@@ -9,18 +9,23 @@ type LoginPayload struct {
 
 type User struct {
 	BaseModel
-	FirstName string
-	LastName  string
-	Email     string
-	Password  string
-	Phone     string
-	Profile   string
-	RoleID    uint
+	FirstName   string
+	LastName    string
+	Email       string
+	Password    string
+	Phone       string
+	Profile     string
+	DateofBirth time.Time
+
+	RoleID uint
+	Role   Role `gorm:"foreignKey:RoleID"`
 
 	GenderID uint
 	Gender   Gender `gorm:"foreignKey:GenderID"`
 
-	RidingLevelID     uint
+	RidingLevelID uint
+	RidingLevel   RidingLevel `gorm:"foreignKey:RidingLevelID"`
+
 	Supports          []Support
 	TourRegistrations []TourRegistration
 	Enrollments       []Enrollment
