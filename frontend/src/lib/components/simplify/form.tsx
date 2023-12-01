@@ -13,7 +13,6 @@ import {
   PathValue,
 } from "react-hook-form";
 import { z } from "zod";
-import { Tooltip } from "./tooltip";
 import {
   Input,
   Textarea,
@@ -24,7 +23,6 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-  AlertCircle,
   Button,
   Checkbox,
   Switch,
@@ -35,6 +33,7 @@ import {
   InputProps,
   TextareaProps,
 } from "@shadcn/ui";
+import { ImageToBase64 } from "../../../utils";
 
 interface Fields<T extends FieldValues> {
   form: UseFormReturn<T, any, undefined>;
@@ -99,22 +98,16 @@ const FormInput = <T extends FieldValues>({
 
   return (
     <div className="flex flex-col gap-1 relative grow">
-      {/* {errors[name] && (
-        <Tooltip
-          className=" bg-red-500 text-white"
-          content={() => {
-            return <p>{`${errors[name]?.message}`}</p>;
-          }}
-          side="right"
-        >
-          <AlertCircle className="absolute top-1/2 -translate-y-1/2 text-red-500 right-1 scale-75" />
-        </Tooltip>
-      )} */}
       <Input
         type={type}
         {...props}
-        onChange={(e) => {
-          const value = type === "number" ? +e.target.value : e.target.value;
+        onChange={async (e) => {
+          const value =
+            type === "number"
+              ? +e.target.value
+              : "file"
+              ? await ImageToBase64(e.target.files?.item(0) as File)
+              : e.target.value;
           setValue(name, value as PathValue<T, Path<T>>, {
             shouldValidate: true,
             shouldDirty: true,
@@ -140,18 +133,26 @@ const FormTextArea = <T extends FieldValues>({
   className,
   ...props
 }: FormTextAreaProps<T>) => {
-  const { setValue } = useForm;
+  const {
+    setValue,
+    formState: { errors },
+  } = useForm;
   return (
-    <Textarea
-      {...props}
-      onChange={(e) =>
-        setValue(name, e.target.value as PathValue<T, Path<T>>, {
-          shouldValidate: true,
-          shouldDirty: true,
-        })
-      }
-      className={className}
-    />
+    <div className="flex flex-col grow">
+      <Textarea
+        {...props}
+        onChange={(e) =>
+          setValue(name, e.target.value as PathValue<T, Path<T>>, {
+            shouldValidate: true,
+            shouldDirty: true,
+          })
+        }
+        className={className}
+      />
+      {errors[name] && (
+        <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
+      )}
+    </div>
   );
 };
 
@@ -162,10 +163,11 @@ interface FormSelectProps<T extends FieldValues> {
   items: ItemList[];
   className?: string;
   placeholder?: string;
+  valueAsNumber?: boolean;
 }
 
 export interface ItemList {
-  value: string | "label-separator";
+  value: string | "label-separator" | number;
   label: string;
 }
 
@@ -175,35 +177,50 @@ const FormSelect = <T extends FieldValues>({
   className,
   placeholder,
   items,
+  valueAsNumber = false,
 }: FormSelectProps<T>) => {
-  const { setValue } = useForm;
+  const {
+    setValue,
+    formState: { errors },
+  } = useForm;
   return (
-    <Select
-      onValueChange={(v) =>
-        setValue(name, v as PathValue<T, Path<T>>, {
-          shouldValidate: true,
-          shouldDirty: true,
-        })
-      }
-    >
-      <SelectTrigger className={className}>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {items.map((item) => {
-            if (item.value === "label-separator") {
-              return <SelectLabel key={item.label}>{item.label}</SelectLabel>;
+    <div className="flex flex-col grow">
+      <Select
+        onValueChange={(v) =>
+          setValue(
+            name,
+            valueAsNumber
+              ? (+v as PathValue<T, Path<T>>)
+              : (v as PathValue<T, Path<T>>),
+            {
+              shouldValidate: true,
+              shouldDirty: true,
             }
-            return (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
-              </SelectItem>
-            );
-          })}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+          )
+        }
+      >
+        <SelectTrigger className={className}>
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {items.map((item) => {
+              if (item.value === "label-separator") {
+                return <SelectLabel key={item.label}>{item.label}</SelectLabel>;
+              }
+              return (
+                <SelectItem key={item.value} value={String(item.value)}>
+                  {item.label}
+                </SelectItem>
+              );
+            })}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      {errors[name] && (
+        <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
+      )}
+    </div>
   );
 };
 
@@ -220,18 +237,26 @@ const FormDatePicker = <T extends FieldValues>({
   className,
   ...props
 }: FormDatePickerProps<T>) => {
-  const { setValue } = useForm;
+  const {
+    setValue,
+    formState: { errors },
+  } = useForm;
   return (
-    <DatePicker
-      {...props}
-      onSelect={(v) =>
-        setValue(name, v as PathValue<T, Path<T>>, {
-          shouldValidate: true,
-          shouldDirty: true,
-        })
-      }
-      className={className}
-    />
+    <div className="flex flex-col grow">
+      <DatePicker
+        {...props}
+        onSelect={(v) =>
+          setValue(name, v as PathValue<T, Path<T>>, {
+            shouldValidate: true,
+            shouldDirty: true,
+          })
+        }
+        className={className}
+      />
+      {errors[name] && (
+        <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
+      )}
+    </div>
   );
 };
 
@@ -317,32 +342,42 @@ interface FormRadioGroupProps<T extends FieldValues> {
   useForm: UseFormReturn<T, any, undefined>;
   className?: string;
   items: ItemList[];
+  valueAsNumber?: boolean;
 }
 const FormRadioGroup = <T extends FieldValues>({
   name,
   useForm,
   className,
   items,
+  valueAsNumber = false,
 }: FormRadioGroupProps<T>) => {
   const { setValue } = useForm;
   return (
     <RadioGroup
       className={className}
       onValueChange={(v) =>
-        setValue(name, v as PathValue<T, Path<T>>, {
-          shouldValidate: true,
-          shouldDirty: true,
-        })
+        setValue(
+          name,
+          valueAsNumber
+            ? (+v as PathValue<T, Path<T>>)
+            : (v as PathValue<T, Path<T>>),
+          {
+            shouldValidate: true,
+            shouldDirty: true,
+          }
+        )
       }
       defaultValue={
-        items[0].value !== "label-separator" ? items[0].value : items[1].value
+        items[0].value !== "label-separator"
+          ? String(items[0].value)
+          : String(items[1].value)
       }
     >
       {items.map(
         (item) =>
           item.value !== "label-separator" && (
             <div className="flex items-center space-x-2" key={item.value}>
-              <RadioGroupItem value={item.value} />
+              <RadioGroupItem value={String(item.value)} />
               <Label>{item.label}</Label>
             </div>
           )
