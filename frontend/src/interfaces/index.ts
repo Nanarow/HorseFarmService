@@ -131,3 +131,40 @@ export interface Address {
   Province: string;
   ZipCode: string;
 }
+
+export interface Course {
+	ID: number;
+	Name: string;     
+	Duration: number;
+	Participants: number;
+	Description: string;
+	EmployeeID: number;
+	ScheduleID: number;
+}
+
+
+export interface Schedule {
+	ID: number;
+	Date: Date;
+	StartTime: Date;
+	Description: string;
+	LocationID: number;
+}
+
+export interface Location {
+	ID: number;
+	Name: string;
+	Description: string;
+}
+
+export interface Food {
+	ID: number;
+	Fat: string;
+	Carbohydrate: string;
+	Protein: string;
+	Vitamin: string;
+	Mineral: string;
+	Forage: string;
+	Date: Date;
+	EmployeeID: number;
+}
