@@ -40,7 +40,6 @@ const Tour = () => {
     <div className=" bg-secondary w-full h-screen flex relative">
       <img src={tourImage} className=" w-full object-cover "></img>
       <div className="absolute top-0 left-0 w-full h-full "></div>
-      {/* <section className="absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-[600px] bg-secondary border-black border-2"></section> */}
       <Card className=" absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[360px] rounded-sm">
         <CardHeader>
           <CardTitle className=" text-center ">Tour Registration</CardTitle>
@@ -68,7 +67,7 @@ const Tour = () => {
                 <Form.Input
                   useForm={form}
                   name="Name"
-                  type="file"
+                  type="text"
                   placeholder="Name"
                 ></Form.Input>
                 <Form.Input
