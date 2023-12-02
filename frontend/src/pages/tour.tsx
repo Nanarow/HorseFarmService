@@ -1,15 +1,17 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/ui/card";
-import tourImage from "../assets/tourbg-3.jpg";
+import tourImage from "../assets/tourbg-2.jpg";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import { TourType } from "../interfaces";
+import { TourRegistration, TourType } from "../interfaces";
 import { http } from "../services/httpRequest";
+import { Label } from "@shadcn/ui";
+import { useToast } from "@shadcn/ui/use-toast";
 
 const Tour = () => {
+  const { toast } = useToast();
   const formSchema = z.object({
     Name: z.string(),
-    TourDate: z.date(),
+    Date: z.date(),
     Participants: z.number(),
     TourTypeID: z.number(),
   });
@@ -36,45 +38,81 @@ const Tour = () => {
     });
   }
 
+  async function onValid(formData: z.infer<typeof formSchema>) {
+    const tour: TourRegistration = {
+      ...formData,
+      UserID: 0,
+      Participant: 0,
+    };
+    const res = await http.Post<TourRegistration, TourRegistration>(
+      "/tours",
+      tour
+    );
+    if (res.ok) {
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(tour, null, 2)}</code>
+          </pre>
+        ),
+        duration: 1500,
+      });
+    }
+  }
+
   return (
-    <div className=" bg-secondary w-full h-screen flex relative">
-      <img src={tourImage} className=" w-full object-cover "></img>
-      <div className="absolute top-0 left-0 w-full h-full "></div>
-      <Card className=" absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[360px] rounded-sm">
-        <CardHeader>
-          <CardTitle className=" text-center ">Tour Registration</CardTitle>
-        </CardHeader>
-        <CardContent>
+    <div className="  w-full h-screen grid md:grid-cols-2">
+      <section className="w-full h-full p-2">
+        <img
+          src={tourImage}
+          className="w-full h-full object-cover rounded "
+          loading="lazy"
+          alt="Tour"
+        />
+      </section>
+      <section className="h-full w-full flex justify-center items-center">
+        <div className=" w-full h-full p-20 max-w-lg flex justify-center flex-col">
+          <Label className=" text-4xl font-bold text-center">
+            Tour Registration
+          </Label>
           <Form
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-4 mt-12"
             validator={formSchema}
-            onValid={(data) => console.log(data)}
+            onValid={onValid}
             onInvalid={(data) => console.log(data)}
             fields={({ form }) => (
               <>
+                <Label>
+                  Tour Date<span className="text-red-500">*</span>
+                </Label>
+                <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
                 {tourType && (
-                  <Form.Select
-                    valueAsNumber
-                    useForm={form}
-                    items={tourTypeToSelectItems(tourType)}
-                    name="TourTypeID"
-                  ></Form.Select>
+                  <>
+                    <Label>
+                      Type of tour<span className="text-red-500">*</span>
+                    </Label>
+                    <Form.Select
+                      valueAsNumber
+                      useForm={form}
+                      items={tourTypeToSelectItems(tourType)}
+                      name="TourTypeID"
+                      placeholder="Pick type of tour"
+                    ></Form.Select>
+                  </>
                 )}
-                <Form.DatePicker
-                  useForm={form}
-                  name="TourDate"
-                ></Form.DatePicker>
-                <Form.Input
-                  useForm={form}
-                  name="Name"
-                  type="text"
-                  placeholder="Name"
-                ></Form.Input>
+
+                <Label>
+                  Tour Name<span className="text-red-500">*</span>
+                </Label>
+                <Form.Input useForm={form} name="Name" type="text"></Form.Input>
+                <Label>
+                  Participants<span className="text-red-500">*</span>
+                </Label>
                 <Form.Input
                   useForm={form}
                   name="Participants"
                   type="number"
-                  placeholder="Participants"
                 ></Form.Input>
                 <Form.SubmitButton useForm={form}>
                   Registration
@@ -82,8 +120,8 @@ const Tour = () => {
               </>
             )}
           ></Form>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
     </div>
   );
 };

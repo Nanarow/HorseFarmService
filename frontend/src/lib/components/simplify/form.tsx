@@ -203,7 +203,11 @@ const FormSelect = <T extends FieldValues>({
         }
       >
         <SelectTrigger className={className}>
-          <SelectValue placeholder={placeholder} />
+          <SelectValue
+            placeholder={
+              <span className=" text-muted-foreground">{placeholder}</span>
+            }
+          />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
