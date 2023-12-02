@@ -32,13 +32,14 @@ class HttpRequest {
     );
     return response;
   }
-  public async Patch<DataType, BodyType = unknown>(
+  public async Put<DataType, BodyType = unknown>(
     resource: string,
+    id: number,
     body: Partial<BodyType>
   ) {
     const response = await this.sendRequest<DataType>(
       "PATCH",
-      this.base_url + resource,
+      this.base_url + resource + "/" + id,
       JSON.stringify(body)
     );
     return response;

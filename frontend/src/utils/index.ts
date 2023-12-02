@@ -1,4 +1,4 @@
-export function ImageToBase64(file: Blob): Promise<string> {
+export function ImageToBase64(file: Blob | File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result as string);
