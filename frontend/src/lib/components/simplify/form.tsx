@@ -93,6 +93,7 @@ const FormInput = <T extends FieldValues>({
   const {
     formState: { errors },
     setValue,
+    register,
   } = useForm;
   async function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (type === "number") {
@@ -113,10 +114,14 @@ const FormInput = <T extends FieldValues>({
       });
     }
   }
-
   return (
     <div className="flex flex-col gap-1 relative grow">
-      <Input type={type} {...props} onChange={onChange} />
+      <Input
+        type={type}
+        {...props}
+        onChange={onChange}
+        ref={register(name).ref}
+      />
       {errors[name] && (
         <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
       )}

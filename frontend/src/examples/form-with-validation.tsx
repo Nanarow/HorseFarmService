@@ -90,6 +90,7 @@ const ValidateForm = () => {
                   placeholder="Name"
                 />
                 <Form.SubmitButton useForm={form}>Submit</Form.SubmitButton>
+                <button onClick={() => form.reset()}>Reset</button>
               </>
             )}
           />

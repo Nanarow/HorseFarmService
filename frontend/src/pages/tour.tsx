@@ -117,6 +117,10 @@ const Tour = () => {
                 <Form.SubmitButton useForm={form}>
                   Registration
                 </Form.SubmitButton>
+                {/* <button onClick={() => console.log(form.formState.dirtyFields)}>
+                  Cancel
+                </button>
+                <button onClick={() => form.reset()}>Reset</button> */}
               </>
             )}
           ></Form>
