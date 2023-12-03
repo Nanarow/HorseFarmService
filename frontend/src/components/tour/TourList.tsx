@@ -18,6 +18,7 @@ import {
 } from "@shadcn/ui/table";
 import TourEdit from "./TourEdit";
 import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
+import { format } from "date-fns";
 
 interface Props {
   setTabs: React.Dispatch<React.SetStateAction<string>>;
@@ -56,10 +57,11 @@ const TourList = ({ setTabs }: Props) => {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[10%] text-center">Name</TableHead>
-            <TableHead className="w-[35%] text-center">Date</TableHead>
+            <TableHead className="w-[20%] text-center">Date</TableHead>
+            <TableHead className="w-[20%] text-center">Email</TableHead>
             <TableHead className="w-[15%] text-center">Type</TableHead>
             <TableHead className="w-[15%] text-center">Plan</TableHead>
-            <TableHead className="w-[15%] text-center">Participants</TableHead>
+            <TableHead className="w-[10%] text-center">Participants</TableHead>
             <TableHead className="w-[5%] text-center">Edit</TableHead>
             <TableHead className="w-[5%] text-center">Cancel</TableHead>
           </TableRow>
@@ -71,7 +73,10 @@ const TourList = ({ setTabs }: Props) => {
                 <TableCell className="font-medium text-center">
                   {tour.Name}
                 </TableCell>
-                <TableCell className=" text-center">{`${tour.Date}`}</TableCell>
+                <TableCell className=" text-center">
+                  {format(new Date(tour.Date), "PPP")}
+                </TableCell>
+                <TableCell className=" text-center">{tour.Email}</TableCell>
                 <TableCell className=" text-center">
                   {tour.TourType?.Name}
                 </TableCell>
@@ -82,7 +87,7 @@ const TourList = ({ setTabs }: Props) => {
                   {tour.Participants}
                 </TableCell>
                 <TableCell className=" relative">
-                  <Dialog>
+                  <Dialog onOpenChange={handleChange}>
                     <DialogTrigger asChild>
                       <Edit
                         onClick={onEdit}
