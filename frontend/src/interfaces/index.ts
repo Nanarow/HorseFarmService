@@ -3,10 +3,18 @@ export interface TourRegistration {
   UserID: number;
   TourTypeID: number;
   TourType?: TourType;
-  ScheduleID?: number;
+  PlanID: number;
+  Plan?: Plan;
+  Email: string;
   Participants: number;
   Name: string;
   Date: Date;
+}
+
+export interface Plan {
+  ID: number;
+  Name: string;
+  Description: string;
 }
 
 export interface TourType {

@@ -2,7 +2,7 @@ import NavBar from "../components/navBar";
 import { Tabs, TabsContent } from "@shadcn/ui/tabs";
 import TourList from "../components/tour/TourList";
 import { useState } from "react";
-import TourForm from "../components/tour/TourForm";
+import TourRegister from "../components/tour/TourRegister";
 
 const Tour = () => {
   const [tabs, setTabs] = useState("register");
@@ -20,7 +20,7 @@ const Tour = () => {
           <TabsTrigger value="password">Password</TabsTrigger>
         </TabsList> */}
         <TabsContent value="register" className="w-full h-full mt-0">
-          <TourForm setTabs={setTabs} />
+          <TourRegister setTabs={setTabs} />
         </TabsContent>
         <TabsContent value="list" className="w-full h-full mt-0">
           <div className="w-full h-full flex">

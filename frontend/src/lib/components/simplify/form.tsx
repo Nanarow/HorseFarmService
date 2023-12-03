@@ -172,6 +172,7 @@ interface FormSelectProps<T extends FieldValues> {
   className?: string;
   placeholder?: string;
   valueAsNumber?: boolean;
+  defaultValue?: string;
 }
 
 export interface ItemList {
@@ -185,6 +186,7 @@ const FormSelect = <T extends FieldValues>({
   className,
   placeholder,
   items,
+  defaultValue,
   valueAsNumber = false,
 }: FormSelectProps<T>) => {
   const {
@@ -194,6 +196,7 @@ const FormSelect = <T extends FieldValues>({
   return (
     <div className="flex flex-col grow">
       <Select
+        defaultValue={defaultValue}
         onValueChange={(v) =>
           setValue(
             name,
@@ -241,13 +244,14 @@ interface FormDatePickerProps<T extends FieldValues> {
   name: Path<T>;
   useForm: UseFormReturn<T, any, undefined>;
   className?: string;
+  defaultValue?: Date;
 }
 
 const FormDatePicker = <T extends FieldValues>({
   name,
   useForm,
   className,
-  ...props
+  defaultValue,
 }: FormDatePickerProps<T>) => {
   const {
     setValue,
@@ -256,7 +260,7 @@ const FormDatePicker = <T extends FieldValues>({
   return (
     <div className="flex flex-col grow">
       <DatePicker
-        {...props}
+        defaultValue={defaultValue}
         onSelect={(v) =>
           setValue(name, v as PathValue<T, Path<T>>, {
             shouldValidate: true,
@@ -298,6 +302,7 @@ interface FormCheckboxProps<T extends FieldValues> {
   className?: string;
   id?: string;
   label?: string;
+  defaultValue?: boolean;
 }
 const FormCheckbox = <T extends FieldValues>({
   name,
@@ -305,6 +310,7 @@ const FormCheckbox = <T extends FieldValues>({
   className,
   id,
   label,
+  defaultValue,
 }: FormCheckboxProps<T>) => {
   const {
     setValue,
@@ -314,6 +320,7 @@ const FormCheckbox = <T extends FieldValues>({
     <div className="flex flex-col grow">
       <div className="flex gap-2 items-center">
         <Checkbox
+          defaultChecked={defaultValue}
           id={id}
           onCheckedChange={(e) =>
             setValue(name, e as PathValue<T, Path<T>>, {
@@ -339,12 +346,14 @@ interface FormSwitchProps<T extends FieldValues> {
   useForm: UseFormReturn<T, any, undefined>;
   className?: string;
   label?: string;
+  defaultValue?: boolean;
 }
 const FormSwitch = <T extends FieldValues>({
   name,
   useForm,
   className,
   label,
+  defaultValue,
 }: FormSwitchProps<T>) => {
   const {
     setValue,
@@ -358,6 +367,7 @@ const FormSwitch = <T extends FieldValues>({
     <div className="flex flex-col grow">
       <div className="flex gap-2 items-center">
         <Switch
+          defaultChecked={defaultValue}
           onCheckedChange={(e) =>
             setValue(name, e as PathValue<T, Path<T>>, {
               shouldValidate: true,
@@ -382,6 +392,7 @@ interface FormRadioGroupProps<T extends FieldValues> {
   className?: string;
   items: ItemList[];
   valueAsNumber?: boolean;
+  defaultValue?: string;
 }
 const FormRadioGroup = <T extends FieldValues>({
   name,
@@ -389,6 +400,7 @@ const FormRadioGroup = <T extends FieldValues>({
   className,
   items,
   valueAsNumber = false,
+  defaultValue,
 }: FormRadioGroupProps<T>) => {
   const {
     setValue,
@@ -411,7 +423,9 @@ const FormRadioGroup = <T extends FieldValues>({
           )
         }
         defaultValue={
-          items[0].value !== "label-separator"
+          defaultValue
+            ? defaultValue
+            : items[0].value !== "label-separator"
             ? String(items[0].value)
             : String(items[1].value)
         }

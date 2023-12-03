@@ -8,9 +8,14 @@ import { Calendar } from "../ui/calendar";
 interface DatePickerProps {
   className?: string;
   onSelect?: (date: Date) => any;
+  defaultValue?: Date;
 }
-export function DatePicker({ className, onSelect }: DatePickerProps) {
-  const [date, setDate] = React.useState<Date>();
+export function DatePicker({
+  className,
+  onSelect,
+  defaultValue,
+}: DatePickerProps) {
+  const [date, setDate] = React.useState<Date | undefined>(defaultValue);
   return (
     <Popover>
       <PopoverTrigger asChild>

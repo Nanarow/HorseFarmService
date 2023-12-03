@@ -20,13 +20,8 @@ func InitRouter(route *gin.Engine) {
 
 }
 func initRequiredAuth(route *gin.RouterGroup) {
-	route.Use(middlewares.Authentication())
+	// route.Use(middlewares.Authentication())
 	// route.Use(middlewares.Authorization())
-	route.GET("/tours", controllers.GetAll[*entity.TourRegistration])
-	route.GET("/tours/:id", controllers.Get[*entity.TourRegistration])
-	route.POST("/tours", controllers.Create[*entity.TourRegistration])
-	route.PUT("/tours/:id", controllers.Update[*entity.TourRegistration])
-	route.DELETE("/tours/:id", controllers.Delete[*entity.TourRegistration])
 
 	InitBasicApi[*entity.Food](route, "/foods")
 	InitBasicApi[*entity.User](route, "/users")
@@ -39,7 +34,7 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.Gender](route, "/gender")
 	InitBasicApi[*entity.Position](route, "/positions")
 	InitBasicApi[*entity.TourType](route, "/tour/types")
-	InitBasicApi[*entity.TourRegistration](route, "/tour")
+	InitBasicApi[*entity.TourRegistration](route, "/tours")
 	InitBasicApi[*entity.Enrollment](route, "/enrollments")
 	InitBasicApi[*entity.Support](route, "/supports")
 	InitBasicApi[*entity.Bleed](route, "/bleeds")
@@ -48,6 +43,7 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.Stable](route, "/stables")
 	InitBasicApi[*entity.Address](route, "/addresses")
 	InitBasicApi[*entity.Employee](route, "/employees")
+	InitBasicApi[*entity.Plan](route, "/plans")
 
 	// route.GET("/users/:id", func(c *gin.Context) {
 
