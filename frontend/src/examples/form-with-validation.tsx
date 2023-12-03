@@ -9,10 +9,11 @@ const ValidUser = z.object({
   gender: z.enum(["male", "female"]),
   date: z.date().min(new Date(), "Date must be in the future"),
   agree: z.boolean(),
+  image: z.string(),
+  address: z.string().optional(),
 });
 const ValidateForm = () => {
   const Items = [
-    { label: "Gender", value: "label-separator" },
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
     { label: "Other", value: "other" },
@@ -33,6 +34,12 @@ const ValidateForm = () => {
               <>
                 <Form.Input
                   useForm={form}
+                  name="name"
+                  type="text"
+                  placeholder="enter your name"
+                />
+                <Form.Input
+                  useForm={form}
                   name="age"
                   type="number"
                   placeholder="age"
@@ -43,25 +50,31 @@ const ValidateForm = () => {
                   type="password"
                   placeholder="password"
                 />
-                <Form.TextArea useForm={form} name="name" placeholder="name" />
+                <Form.TextArea
+                  useForm={form}
+                  name="address"
+                  placeholder="addr ..."
+                />
                 <Form.Select
                   useForm={form}
                   name="gender"
-                  placeholder="Pick one"
+                  placeholder="Gender"
                   items={Items}
                 />
 
                 <Form.DatePicker useForm={form} name="date" />
 
-                <div className="flex gap-2 items-center">
-                  <Form.Checkbox useForm={form} name="agree" />
-                  <label>I agree to the terms </label>
-                </div>
+                <Form.Checkbox
+                  useForm={form}
+                  name="agree"
+                  label="I agree to conditions"
+                />
 
-                <div className="flex gap-2 items-center">
-                  <Form.Switch useForm={form} name="agree" />
-                  <label>I agree to conditions</label>
-                </div>
+                <Form.Switch
+                  useForm={form}
+                  name="agree"
+                  label="I agree to conditions"
+                />
 
                 <Form.RadioGroup
                   useForm={form}
@@ -69,7 +82,15 @@ const ValidateForm = () => {
                   items={Items}
                   className="flex"
                 />
+                <Form.Input
+                  useForm={form}
+                  name="image"
+                  type="file"
+                  accept="image/*"
+                  placeholder="Name"
+                />
                 <Form.SubmitButton useForm={form}>Submit</Form.SubmitButton>
+                <button onClick={() => form.reset()}>Reset</button>
               </>
             )}
           />
