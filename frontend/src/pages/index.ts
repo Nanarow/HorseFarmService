@@ -1,15 +1,15 @@
-import Course from "../pages/course";
-import Login from "../pages/login";
-import Tour from "../pages/tour";
-import Food from "../pages/food";
-import Health from "../pages/health";
-import Stable from "../pages/stable";
-import Horse from "../pages/horse";
-import Account from "../pages/account";
-import Employee from "../pages/employee";
-import CourseSetting from "../pages/courseSetting";
-import Support from "../pages/support";
-import User from "../pages/user";
+import Course from "./course";
+import Login from "./login";
+import Tour from "./tour";
+import Food from "./food";
+import Health from "./health";
+import Stable from "./stable";
+import Horse from "./horse";
+import Account from "./account";
+import Employee from "./employee";
+import Support from "./support";
+import User from "./user";
+import CourseSetting from "./courseSetting";
 export {
   Course,
   Login,

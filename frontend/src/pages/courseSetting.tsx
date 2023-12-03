@@ -33,3 +33,10 @@
 // };
 
 // export default CourseSetting;
+import React from "react";
+
+const CourseSetting = () => {
+  return <div>courseSetting</div>;
+};
+
+export default CourseSetting;

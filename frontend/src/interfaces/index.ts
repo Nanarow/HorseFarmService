@@ -2,8 +2,9 @@ export interface TourRegistration {
   ID?: number;
   UserID: number;
   TourTypeID: number;
+  TourType?: TourType;
   ScheduleID?: number;
-  Participant: number;
+  Participants: number;
   Name: string;
   Date: Date;
 }

@@ -128,11 +128,13 @@ type TourType struct {
 
 type TourRegistration struct {
 	BaseModel
-	UserID     uint
-	TourTypeID uint
-	Schedule   uint
-	Name       string
-	Date       time.Time
+	UserID       uint
+	TourTypeID   uint
+	TourType     TourType `gorm:"foreignKey:TourTypeID"`
+	Schedule     uint
+	Participants int
+	Name         string
+	Date         time.Time
 }
 
 type Enrollment struct {
