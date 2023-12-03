@@ -114,9 +114,10 @@ export interface Employee {
   DayOfBirth: Date;
   Phone: string;
 }
-export interface Health {
+export interface Healths {
   ID: number;
   EmployeeID: number;
+  HorseID: number;
   Vital: string;
   Tooth: string;
   Vaccine: string;

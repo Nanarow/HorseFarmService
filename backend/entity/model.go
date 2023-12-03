@@ -9,13 +9,13 @@ type LoginPayload struct {
 
 type User struct {
 	BaseModel
-	FirstName   string
-	LastName    string
-	Email       string
-	Password    string
-	Phone       string
-	Profile     string
-	DateofBirth time.Time
+	FirstName string
+	LastName  string
+	Email     string
+	Password  string
+	Phone     string
+	Profile   string
+	Age       int
 
 	RoleID uint
 	Role   Role `gorm:"foreignKey:RoleID"`
