@@ -72,7 +72,7 @@ const TourEdit = ({ tour }: Props) => {
     }
   }
   return (
-    <DialogContent className="sm:max-w-[600px]">
+    <DialogContent className="sm:max-w-[480px]">
       <DialogHeader>
         <DialogTitle>Edit Tour Registration</DialogTitle>
         <DialogDescription>
@@ -80,23 +80,24 @@ const TourEdit = ({ tour }: Props) => {
         </DialogDescription>
       </DialogHeader>
       <Form
-        className="flex flex-col gap-2 mt-4"
+        className="grid gap-2 mt-4"
         validator={formSchema}
         onValid={onValid}
         onInvalid={(data) => console.log(data)}
         fields={({ form }) => (
           <>
-            <div className="flex">
+            <div className="grid grid-cols-4">
               <Label>
                 Tour Date<span className="text-red-500">*</span>
               </Label>
               <Form.DatePicker
                 useForm={form}
                 name="Date"
-                // defaultValue={tour.Date}
+                defaultValue={new Date(tour.Date)}
+                className="col-span-3"
               ></Form.DatePicker>
             </div>
-            <div className="flex">
+            <div className="grid grid-cols-4">
               {tourType && (
                 <>
                   <Label>
@@ -109,11 +110,12 @@ const TourEdit = ({ tour }: Props) => {
                     items={ToItemList(tourType)}
                     name="TourTypeID"
                     placeholder="Pick type of tour"
+                    className="col-span-3"
                   ></Form.Select>
                 </>
               )}
             </div>
-            <div className="flex">
+            <div className="grid grid-cols-4">
               {plans && (
                 <>
                   <Label>
@@ -126,12 +128,13 @@ const TourEdit = ({ tour }: Props) => {
                     items={ToItemList(plans)}
                     name="PlanID"
                     placeholder="Pick your plan"
+                    className="col-span-3"
                   ></Form.Select>
                 </>
               )}
             </div>
 
-            <div className="flex">
+            <div className="grid grid-cols-4">
               <Label>
                 Email<span className="text-red-500">*</span>
               </Label>
@@ -140,9 +143,10 @@ const TourEdit = ({ tour }: Props) => {
                 name="Email"
                 type="email"
                 defaultValue={tour.Email}
+                className="col-span-3"
               ></Form.Input>
             </div>
-            <div className=" flex items-center">
+            <div className="grid grid-cols-4">
               <Label>
                 Participants<span className="text-red-500">*</span>
               </Label>
@@ -151,15 +155,17 @@ const TourEdit = ({ tour }: Props) => {
                 name="Participants"
                 type="number"
                 defaultValue={tour.Participants}
+                className="col-span-3"
               ></Form.Input>
             </div>
-            <div className=" flex">
+            <div className=" grid grid-cols-4">
               <Label>Tour Name</Label>
               <Form.Input
                 useForm={form}
                 name="Name"
                 type="text"
                 defaultValue={tour.Name}
+                className="col-span-3"
               ></Form.Input>
             </div>
 
@@ -168,14 +174,12 @@ const TourEdit = ({ tour }: Props) => {
         )}
       >
         <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="secondary">Close</Button>
+          </DialogClose>
           <Button type="submit">Save changes</Button>
         </DialogFooter>
       </Form>
-      <DialogClose asChild>
-        <Button type="submit" variant="secondary">
-          Close
-        </Button>
-      </DialogClose>
     </DialogContent>
   );
 };
