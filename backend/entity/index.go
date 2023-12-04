@@ -38,6 +38,7 @@ func SetupDatabase() {
 		&Employee{},
 		&Address{},
 		&Health{},
+		&Plan{},
 	)
 	db = database
 	// users := []User{

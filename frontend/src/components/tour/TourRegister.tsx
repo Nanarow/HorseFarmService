@@ -1,46 +1,47 @@
 import tourImage from "../../assets/tourbg-2.jpg";
-import Form, { ItemList } from "@shadcn/simplify/form";
+import Form from "@shadcn/simplify/form";
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import { TourRegistration, TourType } from "../../interfaces";
+import { Plan, TourRegistration, TourType } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { Label } from "@shadcn/ui";
 import { useToast } from "@shadcn/ui/use-toast";
 
-import { ChevronRight } from "lucide-react";
+import { ArrowRightSquareIcon } from "lucide-react";
+import { ToItemList } from "@src/utils";
 interface Props {
   setTabs: React.Dispatch<React.SetStateAction<string>>;
 }
-const TourForm = ({ setTabs }: Props) => {
+const TourRegister = ({ setTabs }: Props) => {
   const { toast } = useToast();
   const formSchema = z.object({
     Name: z.string(),
     Date: z.date(),
     Participants: z.number(),
     TourTypeID: z.number(),
+    PlanID: z.number(),
+    Email: z.string().email(),
   });
   const [tourType, setTourType] = useState<TourType[] | undefined>(undefined);
+  const [plans, setPlans] = useState<Plan[] | undefined>(undefined);
   async function fetchTour() {
     const res = await http.Get<TourType[]>("/tour/types");
     if (res.ok) {
       setTourType(res.data);
     }
   }
+  async function fetchPlan() {
+    const res = await http.Get<Plan[]>("/plans");
+    if (res.ok) {
+      setPlans(res.data);
+    }
+  }
   useEffect(() => {
     return () => {
+      fetchPlan();
       fetchTour();
     };
   }, []);
-
-  function tourTypeToSelectItems(tourType: TourType[]) {
-    return tourType.map((tour) => {
-      const newItem: ItemList = {
-        value: tour.ID,
-        label: tour.Name,
-      };
-      return newItem;
-    });
-  }
 
   async function onValid(formData: z.infer<typeof formSchema>) {
     const tour: TourRegistration = {
@@ -73,16 +74,16 @@ const TourForm = ({ setTabs }: Props) => {
         />
       </section>
       <section className="h-full w-full flex justify-center items-center relative">
-        <ChevronRight
-          className="absolute top-4 right-4"
+        <ArrowRightSquareIcon
+          className="absolute top-4 right-8 text-green-500"
           onClick={() => setTabs("list")}
         />
-        <div className=" w-full h-full p-20 max-w-lg flex justify-center flex-col">
-          <Label className=" text-4xl font-bold text-center">
+        <div className=" w-full h-full max-w-md flex justify-center flex-col py-12 md:px-0">
+          <Label className=" text-3xl font-bold text-center">
             Tour Registration
           </Label>
           <Form
-            className="flex flex-col gap-4 mt-12"
+            className="flex flex-col gap-2 mt-4"
             validator={formSchema}
             onValid={onValid}
             onInvalid={(data) => console.log(data)}
@@ -100,17 +101,35 @@ const TourForm = ({ setTabs }: Props) => {
                     <Form.Select
                       valueAsNumber
                       useForm={form}
-                      items={tourTypeToSelectItems(tourType)}
+                      items={ToItemList(tourType)}
                       name="TourTypeID"
                       placeholder="Pick type of tour"
                     ></Form.Select>
                   </>
                 )}
+                {plans && (
+                  <>
+                    <Label>
+                      Plan<span className="text-red-500">*</span>
+                    </Label>
+                    <Form.Select
+                      valueAsNumber
+                      useForm={form}
+                      items={ToItemList(plans)}
+                      name="PlanID"
+                      placeholder="Pick your plan"
+                    ></Form.Select>
+                  </>
+                )}
 
                 <Label>
-                  Tour Name<span className="text-red-500">*</span>
+                  Email<span className="text-red-500">*</span>
                 </Label>
-                <Form.Input useForm={form} name="Name" type="text"></Form.Input>
+                <Form.Input
+                  useForm={form}
+                  name="Email"
+                  type="email"
+                ></Form.Input>
                 <Label>
                   Participants<span className="text-red-500">*</span>
                 </Label>
@@ -119,6 +138,9 @@ const TourForm = ({ setTabs }: Props) => {
                   name="Participants"
                   type="number"
                 ></Form.Input>
+                <Label>Tour Name</Label>
+                <Form.Input useForm={form} name="Name" type="text"></Form.Input>
+
                 <Form.SubmitButton useForm={form}>
                   Registration
                 </Form.SubmitButton>
@@ -135,4 +157,4 @@ const TourForm = ({ setTabs }: Props) => {
   );
 };
 
-export default TourForm;
+export default TourRegister;

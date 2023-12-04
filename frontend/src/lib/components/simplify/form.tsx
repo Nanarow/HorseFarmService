@@ -2,6 +2,7 @@ import {
   ButtonHTMLAttributes,
   PropsWithChildren,
   HTMLInputTypeAttribute,
+  useEffect,
 } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -34,6 +35,13 @@ import {
   TextareaProps,
 } from "@shadcn/ui";
 import { ImageToBase64 } from "../../../utils";
+import { CheckedState } from "@radix-ui/react-checkbox";
+
+const defaultOptions = {
+  shouldValidate: true,
+  shouldDirty: true,
+  shouldTouch: true,
+};
 
 interface Fields<T extends FieldValues> {
   form: UseFormReturn<T, any, undefined>;
@@ -95,27 +103,29 @@ const FormInput = <T extends FieldValues>({
     setValue,
     register,
   } = useForm;
+
   async function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const options = errors[name] ? defaultOptions : {};
     if (type === "number") {
-      setValue(name, +e.target.value as PathValue<T, Path<T>>, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+      setValue(name, +e.target.value as PathValue<T, Path<T>>, options);
     } else if (type === "file") {
       const b64 = await ImageToBase64(e.target.files?.item(0) as File);
-      setValue(name, b64 as PathValue<T, Path<T>>, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+      setValue(name, b64 as PathValue<T, Path<T>>, options);
     } else {
-      setValue(name, e.target.value as PathValue<T, Path<T>>, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+      setValue(name, e.target.value as PathValue<T, Path<T>>, options);
     }
   }
+
+  useEffect(() => {
+    return () => {
+      if (props.defaultValue) {
+        setValue(name, props.defaultValue as PathValue<T, Path<T>>);
+      }
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col gap-1 relative grow">
+    <>
       <Input
         type={type}
         {...props}
@@ -125,7 +135,7 @@ const FormInput = <T extends FieldValues>({
       {errors[name] && (
         <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
       )}
-    </div>
+    </>
   );
 };
 
@@ -145,22 +155,28 @@ const FormTextArea = <T extends FieldValues>({
     setValue,
     formState: { errors },
   } = useForm;
+  function setNewValue(value: string | number | readonly string[]) {
+    const options = errors[name] ? defaultOptions : {};
+    setValue(name, value as PathValue<T, Path<T>>, options);
+  }
+  useEffect(() => {
+    return () => {
+      if (props.defaultValue) {
+        setNewValue(props.defaultValue);
+      }
+    };
+  }, []);
   return (
-    <div className="flex flex-col grow">
+    <>
       <Textarea
         {...props}
-        onChange={(e) =>
-          setValue(name, e.target.value as PathValue<T, Path<T>>, {
-            shouldValidate: true,
-            shouldDirty: true,
-          })
-        }
+        onChange={(e) => setNewValue(e.target.value)}
         className={className}
       />
       {errors[name] && (
         <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
       )}
-    </div>
+    </>
   );
 };
 
@@ -172,6 +188,7 @@ interface FormSelectProps<T extends FieldValues> {
   className?: string;
   placeholder?: string;
   valueAsNumber?: boolean;
+  defaultValue?: string | number;
 }
 
 export interface ItemList {
@@ -185,27 +202,36 @@ const FormSelect = <T extends FieldValues>({
   className,
   placeholder,
   items,
+  defaultValue,
   valueAsNumber = false,
 }: FormSelectProps<T>) => {
   const {
     setValue,
     formState: { errors },
   } = useForm;
+
+  function setNewValue(value: string | number) {
+    const options = errors[name] ? defaultOptions : {};
+    setValue(
+      name,
+      valueAsNumber
+        ? (+value as PathValue<T, Path<T>>)
+        : (value as PathValue<T, Path<T>>),
+      options
+    );
+  }
+  useEffect(() => {
+    return () => {
+      if (defaultValue) {
+        setNewValue(defaultValue);
+      }
+    };
+  }, []);
   return (
-    <div className="flex flex-col grow">
+    <>
       <Select
-        onValueChange={(v) =>
-          setValue(
-            name,
-            valueAsNumber
-              ? (+v as PathValue<T, Path<T>>)
-              : (v as PathValue<T, Path<T>>),
-            {
-              shouldValidate: true,
-              shouldDirty: true,
-            }
-          )
-        }
+        onValueChange={setNewValue}
+        defaultValue={defaultValue ? String(defaultValue) : undefined}
       >
         <SelectTrigger className={className}>
           <SelectValue
@@ -232,7 +258,7 @@ const FormSelect = <T extends FieldValues>({
       {errors[name] && (
         <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
       )}
-    </div>
+    </>
   );
 };
 
@@ -241,34 +267,41 @@ interface FormDatePickerProps<T extends FieldValues> {
   name: Path<T>;
   useForm: UseFormReturn<T, any, undefined>;
   className?: string;
+  defaultValue?: Date;
 }
 
 const FormDatePicker = <T extends FieldValues>({
   name,
   useForm,
   className,
-  ...props
+  defaultValue,
 }: FormDatePickerProps<T>) => {
   const {
     setValue,
     formState: { errors },
   } = useForm;
+  function setNewValue(value: Date) {
+    const options = errors[name] ? defaultOptions : {};
+    setValue(name, value as PathValue<T, Path<T>>, options);
+  }
+  useEffect(() => {
+    return () => {
+      if (defaultValue) {
+        setNewValue(defaultValue);
+      }
+    };
+  }, []);
   return (
-    <div className="flex flex-col grow">
+    <>
       <DatePicker
-        {...props}
-        onSelect={(v) =>
-          setValue(name, v as PathValue<T, Path<T>>, {
-            shouldValidate: true,
-            shouldDirty: true,
-          })
-        }
+        defaultValue={defaultValue}
+        onSelect={setNewValue}
         className={className}
       />
       {errors[name] && (
         <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
       )}
-    </div>
+    </>
   );
 };
 
@@ -298,6 +331,7 @@ interface FormCheckboxProps<T extends FieldValues> {
   className?: string;
   id?: string;
   label?: string;
+  defaultValue?: boolean;
 }
 const FormCheckbox = <T extends FieldValues>({
   name,
@@ -305,22 +339,30 @@ const FormCheckbox = <T extends FieldValues>({
   className,
   id,
   label,
+  defaultValue,
 }: FormCheckboxProps<T>) => {
   const {
     setValue,
     formState: { errors },
   } = useForm;
+  function setNewValue(value: CheckedState) {
+    const options = errors[name] ? defaultOptions : {};
+    setValue(name, value as PathValue<T, Path<T>>, options);
+  }
+  useEffect(() => {
+    return () => {
+      if (defaultValue) {
+        setNewValue(defaultValue);
+      }
+    };
+  }, []);
   return (
     <div className="flex flex-col grow">
       <div className="flex gap-2 items-center">
         <Checkbox
+          defaultChecked={defaultValue}
           id={id}
-          onCheckedChange={(e) =>
-            setValue(name, e as PathValue<T, Path<T>>, {
-              shouldValidate: true,
-              shouldDirty: true,
-            })
-          }
+          onCheckedChange={setNewValue}
           className={className}
         />
         {label && <Label>{label}</Label>}
@@ -339,31 +381,37 @@ interface FormSwitchProps<T extends FieldValues> {
   useForm: UseFormReturn<T, any, undefined>;
   className?: string;
   label?: string;
+  defaultValue?: boolean;
 }
 const FormSwitch = <T extends FieldValues>({
   name,
   useForm,
   className,
   label,
+  defaultValue,
 }: FormSwitchProps<T>) => {
   const {
     setValue,
     formState: { errors },
   } = useForm;
-  // useEffect(() => {
-  //   setValue(name, false as PathValue<T, Path<T>>);
-  // }, []);
+  function setNewValue(value: boolean) {
+    const options = errors[name] ? defaultOptions : {};
+    setValue(name, value as PathValue<T, Path<T>>, options);
+  }
+  useEffect(() => {
+    return () => {
+      if (defaultValue) {
+        setNewValue(defaultValue);
+      }
+    };
+  }, []);
 
   return (
     <div className="flex flex-col grow">
       <div className="flex gap-2 items-center">
         <Switch
-          onCheckedChange={(e) =>
-            setValue(name, e as PathValue<T, Path<T>>, {
-              shouldValidate: true,
-              shouldDirty: true,
-            })
-          }
+          defaultChecked={defaultValue}
+          onCheckedChange={setNewValue}
           className={className}
         />
         {label && <Label>{label}</Label>}
@@ -382,6 +430,7 @@ interface FormRadioGroupProps<T extends FieldValues> {
   className?: string;
   items: ItemList[];
   valueAsNumber?: boolean;
+  defaultValue?: string;
 }
 const FormRadioGroup = <T extends FieldValues>({
   name,
@@ -389,29 +438,38 @@ const FormRadioGroup = <T extends FieldValues>({
   className,
   items,
   valueAsNumber = false,
+  defaultValue,
 }: FormRadioGroupProps<T>) => {
   const {
     setValue,
     formState: { errors },
   } = useForm;
+  function setNewValue(value: string | number) {
+    const options = errors[name] ? defaultOptions : {};
+    setValue(
+      name,
+      valueAsNumber
+        ? (+value as PathValue<T, Path<T>>)
+        : (value as PathValue<T, Path<T>>),
+      options
+    );
+  }
+  useEffect(() => {
+    return () => {
+      if (defaultValue) {
+        setNewValue(defaultValue);
+      }
+    };
+  }, []);
   return (
     <div className="flex flex-col grow">
       <RadioGroup
         className={className}
-        onValueChange={(v) =>
-          setValue(
-            name,
-            valueAsNumber
-              ? (+v as PathValue<T, Path<T>>)
-              : (v as PathValue<T, Path<T>>),
-            {
-              shouldValidate: true,
-              shouldDirty: true,
-            }
-          )
-        }
+        onValueChange={setNewValue}
         defaultValue={
-          items[0].value !== "label-separator"
+          defaultValue
+            ? defaultValue
+            : items[0].value !== "label-separator"
             ? String(items[0].value)
             : String(items[1].value)
         }

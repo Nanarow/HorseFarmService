@@ -3,10 +3,18 @@ export interface TourRegistration {
   UserID: number;
   TourTypeID: number;
   TourType?: TourType;
-  ScheduleID?: number;
+  PlanID: number;
+  Plan?: Plan;
+  Email: string;
   Participants: number;
   Name: string;
   Date: Date;
+}
+
+export interface Plan {
+  ID: number;
+  Name: string;
+  Description: string;
 }
 
 export interface TourType {
@@ -27,7 +35,7 @@ export interface Enrollment {
 export interface Horse {
   ID: number;
   Name: string;
-  Age: string;
+  Age: number;
   Date: Date;
   Image: string;
   EmployeeID: number;
@@ -68,6 +76,7 @@ export interface User {
   GenderID: number;
   Gender: Gender;
   RidingLevelID: number;
+  TourRegistrations?: TourRegistration[];
 }
 
 export interface Support {
