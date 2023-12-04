@@ -65,7 +65,7 @@ const HorsePage = () => {
       fetchSexs();
       fetchStables();
     }
-  })
+  },[])
 
   async function onValid(formData: z.infer<typeof formHorse>) {
     const horseData: Horse = {
