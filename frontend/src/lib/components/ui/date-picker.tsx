@@ -8,9 +8,14 @@ import { Calendar } from "../ui/calendar";
 interface DatePickerProps {
   className?: string;
   onSelect?: (date: Date) => any;
+  defaultValue?: Date;
 }
-export function DatePicker({ className, onSelect }: DatePickerProps) {
-  const [date, setDate] = React.useState<Date>();
+export function DatePicker({
+  className,
+  onSelect,
+  defaultValue,
+}: DatePickerProps) {
+  const [date, setDate] = React.useState<Date | undefined>(defaultValue);
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -18,7 +23,8 @@ export function DatePicker({ className, onSelect }: DatePickerProps) {
           variant={"outline"}
           className={cn(
             "justify-start text-left font-normal",
-            !date && "text-muted-foreground"
+            !date && "text-muted-foreground",
+            className
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
@@ -34,7 +40,6 @@ export function DatePicker({ className, onSelect }: DatePickerProps) {
             setDate(date);
           }}
           initialFocus
-          className={className}
         />
       </PopoverContent>
     </Popover>
