@@ -17,8 +17,9 @@ import {
 import { ToItemList } from "@src/utils";
 interface Props {
   tour: TourRegistration;
+  onSave(): void;
 }
-const TourEdit = ({ tour }: Props) => {
+const TourEdit = ({ tour, onSave }: Props) => {
   const { toast } = useToast();
   const formSchema = z.object({
     Name: z.string(),
@@ -30,7 +31,7 @@ const TourEdit = ({ tour }: Props) => {
   });
   const [tourType, setTourType] = useState<TourType[] | undefined>(undefined);
   const [plans, setPlans] = useState<Plan[] | undefined>(undefined);
-  async function fetchTour() {
+  async function fetchTourType() {
     const res = await http.Get<TourType[]>("/tour/types");
     if (res.ok) {
       setTourType(res.data);
@@ -45,7 +46,7 @@ const TourEdit = ({ tour }: Props) => {
   useEffect(() => {
     return () => {
       fetchPlan();
-      fetchTour();
+      fetchTourType();
     };
   }, []);
 
@@ -60,6 +61,7 @@ const TourEdit = ({ tour }: Props) => {
       newTour
     );
     if (res.ok) {
+      onSave();
       toast({
         title: "You submitted the following values:",
         description: (
@@ -86,7 +88,7 @@ const TourEdit = ({ tour }: Props) => {
         onInvalid={(data) => console.log(data)}
         fields={({ form }) => (
           <>
-            <div className="grid grid-cols-4">
+            <div className="grid grid-cols-4 items-center">
               <Label>
                 Tour Date<span className="text-red-500">*</span>
               </Label>
@@ -97,7 +99,7 @@ const TourEdit = ({ tour }: Props) => {
                 className="col-span-3"
               ></Form.DatePicker>
             </div>
-            <div className="grid grid-cols-4">
+            <div className="grid grid-cols-4 items-center">
               {tourType && (
                 <>
                   <Label>
@@ -115,7 +117,7 @@ const TourEdit = ({ tour }: Props) => {
                 </>
               )}
             </div>
-            <div className="grid grid-cols-4">
+            <div className="grid grid-cols-4 items-center">
               {plans && (
                 <>
                   <Label>
@@ -134,7 +136,7 @@ const TourEdit = ({ tour }: Props) => {
               )}
             </div>
 
-            <div className="grid grid-cols-4">
+            <div className="grid grid-cols-4 items-center">
               <Label>
                 Email<span className="text-red-500">*</span>
               </Label>
@@ -146,7 +148,7 @@ const TourEdit = ({ tour }: Props) => {
                 className="col-span-3"
               ></Form.Input>
             </div>
-            <div className="grid grid-cols-4">
+            <div className="grid grid-cols-4 items-center">
               <Label>
                 Participants<span className="text-red-500">*</span>
               </Label>
@@ -158,7 +160,7 @@ const TourEdit = ({ tour }: Props) => {
                 className="col-span-3"
               ></Form.Input>
             </div>
-            <div className=" grid grid-cols-4">
+            <div className=" grid grid-cols-4 items-center">
               <Label>Tour Name</Label>
               <Form.Input
                 useForm={form}
@@ -177,7 +179,9 @@ const TourEdit = ({ tour }: Props) => {
           <DialogClose asChild>
             <Button variant="secondary">Close</Button>
           </DialogClose>
-          <Button type="submit">Save changes</Button>
+          <DialogClose asChild>
+            <Button type="submit">Save changes</Button>
+          </DialogClose>
         </DialogFooter>
       </Form>
     </DialogContent>
