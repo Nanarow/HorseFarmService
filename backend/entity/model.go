@@ -27,7 +27,7 @@ type User struct {
 	RidingLevel   RidingLevel `gorm:"foreignKey:RidingLevelID"`
 
 	Supports          []Support          `json:"-"`
-	TourRegistrations []TourRegistration `json:"-"`
+	TourRegistrations []TourRegistration `gorm:"foreignKey:UserID"`
 	Enrollments       []Enrollment       `json:"-"`
 }
 

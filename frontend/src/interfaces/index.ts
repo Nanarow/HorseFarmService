@@ -76,6 +76,7 @@ export interface User {
   GenderID: number;
   Gender: Gender;
   RidingLevelID: number;
+  TourRegistrations?: TourRegistration[];
 }
 
 export interface Support {

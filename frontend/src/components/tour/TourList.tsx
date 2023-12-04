@@ -1,5 +1,5 @@
 import { ArrowLeftSquareIcon, Edit, XSquare } from "lucide-react";
-import { TourRegistration } from "../../interfaces";
+import { TourRegistration, User } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
 import {
@@ -23,9 +23,9 @@ interface Props {
 const TourList = ({ setTabs }: Props) => {
   const [tours, setTours] = useState<TourRegistration[] | undefined>(undefined);
   async function fetchTours() {
-    const res = await http.Get<TourRegistration[]>("/tours");
+    const res = await http.Get<User>("/users/1");
     if (res.ok) {
-      setTours(res.data);
+      setTours(res.data.TourRegistrations);
     }
   }
   useEffect(() => {
