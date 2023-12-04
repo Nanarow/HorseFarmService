@@ -7,10 +7,9 @@ import { Input } from "@shadcn/ui/input"
 import { Label } from "@shadcn/ui/label"
 import Form from "@shadcn/simplify/form";
 import { useEffect, useState } from "react";
-import { Bleed , Employee, Horse, Sex, Stable} from "@src/interfaces";
+//import { Bleed , Employee, Horse, Sex, Stable} from "@src/interfaces";
 import { http } from "../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
-
 
 const Horse = () => {
   const { toast } = useToast();
@@ -26,7 +25,7 @@ const Horse = () => {
     StableID: z.number(),
   });
   
-  const [employee, setEmployees] = useState<Employee[] | undefined>(undefined);
+  /*const [employee, setEmployees] = useState<Employee[] | undefined>(undefined);
   const [bleed, setBleeds] = useState<Bleed[] | undefined>(undefined);
   const [sex, setSexs] = useState<Sex[] | undefined>(undefined);
   const [stable, setStables] = useState<Stable[] | undefined>(undefined);
@@ -73,7 +72,7 @@ const Horse = () => {
       ...formData,
       ID: 0,
       Name: "cyan",
-      Age: "12",
+      Age: "",
       Date: new Date(),
       Image: " ",
       EmployeeID: 1,
@@ -95,13 +94,13 @@ const Horse = () => {
         duration: 1500,
       });
     }
-  }
+  }*/
 
   return (
     <div className="w-full h-screen flex flex-col item-center justify-item">
       <h1 className="text-center text-2xl font-sans mt-10 ml-20">จัดการข้อมูลม้า</h1>
       <div className="ml-10 mt-1 mr-10 flex flex-row-reverse space-x-9 space-x-reverse">
-        <Form
+        {/*<Form
           validator={formHorse}
           onValid={onValid}
           fields={({ form }) => (
@@ -120,29 +119,13 @@ const Horse = () => {
                     </Label>
                     <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
                   </div>
-                </div>  
+                </div>
+                
                 </DialogContent>
             </Dialog>
           )}
-        ></Form>
-        {/*<Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">Add</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>เพิ่มข้อมูลม้า</DialogTitle>              
-            </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                      วันนที่เข้ามา
-                  </Label>
-                  <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
-                </div>
-              </div>  
-          </DialogContent>   
-        </Dialog>*/}
+          ></Form>*/}
+          
       </div>
     </div>
   );
