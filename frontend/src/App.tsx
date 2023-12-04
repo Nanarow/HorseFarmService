@@ -38,7 +38,7 @@ function App() {
       <Route element={<PrivateRoute role="employee" path="/login/employee" />}>
         <Route path="/course/setting" element={<CourseSetting />}></Route>
         <Route path="/food" element={<Food />}></Route>
-        <Route path="/heath" element={<Health />}></Route>
+        <Route path="/health" element={<Health />}></Route>
         <Route path="/stable" element={<Stable />}></Route>
         <Route path="/horse" element={<Horse />}></Route>
       </Route>

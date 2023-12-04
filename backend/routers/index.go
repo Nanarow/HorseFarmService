@@ -20,7 +20,7 @@ func InitRouter(route *gin.Engine) {
 
 }
 func initRequiredAuth(route *gin.RouterGroup) {
-	route.Use(middlewares.Authentication())
+	//route.Use(middlewares.Authentication())
 	// route.Use(middlewares.Authorization())
 	route.GET("/tours", controllers.GetAll[*entity.TourRegistration])
 	route.GET("/tours/:id", controllers.Get[*entity.TourRegistration])
@@ -46,7 +46,6 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.Sex](route, "/sexes")
 	InitBasicApi[*entity.Location](route, "/locations")
 	InitBasicApi[*entity.Stable](route, "/stables")
-	InitBasicApi[*entity.Address](route, "/addresses")
 	InitBasicApi[*entity.Employee](route, "/employees")
 
 	// route.GET("/users/:id", func(c *gin.Context) {

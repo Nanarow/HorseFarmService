@@ -149,7 +149,7 @@ type Employee struct {
 	BaseModel
 	PositionID uint
 	GenderID   uint
-	AddressID  uint
+	PreceedID  uint
 	FirstName  string
 	LastName   string
 	Email      string
@@ -176,13 +176,9 @@ type Gender struct {
 	Employees []Employee
 	Users     []User
 }
-type Address struct {
+type Preceed struct {
 	BaseModel
-	Local     string
-	Locality  string
-	District  string
-	Province  string
-	ZipCode   string
+	Name		string
 	Employees []Employee
 }
 
@@ -195,7 +191,6 @@ type Health struct {
 	Vaccine    string
 	Parasite   string
 	Blood      string
-	Remark     string
 	Date       time.Time
 }
 
