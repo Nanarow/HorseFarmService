@@ -1,17 +1,17 @@
-//import React from "react";
+import React from "react";
 import { z } from "zod";
-//import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@shadcn/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@shadcn/ui/table"
 import { Button } from "@shadcn/ui/button"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,} from "@shadcn/ui/dialog"
 import { Input } from "@shadcn/ui/input"
 import { Label } from "@shadcn/ui/label"
 import Form from "@shadcn/simplify/form";
 import { useEffect, useState } from "react";
-//import { Bleed , Employee, Horse, Sex, Stable} from "@src/interfaces";
+import { Bleed , Employee, Sex,Horse, Stable} from "@src/interfaces";
 import { http } from "../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 
-const Horse = () => {
+const HorsePage = () => {
   const { toast } = useToast();
 
   const formHorse = z.object({
@@ -25,7 +25,7 @@ const Horse = () => {
     StableID: z.number(),
   });
   
-  /*const [employee, setEmployees] = useState<Employee[] | undefined>(undefined);
+  const [employee, setEmployees] = useState<Employee[] | undefined>(undefined);
   const [bleed, setBleeds] = useState<Bleed[] | undefined>(undefined);
   const [sex, setSexs] = useState<Sex[] | undefined>(undefined);
   const [stable, setStables] = useState<Stable[] | undefined>(undefined);
@@ -94,13 +94,13 @@ const Horse = () => {
         duration: 1500,
       });
     }
-  }*/
+  }
 
   return (
     <div className="w-full h-screen flex flex-col item-center justify-item">
       <h1 className="text-center text-2xl font-sans mt-10 ml-20">จัดการข้อมูลม้า</h1>
       <div className="ml-10 mt-1 mr-10 flex flex-row-reverse space-x-9 space-x-reverse">
-        {/*<Form
+        <Form
           validator={formHorse}
           onValid={onValid}
           fields={({ form }) => (
@@ -124,11 +124,11 @@ const Horse = () => {
                 </DialogContent>
             </Dialog>
           )}
-          ></Form>*/}
+          ></Form>
           
       </div>
     </div>
   );
 };
 
-export default Horse;
+export default HorsePage;
