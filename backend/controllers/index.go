@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -120,6 +121,33 @@ func Login(c *gin.Context) {
 	responseOK(user, c)
 }
 
+func AutoLogin(c *gin.Context) {
+	var user entity.User
+	_, payload, err := utils.ValidateJWT(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+	err = entity.DB().Where("email = ?", payload["email"].(string)).First(&user).Error
+	if isError(err, c) {
+		return
+	}
+	responseOK(user, c)
+}
+
+func AutoLoginEmployee(c *gin.Context) {
+	var employee entity.Employee
+	_, payload, err := utils.ValidateJWT(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+	err = entity.DB().Where("email = ?", payload["email"].(string)).First(&employee).Error
+	if isError(err, c) {
+		return
+	}
+	responseOK(employee, c)
+}
 func LoginEmployee(c *gin.Context) {
 	var payload entity.LoginPayload
 	var employee entity.Employee

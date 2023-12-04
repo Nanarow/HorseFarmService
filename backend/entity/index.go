@@ -36,31 +36,94 @@ func SetupDatabase() {
 		&Enrollment{},
 		&Food{},
 		&Employee{},
-		&Preceed{},
+		&Precede{},
 		&Health{},
 		&Plan{},
 	)
 	db = database
-	// users := []User{
-	// 	{
-	// 		FirstName: "admin",
-	// 		LastName:  "admin",
-	// 		Email:     "admin",
-	// 		Password:  "admin",
-	// 		Phone:     "admin",
-	// 		RoleID:    1,
-	// 		GenderID:  1,
-	// 	}, {
-	// 		FirstName: "user",
-	// 		LastName:  "user",
-	// 		Email:     "user",
-	// 		Password:  "user",
-	// 		Phone:     "user",
-	// 		RoleID:    2,
-	// 		GenderID:  1,
-	// 	},
-	// }
-	// for _, user := range users {
-	// 	db.Create(user)
-	// }
+	SetupData(db)
+
+}
+
+func SetupData(db *gorm.DB) {
+	roles := []Role{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "admin",
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "user",
+		},
+	}
+	for _, role := range roles {
+		db.Create(&role)
+	}
+	// // users
+	users := []User{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Email:     "admin@admin.com",
+			Password:  "admin",
+			RoleID:    1,
+		}, {
+			BaseModel: BaseModel{ID: 2},
+			Email:     "user@user.com",
+			Password:  "user",
+			RoleID:    2,
+		},
+		{
+			BaseModel: BaseModel{ID: 3},
+			Email:     "user2@user.com",
+			Password:  "user",
+			RoleID:    2,
+		},
+		{
+			BaseModel: BaseModel{ID: 4},
+			Email:     "user3@user.com",
+			Password:  "user",
+			RoleID:    2,
+		},
+	}
+	for _, user := range users {
+		db.Create(&user)
+	}
+	// roles
+
+	// position
+	positions := []Position{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "pos1",
+			Salary:    10000,
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "pos2",
+			Salary:    5000,
+		},
+	}
+	for _, position := range positions {
+		db.Create(&position)
+	}
+
+	// employee
+	employees := []Employee{
+		{
+			BaseModel:  BaseModel{ID: 1},
+			Email:      "emp1@emp.com",
+			Password:   "emp",
+			PositionID: 1,
+		},
+		{
+			BaseModel:  BaseModel{ID: 1},
+			Email:      "emp2@emp.com",
+			Password:   "emp",
+			PositionID: 2,
+		},
+	}
+	for _, employee := range employees {
+		db.Create(&employee)
+	}
+
 }

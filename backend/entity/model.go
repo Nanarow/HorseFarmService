@@ -31,7 +31,6 @@ type User struct {
 	Enrollments       []Enrollment       `json:"-"`
 }
 
-// user.gender.name
 type Role struct {
 	BaseModel
 	Name  string
@@ -161,7 +160,7 @@ type Employee struct {
 	BaseModel
 	PositionID uint
 	GenderID   uint
-	PreceedID  uint
+	PrecedeID  uint
 	FirstName  string
 	LastName   string
 	Email      string
@@ -188,9 +187,9 @@ type Gender struct {
 	Employees []Employee `json:"-"`
 	Users     []User     `json:"-"`
 }
-type Preceed struct {
+type Precede struct {
 	BaseModel
-	Name		string
+	Name      string
 	Employees []Employee
 }
 

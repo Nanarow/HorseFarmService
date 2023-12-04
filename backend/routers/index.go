@@ -13,6 +13,8 @@ func InitRouter(route *gin.Engine) {
 
 	route.POST("/login", controllers.Login)
 	route.POST("/login/employee", controllers.LoginEmployee)
+	route.POST("/login/me", controllers.AutoLogin)
+	route.POST("/login/employee/me", controllers.AutoLoginEmployee)
 	route.POST("/logout", controllers.Logout)
 
 	authRouter := route.Group("/")
@@ -43,13 +45,4 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.Stable](route, "/stables")
 	InitBasicApi[*entity.Employee](route, "/employees")
 	InitBasicApi[*entity.Plan](route, "/plans")
-
-	// route.GET("/users/:id", func(c *gin.Context) {
-
-	// 	c.JSON(200, gin.H{"id": c.Param("id"), "full_path": c.FullPath()})
-	// })
-	// route.GET("/users", func(c *gin.Context) {
-
-	// 	c.JSON(200, gin.H{"id": "all", "full_path": c.FullPath()})
-	// })
 }

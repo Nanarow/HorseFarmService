@@ -1,57 +1,55 @@
 import { http } from "../services/httpRequest";
-import { useToast } from "@shadcn/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/ui/card";
 import Form from "@shadcn/simplify/form";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@shadcn/ui/badge";
+import { useEffect } from "react";
+import { useAuth } from "@src/providers/authProvider";
+import { Employee, User } from "@src/interfaces";
 
 interface LoginProps {
   role: "user" | "employee" | "admin";
 }
+const validLogin = z.object({
+  Email: z.string().email("Please enter a valid email"),
+  Password: z
+    .string()
+    .min(2, "Password must be at least 8 characters long")
+    .max(20, "Password must be at most 20 characters long"),
+});
+type TLogin = z.infer<typeof validLogin>;
 const Login = ({ role }: LoginProps) => {
-  const { toast } = useToast();
+  const { setUser, setEmployee } = useAuth();
   const navigate = useNavigate();
-  const validLogin = z.object({
-    Email: z.string().email("Please enter a valid email"),
-    Password: z
-      .string()
-      .min(2, "Password must be at least 8 characters long")
-      .max(20, "Password must be at most 20 characters long"),
-  });
 
-  async function onLogin(data: z.infer<typeof validLogin>) {
+  async function onLogin(data?: TLogin) {
     if (role === "user" || role === "admin") {
-      const res = await http.Post("/login", data);
+      const res = await http.Post<User, TLogin | undefined>(
+        data ? "/login" : "/login/me",
+        data
+      );
       if (res.ok) {
-        navigate("/login", { replace: true });
+        setUser(res.data);
+        navigate("/course", { replace: true });
       }
-      console.log("login success: ", res);
     } else {
-      const res = await http.Post("/login/employee", data);
+      const res = await http.Post<Employee, TLogin | undefined>(
+        data ? "/login/employee" : "/login/employee/me",
+        data
+      );
       if (res.ok) {
-        navigate("/login", { replace: true });
+        setEmployee(res.data);
+        navigate("/course", { replace: true });
       }
-      console.log("login success: ", res);
     }
   }
-  // async function getUser() {
-  //   const res = await http.Get("/users");
-  //   console.log("users: ", res);
-  //   toast({
-  //     title: "Users",
-  //     description: (
-  //       <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-  //         <code className="text-white">{JSON.stringify(res.ok, null, 2)}</code>
-  //       </pre>
-  //     ),
-  //     duration: 1000,
-  //   });
-  // }
-  // async function onLogout() {
-  //   const res = await http.Post("/logout", {});
-  //   console.log("response: ", res);
-  // }
+
+  useEffect(() => {
+    return () => {
+      onLogin();
+    };
+  }, []);
 
   return (
     <div className="w-full h-screen bg-secondary flex flex-col justify-center items-center gap-2">

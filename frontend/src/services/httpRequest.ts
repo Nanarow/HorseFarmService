@@ -74,6 +74,7 @@ class HttpRequest {
         ok: false,
         error: `${result.error}`,
       };
+      console.log(fail.error);
       return fail;
     }
 

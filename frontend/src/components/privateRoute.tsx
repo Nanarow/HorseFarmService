@@ -1,3 +1,4 @@
+import { useAuth } from "@src/providers/authProvider";
 import { Navigate, Outlet } from "react-router-dom";
 
 type Props = {
@@ -6,11 +7,14 @@ type Props = {
 };
 
 const PrivateRoute = ({ role, path = "/login" }: Props) => {
-  if (!role) {
+  const { user, employee } = useAuth();
+  if ((role === "admin" || role === "user") && !user) {
     return <Navigate to={path} replace />;
   }
-
-  return <Outlet context={[1, 2]} />;
+  if (role === "employee" && !employee) {
+    return <Navigate to={path} replace />;
+  }
+  return <Outlet />;
 };
 
 export default PrivateRoute;
