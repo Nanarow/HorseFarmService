@@ -8,6 +8,8 @@ import { Label } from "@shadcn/ui";
 import { useToast } from "@shadcn/ui/use-toast";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import HealthImage from "./../assets/healthbg2.jpg";
+import { LogOut } from 'lucide-react';
+import { Link } from "react-router-dom";
 
 
 const Health = () => {
@@ -94,7 +96,7 @@ const Health = () => {
 
   return (
     <div className="relative">
-      <section className="w-2/5 h-full  bg-cover bg-center absolute  inset-0 	">
+      <section className="w-2/5 h-full  bg-cover bg-center absolute   	">
         <img
           src={HealthImage}
           className="w-full h-full object-cover rounded "
@@ -104,7 +106,7 @@ const Health = () => {
         
         
       <Form
-        className="flex justify-end	"
+        className="flex justify-end"
         validator={formHealth}
         onValid={onValid}
         onInvalid={console.log}
@@ -118,52 +120,52 @@ const Health = () => {
               <Label className=" text-2xl text-primary mx-64 flex mt-16">
                 วันที่ทำการตรวจสุขภาพม้า:<span className="text-red-500 ">*</span>
                 <div className=" px-14 ">
-                  <Form.DatePicker useForm={form} name="Date" />
+                  <Form.DatePicker className="w-96 h-14" useForm={form} name="Date" />
                 </div>
               </Label>
             </div>
 
             
-
-              {horses && (
-                <>
-                  <div className="flex gap-14 mx-64 mt-6">
-                    <Label className="text-2xl text-primary ">
-                      ชื่อม้า:<span className="text-red-500">*</span>
-                    </Label>
-                    <Form.Select
-                      valueAsNumber
-                      className="h-14 px-24 text-2xl"
-                      useForm={form}
-                      items={HorseToSelectItems(horses)}
-                      name="HorseID"
-                      placeholder="choose horse name"
+          <div className=" items-center justify-center"> 
+            {horses && (
+              <>
+                <div className="flex gap-14 mx-64 mt-6"> 
+                  <Label className="text-2xl text-primary ">
+                    ชื่อม้า:<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Select
+                    valueAsNumber
+                    className="h-14 px-16 text-2xl text-primary"
+                    useForm={form}
+                    items={HorseToSelectItems(horses)}
+                    name="HorseID"
+                    placeholder="Choose horse name"
                     />
-                  </div>
+                </div>
 
-                </>
-              )}
+              </>
+            )}
              
-              {employee && (
-                <>
-                  <div className=" flex gap-14 mx-64 mt-6">
-                    <Label className="text-2xl text-primary ">
-                      ผู้ตรวจ: <span className="text-red-500">*</span>
-                    </Label>
-                    <Form.Select
-                      valueAsNumber
-                      className="h-14 px-24 text-2xl "
-                      useForm={form}
-                      items={EmployeeToSelectItems(employee)}
-                      name="EmployeeID"
-                      placeholder="choose employee name"
-                    />
-                  </div>
-                </>
-              )}
+            {employee && (
+              <>
+                <div className=" flex gap-14 mx-64 mt-6">
+                  <Label className="text-2xl text-primary ">
+                    ผู้ตรวจ:<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Select
+                    valueAsNumber
+                    className="h-14 px-24 text-2xl text-primary"
+                    useForm={form}
+                    items={EmployeeToSelectItems(employee)}
+                    name="EmployeeID"
+                    placeholder="Choose employee name"
+                  />
+                </div>
+              </>
+            )}
 
-            
-            <div className="flex flex-col gap-2  relative " >
+             
+            <div className="flex flex-col  relative " >
               <Label className="flex text-primary text-2xl mx-64 mt-6">
                 การตรวจสัญญาณชีพ:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vital" type="text"></Form.Input>
@@ -184,16 +186,21 @@ const Health = () => {
                 การตรวจเลือด:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
               </Label>
-            </div>
+            
 
 
             <Button
               type="submit"
-              className="w-48 h-12 text-2xl  text-center bg-green-600 rounded-md	mt-7 mx-auto	text-primary text-white	 	"
+              className="w-48 h-12 text-2xl  text-center bg-green-600 rounded-md	mt-5 mx-auto	text-primary text-white	 	"
             >บันทึกข้อมูล
             </Button>
+            </div>
+            <Link to="/login/employee">
+              <LogOut className=" fixed bottom-9 right-16 w-10 h-10  cursor-pointer  text-red-500"/>
+              <Label className="fixed bottom-2 right-16 text-primary text-1xl text-red-500 cursor-pointer">Log out</Label>
+            </Link>
           </div>
-
+        </div> 
         )}
       />
     </div>
