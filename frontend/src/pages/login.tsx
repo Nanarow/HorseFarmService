@@ -2,11 +2,12 @@ import { http } from "../services/httpRequest";
 import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/ui/card";
 import Form from "@shadcn/simplify/form";
 import { z } from "zod";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Badge } from "@shadcn/ui/badge";
 import { useEffect } from "react";
 import { useAuth } from "@src/providers/authProvider";
 import { Employee, User } from "@src/interfaces";
+import { Label } from "@shadcn/ui";
 
 interface LoginProps {
   role: "user" | "employee" | "admin";
@@ -22,6 +23,8 @@ type TLogin = z.infer<typeof validLogin>;
 const Login = ({ role }: LoginProps) => {
   const { setUser, setEmployee } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || "/home";
 
   async function onLogin(data?: TLogin) {
     if (role === "user" || role === "admin") {
@@ -31,7 +34,7 @@ const Login = ({ role }: LoginProps) => {
       );
       if (res.ok) {
         setUser(res.data);
-        navigate("/course", { replace: true });
+        navigate(from, { replace: true });
       }
     } else {
       const res = await http.Post<Employee, TLogin | undefined>(
@@ -39,8 +42,12 @@ const Login = ({ role }: LoginProps) => {
         data
       );
       if (res.ok) {
-        setEmployee(res.data);
-        navigate("/course", { replace: true });
+        const emp = res.data;
+        setEmployee(emp);
+        // if (emp.PositionID === 155) {
+        //   navigate(from, { replace: true });
+        // }
+        navigate(from, { replace: true });
       }
     }
   }
@@ -63,7 +70,7 @@ const Login = ({ role }: LoginProps) => {
         <CardContent>
           {role !== "user" ? (
             <Badge
-              className={` absolute top-2 right-2   rounded-full   ${
+              className={` absolute top-2 right-2 rounded-full ${
                 role === "admin"
                   ? "bg-sky-500 hover:bg-sky-500/80"
                   : "bg-amber-500 hover:bg-amber-500/80"
@@ -79,17 +86,19 @@ const Login = ({ role }: LoginProps) => {
             onInvalid={(errorFields) => console.log(errorFields)}
             fields={({ form }) => (
               <>
+                <Label>Email</Label>
                 <Form.Input
                   useForm={form}
                   name="Email"
                   type="email"
-                  placeholder="Email"
+                  placeholder="example@mail.com"
                 />
+                <Label>Password</Label>
                 <Form.Input
                   useForm={form}
                   name="Password"
                   type="password"
-                  placeholder="Password"
+                  placeholder="A-Z,0-9,@"
                 />
                 <Form.SubmitButton useForm={form}>Log in</Form.SubmitButton>
               </>
@@ -97,17 +106,6 @@ const Login = ({ role }: LoginProps) => {
           />
         </CardContent>
       </Card>
-      {/* <div className="flex gap-2 relative">
-        <Button onClick={onLogin}>Login</Button>
-        <Badge className=" bg-emerald-500 rounded-full absolute top-0 left-0 -translate-x-1/4 -translate-y-1/2">
-          admin
-        </Badge>
-      </div>
-      <Button onClick={getUser}>Get Users</Button>
-      <Button onClick={() => console.log("Cookie : ", document.cookie)}>
-        Cookie
-      </Button>
-      <Button onClick={onLogout}>Logout</Button> */}
     </div>
   );
 };
