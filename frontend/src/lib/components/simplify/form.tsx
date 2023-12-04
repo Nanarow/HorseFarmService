@@ -37,6 +37,12 @@ import {
 import { ImageToBase64 } from "../../../utils";
 import { CheckedState } from "@radix-ui/react-checkbox";
 
+const defaultOptions = {
+  shouldValidate: true,
+  shouldDirty: true,
+  shouldTouch: true,
+};
+
 interface Fields<T extends FieldValues> {
   form: UseFormReturn<T, any, undefined>;
 }
@@ -97,33 +103,23 @@ const FormInput = <T extends FieldValues>({
     setValue,
     register,
   } = useForm;
+
   async function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const options = errors[name] ? defaultOptions : {};
     if (type === "number") {
-      setValue(name, +e.target.value as PathValue<T, Path<T>>, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+      setValue(name, +e.target.value as PathValue<T, Path<T>>, options);
     } else if (type === "file") {
       const b64 = await ImageToBase64(e.target.files?.item(0) as File);
-      setValue(name, b64 as PathValue<T, Path<T>>, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+      setValue(name, b64 as PathValue<T, Path<T>>, options);
     } else {
-      setValue(name, e.target.value as PathValue<T, Path<T>>, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+      setValue(name, e.target.value as PathValue<T, Path<T>>, options);
     }
   }
 
   useEffect(() => {
     return () => {
       if (props.defaultValue) {
-        setValue(name, props.defaultValue as PathValue<T, Path<T>>, {
-          shouldValidate: true,
-          shouldDirty: true,
-        });
+        setValue(name, props.defaultValue as PathValue<T, Path<T>>);
       }
     };
   }, []);
@@ -160,10 +156,8 @@ const FormTextArea = <T extends FieldValues>({
     formState: { errors },
   } = useForm;
   function setNewValue(value: string | number | readonly string[]) {
-    setValue(name, value as PathValue<T, Path<T>>, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
+    const options = errors[name] ? defaultOptions : {};
+    setValue(name, value as PathValue<T, Path<T>>, options);
   }
   useEffect(() => {
     return () => {
@@ -217,15 +211,13 @@ const FormSelect = <T extends FieldValues>({
   } = useForm;
 
   function setNewValue(value: string | number) {
+    const options = errors[name] ? defaultOptions : {};
     setValue(
       name,
       valueAsNumber
         ? (+value as PathValue<T, Path<T>>)
         : (value as PathValue<T, Path<T>>),
-      {
-        shouldValidate: true,
-        shouldDirty: true,
-      }
+      options
     );
   }
   useEffect(() => {
@@ -289,10 +281,8 @@ const FormDatePicker = <T extends FieldValues>({
     formState: { errors },
   } = useForm;
   function setNewValue(value: Date) {
-    setValue(name, value as PathValue<T, Path<T>>, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
+    const options = errors[name] ? defaultOptions : {};
+    setValue(name, value as PathValue<T, Path<T>>, options);
   }
   useEffect(() => {
     return () => {
@@ -356,10 +346,8 @@ const FormCheckbox = <T extends FieldValues>({
     formState: { errors },
   } = useForm;
   function setNewValue(value: CheckedState) {
-    setValue(name, value as PathValue<T, Path<T>>, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
+    const options = errors[name] ? defaultOptions : {};
+    setValue(name, value as PathValue<T, Path<T>>, options);
   }
   useEffect(() => {
     return () => {
@@ -407,10 +395,8 @@ const FormSwitch = <T extends FieldValues>({
     formState: { errors },
   } = useForm;
   function setNewValue(value: boolean) {
-    setValue(name, value as PathValue<T, Path<T>>, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
+    const options = errors[name] ? defaultOptions : {};
+    setValue(name, value as PathValue<T, Path<T>>, options);
   }
   useEffect(() => {
     return () => {
@@ -459,15 +445,13 @@ const FormRadioGroup = <T extends FieldValues>({
     formState: { errors },
   } = useForm;
   function setNewValue(value: string | number) {
+    const options = errors[name] ? defaultOptions : {};
     setValue(
       name,
       valueAsNumber
         ? (+value as PathValue<T, Path<T>>)
         : (value as PathValue<T, Path<T>>),
-      {
-        shouldValidate: true,
-        shouldDirty: true,
-      }
+      options
     );
   }
   useEffect(() => {

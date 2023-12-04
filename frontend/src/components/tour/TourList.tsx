@@ -1,9 +1,4 @@
-import {
-  ArrowLeftSquareIcon,
-  ChevronLeftIcon,
-  Edit,
-  XSquare,
-} from "lucide-react";
+import { ArrowLeftSquareIcon, Edit, XSquare } from "lucide-react";
 import { TourRegistration } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
@@ -19,6 +14,7 @@ import {
 import TourEdit from "./TourEdit";
 import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import { format } from "date-fns";
+import TourAlert from "./TourAlert";
 
 interface Props {
   setTabs: React.Dispatch<React.SetStateAction<string>>;
@@ -26,8 +22,6 @@ interface Props {
 
 const TourList = ({ setTabs }: Props) => {
   const [tours, setTours] = useState<TourRegistration[] | undefined>(undefined);
-  // const [openEdit, setOpenEdit] = useState(false);
-  // const [openCancel, setOpenCancel] = useState(false);
   async function fetchTours() {
     const res = await http.Get<TourRegistration[]>("/tours");
     if (res.ok) {
@@ -39,12 +33,12 @@ const TourList = ({ setTabs }: Props) => {
       fetchTours();
     };
   }, []);
-  async function handleChange(open: boolean) {
-    if (open) {
-      await fetchTours();
-    }
-  }
-  function onEdit() {}
+  // async function handleChange(open: boolean) {
+  //   if (open) {
+  //     await fetchTours();
+  //   }
+  // }
+  // function onEdit() {}
 
   return (
     <div className="w-full h-full relative p-8">
@@ -87,18 +81,23 @@ const TourList = ({ setTabs }: Props) => {
                   {tour.Participants}
                 </TableCell>
                 <TableCell className=" relative">
-                  <Dialog onOpenChange={handleChange}>
+                  <Dialog>
                     <DialogTrigger asChild>
-                      <Edit
-                        onClick={onEdit}
-                        className="text-yellow-500 absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 hover:scale-110 cursor-pointer"
-                      />
+                      <Edit className="text-yellow-500 absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 hover:scale-110 cursor-pointer" />
                     </DialogTrigger>
-                    <TourEdit tour={tour}></TourEdit>
+                    <TourEdit tour={tour} onSave={fetchTours}></TourEdit>
                   </Dialog>
                 </TableCell>
                 <TableCell className=" relative">
-                  <XSquare className="text-red-500 absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 hover:scale-110 cursor-pointer" />
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <XSquare className="text-red-500 absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 hover:scale-110 cursor-pointer" />
+                    </DialogTrigger>
+                    <TourAlert
+                      tourID={tour.ID!}
+                      onCancel={fetchTours}
+                    ></TourAlert>
+                  </Dialog>
                 </TableCell>
               </TableRow>
             ))}
