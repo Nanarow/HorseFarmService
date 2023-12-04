@@ -35,7 +35,7 @@ export interface Enrollment {
 export interface Horse {
   ID: number;
   Name: string;
-  Age: string;
+  Age: number;
   Date: Date;
   Image: string;
   EmployeeID: number;
