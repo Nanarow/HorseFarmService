@@ -83,7 +83,7 @@ type Location struct {
 type Horse struct {
 	BaseModel
 	Name       string
-	Age        int
+	Age        string
 	Date       time.Time
 	Image      string
 	EmployeeID uint
