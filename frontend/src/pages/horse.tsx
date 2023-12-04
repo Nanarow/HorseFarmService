@@ -72,7 +72,7 @@ const HorsePage = () => {
       ...formData,
       ID: 0,
       Name: "cyan",
-      Age: "",
+      Age: 8,
       Date: new Date(),
       Image: " ",
       EmployeeID: 1,
