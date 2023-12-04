@@ -1,3 +1,5 @@
+import { ItemList } from "@shadcn/simplify/form";
+
 export function ImageToBase64(file: Blob | File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -91,4 +93,14 @@ export function urlToEmbed(url: string) {
     return "https://www.youtube.com/embed/" + id;
   }
   return "https://www.youtube.com/embed/" + id?.split("=").at(-1);
+}
+
+export function ToItemList<T extends { ID: number; Name: string }>(items: T[]) {
+  return items.map((item) => {
+    const newItem: ItemList = {
+      value: item.ID,
+      label: item.Name,
+    };
+    return newItem;
+  });
 }

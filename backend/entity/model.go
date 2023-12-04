@@ -9,13 +9,13 @@ type LoginPayload struct {
 
 type User struct {
 	BaseModel
-	FirstName   string
-	LastName    string
-	Email       string
-	Password    string
-	Phone       string
-	Profile     string
-	DateofBirth time.Time
+	FirstName string
+	LastName  string
+	Email     string
+	Password  string
+	Phone     string
+	Profile   string
+	Age       int
 
 	RoleID uint
 	Role   Role `gorm:"foreignKey:RoleID"`
@@ -26,23 +26,23 @@ type User struct {
 	RidingLevelID uint
 	RidingLevel   RidingLevel `gorm:"foreignKey:RidingLevelID"`
 
-	Supports          []Support
-	TourRegistrations []TourRegistration
-	Enrollments       []Enrollment
+	Supports          []Support          `json:"-"`
+	TourRegistrations []TourRegistration `gorm:"foreignKey:UserID"`
+	Enrollments       []Enrollment       `json:"-"`
 }
 
 // user.gender.name
 type Role struct {
 	BaseModel
 	Name  string
-	Users []User
+	Users []User `json:"-"`
 }
 
 type RidingLevel struct {
 	BaseModel
 	Name        string
 	Description string
-	Users       []User
+	Users       []User `json:"-"`
 }
 
 type Support struct {
@@ -71,27 +71,27 @@ type Schedule struct {
 	StartTime   time.Time
 	Description string
 	LocationID  uint
-	Courses     []Course
+	Courses     []Course `json:"-"`
 }
 
 type Location struct {
 	BaseModel
 	Name        string
 	Description string
-	Schedules   []Schedule
+	Schedules   []Schedule `json:"-"`
 }
 type Horse struct {
 	BaseModel
 	Name       string
-	Age        string
+	Age        int
 	Date       time.Time
 	Image      string
 	EmployeeID uint
 	BleedID    uint
 	SexID      uint
 	StableID   uint
-	Courses    []*Course `gorm:"many2many:horse_courses;"`
-	Healths    []Health
+	Courses    []*Course `gorm:"many2many:horse_courses;" json:"-"`
+	Healths    []Health  `json:"-"`
 }
 
 type Stable struct {
@@ -101,20 +101,20 @@ type Stable struct {
 	Temperature int
 	Humidity    int
 	Description string
-	Horses      []Horse
+	Horses      []Horse `json:"-"`
 }
 
 type Bleed struct {
 	BaseModel
 	Name        string
 	Description string
-	Horses      []Horse
+	Horses      []Horse `json:"-"`
 }
 
 type Sex struct {
 	BaseModel
 	Name   string
-	Horses []Horse
+	Horses []Horse `json:"-"`
 }
 
 type TourType struct {
@@ -123,18 +123,30 @@ type TourType struct {
 	MinParticipant    int
 	MaxParticipant    int
 	Description       string
-	TourRegistrations []TourRegistration
+	TourRegistrations []TourRegistration `json:"-"`
 }
 
 type TourRegistration struct {
 	BaseModel
-	UserID       uint
-	TourTypeID   uint
-	TourType     TourType `gorm:"foreignKey:TourTypeID"`
-	Schedule     uint
+	UserID uint
+
+	TourTypeID uint
+	TourType   TourType `gorm:"foreignKey:TourTypeID"`
+
+	PlanID uint
+	Plan   Plan `gorm:"foreignKey:PlanID"`
+
+	Email        string
 	Participants int
 	Name         string
 	Date         time.Time
+}
+
+type Plan struct {
+	BaseModel
+	Name              string
+	Description       string
+	TourRegistrations []TourRegistration `json:"-"`
 }
 
 type Enrollment struct {
@@ -149,17 +161,17 @@ type Employee struct {
 	BaseModel
 	PositionID uint
 	GenderID   uint
-	AddressID  uint
+	PreceedID  uint
 	FirstName  string
 	LastName   string
 	Email      string
 	Password   string
 	DayOfBirth time.Time
 	Phone      string
-	Healths    []Health
-	Horses     []Horse
-	Courses    []Course
-	Foods      []Food
+	Healths    []Health `json:"-"`
+	Horses     []Horse  `json:"-"`
+	Courses    []Course `json:"-"`
+	Foods      []Food   `json:"-"`
 }
 
 type Position struct {
@@ -167,22 +179,18 @@ type Position struct {
 	Name        string
 	Salary      int
 	Description string
-	Employees   []Employee
+	Employees   []Employee `json:"-"`
 }
 
 type Gender struct {
 	BaseModel
 	Name      string
-	Employees []Employee
-	Users     []User
+	Employees []Employee `json:"-"`
+	Users     []User     `json:"-"`
 }
-type Address struct {
+type Preceed struct {
 	BaseModel
-	Local     string
-	Locality  string
-	District  string
-	Province  string
-	ZipCode   string
+	Name		string
 	Employees []Employee
 }
 
@@ -195,7 +203,6 @@ type Health struct {
 	Vaccine    string
 	Parasite   string
 	Blood      string
-	Remark     string
 	Date       time.Time
 }
 

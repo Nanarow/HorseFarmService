@@ -1,4 +1,4 @@
-type Method = "GET" | "POST" | "PATCH" | "DELETE";
+type Method = "GET" | "POST" | "PUT" | "DELETE";
 
 type SuccessResponse<DataType> = {
   ok: true;
@@ -38,7 +38,7 @@ class HttpRequest {
     body: Partial<BodyType>
   ) {
     const response = await this.sendRequest<DataType>(
-      "PATCH",
+      "PUT",
       this.base_url + resource + "/" + id,
       JSON.stringify(body)
     );

@@ -22,7 +22,8 @@
     "baseUrl": ".",
     "paths": {
       "@shadcn/*": ["./src/lib/components/*"],
-      "@cn/*": ["./src/lib/*"]
+      "@cn/*": ["./src/lib/*"],
+      "@src/*": ["./src/*"]
     }
   },
   "include": ["src"],

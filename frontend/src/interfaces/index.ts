@@ -3,10 +3,18 @@ export interface TourRegistration {
   UserID: number;
   TourTypeID: number;
   TourType?: TourType;
-  ScheduleID?: number;
+  PlanID: number;
+  Plan?: Plan;
+  Email: string;
   Participants: number;
   Name: string;
   Date: Date;
+}
+
+export interface Plan {
+  ID: number;
+  Name: string;
+  Description: string;
 }
 
 export interface TourType {
@@ -27,7 +35,7 @@ export interface Enrollment {
 export interface Horse {
   ID: number;
   Name: string;
-  Age: string;
+  Age: number;
   Date: Date;
   Image: string;
   EmployeeID: number;
@@ -68,6 +76,7 @@ export interface User {
   GenderID: number;
   Gender: Gender;
   RidingLevelID: number;
+  TourRegistrations?: TourRegistration[];
 }
 
 export interface Support {
@@ -98,7 +107,7 @@ export interface Employee {
   ID: number;
   PositionID: number;
   GenderID: number;
-  AddressID: number;
+  PreceedID: number;
   FirstName: string;
   LastName: string;
   Email: string;
@@ -107,7 +116,7 @@ export interface Employee {
   Phone: string;
 }
 export interface Healths {
-  ID: number;
+  ID?: number;
   EmployeeID: number;
   HorseID: number;
   Vital: string;
@@ -115,7 +124,6 @@ export interface Healths {
   Vaccine: string;
   Parasite: string;
   Blood: string;
-  Remark: string;
   Date: Date;
 }
 
@@ -126,13 +134,10 @@ export interface Position {
   Description: string;
 }
 
-export interface Address {
+export interface Preceed {
   ID: number;
-  Local: string;
-  Locality: string;
-  District: string;
-  Province: string;
-  ZipCode: string;
+  Name: string;
+
 }
 
 export interface Course {
