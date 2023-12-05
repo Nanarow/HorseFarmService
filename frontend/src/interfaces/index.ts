@@ -137,7 +137,6 @@ export interface Position {
 export interface Precede {
   ID: number;
   Name: string;
-
 }
 
 export interface Course {

@@ -135,7 +135,7 @@ const Health = () => {
                   </Label>
                   <Form.Select
                     valueAsNumber
-                    className="h-14 px-16 text-xl text-primary"
+                    className="h-14 px-16 text-2xl text-primary"
                     useForm={form}
                     items={HorseToSelectItems(horses)}
                     name="HorseID"
@@ -154,7 +154,7 @@ const Health = () => {
                   </Label>
                   <Form.Select
                     valueAsNumber
-                    className="h-14 px-24 text-xl text-primary"
+                    className="h-14 px-24 text-2xl text-primary"
                     useForm={form}
                     items={EmployeeToSelectItems(employee)}
                     name="EmployeeID"
