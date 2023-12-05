@@ -107,7 +107,7 @@ export interface Employees {
   ID?: number;
   PositionID: number;
   GenderID: number;
-  PreceedID: number;
+  PrecedeID: number;
   FirstName: string;
   LastName: string;
   Email: string;
@@ -134,7 +134,7 @@ export interface Position {
   Description: string;
 }
 
-export interface Preceed {
+export interface Precede {
   ID: number;
   Name: string;
 

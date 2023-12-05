@@ -1,12 +1,13 @@
 import React from "react";
 import { z } from "zod";
 import { Button } from "@shadcn/ui/button";
-import { Position, Preceed, Gender, Employees } from "../interfaces";
+import { Position, Precede, Gender, Employees } from "../interfaces";
 import { http } from "../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 import { useEffect, useState } from "react";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { Label } from "@shadcn/ui";
+import HealthImage from "./../assets/employee.jpg";
 
 
 const Employee = () => {
@@ -20,12 +21,12 @@ const Employee = () => {
     Password: z.string().min(2, "Password must be at least 8 characters long").max(20, "Password must be at most 20 characters long"),
     DayOfBirth: z.date().min(new Date(), "Date must be in the future"),
     PositionID: z.number(),
-    PreceedID: z.number(),
+    PrecedeID: z.number(),
     GenderID: z.number(),
   });
 
   const [position, setPosition] = useState<Position[] | undefined>(undefined);
-  const [preceed, setPreceed] = useState<Preceed[] | undefined>(undefined);
+  const [precede, setPrecede] = useState<Precede[] | undefined>(undefined);
   const [gender, setGender] = useState<Gender[] | undefined>(undefined);
 
   useEffect(() => {
@@ -36,10 +37,10 @@ const Employee = () => {
       }
     }
 
-    async function fetchPreceed() {
-      const res = await http.Get<Preceed[]>("/preceeds");
+    async function fetchPrecede() {
+      const res = await http.Get<Precede[]>("/precedes");
       if (res.ok) {
-        setPreceed(res.data);
+        setPrecede(res.data);
       }
     }
 
@@ -50,14 +51,14 @@ const Employee = () => {
       }
     }
     fetchGender();
-    fetchPreceed();
+    fetchPrecede();
     fetchPosition();
   }, []);
 
-  function PreceedToSelectItems(Preceed: { ID: number; Name: string }[]): ItemList[] {
-    return Preceed.map((Preceed) => ({
-      value: Preceed.ID,
-      label: Preceed.Name,
+  function PrecedeToSelectItems(Precede: { ID: number; Name: string }[]): ItemList[] {
+    return Precede.map((Precede) => ({
+      value: Precede.ID,
+      label: Precede.Name,
     }));
   }
 
@@ -96,33 +97,43 @@ const Employee = () => {
 
   }
   return (
-    <div className="w-full h-full">
-      <h1 className="text-3xl font-black text-primary  mt-12 mx-32">
-        เพิ่มข้อมูลพนักงาน
-      </h1>
+    <div className="relative ">
+      <section className="w-2/5 h-full  bg-cover bg-center absolute   	">
+        <img
+          src={HealthImage}
+          className="w-full h-full object-cover rounded "
+          alt="Health"
+        />
+      </section>
+      
+    <div className="flex justify-end mt-8">
       
 
    
       <Form
-        className="flex justify-items-center"
+        className="flex justify-items-center gap-4 "
         validator={formEmployee}
         onValid={onValid}
         onInvalid={console.log}
         fields={({ form }) => (
 
           <div className="flex flex-col ">
-            {preceed && (
+
+            <h1 className="text-3xl font-black text-primary  mt-9 mx-32 text-center">
+            เพิ่มข้อมูลพนักงาน
+            </h1>
+            {precede && (
               <>
                 <div className="flex gap-14 mx-64 mt-6"> 
                   <Label className="text-2xl text-primary ">
-                    คำนำหน้า: <span className="text-red-500">*</span>
+                    คำนำหน้า:<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
                     valueAsNumber
-                    className="h-14 px-16 text-2xl text-primary"
+                    className="h-14 px-16 text-xl text-primary"
                     useForm={form}
-                    items={PreceedToSelectItems(preceed)}
-                    name="PreceedID"
+                    items={PrecedeToSelectItems(precede)}
+                    name="PrecedeID"
                     placeholder="Choose your preceed"
                     />
                 </div>
@@ -130,7 +141,7 @@ const Employee = () => {
               </>
             )}
             
-            <Label className="flex text-primary text-2xl mx-64 mt-8">
+            <Label className="flex text-primary text-2xl mx-64 mt-8 ">
               ชื่อ:<span className="text-red-500">*</span>
               <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="FirstName" type="text"></Form.Input>
             </Label>
@@ -141,7 +152,7 @@ const Employee = () => {
 
             {gender && (
               <>
-                <div className="flex gap-14 mx-64 mt-6"> 
+                <div className="flex gap-16 mx-64 mt-6"> 
                   <Label className="text-2xl text-primary flex">
                     เพศ: <span className="text-red-500">*</span>
                   </Label>
@@ -169,7 +180,7 @@ const Employee = () => {
 
             {position && (
               <>
-                <div className="flex gap-14 mx-64 mt-6"> 
+                <div className="flex gap-16 mx-64 mt-6"> 
                   <Label className="text-2xl text-primary flex">
                     ตำแหน่ง: <span className="text-red-500">*</span>
                   </Label>
@@ -194,16 +205,16 @@ const Employee = () => {
               อีเมล:<span className="text-red-500">*</span>
               <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Email" type="text"></Form.Input>
             </Label > 
-            <div className="flex">
+            <div className="mx-64 mt-6">
               <Button
                 type="submit"
-                className="w-48 h-12 text-2xl  text-center bg-green-600 rounded-md	mt-5 mx-auto	text-primary text-white	 	"
+                className="w-48 h-12 text-2xl  text-center bg-green-600 rounded-md	mt-5 mx-16	text-primary text-white	 	"
               >บันทึกข้อมูล
               </Button>
 
               <Button
                 type="submit"
-                className="w-48 h-12 text-2xl  text-center bg-red-600 rounded-md	mt-5 mx-auto	text-primary text-white	 	"
+                className="w-48 h-12 text-2xl  text-center bg-red-600 rounded-md	mt-5 mx-16	text-primary text-white	 	"
               >ยกเลิก
               </Button>
             </div>
@@ -213,7 +224,7 @@ const Employee = () => {
       />
     </div>
 
-
+    </div>
         
   );
 };
