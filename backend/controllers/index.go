@@ -10,40 +10,35 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-func HandlerCreate[T entity.Models](c *gin.Context, handler func(*gin.Context, T)) {
-	var model T
-	err := c.ShouldBindJSON(&model)
-	if isError(err, c) {
-		return
-	}
-	handler(c, model)
-}
+// unused
 
-func HandlerUpdate[T entity.Models](c *gin.Context, handler func(*gin.Context, T, uint)) {
-	var model T
-	id := c.Param("id")
-	id_int, err := strconv.Atoi(id)
-	if isError(err, c) {
-		return
-	}
-	err = c.ShouldBindJSON(&model)
-	if isError(err, c) {
-		return
-	}
-	model.SetID(uint(id_int))
-	handler(c, model, uint(id_int))
-}
+// func HandlerCreate[T entity.Models](c *gin.Context, handler func(*gin.Context, T)) {
+// 	var model T
+// 	err := c.ShouldBindJSON(&model)
+// 	if isError(err, c) {
+// 		return
+// 	}
+// 	handler(c, model)
+// }
+
+// func HandlerUpdate[T entity.Models](c *gin.Context, handler func(*gin.Context, T, uint)) {
+// 	var model T
+// 	id := c.Param("id")
+// 	id_int, err := strconv.Atoi(id)
+// 	if isError(err, c) {
+// 		return
+// 	}
+// 	err = c.ShouldBindJSON(&model)
+// 	if isError(err, c) {
+// 		return
+// 	}
+// 	model.SetID(uint(id_int))
+// 	handler(c, model, uint(id_int))
+// }
 
 func Get[T entity.Models](c *gin.Context) {
 	var model T
-	db := entity.DB()
-	for k, v := range c.Request.URL.Query() {
-		if len(v) < 1 {
-			db = db.Where(k+" = ?", v)
-		} else {
-			db = db.Where(k+" = ?", v[0])
-		}
-	}
+	db := addQuery(c, entity.DB())
 	id := c.Param("id")
 	err := db.Preload(clause.Associations).First(&model, id).Error
 	if isError(err, c) {
@@ -54,14 +49,7 @@ func Get[T entity.Models](c *gin.Context) {
 
 func GetAll[T entity.Models](c *gin.Context) {
 	var models []T
-	db := entity.DB()
-	for k, v := range c.Request.URL.Query() {
-		if len(v) < 1 {
-			db = db.Where(k+" = ?", v)
-		} else {
-			db = db.Where(k+" = ?", v[0])
-		}
-	}
+	db := addQuery(c, entity.DB())
 	err := db.Preload(clause.Associations).Find(&models).Error
 	if isError(err, c) {
 		return

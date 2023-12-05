@@ -17,6 +17,7 @@ func InitRouter(route *gin.Engine) {
 	route.POST("/login/employee/me", controllers.AutoLoginEmployee)
 	route.POST("/logout", controllers.Logout)
 
+	// example
 	// route.GET("/query", func(c *gin.Context) {
 	// 	c.JSON(200, gin.H{"message": c.Request.URL.Query()})
 	// })

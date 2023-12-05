@@ -14,58 +14,59 @@ func InitBasicApi[Type entity.Models](route *gin.RouterGroup, relativePath strin
 	route.DELETE(relativePath+"/:id", controllers.Delete[Type])
 }
 
-type BasicRouter[Type entity.Models] struct {
-	route        *gin.Engine
-	relativePath string
-}
+// unused
 
-func NewBasicRouter[T entity.Models](route *gin.Engine, relativePath string) *BasicRouter[T] {
-	return &BasicRouter[T]{
-		route:        route,
-		relativePath: relativePath,
-	}
-}
+// type BasicRouter[Type entity.Models] struct {
+// 	route        *gin.Engine
+// 	relativePath string
+// }
 
-func (this *BasicRouter[T]) GET() {
-	this.route.GET(this.relativePath+"/:id", controllers.Get[T])
-}
+// func NewBasicRouter[T entity.Models](route *gin.Engine, relativePath string) *BasicRouter[T] {
+// 	return &BasicRouter[T]{
+// 		route:        route,
+// 		relativePath: relativePath,
+// 	}
+// }
 
-func (this *BasicRouter[T]) POST() {
-	this.route.POST(this.relativePath, controllers.Create[T])
+// func (this *BasicRouter[T]) HandlerPost(handler func(*gin.Context, T)) {
+// 	this.route.POST(this.relativePath, func(ctx *gin.Context) {
+// 		controllers.HandlerCreate[T](ctx, handler)
+// 	})
+// }
 
-}
+// func (this *BasicRouter[T]) HandlerPut(handler func(*gin.Context, T, uint)) {
+// 	this.route.PUT(this.relativePath+"/:id", func(ctx *gin.Context) {
+// 		controllers.HandlerUpdate[T](ctx, handler)
+// 	})
+// }
 
-func (this *BasicRouter[T]) HandlerPost(handler func(*gin.Context, T)) {
-	this.route.POST(this.relativePath, func(ctx *gin.Context) {
-		controllers.HandlerCreate[T](ctx, handler)
-	})
-}
+// func (this *BasicRouter[T]) GET() {
+// 	this.route.GET(this.relativePath+"/:id", controllers.Get[T])
+// }
 
-func (this *BasicRouter[T]) HandlerPut(handler func(*gin.Context, T, uint)) {
-	this.route.PUT(this.relativePath+"/:id", func(ctx *gin.Context) {
-		controllers.HandlerUpdate[T](ctx, handler)
-	})
+// func (this *BasicRouter[T]) POST() {
+// 	this.route.POST(this.relativePath, controllers.Create[T])
 
-}
+// }
 
-func (this *BasicRouter[T]) PUT() {
-	this.route.PUT(this.relativePath+"/:id", controllers.Update[T])
+// func (this *BasicRouter[T]) PUT() {
+// 	this.route.PUT(this.relativePath+"/:id", controllers.Update[T])
 
-}
+// }
 
-func (this *BasicRouter[T]) DELETE() {
-	this.route.DELETE(this.relativePath+"/:id", controllers.Delete[T])
-}
+// func (this *BasicRouter[T]) DELETE() {
+// 	this.route.DELETE(this.relativePath+"/:id", controllers.Delete[T])
+// }
 
-func (this *BasicRouter[T]) GET_ALL() {
-	this.route.GET(this.relativePath, controllers.GetAll[T])
-}
+// func (this *BasicRouter[T]) GET_ALL() {
+// 	this.route.GET(this.relativePath, controllers.GetAll[T])
+// }
 
-// handler basic method e.g. get post put delete etc ...
-func (this *BasicRouter[T]) BasicHandler() {
-	this.route.GET(this.relativePath+"/:id", controllers.Get[T])
-	this.route.POST(this.relativePath, controllers.Create[T])
-	this.route.PUT(this.relativePath+"/:id", controllers.Update[T])
-	this.route.DELETE(this.relativePath+"/:id", controllers.Delete[T])
-	this.route.GET(this.relativePath, controllers.GetAll[T])
-}
+// // handler basic method e.g. get post put delete etc ...
+// func (this *BasicRouter[T]) BasicHandler() {
+// 	this.route.GET(this.relativePath+"/:id", controllers.Get[T])
+// 	this.route.POST(this.relativePath, controllers.Create[T])
+// 	this.route.PUT(this.relativePath+"/:id", controllers.Update[T])
+// 	this.route.DELETE(this.relativePath+"/:id", controllers.Delete[T])
+// 	this.route.GET(this.relativePath, controllers.GetAll[T])
+// }
