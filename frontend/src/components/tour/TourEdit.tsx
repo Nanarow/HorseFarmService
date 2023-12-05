@@ -15,11 +15,13 @@ import {
   DialogTitle,
 } from "@shadcn/ui/dialog";
 import { ToItemList } from "@src/utils";
+import { useAuth } from "@src/providers/authProvider";
 interface Props {
   tour: TourRegistration;
   onSave(): void;
 }
 const TourEdit = ({ tour, onSave }: Props) => {
+  const { user } = useAuth();
   const { toast } = useToast();
   const formSchema = z.object({
     Name: z.string(),
@@ -53,7 +55,7 @@ const TourEdit = ({ tour, onSave }: Props) => {
   async function onValid(formData: z.infer<typeof formSchema>) {
     const newTour: TourRegistration = {
       ...formData,
-      UserID: 0,
+      UserID: user?.ID!,
     };
     const res = await http.Put<TourRegistration, TourRegistration>(
       "/tours",
