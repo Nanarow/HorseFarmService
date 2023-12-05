@@ -10,6 +10,7 @@ import { useToast } from "@shadcn/ui/use-toast";
 import { ArrowRightSquareIcon } from "lucide-react";
 import { ToItemList } from "@src/utils";
 import { useAuth } from "@src/providers/authProvider";
+import { Tooltip } from "@shadcn/simplify/tooltip";
 interface Props {
   setTabs: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -79,10 +80,13 @@ const TourRegister = ({ setTabs }: Props) => {
         />
       </section>
       <section className="h-full w-full flex justify-center items-center relative">
-        <ArrowRightSquareIcon
-          className="absolute top-4 right-8 text-green-500"
-          onClick={() => setTabs("list")}
-        />
+        <Tooltip content={() => <span>My tours registration</span>} side="left">
+          <ArrowRightSquareIcon
+            className="absolute top-4 right-8 text-green-500"
+            onClick={() => setTabs("list")}
+          />
+        </Tooltip>
+
         <div className=" w-full h-full max-w-md flex justify-center flex-col py-12 md:px-0">
           <Label className=" text-3xl font-bold text-center">
             Tour Registration
