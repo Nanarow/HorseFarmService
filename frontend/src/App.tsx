@@ -7,6 +7,7 @@ import {
   Employee,
   Food,
   Health,
+  Home,
   Horse,
   Login,
   Stable,
@@ -15,10 +16,13 @@ import {
 } from "./pages";
 import PrivateRoute from "./components/privateRoute";
 import ValidateForm from "./examples/form-with-validation";
+import NoPage from "./pages/noPage";
 
 function App() {
   return (
     <Routes>
+      <Route path="/*" element={<NoPage />}></Route>
+      <Route path="/" element={<Home />}></Route>
       <Route path="/login/admin" element={<Login role="admin" />}></Route>
       <Route path="/login/employee" element={<Login role="employee" />}></Route>
       <Route path="/login" element={<Login role="user" />}></Route>

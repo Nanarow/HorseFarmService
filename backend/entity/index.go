@@ -36,31 +36,11 @@ func SetupDatabase() {
 		&Enrollment{},
 		&Food{},
 		&Employee{},
-		&Preceed{},
+		&Precede{},
 		&Health{},
 		&Plan{},
 	)
 	db = database
-	// users := []User{
-	// 	{
-	// 		FirstName: "admin",
-	// 		LastName:  "admin",
-	// 		Email:     "admin",
-	// 		Password:  "admin",
-	// 		Phone:     "admin",
-	// 		RoleID:    1,
-	// 		GenderID:  1,
-	// 	}, {
-	// 		FirstName: "user",
-	// 		LastName:  "user",
-	// 		Email:     "user",
-	// 		Password:  "user",
-	// 		Phone:     "user",
-	// 		RoleID:    2,
-	// 		GenderID:  1,
-	// 	},
-	// }
-	// for _, user := range users {
-	// 	db.Create(user)
-	// }
+	SetupData(db)
+
 }

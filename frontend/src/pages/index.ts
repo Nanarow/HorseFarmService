@@ -10,7 +10,9 @@ import Employee from "./employee";
 import Support from "./support";
 import User from "./user";
 import CourseSetting from "./courseSetting";
+import Home from "./home";
 export {
+  Home,
   Course,
   Login,
   Tour,

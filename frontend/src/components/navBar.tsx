@@ -7,10 +7,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@shadcn/ui/dropdown-menu";
-import { HomeIcon, LogOutIcon, User } from "lucide-react";
+import { useAuth } from "@src/providers/authProvider";
+import { HomeIcon, LogInIcon, LogOutIcon, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const NavBar = () => {
+  const { LogOut, user } = useAuth();
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center w-full px-4">
@@ -56,27 +58,34 @@ const NavBar = () => {
             <span className="sr-only">Toggle Menu</span>
           </button> */}
         <div className="flex justify-end w-full items-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <User />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => console.log("logout")}
-                className="text-red-500 cursor-pointer"
-              >
-                <LogOutIcon className="mr-2" />
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                  <User />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("logout");
+                    LogOut();
+                  }}
+                  className="text-red-500 cursor-pointer"
+                >
+                  <LogOutIcon className="mr-2" />
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <LogInIcon />
+          )}
           {/* <div className="w-full flex-1 md:w-auto md:flex-none">
               <button className="inline-flex items-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 relative w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64">
                 <span className="hidden lg:inline-flex">

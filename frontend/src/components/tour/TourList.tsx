@@ -1,5 +1,5 @@
 import { ArrowLeftSquareIcon, Edit, XSquare } from "lucide-react";
-import { TourRegistration, User } from "../../interfaces";
+import { TourRegistration } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
 import {
@@ -15,6 +15,7 @@ import TourEdit from "./TourEdit";
 import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import { format } from "date-fns";
 import TourAlert from "./TourAlert";
+import { useAuth } from "@src/providers/authProvider";
 
 interface Props {
   setTabs: React.Dispatch<React.SetStateAction<string>>;
@@ -22,10 +23,13 @@ interface Props {
 
 const TourList = ({ setTabs }: Props) => {
   const [tours, setTours] = useState<TourRegistration[] | undefined>(undefined);
+  const { user } = useAuth();
   async function fetchTours() {
-    const res = await http.Get<User>("/users/1");
+    const res = await http.Get<TourRegistration[]>(
+      "/tours?user_id=" + user?.ID
+    );
     if (res.ok) {
-      setTours(res.data.TourRegistrations);
+      setTours(res.data);
     }
   }
   useEffect(() => {
@@ -33,12 +37,6 @@ const TourList = ({ setTabs }: Props) => {
       fetchTours();
     };
   }, []);
-  // async function handleChange(open: boolean) {
-  //   if (open) {
-  //     await fetchTours();
-  //   }
-  // }
-  // function onEdit() {}
 
   return (
     <div className="w-full h-full relative p-8">
@@ -65,7 +63,7 @@ const TourList = ({ setTabs }: Props) => {
             tours.map((tour) => (
               <TableRow key={tour.ID}>
                 <TableCell className="font-medium text-center">
-                  {tour.Name}
+                  {tour.Name ? tour.Name : "tour " + tour.ID}
                 </TableCell>
                 <TableCell className=" text-center">
                   {format(new Date(tour.Date), "PPP")}
@@ -83,7 +81,7 @@ const TourList = ({ setTabs }: Props) => {
                 <TableCell className=" relative">
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Edit className="text-yellow-500 absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 hover:scale-110 cursor-pointer" />
+                      <Edit className="text-yellow-500 abs-center hover:scale-110 cursor-pointer" />
                     </DialogTrigger>
                     <TourEdit tour={tour} onSave={fetchTours}></TourEdit>
                   </Dialog>
@@ -91,7 +89,7 @@ const TourList = ({ setTabs }: Props) => {
                 <TableCell className=" relative">
                   <Dialog>
                     <DialogTrigger asChild>
-                      <XSquare className="text-red-500 absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 hover:scale-110 cursor-pointer" />
+                      <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
                     </DialogTrigger>
                     <TourAlert
                       tourID={tour.ID!}

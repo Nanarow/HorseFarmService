@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func responseOK(data interface{}, c *gin.Context) {
@@ -23,4 +24,15 @@ func isError(err error, c *gin.Context, message ...string) bool {
 		return true
 	}
 	return false
+}
+
+func addQuery(c *gin.Context, db *gorm.DB) *gorm.DB {
+	for k, v := range c.Request.URL.Query() {
+		if len(v) > 1 {
+			db = db.Where(k+" IN ?", v)
+		} else {
+			db = db.Where(k+" = ?", v[0])
+		}
+	}
+	return db
 }

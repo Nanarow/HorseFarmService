@@ -15,10 +15,6 @@ const Tour = () => {
         onValueChange={setTabs}
         value={tabs}
       >
-        {/* <TabsList>
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="password">Password</TabsTrigger>
-        </TabsList> */}
         <TabsContent value="register" className="w-full h-full mt-0">
           <TourRegister setTabs={setTabs} />
         </TabsContent>
