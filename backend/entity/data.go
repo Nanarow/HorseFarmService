@@ -98,4 +98,57 @@ func SetupData(db *gorm.DB) {
 		db.Create(&employee)
 	}
 
+	// tour type data
+	tourTypes := []TourType{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "Family tour",
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "Study tour",
+		},
+		{
+			BaseModel: BaseModel{ID: 3},
+			Name:      "Group tour",
+		},
+		{
+			BaseModel: BaseModel{ID: 4},
+			Name:      "Private tour",
+		},
+		{
+			BaseModel: BaseModel{ID: 5},
+			Name:      "Official tour",
+		},
+		{
+			BaseModel: BaseModel{ID: 6},
+			Name:      "Other",
+		},
+	}
+	for _, tourType := range tourTypes {
+		db.Create(&tourType)
+	}
+
+	// plan data
+	plans := []Plan{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "Plan A",
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "Plan B",
+		},
+		{
+			BaseModel: BaseModel{ID: 3},
+			Name:      "Plan C",
+		},
+		{
+			BaseModel: BaseModel{ID: 4},
+			Name:      "Plan D",
+		},
+	}
+	for _, plan := range plans {
+		db.Create(&plan)
+	}
 }

@@ -36,8 +36,16 @@ func HandlerUpdate[T entity.Models](c *gin.Context, handler func(*gin.Context, T
 
 func Get[T entity.Models](c *gin.Context) {
 	var model T
+	db := entity.DB()
+	for k, v := range c.Request.URL.Query() {
+		if len(v) < 1 {
+			db = db.Where(k+" = ?", v)
+		} else {
+			db = db.Where(k+" = ?", v[0])
+		}
+	}
 	id := c.Param("id")
-	err := entity.DB().Preload(clause.Associations).First(&model, id).Error
+	err := db.Preload(clause.Associations).First(&model, id).Error
 	if isError(err, c) {
 		return
 	}
@@ -46,7 +54,15 @@ func Get[T entity.Models](c *gin.Context) {
 
 func GetAll[T entity.Models](c *gin.Context) {
 	var models []T
-	err := entity.DB().Preload(clause.Associations).Find(&models).Error
+	db := entity.DB()
+	for k, v := range c.Request.URL.Query() {
+		if len(v) < 1 {
+			db = db.Where(k+" = ?", v)
+		} else {
+			db = db.Where(k+" = ?", v[0])
+		}
+	}
+	err := db.Preload(clause.Associations).Find(&models).Error
 	if isError(err, c) {
 		return
 	}

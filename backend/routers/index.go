@@ -17,6 +17,10 @@ func InitRouter(route *gin.Engine) {
 	route.POST("/login/employee/me", controllers.AutoLoginEmployee)
 	route.POST("/logout", controllers.Logout)
 
+	// route.GET("/query", func(c *gin.Context) {
+	// 	c.JSON(200, gin.H{"message": c.Request.URL.Query()})
+	// })
+
 	authRouter := route.Group("/")
 	initRequiredAuth(authRouter)
 

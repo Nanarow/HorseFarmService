@@ -4,16 +4,22 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import { Plan, TourRegistration, TourType } from "../../interfaces";
 import { http } from "../../services/httpRequest";
-import { Label } from "@shadcn/ui";
+import { Checkbox, Label } from "@shadcn/ui";
 import { useToast } from "@shadcn/ui/use-toast";
 
 import { ArrowRightSquareIcon } from "lucide-react";
 import { ToItemList } from "@src/utils";
+import { useAuth } from "@src/providers/authProvider";
 interface Props {
   setTabs: React.Dispatch<React.SetStateAction<string>>;
 }
 const TourRegister = ({ setTabs }: Props) => {
   const { toast } = useToast();
+  const [tourType, setTourType] = useState<TourType[] | undefined>(undefined);
+  const [plans, setPlans] = useState<Plan[] | undefined>(undefined);
+  const { user } = useAuth();
+  const [email, setEmail] = useState<undefined | string>(undefined);
+
   const formSchema = z.object({
     Name: z.string(),
     Date: z.date(),
@@ -22,8 +28,7 @@ const TourRegister = ({ setTabs }: Props) => {
     PlanID: z.number(),
     Email: z.string().email(),
   });
-  const [tourType, setTourType] = useState<TourType[] | undefined>(undefined);
-  const [plans, setPlans] = useState<Plan[] | undefined>(undefined);
+
   async function fetchTour() {
     const res = await http.Get<TourType[]>("/tour/types");
     if (res.ok) {
@@ -46,7 +51,7 @@ const TourRegister = ({ setTabs }: Props) => {
   async function onValid(formData: z.infer<typeof formSchema>) {
     const tour: TourRegistration = {
       ...formData,
-      UserID: 0,
+      UserID: user?.ID!,
     };
     const res = await http.Post<TourRegistration, TourRegistration>(
       "/tours",
@@ -129,7 +134,19 @@ const TourRegister = ({ setTabs }: Props) => {
                   useForm={form}
                   name="Email"
                   type="email"
+                  value={email}
+                  disabled={!!email}
                 ></Form.Input>
+                <div className="flex gap-2 items-center">
+                  <Checkbox
+                    onCheckedChange={(s) =>
+                      s ? setEmail(user?.Email) : setEmail(undefined)
+                    }
+                  ></Checkbox>
+                  <p className="text-sm text-muted-foreground">
+                    use account email
+                  </p>
+                </div>
                 <Label>
                   Participants<span className="text-red-500">*</span>
                 </Label>
@@ -144,10 +161,6 @@ const TourRegister = ({ setTabs }: Props) => {
                 <Form.SubmitButton useForm={form}>
                   Registration
                 </Form.SubmitButton>
-                {/* <button onClick={() => console.log(form.formState.dirtyFields)}>
-        Cancel
-      </button>
-      <button onClick={() => form.reset()}>Reset</button> */}
               </>
             )}
           ></Form>
