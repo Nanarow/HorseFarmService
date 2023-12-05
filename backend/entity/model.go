@@ -189,8 +189,8 @@ type Gender struct {
 }
 type Precede struct {
 	BaseModel
-	Name      string
-	Employees []Employee
+	Name		string
+	Employees []Employee `json:"-"`
 }
 
 type Health struct {

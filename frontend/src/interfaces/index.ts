@@ -103,8 +103,8 @@ export interface Gender {
   Name: string;
 }
 
-export interface Employee {
-  ID: number;
+export interface Employees {
+  ID?: number;
   PositionID: number;
   GenderID: number;
   PreceedID: number;
