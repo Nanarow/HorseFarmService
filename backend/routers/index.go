@@ -43,6 +43,7 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.Stable](route, "/stables")
 	InitBasicApi[*entity.Employee](route, "/employees")
 	InitBasicApi[*entity.Plan](route, "/plans")
+	InitBasicApi[*entity.Preceed](route, "/preceeds")
 
 	// route.GET("/users/:id", func(c *gin.Context) {
 

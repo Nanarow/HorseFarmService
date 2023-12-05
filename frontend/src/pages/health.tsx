@@ -1,7 +1,7 @@
 import React from "react";
 import { z } from "zod";
 import { Button } from "@shadcn/ui/button";
-import { Healths, Horse, Employee } from "../interfaces";
+import { Healths, Horse, Employees } from "../interfaces";
 import { http } from "../services/httpRequest";
 import { useEffect, useState } from "react";
 import { Label } from "@shadcn/ui";
@@ -27,7 +27,7 @@ const Health = () => {
 
 
   const [horses, setHorses] = useState<Horse[] | undefined>(undefined);
-  const [employee, setEmployees] = useState<Employee[] | undefined>(undefined);
+  const [employee, setEmployees] = useState<Employees[] | undefined>(undefined);
 
   useEffect(() => {
     async function fetchHorses() {
@@ -38,7 +38,7 @@ const Health = () => {
     }
 
     async function fetchEmployees() {
-      const res = await http.Get<Employee[]>("/employees");
+      const res = await http.Get<Employees[]>("/employees");
       if (res.ok) {
         setEmployees(res.data);
       }
