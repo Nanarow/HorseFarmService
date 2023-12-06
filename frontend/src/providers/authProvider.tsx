@@ -14,7 +14,7 @@ const AuthContext = createContext<AuthContextProps | null>(null);
 function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useMemberContext must be used within a MemberProvider");
+    throw new Error("useAuthContext must be used within a AuthProvider");
   }
   return context;
 }

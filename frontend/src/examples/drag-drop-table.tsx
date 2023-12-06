@@ -1,3 +1,5 @@
+import { DragDrop, DraggableCard, DropZone } from "@shadcn/simplify/drag-drop";
+import { Button } from "@shadcn/ui";
 import {
   Table,
   TableBody,
@@ -7,165 +9,120 @@ import {
   TableHeader,
   TableRow,
 } from "@shadcn/ui/table";
-import React, { useState } from "react";
+import { Schedule } from "@src/interfaces";
+import { addTimeToDate } from "@src/utils";
+import { useState } from "react";
 interface Course {
   id: number;
   title: string;
 }
 
-type DropZoneState = "empty" | "added" | "adding" | "replacing";
-
-type DropZoneStateRender = {
-  [x in DropZoneState]: React.ReactNode;
-};
-
 const DragDropTable = () => {
-  const [first, setFirst] = useState<string | undefined>(undefined);
-  const [state, setState] = useState<DropZoneState>("empty");
-  const [data, setData] = useState<string | undefined>(undefined);
-  const courses: Course[] = [
-    {
-      id: 1,
-      title: "Course 1",
-    },
-    {
-      id: 2,
-      title: "Course 2",
-    },
-    {
-      id: 3,
-      title: "Course 3",
-    },
-    {
-      id: 4,
-      title: "Course 4",
-    },
-    {
-      id: 5,
-      title: "Course 5",
-    },
-  ];
-  const renderItems: DropZoneStateRender = {
-    empty: (
-      <div
-        onDragOver={(e) => {
-          e.preventDefault();
-          setState("adding");
-        }}
-        className="w-full h-full bg-red-200"
-      >
-        <p>Drop here</p>
-        <p>or</p>
-        <p>Click to add</p>
-      </div>
-    ),
-    added: (
-      <div
-        onDragOver={(e) => {
-          e.preventDefault();
-          if (data !== first) {
-            setState("replacing");
-          }
-        }}
-      >
-        {first}
-      </div>
-    ),
-    adding: (
-      <div
-        className=" bg-gray-200 w-full h-full outline-dashed rounded-sm outline-zinc-400"
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={() => {
-          setFirst(data);
-          setState("added");
-          console.log("add", data);
-        }}
-      >
-        <p className=" text-center">+</p>
-      </div>
-    ),
-    replacing: (
-      <div
-        className=" bg-gray-200 w-full h-full outline-dashed rounded-sm outline-zinc-400"
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={() => {
-          setFirst(data);
-          setState("added");
-        }}
-      >
-        <p className=" text-center">replace</p>
-      </div>
-    ),
+  function initSchedule() {
+    const dayList: Schedule[][] = [];
+    // day
+    for (let j = 0; j < 10; j++) {
+      const scheduleList: Schedule[] = [];
+      // hour
+      for (let i = 0; i < 8; i++) {
+        const day = addTimeToDate(new Date(new Date().setHours(0, 0, 0, 0)), {
+          days: j,
+        });
+        scheduleList.push({
+          CourseID: 0,
+          Description: "",
+          LocationID: 0,
+          Date: day,
+          StartTime: addTimeToDate(day, {
+            hours: i + 9,
+          }),
+        });
+      }
+      dayList.push(scheduleList);
+    }
+    return dayList;
+  }
+
+  const [days, setDays] = useState<Schedule[][]>(initSchedule());
+  const courses = () => {
+    const courseList: Course[] = [];
+    for (let i = 0; i < 7; i++) {
+      courseList.push({
+        id: i,
+        title: `Course ${i}`,
+      });
+    }
+    return courseList;
+  };
+
+  const onSave = () => {
+    days.forEach((day) => {
+      day
+        .filter((time) => time.CourseID !== 0)
+        .forEach((time) => {
+          console.log("save this :", time);
+        });
+    });
   };
   return (
     <main className="w-full h-screen p-16">
-      <section className=" w-full flex gap-2 my-4">
-        {courses.map((course) => (
-          <div
-            key={course.id}
-            className=" w-32 h-8 border rounded "
-            draggable
-            onDragStart={() => {
-              setData(course.title);
-            }}
-            onDragEnd={() => {
-              setData(undefined);
-              if (state === "adding") {
-                setState("empty");
-              }
-              if (state === "replacing") {
-                setState("added");
-              }
-            }}
-          >
-            <p className="text-center">{course.title}</p>
-          </div>
-        ))}
-      </section>
-      <Table className=" border">
-        <TableCaption>A list of your recent invoices.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px] border">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <td className="border p-1 h-10">{renderItems[state]}</td>
+      <DragDrop>
+        <section className=" w-full flex gap-2 my-4">
+          {courses().map((course) => (
+            <DraggableCard
+              key={course.id}
+              value={course.id.toString()}
+              className="h-10"
+            >
+              {course.title}
+            </DraggableCard>
+          ))}
+        </section>
 
-            {/* <TableCell className=" border">
-              <div className=" bg-red-400 w-full h-full"></div>
-            </TableCell>
-            <TableCell>Paid</TableCell>
-            <TableCell>Credit Card</TableCell>
-            <TableCell className="text-right">$250.00</TableCell> */}
-          </TableRow>
-        </TableBody>
-      </Table>
-      {/* <table>
-        <thead>
-          <tr>
-            <th>Company</th>
-            <th>Contact</th>
-            <th>Country</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Alfreds Futterkiste</td>
-            <td>Maria Anders</td>
-            <td>Germany</td>
-          </tr>
-          <tr>
-            <td>Centro comercial Moctezuma</td>
-            <td>Francisco Chang</td>
-            <td>Mexico</td>
-          </tr>
-        </tbody>
-      </table> */}
+        <Table className=" border">
+          <TableCaption>A list of your recent invoices.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[20%] border">Day</TableHead>
+              {days[0].map((head, index) => (
+                <TableHead key={index} className="border text-center w-[10%]">
+                  {head.StartTime.toLocaleTimeString()}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {days.map((day, day_index) => (
+              <TableRow key={day_index}>
+                <TableCell className=" w-[20%]">
+                  {day[0].Date.toLocaleDateString()}
+                </TableCell>
+                {day.map((_, sch_index) => (
+                  <td className="border h-10 w-[10%]" key={sch_index}>
+                    <DropZone
+                      onValueChange={(value) => {
+                        days[day_index][sch_index].CourseID = value
+                          ? +value
+                          : 0;
+                        setDays([...days]);
+                      }}
+                      render={({ value, clear }) => (
+                        <div className="bg-blue-200 w-full h-full flex gap-4 items-center justify-between p-2">
+                          <p>
+                            {courses()[+value!] ? courses()[+value!].title : ""}
+                          </p>
+                          <button onClick={clear}>-</button>
+                        </div>
+                      )}
+                    ></DropZone>
+                  </td>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </DragDrop>
+      <Button onClick={onSave}>Save</Button>
     </main>
   );
 };
