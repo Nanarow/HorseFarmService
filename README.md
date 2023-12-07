@@ -22,3 +22,8 @@ cd .\frontend\
 npm i
 npm run dev
 ```
+
+## Member
+
+- B6408985 วรนันท์ ชอลี
+-
