@@ -26,9 +26,7 @@ const TourList = ({ setTabs }: Props) => {
   const [tours, setTours] = useState<TourRegistration[] | undefined>(undefined);
   const { user } = useAuth();
   async function fetchTours() {
-    const res = await http.Get<TourRegistration[]>(
-      "/tours?user_id=" + user?.ID
-    );
+    const res = await http.Get<TourRegistration[]>("/tours/user/" + user?.ID);
     if (res.ok) {
       setTours(res.data);
     }
