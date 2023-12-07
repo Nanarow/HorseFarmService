@@ -130,7 +130,7 @@ const Health = () => {
             {horses && (
               <>
                 <div className="flex gap-14 mx-64 mt-6"> 
-                  <Label className="text-2xl text-primary ">
+                  <Label className="text-2xl text-primary w-64 ">
                     ชื่อม้า:<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
@@ -149,7 +149,7 @@ const Health = () => {
             {employee && (
               <>
                 <div className=" flex gap-14 mx-64 mt-6">
-                  <Label className="text-2xl text-primary ">
+                  <Label className="text-2xl text-primary w-64">
                     ผู้ตรวจ:<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
@@ -166,23 +166,23 @@ const Health = () => {
 
              
             <div className="flex flex-col  relative " >
-              <Label className="flex text-primary text-2xl mx-64 mt-6">
+              <Label className="flex text-primary text-2xl mx-64 mt-6 w-64">
                 การตรวจสัญญาณชีพ:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vital" type="text"></Form.Input>
               </Label>
-              <Label className="flex text-2xl mt-6 text-primary mx-64 ">
+              <Label className="flex text-2xl mt-6 text-primary mx-64 w-64">
                 การตรวจสุขภาพฟัน:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Tooth" type="text"></Form.Input>
               </Label >
-              <Label className="flex text-primary text-2xl mt-6 mx-64 ">
+              <Label className="flex text-primary text-2xl mt-6 mx-64 w-64">
                 การฉีดวัคซีนป้องกันโรค :<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vaccine" type="text"></Form.Input>
               </Label>
-              <Label className="flex text-primary text-2xl mt-6 mx-64 ">
+              <Label className="flex text-primary text-2xl mt-6 mx-64 w-64">
                 การถ่ายพยาธิและตรวจนับไข่พยาธิ:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Parasite" type="text"></Form.Input>
               </Label>
-              <Label className="flex text-primary text-2xl mt-6 mx-64 ">
+              <Label className="flex text-primary text-2xl mt-6 mx-64 w-64">
                 การตรวจเลือด:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
               </Label>

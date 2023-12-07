@@ -125,7 +125,7 @@ const Employee = () => {
             {precede && (
               <>
                 <div className="flex gap-14 mx-64 mt-6"> 
-                  <Label className="text-2xl text-primary ">
+                  <Label className="text-2xl text-primary w-64 ">
                     คำนำหน้า:<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
