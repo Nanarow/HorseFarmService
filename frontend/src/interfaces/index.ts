@@ -103,7 +103,7 @@ export interface Gender {
   Name: string;
 }
 
-export interface Employees {
+export interface Employee {
   ID?: number;
   PositionID: number;
   GenderID: number;
@@ -115,7 +115,7 @@ export interface Employees {
   DayOfBirth: Date;
   Phone: string;
 }
-export interface Healths {
+export interface Health {
   ID?: number;
   EmployeeID: number;
   HorseID: number;
@@ -137,7 +137,6 @@ export interface Position {
 export interface Precede {
   ID: number;
   Name: string;
-
 }
 
 export interface Course {
@@ -151,7 +150,8 @@ export interface Course {
 }
 
 export interface Schedule {
-  ID: number;
+  ID?: number;
+  CourseID: number;
   Date: Date;
   StartTime: Date;
   Description: string;

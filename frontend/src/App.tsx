@@ -17,6 +17,7 @@ import {
 import PrivateRoute from "./components/privateRoute";
 import ValidateForm from "./examples/form-with-validation";
 import NoPage from "./pages/noPage";
+import DragDropTable from "./examples/drag-drop-table";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       <Route path="/login/employee" element={<Login role="employee" />}></Route>
       <Route path="/login" element={<Login role="user" />}></Route>
       <Route path="/example/form" element={<ValidateForm />} />
+      <Route path="/example/table" element={<DragDropTable />} />
 
       <Route element={<PrivateRoute role="user" />}>
         <Route path="/course" element={<Course />}></Route>

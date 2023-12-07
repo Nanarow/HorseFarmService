@@ -16,6 +16,7 @@ import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import { format } from "date-fns";
 import TourAlert from "./TourAlert";
 import { useAuth } from "@src/providers/authProvider";
+import { Tooltip } from "@shadcn/simplify/tooltip";
 
 interface Props {
   setTabs: React.Dispatch<React.SetStateAction<string>>;
@@ -40,22 +41,29 @@ const TourList = ({ setTabs }: Props) => {
 
   return (
     <div className="w-full h-full relative p-8">
-      <ArrowLeftSquareIcon
-        onClick={() => setTabs("register")}
-        className="absolute top-4 left-8 text-blue-500"
-      />
+      <Tooltip content={() => <span>Back to registration</span>} side="right">
+        <ArrowLeftSquareIcon
+          onClick={() => setTabs("register")}
+          className="absolute top-4 left-8 text-blue-500"
+        />
+      </Tooltip>
+
       <Table className="border mt-6">
         <TableCaption>A list of your recent registration.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[10%] text-center">Name</TableHead>
-            <TableHead className="w-[20%] text-center">Date</TableHead>
-            <TableHead className="w-[20%] text-center">Email</TableHead>
-            <TableHead className="w-[15%] text-center">Type</TableHead>
-            <TableHead className="w-[15%] text-center">Plan</TableHead>
-            <TableHead className="w-[10%] text-center">Participants</TableHead>
-            <TableHead className="w-[5%] text-center">Edit</TableHead>
-            <TableHead className="w-[5%] text-center">Cancel</TableHead>
+            <TableHead className="w-[28%] text-center">Date</TableHead>
+            <TableHead className="w-[18%] text-center hidden md:table-cell">
+              Email
+            </TableHead>
+            <TableHead className="w-[12%] text-center">Type</TableHead>
+            <TableHead className="w-[12%] text-center">Plan</TableHead>
+            <TableHead className="w-[12%] text-center hidden md:table-cell">
+              Participants
+            </TableHead>
+            <TableHead className="w-[4%] text-center">Edit</TableHead>
+            <TableHead className="w-[4%] text-center">Cancel</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -68,14 +76,16 @@ const TourList = ({ setTabs }: Props) => {
                 <TableCell className=" text-center">
                   {format(new Date(tour.Date), "PPP")}
                 </TableCell>
-                <TableCell className=" text-center">{tour.Email}</TableCell>
+                <TableCell className=" text-center hidden md:table-cell">
+                  {tour.Email}
+                </TableCell>
                 <TableCell className=" text-center">
                   {tour.TourType?.Name}
                 </TableCell>
                 <TableCell className=" text-center">
                   {tour.Plan?.Name}
                 </TableCell>
-                <TableCell className=" text-center">
+                <TableCell className=" text-center hidden md:table-cell">
                   {tour.Participants}
                 </TableCell>
                 <TableCell className=" relative">

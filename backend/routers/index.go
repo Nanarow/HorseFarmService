@@ -51,13 +51,4 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.Employee](route, "/employees")
 	InitBasicApi[*entity.Plan](route, "/plans")
 	InitBasicApi[*entity.Precede](route, "/precedes")
-
-	// route.GET("/users/:id", func(c *gin.Context) {
-
-	// 	c.JSON(200, gin.H{"id": c.Param("id"), "full_path": c.FullPath()})
-	// })
-	// route.GET("/users", func(c *gin.Context) {
-
-	// 	c.JSON(200, gin.H{"id": "all", "full_path": c.FullPath()})
-	// })
 }
