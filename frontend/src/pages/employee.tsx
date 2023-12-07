@@ -111,31 +111,36 @@ const EmployeePage = () => {
           alt="Health"
         />
       </section>
+      
+    <div className="flex justify-end mt-8">
+      
 
-      <div className="flex justify-end mt-8">
-        <Form
-          className="flex justify-items-center gap-4 "
-          validator={formEmployee}
-          onValid={onValid}
-          onInvalid={console.log}
-          fields={({ form }) => (
-            <div className="flex flex-col ">
-              <h1 className="text-3xl font-black text-primary  mt-9 mx-32 text-center">
-                เพิ่มข้อมูลพนักงาน
-              </h1>
-              {precede && (
-                <>
-                  <div className="flex gap-14 mx-64 mt-6">
-                    <Label className="text-2xl text-primary ">
-                      คำนำหน้า:<span className="text-red-500">*</span>
-                    </Label>
-                    <Form.Select
-                      valueAsNumber
-                      className="h-14 px-16 text-xl text-primary"
-                      useForm={form}
-                      items={PrecedeToSelectItems(precede)}
-                      name="PrecedeID"
-                      placeholder="Choose your preceed"
+   
+      <Form
+        className="flex justify-items-center gap-4 "
+        validator={formEmployee}
+        onValid={onValid}
+        onInvalid={console.log}
+        fields={({ form }) => (
+
+          <div className="flex flex-col ">
+
+            <h1 className="text-3xl font-black text-primary  mt-9 mx-32 text-center">
+            เพิ่มข้อมูลพนักงาน
+            </h1>
+            {precede && (
+              <>
+                <div className="flex gap-14 mx-64 mt-6"> 
+                  <Label className="text-2xl text-primary w-64 ">
+                    คำนำหน้า:<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Select
+                    valueAsNumber
+                    className="h-14 px-16 text-xl text-primary"
+                    useForm={form}
+                    items={PrecedeToSelectItems(precede)}
+                    name="PrecedeID"
+                    placeholder="Choose your preceed"
                     />
                   </div>
                 </>

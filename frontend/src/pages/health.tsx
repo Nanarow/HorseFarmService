@@ -126,91 +126,69 @@ const HealthPage = () => {
               </Label>
             </div>
 
-            <div className=" items-center justify-center">
-              {horses && (
-                <>
-                  <div className="flex gap-14 mx-64 mt-6">
-                    <Label className="text-2xl text-primary ">
-                      ชื่อม้า:<span className="text-red-500">*</span>
-                    </Label>
-                    <Form.Select
-                      valueAsNumber
-                      className="h-14 px-16 text-2xl text-primary"
-                      useForm={form}
-                      items={HorseToSelectItems(horses)}
-                      name="HorseID"
-                      placeholder="Choose horse name"
+            
+          <div className=" items-center justify-center"> 
+            {horses && (
+              <>
+                <div className="flex gap-14 mx-64 mt-6"> 
+                  <Label className="text-2xl text-primary w-64 ">
+                    ชื่อม้า:<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Select
+                    valueAsNumber
+                    className="h-14 px-16 text-xl text-primary"
+                    useForm={form}
+                    items={HorseToSelectItems(horses)}
+                    name="HorseID"
+                    placeholder="Choose horse name"
                     />
-                  </div>
-                </>
-              )}
+                </div>
 
-              {employee && (
-                <>
-                  <div className=" flex gap-14 mx-64 mt-6">
-                    <Label className="text-2xl text-primary ">
-                      ผู้ตรวจ:<span className="text-red-500">*</span>
-                    </Label>
-                    <Form.Select
-                      valueAsNumber
-                      className="h-14 px-24 text-2xl text-primary"
-                      useForm={form}
-                      items={EmployeeToSelectItems(employee)}
-                      name="EmployeeID"
-                      placeholder="Choose employee name"
-                    />
-                  </div>
-                </>
-              )}
+              </>
+            )}
+             
+            {employee && (
+              <>
+                <div className=" flex gap-14 mx-64 mt-6">
+                  <Label className="text-2xl text-primary w-64">
+                    ผู้ตรวจ:<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Select
+                    valueAsNumber
+                    className="h-14 px-24 text-xl text-primary"
+                    useForm={form}
+                    items={EmployeeToSelectItems(employee)}
+                    name="EmployeeID"
+                    placeholder="Choose employee name"
+                  />
+                </div>
+              </>
+            )}
 
-              <div className="flex flex-col  relative ">
-                <Label className="flex text-primary text-2xl mx-64 mt-6">
-                  การตรวจสัญญาณชีพ:<span className="text-red-500">*</span>
-                  <Form.Input
-                    className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
-                    useForm={form}
-                    name="Vital"
-                    type="text"
-                  ></Form.Input>
-                </Label>
-                <Label className="flex text-2xl mt-6 text-primary mx-64 ">
-                  การตรวจสุขภาพฟัน:<span className="text-red-500">*</span>
-                  <Form.Input
-                    className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
-                    useForm={form}
-                    name="Tooth"
-                    type="text"
-                  ></Form.Input>
-                </Label>
-                <Label className="flex text-primary text-2xl mt-6 mx-64 ">
-                  การฉีดวัคซีนป้องกันโรค :
-                  <span className="text-red-500">*</span>
-                  <Form.Input
-                    className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
-                    useForm={form}
-                    name="Vaccine"
-                    type="text"
-                  ></Form.Input>
-                </Label>
-                <Label className="flex text-primary text-2xl mt-6 mx-64 ">
-                  การถ่ายพยาธิและตรวจนับไข่พยาธิ:
-                  <span className="text-red-500">*</span>
-                  <Form.Input
-                    className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
-                    useForm={form}
-                    name="Parasite"
-                    type="text"
-                  ></Form.Input>
-                </Label>
-                <Label className="flex text-primary text-2xl mt-6 mx-64 ">
-                  การตรวจเลือด:<span className="text-red-500">*</span>
-                  <Form.Input
-                    className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
-                    useForm={form}
-                    name="Blood"
-                    type="text"
-                  ></Form.Input>
-                </Label>
+             
+            <div className="flex flex-col  relative " >
+              <Label className="flex text-primary text-2xl mx-64 mt-6 w-64">
+                การตรวจสัญญาณชีพ:<span className="text-red-500">*</span>
+                <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vital" type="text"></Form.Input>
+              </Label>
+              <Label className="flex text-2xl mt-6 text-primary mx-64 w-64">
+                การตรวจสุขภาพฟัน:<span className="text-red-500">*</span>
+                <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Tooth" type="text"></Form.Input>
+              </Label >
+              <Label className="flex text-primary text-2xl mt-6 mx-64 w-64">
+                การฉีดวัคซีนป้องกันโรค :<span className="text-red-500">*</span>
+                <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vaccine" type="text"></Form.Input>
+              </Label>
+              <Label className="flex text-primary text-2xl mt-6 mx-64 w-64">
+                การถ่ายพยาธิและตรวจนับไข่พยาธิ:<span className="text-red-500">*</span>
+                <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Parasite" type="text"></Form.Input>
+              </Label>
+              <Label className="flex text-primary text-2xl mt-6 mx-64 w-64">
+                การตรวจเลือด:<span className="text-red-500">*</span>
+                <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
+              </Label>
+            
+
 
                 <Button
                   type="submit"
