@@ -9,13 +9,14 @@ type LoginPayload struct {
 
 type User struct {
 	BaseModel
-	FirstName string
-	LastName  string
-	Email     string
-	Password  string
-	Phone     string
-	Profile   string
-	Age       int
+	FirstName      string
+	LastName       string
+	Email          string
+	Password       string
+	Phone          string
+	Profile        string
+	Age            int
+	ExperincePoint int
 
 	RoleID uint
 	Role   Role `gorm:"foreignKey:RoleID"`
@@ -189,7 +190,7 @@ type Gender struct {
 }
 type Precede struct {
 	BaseModel
-	Name		string
+	Name      string
 	Employees []Employee `json:"-"`
 }
 
