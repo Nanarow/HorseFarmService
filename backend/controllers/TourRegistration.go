@@ -118,6 +118,7 @@ func DeleteTour(c *gin.Context) {
 	id := c.Param("id")
 
 	// delete data in database and check error
+	// Clauses(clause.Returning{}) is used to return the deleted data
 	if rows := entity.DB().Clauses(clause.Returning{}).Delete(&tour, id).RowsAffected; rows == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "record not found"})
 		return

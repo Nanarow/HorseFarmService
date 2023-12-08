@@ -137,9 +137,9 @@ type TourRegistration struct {
 	Plan   Plan `gorm:"foreignKey:PlanID"`
 
 	Email        string
-	Participants int
-	Name         string
+	Participants int `json:"omitempty"`
 	Date         time.Time
+	Name         string
 }
 
 type Plan struct {
