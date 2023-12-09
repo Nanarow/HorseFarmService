@@ -22,12 +22,12 @@ const TourRegister = ({ setTabs }: Props) => {
   const [email, setEmail] = useState<undefined | string>(undefined);
 
   const formSchema = z.object({
+    Date: z.date().min(new Date(), "Date must be in the future"),
+    Participants: z.number().min(8, "Participants must be at least 8"),
+    Email: z.string().email("Invalid email"),
     Name: z.string(),
-    Date: z.date(),
-    Participants: z.number(),
     TourTypeID: z.number(),
     PlanID: z.number(),
-    Email: z.string().email(),
   });
 
   async function fetchTour() {

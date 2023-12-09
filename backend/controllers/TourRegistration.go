@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut66/team16/backend/entity"
 	"gorm.io/gorm/clause"
@@ -70,6 +71,12 @@ func CreateTour(c *gin.Context) {
 		return
 	}
 
+	// validate struct
+	if _, err := govalidator.ValidateStruct(tour); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	// create data in database and check error
 	if err := entity.DB().Create(&tour).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -88,6 +95,12 @@ func UpdateTour(c *gin.Context) {
 
 	// get data from body and check error
 	if err := c.ShouldBindJSON(&tour); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// validate struct
+	if _, err := govalidator.ValidateStruct(tour); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
