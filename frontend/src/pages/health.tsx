@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Label } from "@shadcn/ui";
 import { useToast } from "@shadcn/ui/use-toast";
 import Form, { ItemList } from "@shadcn/simplify/form";
-import HealthImage from "./../assets/healthbg2.jpg";
+import HealthImage from "./../assets/health3.jpg";
 import { LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -103,7 +103,7 @@ const HealthPage = () => {
       </section>
 
       <Form
-        className="flex justify-end"
+        className="flex justify-end mt-7"
         validator={formHealth}
         onValid={onValid}
         onInvalid={console.log}
@@ -131,7 +131,7 @@ const HealthPage = () => {
             {horses && (
               <>
                 <div className="flex gap-14 mx-64 mt-6"> 
-                  <Label className="text-2xl text-primary w-64 ">
+                  <Label className="text-2xl text-primary w-48 ">
                     ชื่อม้า:<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
@@ -150,7 +150,7 @@ const HealthPage = () => {
             {employee && (
               <>
                 <div className=" flex gap-14 mx-64 mt-6">
-                  <Label className="text-2xl text-primary w-64">
+                  <Label className="text-2xl text-primary w-48">
                     ผู้ตรวจ:<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
@@ -167,25 +167,25 @@ const HealthPage = () => {
 
              
             <div className="flex flex-col  relative " >
-              <Label className="flex text-primary text-2xl mx-64 mt-6 w-64">
-                การตรวจสัญญาณชีพ:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vital" type="text"></Form.Input>
+              <Label className="flex text-primary text-2xl mx-64 mt-6 ">
+                สัญญาณชีพ:<span className="text-red-500">*</span>
+                <Form.Input className="w-3/4 h-14 px-2 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vital" type="text"></Form.Input>
               </Label>
-              <Label className="flex text-2xl mt-6 text-primary mx-64 w-64">
-                การตรวจสุขภาพฟัน:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Tooth" type="text"></Form.Input>
+              <Label className="flex text-2xl mt-6 text-primary mx-64 ">
+                สุขภาพฟัน:<span className="text-red-500">*</span>
+                <Form.Input className="w-3/4 h-14 px-4 ml-12 border  rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Tooth" type="text"></Form.Input>
               </Label >
-              <Label className="flex text-primary text-2xl mt-6 mx-64 w-64">
-                การฉีดวัคซีนป้องกันโรค :<span className="text-red-500">*</span>
+              <Label className="flex text-primary text-2xl mt-6 mx-64 ">
+                วัคซีนป้องกัน:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vaccine" type="text"></Form.Input>
               </Label>
-              <Label className="flex text-primary text-2xl mt-6 mx-64 w-64">
-                การถ่ายพยาธิและตรวจนับไข่พยาธิ:<span className="text-red-500">*</span>
+              <Label className="flex text-primary text-2xl mt-6 mx-64 gap-4">
+                ถ่ายพยาธิ:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Parasite" type="text"></Form.Input>
               </Label>
-              <Label className="flex text-primary text-2xl mt-6 mx-64 w-64">
-                การตรวจเลือด:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
+              <Label className="flex text-primary text-2xl mt-6 mx-64 ">
+                ตรวจเลือด:<span className="text-red-500">*</span>
+                <Form.Input className="w-3/4 h-14 px-4 ml-12 border gap-5 rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
               </Label>
             
 
