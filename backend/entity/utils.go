@@ -20,10 +20,6 @@ type BaseModel struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 }
 
-// type BaseModel struct {
-// 	gorm.Model
-// }
-
 // GetID returns the ID of the model
 func (b *BaseModel) GetID() uint {
 	return b.ID

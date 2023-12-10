@@ -1,6 +1,8 @@
 package entity
 
-import "time"
+import (
+	"time"
+)
 
 type LoginPayload struct {
 	Email    string
@@ -9,13 +11,14 @@ type LoginPayload struct {
 
 type User struct {
 	BaseModel
-	FirstName string
-	LastName  string
-	Email     string
-	Password  string
-	Phone     string
-	Profile   string
-	Age       int
+	FirstName       string
+	LastName        string
+	Email           string
+	Password        string
+	Phone           string
+	Profile         string
+	Age             int
+	ExperiencePoint int
 
 	RoleID uint
 	Role   Role `gorm:"foreignKey:RoleID"`
@@ -135,10 +138,10 @@ type TourRegistration struct {
 	PlanID uint
 	Plan   Plan `gorm:"foreignKey:PlanID"`
 
-	Email        string
-	Participants int
+	Email        string    `valid:"required~Email is required,email~Invalid email"`
+	Participants int       `valid:"required~Participants is required,gte=8~Participants must be at least 8"`
+	Date         time.Time `valid:"required~Date is required,future~Date must be in the future"`
 	Name         string
-	Date         time.Time
 }
 
 type Plan struct {
@@ -189,7 +192,7 @@ type Gender struct {
 }
 type Precede struct {
 	BaseModel
-	Name		string
+	Name      string
 	Employees []Employee `json:"-"`
 }
 

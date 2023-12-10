@@ -22,12 +22,12 @@ const TourRegister = ({ setTabs }: Props) => {
   const [email, setEmail] = useState<undefined | string>(undefined);
 
   const formSchema = z.object({
+    Date: z.date().min(new Date(), "Date must be in the future"),
+    Participants: z.number().min(8, "Participants must be at least 8"),
+    Email: z.string().email("Invalid email"),
     Name: z.string(),
-    Date: z.date(),
-    Participants: z.number(),
     TourTypeID: z.number(),
     PlanID: z.number(),
-    Email: z.string().email(),
   });
 
   async function fetchTour() {
@@ -63,7 +63,9 @@ const TourRegister = ({ setTabs }: Props) => {
         title: "You submitted the following values:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(tour, null, 2)}</code>
+            <code className="text-white">
+              {JSON.stringify(res.data, null, 2)}
+            </code>
           </pre>
         ),
         duration: 1500,

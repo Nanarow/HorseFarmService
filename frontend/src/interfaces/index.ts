@@ -74,7 +74,8 @@ export interface User {
   Profile: string;
   RoleID: number;
   GenderID: number;
-  Gender: Gender;
+  // Gender: Gender;
+  ExperiencePoint: number;
   RidingLevelID: number;
   TourRegistrations?: TourRegistration[];
 }
