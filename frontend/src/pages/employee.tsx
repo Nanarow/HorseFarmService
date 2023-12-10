@@ -6,7 +6,9 @@ import { useToast } from "@shadcn/ui/use-toast";
 import { useEffect, useState } from "react";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { Label } from "@shadcn/ui";
-import HealthImage from "./../assets/employee.jpg";
+import EmployeeImage from "./../assets/healthbg.jpg";
+import { ChevronLeftSquare } from 'lucide-react';
+import { Link } from "react-router-dom";
 
 const EmployeePage = () => {
   const { toast } = useToast();
@@ -87,7 +89,7 @@ const EmployeePage = () => {
       ...formData,
     };
 
-    const res = await http.Post<Employee, Employee>("/employee", employeeData);
+    const res = await http.Post<Employee, Employee>("/employees", employeeData);
     if (res.ok) {
       toast({
         title: "You submitted the following values:",
@@ -101,12 +103,13 @@ const EmployeePage = () => {
         duration: 1500,
       });
     }
+    
   }
   return (
     <div className="relative ">
-      <section className="w-2/5 h-full  bg-cover bg-center absolute   	">
+      <section className="w-2/5 h-full  bg-cover bg-center absolute  	">
         <img
-          src={HealthImage}
+          src={EmployeeImage}
           className="w-full h-full object-cover rounded "
           alt="Health"
         />
@@ -117,7 +120,7 @@ const EmployeePage = () => {
 
    
       <Form
-        className="flex justify-items-center gap-4 "
+        className="flex justify-items-center gap-2 "
         validator={formEmployee}
         onValid={onValid}
         onInvalid={console.log}
@@ -125,18 +128,18 @@ const EmployeePage = () => {
 
           <div className="flex flex-col ">
 
-            <h1 className="text-3xl font-black text-primary  mt-9 mx-32 text-center">
+            <h1 className="text-4xl font-black text-primary  mt-2 mx-32 text-center">
             เพิ่มข้อมูลพนักงาน
             </h1>
             {precede && (
               <>
-                <div className="flex gap-14 mx-64 mt-6"> 
-                  <Label className="text-2xl text-primary w-64 ">
+                <div className="flex gap-10 mx-64 mt-6"> 
+                  <Label className="text-xl text-primary w-48 ">
                     คำนำหน้า:<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
                     valueAsNumber
-                    className="h-14 px-16 text-xl text-primary"
+                    className="h-14 px-24 text-xl text-primary"
                     useForm={form}
                     items={PrecedeToSelectItems(precede)}
                     name="PrecedeID"
@@ -146,19 +149,19 @@ const EmployeePage = () => {
                 </>
               )}
 
-              <Label className="flex text-primary text-2xl mx-64 mt-8 ">
+              <Label className="flex text-primary text-xl mx-64 mt-8 ">
                 ชื่อ:<span className="text-red-500">*</span>
                 <Form.Input
-                  className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  className="w-3/4 h-14  ml-28 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="FirstName"
                   type="text"
                 ></Form.Input>
               </Label>
-              <Label className="flex text-2xl mt-6 text-primary mx-64 ">
+              <Label className="flex text-xl mt-6 text-primary mx-64 ">
                 นามสกุล:<span className="text-red-500">*</span>
                 <Form.Input
-                  className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  className="w-3/4 h-14 px-10 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="LastName"
                   type="text"
@@ -167,13 +170,13 @@ const EmployeePage = () => {
 
               {gender && (
                 <>
-                  <div className="flex gap-16 mx-64 mt-6">
-                    <Label className="text-2xl text-primary flex">
+                  <div className="flex gap-24 mx-64 mt-6">
+                    <Label className="text-xl text-primary flex">
                       เพศ: <span className="text-red-500">*</span>
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-14 px-16 text-xl text-primary"
+                      className="h-14 px-10 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                       useForm={form}
                       items={GenderToSelectItems(gender)}
                       name="GenderID"
@@ -184,11 +187,11 @@ const EmployeePage = () => {
               )}
 
               <div className="flex">
-                <Label className=" text-2xl text-primary mx-64 flex mt-6">
+                <Label className=" text-xl text-primary mx-64 flex mt-6">
                   วันเกิด:<span className="text-red-500 ">*</span>
-                  <div className=" px-16 ">
+                  <div className=" px-16 ml-4">
                     <Form.DatePicker
-                      className="w-96 h-14 text-xl text-primary"
+                      className="w-96 h-14 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                       useForm={form}
                       name="DayOfBirth"
                     />
@@ -199,12 +202,12 @@ const EmployeePage = () => {
               {position && (
                 <>
                   <div className="flex gap-16 mx-64 mt-6">
-                    <Label className="text-2xl text-primary flex">
+                    <Label className="text-xl text-primary flex">
                       ตำแหน่ง: <span className="text-red-500">*</span>
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-14 px-16 text-xl text-primary"
+                      className="h-14 px-16 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                       useForm={form}
                       items={PositionToSelectItems(position)}
                       name="PositionID"
@@ -214,38 +217,52 @@ const EmployeePage = () => {
                 </>
               )}
 
-              <Label className="flex text-primary text-2xl mx-64 mt-8">
+              <Label className="flex text-primary text-xl mx-64 mt-6 ">
                 เบอร์โทร:<span className="text-red-500">*</span>
                 <Form.Input
-                  className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  className="w-3/4 h-14 px-4 ml-16 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="Phone"
                   type="text"
                 ></Form.Input>
               </Label>
-              <Label className="flex text-2xl mt-6 text-primary mx-64 ">
+              <Label className="flex text-xl mt-6 text-primary mx-64  ">
                 อีเมล:<span className="text-red-500">*</span>
                 <Form.Input
-                  className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  className="w-3/4 h-14 ml-24 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="Email"
                   type="text"
                 ></Form.Input>
               </Label>
-              <div className="mx-64 mt-6">
+              <Label className="flex text-xl mt-6 text-primary mx-64 ">
+                Password:<span className="text-red-500">*</span>
+                <Form.Input
+                  className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  useForm={form}
+                  name="Password"
+                  type="text"
+                ></Form.Input>
+              </Label>
+              <div className="mx-64 mt-2">
                 <Button
                   type="submit"
-                  className="w-48 h-12 text-2xl  text-center bg-green-600 rounded-md	mt-5 mx-16	text-primary text-white	 	"
+                  className="w-48 h-12 text-xl  text-center bg-green-600 rounded-md	mt-5 mx-16	text-primary text-white	 	"
                 >
                   บันทึกข้อมูล
                 </Button>
 
                 <Button
-                  type="submit"
-                  className="w-48 h-12 text-2xl  text-center bg-red-600 rounded-md	mt-5 mx-16	text-primary text-white	 	"
+                  type="reset"
+                  className="w-48 h-12 text-xl  text-center bg-red-600 rounded-md	mt-5 mx-16	text-primary text-white	 	"
                 >
                   ยกเลิก
                 </Button>
+
+                <Link to="/login/employee">
+                <ChevronLeftSquare className="fixed bottom-4 right-16 w-10 h-10 text-red-500 cursor-pointer"/>
+                </Link>
+
               </div>
             </div>
           )}
