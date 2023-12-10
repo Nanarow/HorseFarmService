@@ -40,7 +40,8 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.Horse](route, "/horses")
 	InitBasicApi[*entity.Gender](route, "/gender")
 	InitBasicApi[*entity.Position](route, "/positions")
-	InitBasicApi[*entity.TourType](route, "/tour/types")
+	// InitBasicApi[*entity.Plan](route, "/plans") complete
+	// InitBasicApi[*entity.TourType](route, "/tour/types") complete
 	// InitBasicApi[*entity.TourRegistration](route, "/tours") complete
 	// InitBasicApi[*entity.Enrollment](route, "/enrollments") complete
 	InitBasicApi[*entity.Support](route, "/supports")
@@ -49,7 +50,6 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.Location](route, "/locations")
 	InitBasicApi[*entity.Stable](route, "/stables")
 	InitBasicApi[*entity.Employee](route, "/employees")
-	InitBasicApi[*entity.Plan](route, "/plans")
 	InitBasicApi[*entity.Precede](route, "/precedes")
 
 	// tour registration system
@@ -58,6 +58,9 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	route.POST("/tours", controllers.CreateTour)
 	route.PUT("/tours/:id", controllers.UpdateTour)
 	route.DELETE("/tours/:id", controllers.DeleteTour)
+
+	route.GET("tours/types", controllers.GetAllTourTypes)
+	route.GET("tours/plans", controllers.GetAllPlans)
 
 	// prepare for enrollment system
 	// route.GET("/enrollments/user/:id", controllers.GetAllEnrollmentsOfUser)

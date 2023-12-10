@@ -2,7 +2,7 @@ import tourImage from "../../assets/tourbg-2.jpg";
 import Form from "@shadcn/simplify/form";
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import { Plan, TourRegistration, TourType } from "../../interfaces";
+import { Plan, TourType } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { Checkbox, Label } from "@shadcn/ui";
 import { useToast } from "@shadcn/ui/use-toast";
@@ -31,13 +31,13 @@ const TourRegister = ({ setTabs }: Props) => {
   });
 
   async function fetchTour() {
-    const res = await http.Get<TourType[]>("/tour/types");
+    const res = await http.Get<TourType[]>("/tours/types");
     if (res.ok) {
       setTourType(res.data);
     }
   }
   async function fetchPlan() {
-    const res = await http.Get<Plan[]>("/plans");
+    const res = await http.Get<Plan[]>("/tours/plans");
     if (res.ok) {
       setPlans(res.data);
     }
@@ -50,14 +50,11 @@ const TourRegister = ({ setTabs }: Props) => {
   }, []);
 
   async function onValid(formData: z.infer<typeof formSchema>) {
-    const tour: TourRegistration = {
+    const tour = {
       ...formData,
-      UserID: user?.ID!,
+      UserID: user?.ID,
     };
-    const res = await http.Post<TourRegistration, TourRegistration>(
-      "/tours",
-      tour
-    );
+    const res = await http.Post<string>("/tours", tour);
     if (res.ok) {
       toast({
         title: "You submitted the following values:",

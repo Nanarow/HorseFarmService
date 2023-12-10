@@ -34,13 +34,13 @@ const TourEdit = ({ tour, onSave }: Props) => {
   const [tourType, setTourType] = useState<TourType[] | undefined>(undefined);
   const [plans, setPlans] = useState<Plan[] | undefined>(undefined);
   async function fetchTourType() {
-    const res = await http.Get<TourType[]>("/tour/types");
+    const res = await http.Get<TourType[]>("/tours/types");
     if (res.ok) {
       setTourType(res.data);
     }
   }
   async function fetchPlan() {
-    const res = await http.Get<Plan[]>("/plans");
+    const res = await http.Get<Plan[]>("/tours/plans");
     if (res.ok) {
       setPlans(res.data);
     }
@@ -53,15 +53,11 @@ const TourEdit = ({ tour, onSave }: Props) => {
   }, []);
 
   async function onValid(formData: z.infer<typeof formSchema>) {
-    const newTour: TourRegistration = {
+    const newTour = {
       ...formData,
-      UserID: user?.ID!,
+      UserID: user?.ID,
     };
-    const res = await http.Put<TourRegistration, TourRegistration>(
-      "/tours",
-      tour.ID!,
-      newTour
-    );
+    const res = await http.Put<string>("/tours", tour.ID!, newTour);
     if (res.ok) {
       onSave();
       toast({
@@ -110,7 +106,7 @@ const TourEdit = ({ tour, onSave }: Props) => {
                     Type of tour<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
-                    defaultValue={String(tour.TourTypeID)}
+                    defaultValue={String(tour.TourType.ID)}
                     valueAsNumber
                     useForm={form}
                     items={ToItemList(tourType)}
@@ -128,7 +124,7 @@ const TourEdit = ({ tour, onSave }: Props) => {
                     Plan<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
-                    defaultValue={String(tour.PlanID)}
+                    defaultValue={String(tour.Plan.ID)}
                     valueAsNumber
                     useForm={form}
                     items={ToItemList(plans)}

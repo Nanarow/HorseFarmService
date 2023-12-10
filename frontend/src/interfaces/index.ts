@@ -1,10 +1,7 @@
 export interface TourRegistration {
-  ID?: number;
-  UserID: number;
-  TourTypeID: number;
-  TourType?: TourType;
-  PlanID: number;
-  Plan?: Plan;
+  ID: number;
+  TourType: TourType;
+  Plan: Plan;
   Email: string;
   Participants: number;
   Name: string;
@@ -77,7 +74,6 @@ export interface User {
   // Gender: Gender;
   ExperiencePoint: number;
   RidingLevelID: number;
-  TourRegistrations?: TourRegistration[];
 }
 
 export interface Support {
