@@ -24,12 +24,8 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const LogOut = async () => {
     const res = await http.Post("/logout", {});
     if (res.ok) {
-      if (!user) {
-        setEmployee(undefined);
-      }
-      if (!employee) {
-        setUser(undefined);
-      }
+      setEmployee(undefined);
+      setUser(undefined);
     }
   };
   return (

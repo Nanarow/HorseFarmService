@@ -70,8 +70,9 @@ export interface User {
   Phone: string;
   Profile: string;
   RoleID: number;
+  Role: Role;
   GenderID: number;
-  // Gender: Gender;
+  Gender: Gender;
   ExperiencePoint: number;
   RidingLevelID: number;
 }
@@ -103,6 +104,7 @@ export interface Gender {
 export interface Employee {
   ID?: number;
   PositionID: number;
+  Position: Position;
   GenderID: number;
   PrecedeID: number;
   FirstName: string;

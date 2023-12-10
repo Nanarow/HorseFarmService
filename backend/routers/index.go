@@ -11,11 +11,10 @@ func InitRouter(route *gin.Engine) {
 
 	route.Use(middlewares.CORS())
 
-	route.POST("/login", controllers.Login)
+	route.POST("/login", controllers.LoginUser)
+	route.POST("/login/admin", controllers.LoginAdmin)
 	route.POST("/login/employee", controllers.LoginEmployee)
-	route.POST("/login/me", controllers.AutoLogin)
-	route.POST("/login/employee/me", controllers.AutoLoginEmployee)
-	route.POST("/logout", controllers.Logout)
+	route.POST("/logout/:role", controllers.Logout)
 
 	// example
 	// route.GET("/query", func(c *gin.Context) {

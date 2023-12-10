@@ -1,12 +1,10 @@
 package controllers
 
 import (
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sut66/team16/backend/entity"
-	"github.com/sut66/team16/backend/utils"
 	"gorm.io/gorm/clause"
 )
 
@@ -101,80 +99,4 @@ func Delete[T entity.Models](c *gin.Context) {
 		return
 	}
 	responseOK(model, c)
-}
-
-func Login(c *gin.Context) {
-	var payload entity.LoginPayload
-	var user entity.User
-	err := c.ShouldBindJSON(&payload)
-	if isError(err, c) {
-		return
-	}
-	err = entity.DB().Where("email = ?", payload.Email).First(&user).Error
-	if isError(err, c) {
-		return
-	}
-	err = utils.VerifyPassword(payload.Password, user.Password)
-	if isError(err, c, "password not match") {
-		return
-	}
-	err = utils.GenerateJWT(c, user.Email, 24)
-	if isError(err, c, "token could not be created") {
-		return
-	}
-	responseOK(user, c)
-}
-
-func AutoLogin(c *gin.Context) {
-	var user entity.User
-	_, payload, err := utils.ValidateJWT(c)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-	err = entity.DB().Where("email = ?", payload["email"].(string)).First(&user).Error
-	if isError(err, c) {
-		return
-	}
-	responseOK(user, c)
-}
-
-func AutoLoginEmployee(c *gin.Context) {
-	var employee entity.Employee
-	_, payload, err := utils.ValidateJWT(c)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
-	err = entity.DB().Where("email = ?", payload["email"].(string)).First(&employee).Error
-	if isError(err, c) {
-		return
-	}
-	responseOK(employee, c)
-}
-func LoginEmployee(c *gin.Context) {
-	var payload entity.LoginPayload
-	var employee entity.Employee
-	err := c.ShouldBindJSON(&payload)
-	if isError(err, c) {
-		return
-	}
-	err = entity.DB().Where("email = ?", payload.Email).First(&employee).Error
-	if isError(err, c) {
-		return
-	}
-	err = utils.VerifyPassword(payload.Password, employee.Password)
-	if isError(err, c, "password not match") {
-		return
-	}
-	err = utils.GenerateJWT(c, employee.Email, 24)
-	if isError(err, c, "token could not be created") {
-		return
-	}
-	responseOK(employee, c)
-}
-
-func Logout(c *gin.Context) {
-	c.SetCookie("token", "", -1, "/", "localhost", false, true)
-	responseOK("you have been logged out", c)
 }

@@ -22,31 +22,32 @@ const validLogin = z.object({
 type TLogin = z.infer<typeof validLogin>;
 const Login = ({ role }: LoginProps) => {
   const { setUser, setEmployee } = useAuth();
+  // const [loginData, setLoginData] = useState<TLogin | undefined>(undefined);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || "/home";
 
   async function onLogin(data?: TLogin) {
-    if (role === "user" || role === "admin") {
-      const res = await http.Post<User, TLogin | undefined>(
-        data ? "/login" : "/login/me",
-        data
-      );
+    console.log("login data: ", data);
+    if (role === "user") {
+      const res = await http.Post<User>("/login", data ? data : {});
       if (res.ok) {
         setUser(res.data);
         navigate(from, { replace: true });
       }
-    } else {
-      const res = await http.Post<Employee, TLogin | undefined>(
-        data ? "/login/employee" : "/login/employee/me",
-        data
+    } else if (role === "employee") {
+      const res = await http.Post<Employee>(
+        "/login/employee",
+        data ? data : {}
       );
       if (res.ok) {
-        const emp = res.data;
-        setEmployee(emp);
-        // if (emp.PositionID === 155) {
-        //   navigate(from, { replace: true });
-        // }
+        setEmployee(res.data);
+        navigate(from, { replace: true });
+      }
+    } else if (role === "admin") {
+      const res = await http.Post<User>("/login/admin", data ? data : {});
+      if (res.ok) {
+        setUser(res.data);
         navigate(from, { replace: true });
       }
     }
@@ -60,7 +61,9 @@ const Login = ({ role }: LoginProps) => {
 
   return (
     <div className="w-full h-screen bg-secondary flex flex-col justify-center items-center gap-2">
-      <h1 className="text-3xl font-black text-primary mb-4">Horse Farm</h1>
+      <h1 className="text-3xl font-black text-primary mb-4 tracking-in-expand">
+        Horse Farm
+      </h1>
       <Card className="flex flex-col w-3/4 max-w-sm relative">
         <CardHeader>
           <CardTitle className="text-lg font-bold text-primary text-center ">
@@ -68,7 +71,7 @@ const Login = ({ role }: LoginProps) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {role !== "user" ? (
+          {role !== "user" && (
             <Badge
               className={` absolute top-2 right-2 rounded-full ${
                 role === "admin"
@@ -78,7 +81,7 @@ const Login = ({ role }: LoginProps) => {
             >
               {role}
             </Badge>
-          ) : null}
+          )}
           <Form
             className="flex flex-col gap-4"
             validator={validLogin}

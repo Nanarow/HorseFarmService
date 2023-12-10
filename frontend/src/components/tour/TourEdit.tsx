@@ -31,8 +31,8 @@ const TourEdit = ({ tour, onSave }: Props) => {
     PlanID: z.number(),
     Email: z.string().email(),
   });
-  const [tourType, setTourType] = useState<TourType[] | undefined>(undefined);
-  const [plans, setPlans] = useState<Plan[] | undefined>(undefined);
+  const [tourType, setTourType] = useState<TourType[]>([]);
+  const [plans, setPlans] = useState<Plan[]>([]);
   async function fetchTourType() {
     const res = await http.Get<TourType[]>("/tours/types");
     if (res.ok) {
@@ -100,7 +100,7 @@ const TourEdit = ({ tour, onSave }: Props) => {
               ></Form.DatePicker>
             </div>
             <div className="grid grid-cols-4 items-center">
-              {tourType && (
+              {tourType.length > 0 && (
                 <>
                   <Label>
                     Type of tour<span className="text-red-500">*</span>
@@ -118,7 +118,7 @@ const TourEdit = ({ tour, onSave }: Props) => {
               )}
             </div>
             <div className="grid grid-cols-4 items-center">
-              {plans && (
+              {plans.length > 0 && (
                 <>
                   <Label>
                     Plan<span className="text-red-500">*</span>
