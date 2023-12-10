@@ -22,13 +22,11 @@ const validLogin = z.object({
 type TLogin = z.infer<typeof validLogin>;
 const Login = ({ role }: LoginProps) => {
   const { setUser, setEmployee } = useAuth();
-  // const [loginData, setLoginData] = useState<TLogin | undefined>(undefined);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || "/home";
 
   async function onLogin(data?: TLogin) {
-    console.log("login data: ", data);
     if (role === "user") {
       const res = await http.Post<User>("/login", data ? data : {});
       if (res.ok) {
