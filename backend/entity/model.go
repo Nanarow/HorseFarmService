@@ -5,8 +5,8 @@ import (
 )
 
 type LoginPayload struct {
-	Email    string
-	Password string
+	Email    string `binding:"required,email"`
+	Password string `binding:"required"`
 }
 
 type User struct {

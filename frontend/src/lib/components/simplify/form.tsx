@@ -97,6 +97,7 @@ const FormInput = <T extends FieldValues>({
   name,
   useForm,
   value,
+  onChange,
   ...props
 }: FormInputProps<T>) => {
   const {
@@ -106,6 +107,7 @@ const FormInput = <T extends FieldValues>({
   } = useForm;
 
   async function onValueChange(e: React.ChangeEvent<HTMLInputElement>) {
+    onChange?.(e);
     const options = errors[name] ? defaultOptions : {};
     if (type === "number") {
       setValue(name, +e.target.value as PathValue<T, Path<T>>, options);
