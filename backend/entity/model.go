@@ -139,7 +139,7 @@ type TourRegistration struct {
 	Plan   Plan `gorm:"foreignKey:PlanID"`
 
 	Email        string    `valid:"required~Email is required,email~Invalid email"`
-	Participants int       `valid:"required~Participants is required,gte=4~Participants must be at least 4"`
+	Participants int       `valid:"required~Participants is required,gte=8~Participants must be at least 8"`
 	Date         time.Time `valid:"required~Date is required,future~Date must be in the future"`
 	Name         string
 }
