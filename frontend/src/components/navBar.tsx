@@ -12,7 +12,7 @@ import { HomeIcon, LogInIcon, LogOutIcon, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const NavBar = () => {
-  const { LogOut, user } = useAuth();
+  const { logout, user } = useAuth();
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center w-full px-4">
@@ -74,7 +74,7 @@ const NavBar = () => {
                 <DropdownMenuItem
                   onClick={() => {
                     console.log("logout");
-                    LogOut();
+                    logout("user");
                   }}
                   className="text-red-500 cursor-pointer"
                 >
