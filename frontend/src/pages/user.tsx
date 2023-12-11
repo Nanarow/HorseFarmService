@@ -6,23 +6,58 @@ import Form, { ItemList } from "@shadcn/simplify/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/ui/card";
 import { z } from "zod";
 import { domainToUnicode } from "url";
+import { useAuth } from "@src/providers/authProvider";
 
-const formUser = z.object({
-  FirstName: z.string().min(1, "FirstName is required").default(""),
-  LastName: z.string().min(1, "LastName is required").default(""),
-  Age: z.number({ required_error: "Age is required" }),
-  ExperiencePoint: z.number(),
-  // Gender: z.enum(["male", "female"]),
-  Email: z.string().email({ message: "Invalid email address" }),
-  Password: z.string().min(8, "Password must be at least 8 characters"),
-  Phone: z.string().length(10, "Phone number must be 10 characters"),
-  Profile: z.string(),
-  RoleID: z.number(),
-  GenderID: z.number(),
-  RidingLevelID: z.number(),
-});
-
+interface Props {
+  setTabs: React.Dispatch<React.SetStateAction<string>>;
+}
 const UserPage = () => {
+
+  const [Users, setUser] = useState<User[] | undefined>(undefined);
+  const [Genders, setGender] = useState<Gender[] | undefined>(undefined);
+  const [RidindLevels, setRidingLevel] = useState<RidingLevel[] | undefined>(undefined);
+
+  const formUser = z.object({
+    FirstName: z.string().min(1, "FirstName is required"),
+    LastName: z.string().min(1, "LastName is required"),
+    Age: z.number({ required_error: "Age is required" }),
+    ExperiencePoint: z.number(),
+    // Gender: z.enum(["male", "female"]),
+    Email: z.string().email({ message: "Invalid email address" }),
+    Password: z.string().min(8, "Password must be at least 8 characters"),
+    Phone: z.string().length(10, "Phone number must be 10 characters"),
+    Profile: z.string(),
+    RoleID: z.number(),
+    GenderID: z.number(),
+    RidingLevelID: z.number(),
+  });
+
+  async function fetchGender() {
+    const res = await http.Get<Gender[]>("/genders/:id")
+    if (res.ok) {
+      setGender(res.data);
+    }
+  }
+  async function fetchRidingLevel() {
+    const res = await http.Get<RidingLevel[]>("/ridingLevels/:id")
+    if (res.ok) {
+      setRidingLevel(res.data);
+    }
+  }
+  useEffect(() => {
+    return () => {
+      fetchGender();
+      fetchRidingLevel();
+    };
+  }, []);
+
+  async function onValid(formData: z.infer<typeof formUser>) {
+    const res = await http.Post<string>("/users", formData);
+    if (res.ok) {
+
+    }
+  }
+
   const Items = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
@@ -35,19 +70,6 @@ const UserPage = () => {
     { label: "Expert", value: "Expert" },
   ]
 
-  const [Users, setUser] = useState<User[] | undefined>(undefined);
-  const [Genders, setGender] = useState<Gender[] | undefined>(undefined);
-  const [RidindLevels, setRidingLevel] = useState<Gender[] | undefined>(undefined);
-
-  async function onValid(formData: z.infer<typeof formUser>){
-    const userData: User = {
-      ...formData,
-    };
-    const res = await http.Post<User, User>(
-      "/user",
-      userData      
-    )};
-
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <Card className=" w-[350px]">
@@ -58,7 +80,7 @@ const UserPage = () => {
           <Form
             className="flex flex-col gap-4"
             validator={formUser}
-            onValid={(data) => console.log(data)}
+            onValid={onValid}
             onInvalid={(errorFields) => console.log(errorFields)}
             fields={({ form }) => (
               <>
@@ -99,7 +121,12 @@ const UserPage = () => {
                   placeholder="Gender"
                   items={Items}
                 />
-
+                <Form.Select
+                  useForm={form}
+                  name="ExperiencePoint"
+                  placeholder="Experience Point"
+                  items={Items}
+                />
                 <Form.Select
                   className="w-[130px]"
                   useForm={form}

@@ -27,6 +27,7 @@ const Login = ({ role }: LoginProps) => {
   const from = location.state?.from || "/home";
 
   async function onLogin(data?: TLogin) {
+    // console.log(data);
     if (role === "user") {
       const res = await http.Post<User>("/login", data ? data : {});
       if (res.ok) {
