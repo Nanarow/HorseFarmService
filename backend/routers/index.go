@@ -30,14 +30,14 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	// route.Use(middlewares.Authorization())
 
 	InitBasicApi[*entity.Food](route, "/foods")
-	InitBasicApi[*entity.User](route, "/users")
+	// InitBasicApi[*entity.User](route, "/users")
 	InitBasicApi[*entity.Role](route, "/roles")
-	InitBasicApi[*entity.RidingLevel](route, "/riding/levels")
+	// InitBasicApi[*entity.RidingLevel](route, "/riding/levels")
 	InitBasicApi[*entity.Course](route, "/courses")
 	InitBasicApi[*entity.Schedule](route, "/schedules")
 	InitBasicApi[*entity.Health](route, "/healths")
 	// InitBasicApi[*entity.Horse](route, "/horses") complete
-	InitBasicApi[*entity.Gender](route, "/gender")
+	// InitBasicApi[*entity.Gender](route, "/gender")
 	InitBasicApi[*entity.Position](route, "/positions")
 	// InitBasicApi[*entity.Plan](route, "/plans") complete
 	// InitBasicApi[*entity.TourType](route, "/tour/types") complete
@@ -60,6 +60,14 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	route.GET("tours/types", controllers.GetAllTourTypes)
 	route.GET("tours/plans", controllers.GetAllPlans)
 
+	// User account management
+	route.GET("/users", controllers.GetAllUser)
+	route.POST("/users", controllers.CreateUser)
+	route.PUT("/users/:id", controllers.UpdateUser)
+	route.DELETE("/users/:id", controllers.DeleteUser)
+
+	route.GET("/genders", controllers.GetAllGenders)
+	route.GET("/riding/levels", controllers.GetAllRidingLevels)
 	// prepare for enrollment system
 	// route.GET("/enrollments/user/:id", controllers.GetAllEnrollmentsOfUser)
 	// route.POST("/enrollments", controllers.CreateEnrollment)
