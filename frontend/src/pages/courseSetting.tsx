@@ -58,16 +58,6 @@ const courseSetting = () => {
   }
 
   const [days, setDays] = useState<Schedule[][]>(initSchedule());
-  // const courses = () => {
-  //   const courseList: Course[] = [];
-  //   for (let i = 0; i < 7; i++) {
-  //     courseList.push({
-  //       id: i,
-  //       title: `Course ${i}`,
-  //     });
-  //   }
-  //   return courseList;
-  // };
 
   const onSave = () => {
     days.forEach((day) => {
