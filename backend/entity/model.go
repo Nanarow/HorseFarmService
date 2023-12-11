@@ -168,11 +168,11 @@ type Employee struct {
 	PositionID uint     `json:",omitempty"`
 	Position   Position `gorm:"foreignKey:PositionID"`
 
-	GenderID uint   `json:",omitempty"`
-	Gender   Gender `gorm:"foreignKey:GenderID"`
+	GenderID uint   	`json:",omitempty"`
+	Gender   Gender 	`gorm:"foreignKey:GenderID"`
 
-	PrecedeID uint    `json:",omitempty"`
-	Precede   Precede `gorm:"foreignKey:PrecedeID"`
+	PrecedeID uint    	`json:",omitempty"`
+	Precede   Precede 	`gorm:"foreignKey:PrecedeID"`
 
 	FirstName  string    `gorm:"default:Employee" `
 	LastName   string    `gorm:"default:Employee" `
