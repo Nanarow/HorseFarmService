@@ -2,7 +2,7 @@
 import { z } from "zod";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@shadcn/ui/table"
 import { Button }from "@shadcn/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter} from "@shadcn/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose, DialogDescription} from "@shadcn/ui/dialog"
 import { Label } from "@shadcn/ui/label"
 import Form from "@shadcn/simplify/form";
 import { useEffect, useState} from "react";
@@ -10,6 +10,7 @@ import { Bleed , Employee, Sex, Horse, Stable} from "@src/interfaces";
 import { http } from "../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 import { ToItemList } from "@src/utils";
+
 
 const HorsePage = () => {
   const { toast } = useToast();
@@ -67,6 +68,7 @@ const HorsePage = () => {
     }
   }
 
+
   useEffect(() => {
     return () => {
       fetchEmployees();
@@ -74,12 +76,14 @@ const HorsePage = () => {
       fetchSexs();
       fetchStables();
       fetchHorses();
+      
     }
   },[])
 
-  async function onValid(formData: z.infer<typeof formHorse>) {
-    
+  //post
+  async function onValid(formData: z.infer<typeof formHorse>) {  
     console.log(formData)
+
     const res = await http.Post<Horse>("/horses", formData);
     if (res.ok) {
       toast({
@@ -93,12 +97,14 @@ const HorsePage = () => {
       });
     }
   }
+
   function StableTolist() {
     const res = stables.map((stable) => {
       return {ID:stable.ID,Name:String(stable.ID)}
     })
     return res
   }
+  
   function empTolist() {
     const res = employees.map((emp) => {
       return {ID:emp.ID!,Name:emp.FirstName + " " + emp.LastName}
@@ -106,10 +112,40 @@ const HorsePage = () => {
     return res
   }
 
+  async function handleDelte(id:number) {
+    console.log(id)
+    const res = await http.Delete("/horses", id);
+    if (res.ok) {
+      
+    }
+  }
+
+  async function onEditValid(formData: z.infer<typeof formHorse>, ID: number) {
+    const newHorse ={
+      ...formData,
+
+    }
+    const res = await http.Put<string>("/tours", ID, newHorse);
+    if (res.ok) {
+      
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              {JSON.stringify(res.data, null, 2)}
+            </code>
+          </pre>
+        ),
+        duration: 1500,
+      });
+    }
+  }
+
   return (
     <div className="w-full h-screen flex flex-col item-center justify-item">
       <h1 className="text-center text-2xl font-sans mt-10 ml-20">จัดการข้อมูลม้า</h1>
-      {/* เพิ่มข้อมูลม้า*/}
+      
       <div className="ml-10 mt-1 mr-10 flex flex-row-reverse">
         <Dialog>
           <DialogTrigger asChild>
@@ -218,8 +254,7 @@ const HorsePage = () => {
                       name="Image"
                       accept="image/*"      
                       className="col-span-3 font-extralight"  
-                      placeholder="image"
-                      
+                      placeholder="image"  
                       
                     />
                   </div>
@@ -266,12 +301,159 @@ const HorsePage = () => {
                   <TableCell className=" text-center ">{horse.Stable.ID}</TableCell>
                   <TableCell className=" text-center ">{`${horse.Date}`}</TableCell>
                   <TableCell className=" text-center ">{horse.Employee.FirstName}</TableCell>
-                  <TableCell className=" text-center ">
-                    
-                    
+                  <TableCell className=" text-center ">              
+                    <div className="ml-10 mt-1 mr-10 flex flex-row-reverse">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline">แก้ไข</Button>
+                        </DialogTrigger>
+                        <DialogContent className="mt-10 mb-20 ">
+                          <DialogHeader>
+                            <DialogTitle>แก้ไขข้อมูลม้า</DialogTitle>              
+                          </DialogHeader>
+                          <Form
+                            className="grid gap-2"
+                            validator={formHorse}
+                            onValid={(data)=>onEditValid(data,horse.ID)}
+                            onInvalid={(data) => console.log(data)}
+                            fields={({ form }) => (
+                              <>
+                                <div className="grid grid-cols-6 items-center gap-4 ">
+                                  <Label className="text-right">ชื่อ</Label>
+                                  <Form.Input
+                                    defaultValue={horse.Name}
+                                    useForm={form}
+                                    name="Name"
+                                    type="text"
+                                    className="col-span-3 font-extralight"  
+                                    placeholder="enter your name"
+                                  />   
+                                </div>
+                                <div className="grid grid-cols-6 items-center gap-4">
+                                  {sexs.length > 0  && (
+                                    <>
+                                      <Label className="text-right">เพศ</Label>
+                                      <Form.Select
+                                        defaultValue={String(horse.Sex.ID)}
+                                        valueAsNumber
+                                        useForm={form}
+                                        name="SexID"
+                                        items={ToItemList(sexs)}
+                                        className="col-span-3 font-extralight"  
+                                        placeholder="Sex"
+                                      ></Form.Select> 
+                                    </>
+                                  )}
+                                </div>
+                                <div className="grid grid-cols-6 items-center gap-4">
+                                  <Label  className="text-right">อายุ</Label>
+                                  <Form.Input
+                                    defaultValue={horse.Age}
+                                    useForm={form}
+                                    type="number"
+                                    name="Age"
+                                    className="col-span-3 font-extralight"  
+                                    placeholder="Age"
+                                  />   
+                                </div>
+                                <div className="grid grid-cols-6 items-center gap-4">
+                                  {bleeds.length > 0 && (
+                                    <>                      
+                                      <Label className="text-right">สายพันธุ์</Label>
+                                      <Form.Select
+                                        defaultValue={String(horse.Bleed.ID)}
+                                        valueAsNumber
+                                        useForm={form}
+                                        items={ToItemList(bleeds)}
+                                        name="BleedID"
+                                        className="col-span-3 font-extralight"  
+                                        placeholder="Bleed"
+                                      ></Form.Select>                          
+                                    </>
+                                  )}
+                                </div>
+                                <div className="grid grid-cols-6 items-center gap-4">
+                                  <Label className="text-right">คอกม้า</Label>
+                                    <Form.Select
+                                      defaultValue={horse.Stable.ID}
+                                      items={ToItemList(StableTolist())}
+                                      valueAsNumber
+                                      useForm={form}
+                                      name="StableID"
+                                      className="col-span-3 font-extralight"  
+                                      placeholder="Stable"
+                                  ></Form.Select>                                
+                                </div>
+                                <div className="grid grid-cols-6 items-center gap-4">
+                                  {employees.length > 0 && (
+                                    <>
+                                      <Label className="text-right">ผู้ดูแล</Label>
+                                      <Form.Select
+                                        defaultValue={String(horse.Employee.ID)}
+                                        valueAsNumber
+                                        useForm={form}
+                                        items={ToItemList(empTolist())}
+                                        name="EmployeeID"
+                                        className="col-span-3 font-extralight"  
+                                        placeholder="Employee"
+                                  ></Form.Select>
+                                    </>
+                                  )}
+                                </div>
+                                <div className="grid grid-cols-6 items-center gap-4">
+                                  <Label className="text-right">วันที่เข้ามา</Label>
+                                  <Form.DatePicker 
+                                    defaultValue={new Date(horse.Date)}
+                                    className="col-span-3 font-extralight" 
+                                    useForm={form} 
+                                    name="Date">
+                                  </Form.DatePicker>
+                                </div>
+                                <div className="grid grid-cols-6 items-center gap-4">
+                                  <Label className="text-right">รูป</Label>
+                                  <Form.Input
+                                    useForm={form}
+                                    type="file"
+                                    name="Image"
+                                    accept="image/*"      
+                                    className="col-span-3 font-extralight"  
+                                    placeholder="image"  
+                                    
+                                  />
+                                </div>
+                                <DialogFooter className="items-center grid grid-row-reverse justify-between">
+                                  <div className="space-x-4">
+                                    <Button variant="secondary" className=" bg-red-500">ยกเลิก</Button>
+                                    <Button variant="outline" type="submit" className=" bg-green-500">บันทึกข้อมูล</Button>
+                                  </div>           
+                                </DialogFooter>
+                              </>
+                            )}>
+                          </Form>
+                        </DialogContent>
+                      </Dialog>
+                    </div> 
                   </TableCell>
                   <TableCell className=" text-center ">
-                    
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline">ลบ</Button>
+                      </DialogTrigger>                    
+                      <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                          <DialogTitle>คุณแน่ใจหรือไม่?</DialogTitle>
+                          <DialogDescription>คุณต้องการที่จะลบข้อมูลใช่หรือไม่</DialogDescription>
+                        </DialogHeader>
+                          <DialogFooter className="items-center grid-row-reverse justify-between flex">
+                            <DialogClose asChild>
+                              <Button variant="secondary">No, Keep it</Button>
+                            </DialogClose>
+                            <DialogClose asChild>
+                              <Button type="submit" variant={"destructive"} onClick={()=>handleDelte(horse.ID)} >Yes, Delete</Button>
+                            </DialogClose>        
+                          </DialogFooter>
+                      </DialogContent>   
+                    </Dialog>
                   </TableCell>
                 </TableRow>
               ))}
