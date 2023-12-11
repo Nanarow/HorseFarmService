@@ -28,7 +28,7 @@ func CORS() gin.HandlerFunc {
 
 func Authorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, payload, err := utils.ValidateJWT(c)
+		_, payload, err := utils.ValidateJWT("token", c)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			return
@@ -52,8 +52,10 @@ func Authorization() gin.HandlerFunc {
 
 func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, _, err := utils.ValidateJWT(c)
-		if err != nil {
+		_, _, err1 := utils.ValidateJWT("token", c)
+		_, _, err2 := utils.ValidateJWT("a_token", c)
+		_, _, err3 := utils.ValidateJWT("e_token", c)
+		if err1 != nil && err2 != nil && err3 != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			return
 		}

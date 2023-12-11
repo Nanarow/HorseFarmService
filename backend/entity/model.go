@@ -5,8 +5,8 @@ import (
 )
 
 type LoginPayload struct {
-	Email    string
-	Password string
+	Email    string `binding:"required,email"`
+	Password string `binding:"required"`
 }
 
 type User struct {
@@ -89,9 +89,13 @@ type Horse struct {
 	Date       time.Time
 	Image      string
 	EmployeeID uint
+	Employee   Employee `gorm:"foreignKey:EmployeeID"`
 	BleedID    uint
+	Bleed      Bleed `gorm:"foreignKey:BleedID"`
 	SexID      uint
+	Sex        Sex `gorm:"foreignKey:SexID"`
 	StableID   uint
+	Stable     Stable    `gorm:"foreignKey:StableID"`
 	Courses    []*Course `gorm:"many2many:horse_courses;" json:"-"`
 	Healths    []Health  `json:"-"`
 }
@@ -124,31 +128,31 @@ type TourType struct {
 	Name              string
 	MinParticipant    int
 	MaxParticipant    int
-	Description       string
-	TourRegistrations []TourRegistration `json:"-"`
+	Description       string             `json:",omitempty"`
+	TourRegistrations []TourRegistration `json:",omitempty"`
 }
 
 type TourRegistration struct {
 	BaseModel
-	UserID uint
+	UserID uint `json:",omitempty"`
 
-	TourTypeID uint
+	TourTypeID uint     `json:",omitempty"`
 	TourType   TourType `gorm:"foreignKey:TourTypeID"`
 
-	PlanID uint
+	PlanID uint `json:",omitempty"`
 	Plan   Plan `gorm:"foreignKey:PlanID"`
 
 	Email        string    `valid:"required~Email is required,email~Invalid email"`
 	Participants int       `valid:"required~Participants is required,gte=8~Participants must be at least 8 "`
 	Date         time.Time `valid:"required~Date is required,future~Date must be in the future"`
-	Name         string
+	Name         string    `gorm:"default:Tour" `
 }
 
 type Plan struct {
 	BaseModel
 	Name              string
-	Description       string
-	TourRegistrations []TourRegistration `json:"-"`
+	Description       string             `json:",omitempty"`
+	TourRegistrations []TourRegistration `json:",omitempty"`
 }
 
 type Enrollment struct {

@@ -10,8 +10,8 @@ import (
 
 var secretKey = []byte("secret8985")
 
-func ValidateJWT(c *gin.Context) (*jwt.Token, jwt.MapClaims, error) {
-	tokenCookie, err := c.Cookie("token")
+func ValidateJWT(token_name string, c *gin.Context) (*jwt.Token, jwt.MapClaims, error) {
+	tokenCookie, err := c.Cookie(token_name)
 	if err != nil {
 		return nil, nil, fmt.Errorf("please login first")
 	}
@@ -39,7 +39,7 @@ func ValidateJWT(c *gin.Context) (*jwt.Token, jwt.MapClaims, error) {
 	return token, claims, nil
 }
 
-func GenerateJWT(c *gin.Context, email string, hour int) error {
+func GenerateJWT(token_name string, c *gin.Context, email string, hour int) error {
 	expiration := time.Now().Add(time.Hour * time.Duration(hour) * 30).Unix()
 	claims := jwt.MapClaims{
 		"email": email,
@@ -51,6 +51,6 @@ func GenerateJWT(c *gin.Context, email string, hour int) error {
 	if err != nil {
 		return err
 	}
-	c.SetCookie("token", tokenString, 3600*hour*30, "", "", true, true)
+	c.SetCookie(token_name, tokenString, 3600*hour*30, "", "", true, true)
 	return nil
 }

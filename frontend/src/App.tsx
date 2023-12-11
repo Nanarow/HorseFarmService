@@ -31,19 +31,19 @@ function App() {
       <Route path="/example/form" element={<ValidateForm />} />
       <Route path="/example/table" element={<DragDropTable />} />
 
-      <Route element={<PrivateRoute role="user" />}>
+      <Route element={<PrivateRoute role={101} />}>
         <Route path="/course" element={<Course />}></Route>
         <Route path="/tour" element={<Tour />}></Route>
         <Route path="/account" element={<Account />}></Route>
       </Route>
 
-      <Route element={<PrivateRoute role="admin" path="/login/admin" />}>
+      <Route element={<PrivateRoute role={100} path="/login/admin" />}>
         <Route path="/employee" element={<Employee />}></Route>
         <Route path="/employee/list" element={<EmployeeList/>}></Route>
         <Route path="/user" element={<User />}></Route>
       </Route>
 
-      <Route element={<PrivateRoute role="employee" path="/login/employee" />}>
+      <Route element={<PrivateRoute position={201} path="/login/employee" />}>
         <Route path="/course/setting" element={<CourseSetting />}></Route>
         <Route path="/food" element={<Food />}></Route>
         <Route path="/health" element={<Health />}></Route>

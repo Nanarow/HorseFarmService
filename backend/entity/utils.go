@@ -14,7 +14,7 @@ type Models interface {
 
 // BaseModel provides a basic implementation of the Models interface
 type BaseModel struct {
-	ID        uint           `gorm:"primarykey"`
+	ID        uint           `gorm:"primarykey" json:",omitempty"`
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`

@@ -1,10 +1,7 @@
 export interface TourRegistration {
-  ID?: number;
-  UserID: number;
-  TourTypeID: number;
-  TourType?: TourType;
-  PlanID: number;
-  Plan?: Plan;
+  ID: number;
+  TourType: TourType;
+  Plan: Plan;
   Email: string;
   Participants: number;
   Name: string;
@@ -38,10 +35,15 @@ export interface Horse {
   Age: number;
   Date: Date;
   Image: string;
-  EmployeeID: number;
-  BleedID: number;
-  SexID: number;
-  StableID: number;
+  Employee:Employee
+  Bleed:Bleed
+  Sex:Sex
+  Stable:Stable
+  // EmployeeID: number;
+  
+  // BleedID: number;
+  // SexID: number;
+  // StableID: number;
 }
 
 export interface Stable {
@@ -73,11 +75,11 @@ export interface User {
   Phone: string;
   Profile: string;
   RoleID: number;
+  Role: Role;
   GenderID: number;
-  // Gender: Gender;
+  Gender: Gender;
   ExperiencePoint: number;
   RidingLevelID: number;
-  TourRegistrations?: TourRegistration[];
 }
 
 export interface Support {

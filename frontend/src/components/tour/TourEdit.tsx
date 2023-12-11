@@ -31,16 +31,16 @@ const TourEdit = ({ tour, onSave }: Props) => {
     PlanID: z.number(),
     Email: z.string().email(),
   });
-  const [tourType, setTourType] = useState<TourType[] | undefined>(undefined);
-  const [plans, setPlans] = useState<Plan[] | undefined>(undefined);
+  const [tourType, setTourType] = useState<TourType[]>([]);
+  const [plans, setPlans] = useState<Plan[]>([]);
   async function fetchTourType() {
-    const res = await http.Get<TourType[]>("/tour/types");
+    const res = await http.Get<TourType[]>("/tours/types");
     if (res.ok) {
       setTourType(res.data);
     }
   }
   async function fetchPlan() {
-    const res = await http.Get<Plan[]>("/plans");
+    const res = await http.Get<Plan[]>("/tours/plans");
     if (res.ok) {
       setPlans(res.data);
     }
@@ -53,15 +53,11 @@ const TourEdit = ({ tour, onSave }: Props) => {
   }, []);
 
   async function onValid(formData: z.infer<typeof formSchema>) {
-    const newTour: TourRegistration = {
+    const newTour = {
       ...formData,
-      UserID: user?.ID!,
+      UserID: user?.ID,
     };
-    const res = await http.Put<TourRegistration, TourRegistration>(
-      "/tours",
-      tour.ID!,
-      newTour
-    );
+    const res = await http.Put<string>("/tours", tour.ID!, newTour);
     if (res.ok) {
       onSave();
       toast({
@@ -104,13 +100,13 @@ const TourEdit = ({ tour, onSave }: Props) => {
               ></Form.DatePicker>
             </div>
             <div className="grid grid-cols-4 items-center">
-              {tourType && (
+              {tourType.length > 0 && (
                 <>
                   <Label>
                     Type of tour<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
-                    defaultValue={String(tour.TourTypeID)}
+                    defaultValue={String(tour.TourType.ID)}
                     valueAsNumber
                     useForm={form}
                     items={ToItemList(tourType)}
@@ -122,13 +118,13 @@ const TourEdit = ({ tour, onSave }: Props) => {
               )}
             </div>
             <div className="grid grid-cols-4 items-center">
-              {plans && (
+              {plans.length > 0 && (
                 <>
                   <Label>
                     Plan<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
-                    defaultValue={String(tour.PlanID)}
+                    defaultValue={String(tour.Plan.ID)}
                     valueAsNumber
                     useForm={form}
                     items={ToItemList(plans)}

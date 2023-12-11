@@ -15,10 +15,13 @@ const Tour = () => {
         onValueChange={setTabs}
         value={tabs}
       >
-        <TabsContent value="register" className="w-full h-full mt-0">
+        <TabsContent
+          value="register"
+          className="w-full h-full mt-0 slide-in-right "
+        >
           <TourRegister setTabs={setTabs} />
         </TabsContent>
-        <TabsContent value="list" className="w-full h-full mt-0">
+        <TabsContent value="list" className="w-full h-full mt-0 slide-in-left">
           <div className="w-full h-full flex">
             <TourList setTabs={setTabs} />
           </div>

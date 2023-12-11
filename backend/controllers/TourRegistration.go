@@ -19,15 +19,17 @@ import (
 // 	var tours []entity.TourRegistration
 
 // 	// get data form database and check error
-// 	if err := entity.DB().Preload(clause.Associations).Find(&tours).Error; err != nil {
+// 	if err := entity.DB().Joins("Plan").Joins("TourType").Find(&tours).Error; err != nil {
 // 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 // 		return
 // 	}
 
-// 	// response data
-// 	c.JSON(http.StatusOK, gin.H{"data": tours})
-// }
+//		// response data
+//		c.JSON(http.StatusOK, gin.H{"data": tours})
+//	}
+//
 
+// GET /tours/user/:id
 func GetAllToursOfUser(c *gin.Context) {
 	// create variable for store data as type of TourRegistration array
 	var tours []entity.TourRegistration
@@ -36,7 +38,7 @@ func GetAllToursOfUser(c *gin.Context) {
 	id := c.Param("id")
 
 	// get data form database and check error
-	if err := entity.DB().Preload(clause.Associations).Where("user_id = ?", id).Find(&tours).Error; err != nil {
+	if err := entity.DB().Joins("Plan").Joins("TourType").Where("user_id = ?", id).Omit("UserID", "PlanID", "TourTypeID").Find(&tours).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -45,22 +47,25 @@ func GetAllToursOfUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": tours})
 }
 
-func GetTour(c *gin.Context) {
-	// create variable for store data as type of TourRegistration
-	var tour entity.TourRegistration
-	// get id from url
-	id := c.Param("id")
+// unused
+// GET /tours/:id
+// func GetTour(c *gin.Context) {
+// 	// create variable for store data as type of TourRegistration
+// 	var tour entity.TourRegistration
+// 	// get id from url
+// 	id := c.Param("id")
 
-	// get data form database and check error
-	if err := entity.DB().Preload(clause.Associations).First(&tour, id).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+// 	// get data form database and check error
+// 	if err := entity.DB().Preload(clause.Associations).First(&tour, id).Error; err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
 
-	// response data
-	c.JSON(http.StatusOK, gin.H{"data": tour})
-}
+// 	// response data
+// 	c.JSON(http.StatusOK, gin.H{"data": tour})
+// }
 
+// POST /tours
 func CreateTour(c *gin.Context) {
 	// create variable for store data as type of TourRegistration
 	var tour entity.TourRegistration
@@ -87,6 +92,7 @@ func CreateTour(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"data": "tour registration successfully"})
 }
 
+// PUT /tours/:id
 func UpdateTour(c *gin.Context) {
 	// create variable for store data as type of TourRegistration
 	var tour entity.TourRegistration
@@ -123,6 +129,7 @@ func UpdateTour(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": "updated your tour registration successfully"})
 }
 
+// DELETE /tours/:id
 func DeleteTour(c *gin.Context) {
 	// create variable for store data as type of TourRegistration
 	var tour entity.TourRegistration
@@ -139,4 +146,34 @@ func DeleteTour(c *gin.Context) {
 
 	// response deleted data
 	c.JSON(http.StatusOK, gin.H{"data": "cancel your tour registration successfully"})
+}
+
+// GET tours/types
+func GetAllTourTypes(c *gin.Context) {
+	// create variable for store data as type of TourType array
+	var tourTypes []entity.TourType
+
+	// get data form database and check error
+	if err := entity.DB().Find(&tourTypes).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// response data
+	c.JSON(http.StatusOK, gin.H{"data": tourTypes})
+}
+
+// GET /tours/plans
+func GetAllPlans(c *gin.Context) {
+	// create variable for store data as type of Plan array
+	var plans []entity.Plan
+
+	// get data form database and check error
+	if err := entity.DB().Find(&plans).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// response data
+	c.JSON(http.StatusOK, gin.H{"data": plans})
 }
