@@ -30,12 +30,12 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	// route.Use(middlewares.Authentication())
 	// route.Use(middlewares.Authorization())
 
-	InitBasicApi[*entity.Food](route, "/foods")
+	// InitBasicApi[*entity.Food](route, "/foods")
 	InitBasicApi[*entity.User](route, "/users")
 	InitBasicApi[*entity.Role](route, "/roles")
 	InitBasicApi[*entity.RidingLevel](route, "/riding/levels")
-	InitBasicApi[*entity.Course](route, "/courses")
-	InitBasicApi[*entity.Schedule](route, "/schedules")
+	// InitBasicApi[*entity.Course](route, "/courses")
+	// InitBasicApi[*entity.Schedule](route, "/schedules")
 	InitBasicApi[*entity.Health](route, "/healths")
 	InitBasicApi[*entity.Horse](route, "/horses")
 	InitBasicApi[*entity.Gender](route, "/gender")
@@ -46,7 +46,7 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.Support](route, "/supports")
 	InitBasicApi[*entity.Bleed](route, "/bleeds")
 	InitBasicApi[*entity.Sex](route, "/sexes")
-	InitBasicApi[*entity.Location](route, "/locations")
+	// InitBasicApi[*entity.Location](route, "/locations")
 	InitBasicApi[*entity.Stable](route, "/stables")
 	InitBasicApi[*entity.Employee](route, "/employees")
 	InitBasicApi[*entity.Plan](route, "/plans")
@@ -62,4 +62,16 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	// prepare for enrollment system
 	// route.GET("/enrollments/user/:id", controllers.GetAllEnrollmentsOfUser)
 	// route.POST("/enrollments", controllers.CreateEnrollment)
+
+	route.GET("/courses", controllers.GetAllCourses)
+	route.POST("/courses", controllers.CreateCourse)
+	route.PUT("/courses/:id", controllers.UpdateCourse)
+
+	route.GET("/schedules", controllers.GetAllSchedules)
+	route.POST("/schedules", controllers.CreateSchedule)
+	route.GET("/schedules/locations", controllers.GetAllLocations)
+
+	route.POST("/foods", controllers.CreateFood)
+	route.PUT("/foods/:id", controllers.UpdateFood)
+	route.DELETE("/foods/:id", controllers.DeleteFood)
 }

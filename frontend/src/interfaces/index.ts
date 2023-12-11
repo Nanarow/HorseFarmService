@@ -147,7 +147,6 @@ export interface Course {
   Participants: number;
   Description: string;
   EmployeeID: number;
-  ScheduleID: number;
 }
 
 export interface Schedule {

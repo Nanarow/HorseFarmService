@@ -56,13 +56,15 @@ type Support struct {
 
 type Course struct {
 	BaseModel
-	Name         string
+	Name         string		
 	Duration     int
 	Participants int
 	Description  string
+	Experience   float32
 	EmployeeID   uint
-	ScheduleID   uint
-	Horses       []*Horse `gorm:"many2many:horse_courses;"`
+	Employee	 Employee	`gorm:"foreignKey:EmployeeID"`
+	Schedules    []Schedule `json:"-"`
+	Horses       []*Horse   `gorm:"many2many:horse_courses;"`
 }
 
 type Schedule struct {
@@ -71,7 +73,9 @@ type Schedule struct {
 	StartTime   time.Time
 	Description string
 	LocationID  uint
-	Courses     []Course `json:"-"`
+	Location	Location	`gorm:"foreignKey:LocationID"`
+	CourseID    uint
+	Course		Course		`gorm:"foreignKey:CourseID"`
 }
 
 type Location struct {
@@ -216,4 +220,5 @@ type Food struct {
 	Forage       string
 	Date         time.Time
 	EmployeeID   uint
+	Employee	 Employee	`gorm:"foreignKey:EmployeeID"`
 }
