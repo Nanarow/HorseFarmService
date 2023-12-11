@@ -151,4 +151,55 @@ func SetupData(db *gorm.DB) {
 	for _, plan := range plans {
 		db.Create(&plan)
 	}
+
+	// sex data
+	sexs := []Sex{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "Mare(เพศเมีย)",
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "Stallion(เพศผู้)",
+		},
+	}
+	for _, sex := range sexs {
+		db.Create(&sex)
+	}
+
+	// bleed data
+	bleeds := []Bleed{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "Arabian Horse",
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "American Quarter Horse",
+		},
+		{
+			BaseModel: BaseModel{ID: 3},
+			Name:      "Morgan Horse",
+		},
+		{
+			BaseModel: BaseModel{ID: 4},
+			Name:      "Paint Horse",
+		},
+		{
+			BaseModel: BaseModel{ID: 5},
+			Name:      "Thoroughbred Horse",
+		},
+		{
+			BaseModel: BaseModel{ID: 6},
+			Name:      "Thai Horse",
+		},
+		{
+			BaseModel: BaseModel{ID: 7},
+			Name:      "Other",
+		},
+	}
+	for _, bleed := range bleeds {
+		db.Create(&bleed)
+	}
+
 }
