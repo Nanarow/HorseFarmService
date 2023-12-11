@@ -1,4 +1,4 @@
-import { ArrowLeftSquareIcon, Edit, XSquare } from "lucide-react";
+import { ArrowLeftSquareIcon, XSquare } from "lucide-react";
 import { TourRegistration } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
@@ -23,11 +23,13 @@ interface Props {
 }
 
 const TourList = ({ setTabs }: Props) => {
-  const [tours, setTours] = useState<TourRegistration[] | undefined>(undefined);
+  const [tours, setTours] = useState<TourRegistration[]>([]);
+
   const { user } = useAuth();
   async function fetchTours() {
     const res = await http.Get<TourRegistration[]>("/tours/user/" + user?.ID);
     if (res.ok) {
+      console.log(res.data);
       setTours(res.data);
     }
   }
@@ -65,48 +67,40 @@ const TourList = ({ setTabs }: Props) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tours &&
-            tours.map((tour) => (
-              <TableRow key={tour.ID}>
-                <TableCell className="font-medium text-center">
-                  {tour.Name ? tour.Name : "tour " + tour.ID}
-                </TableCell>
-                <TableCell className=" text-center">
-                  {format(new Date(tour.Date), "PPP")}
-                </TableCell>
-                <TableCell className=" text-center hidden md:table-cell">
-                  {tour.Email}
-                </TableCell>
-                <TableCell className=" text-center">
-                  {tour.TourType?.Name}
-                </TableCell>
-                <TableCell className=" text-center">
-                  {tour.Plan?.Name}
-                </TableCell>
-                <TableCell className=" text-center hidden md:table-cell">
-                  {tour.Participants}
-                </TableCell>
-                <TableCell className=" relative">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Edit className="text-yellow-500 abs-center hover:scale-110 cursor-pointer" />
-                    </DialogTrigger>
-                    <TourEdit tour={tour} onSave={fetchTours}></TourEdit>
-                  </Dialog>
-                </TableCell>
-                <TableCell className=" relative">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
-                    </DialogTrigger>
-                    <TourAlert
-                      tourID={tour.ID!}
-                      onCancel={fetchTours}
-                    ></TourAlert>
-                  </Dialog>
-                </TableCell>
-              </TableRow>
-            ))}
+          {tours.map((tour) => (
+            <TableRow key={tour.ID}>
+              <TableCell className="font-medium text-center">
+                {tour.Name ? tour.Name : "tour " + tour.ID}
+              </TableCell>
+              <TableCell className=" text-center">
+                {format(new Date(tour.Date), "PPP")}
+              </TableCell>
+              <TableCell className=" text-center hidden md:table-cell">
+                {tour.Email}
+              </TableCell>
+              <TableCell className=" text-center">
+                {tour.TourType?.Name}
+              </TableCell>
+              <TableCell className=" text-center">{tour.Plan?.Name}</TableCell>
+              <TableCell className=" text-center hidden md:table-cell">
+                {tour.Participants}
+              </TableCell>
+              <TableCell className=" relative">
+                <TourEdit tour={tour} onSave={fetchTours}></TourEdit>
+              </TableCell>
+              <TableCell className=" relative">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
+                  </DialogTrigger>
+                  <TourAlert
+                    tourID={tour.ID!}
+                    onCancel={fetchTours}
+                  ></TourAlert>
+                </Dialog>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

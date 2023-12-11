@@ -1,22 +1,24 @@
 package entity
 
-import "time"
+import (
+	"time"
+)
 
 type LoginPayload struct {
-	Email    string
-	Password string
+	Email    string `binding:"required,email"`
+	Password string `binding:"required"`
 }
 
 type User struct {
 	BaseModel
-	FirstName      string
-	LastName       string
-	Email          string
-	Password       string
-	Phone          string
-	Profile        string
-	Age            int
-	ExperincePoint int
+	FirstName       string
+	LastName        string
+	Email           string
+	Password        string
+	Phone           string
+	Profile         string
+	Age             int
+	ExperiencePoint int
 
 	RoleID uint
 	Role   Role `gorm:"foreignKey:RoleID"`
@@ -91,9 +93,13 @@ type Horse struct {
 	Date       time.Time
 	Image      string
 	EmployeeID uint
+	Employee   Employee `gorm:"foreignKey:EmployeeID"`
 	BleedID    uint
+	Bleed      Bleed `gorm:"foreignKey:BleedID"`
 	SexID      uint
+	Sex        Sex `gorm:"foreignKey:SexID"`
 	StableID   uint
+	Stable     Stable    `gorm:"foreignKey:StableID"`
 	Courses    []*Course `gorm:"many2many:horse_courses;" json:"-"`
 	Healths    []Health  `json:"-"`
 }
@@ -126,31 +132,31 @@ type TourType struct {
 	Name              string
 	MinParticipant    int
 	MaxParticipant    int
-	Description       string
-	TourRegistrations []TourRegistration `json:"-"`
+	Description       string             `json:",omitempty"`
+	TourRegistrations []TourRegistration `json:",omitempty"`
 }
 
 type TourRegistration struct {
 	BaseModel
-	UserID uint
+	UserID uint `json:",omitempty"`
 
-	TourTypeID uint
+	TourTypeID uint     `json:",omitempty"`
 	TourType   TourType `gorm:"foreignKey:TourTypeID"`
 
-	PlanID uint
+	PlanID uint `json:",omitempty"`
 	Plan   Plan `gorm:"foreignKey:PlanID"`
 
-	Email        string
-	Participants int `json:"omitempty"`
-	Date         time.Time
-	Name         string
+	Email        string    `valid:"required~Email is required,email~Invalid email"`
+	Participants int       `valid:"required~Participants is required,gte=8~Participants must be at least 8 "`
+	Date         time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Name         string    `gorm:"default:Tour" `
 }
 
 type Plan struct {
 	BaseModel
 	Name              string
-	Description       string
-	TourRegistrations []TourRegistration `json:"-"`
+	Description       string             `json:",omitempty"`
+	TourRegistrations []TourRegistration `json:",omitempty"`
 }
 
 type Enrollment struct {
@@ -163,19 +169,26 @@ type Enrollment struct {
 
 type Employee struct {
 	BaseModel
-	PositionID uint
-	GenderID   uint
-	PrecedeID  uint
-	FirstName  string
-	LastName   string
-	Email      string
-	Password   string
-	DayOfBirth time.Time
-	Phone      string
-	Healths    []Health `json:"-"`
-	Horses     []Horse  `json:"-"`
-	Courses    []Course `json:"-"`
-	Foods      []Food   `json:"-"`
+	PositionID uint     `json:",omitempty"`
+	Position   Position `gorm:"foreignKey:PositionID"`
+
+	GenderID uint   	`json:",omitempty"`
+	Gender   Gender 	`gorm:"foreignKey:GenderID"`
+
+	PrecedeID uint    	`json:",omitempty"`
+	Precede   Precede 	`gorm:"foreignKey:PrecedeID"`
+
+	FirstName  string    `gorm:"default:Employee" `
+	LastName   string    `gorm:"default:Employee" `
+	Email      string    `valid:"required~Email is required,email~Invalid email"`
+	Password   string    `valid:"required~Password is required,min=4~Password must be at 4 characters"`
+	DayOfBirth time.Time `valid:"required~DayOfBirth is required,past~DayOfBirth must be in the past"`
+	Phone      string    `valid:"required~Phone is required,min=10~Phone must be at 10 characters"`
+
+	Healths []Health `json:",omitempty"`
+	Horses  []Horse  `json:",omitempty"`
+	Courses []Course `json:",omitempty"`
+	Foods   []Food   `json:",omitempty"`
 }
 
 type Position struct {
@@ -183,31 +196,35 @@ type Position struct {
 	Name        string
 	Salary      int
 	Description string
-	Employees   []Employee `json:"-"`
+	Employees   []Employee `json:",omitempty"`
 }
 
 type Gender struct {
 	BaseModel
 	Name      string
-	Employees []Employee `json:"-"`
-	Users     []User     `json:"-"`
+	Employees []Employee `json:",omitempty"`
+	Users     []User     `json:",omitempty"`
 }
 type Precede struct {
 	BaseModel
 	Name      string
-	Employees []Employee `json:"-"`
+	Employees []Employee `json:",omitempty"`
 }
 
 type Health struct {
 	BaseModel
-	HorseID    uint
-	EmployeeID uint
-	Vital      string
-	Tooth      string
-	Vaccine    string
-	Parasite   string
-	Blood      string
-	Date       time.Time
+	HorseID uint  `json:",omitempty"`
+	Horse   Horse `gorm:"foreignKey:HorseID"`
+
+	EmployeeID uint     `json:",omitempty"`
+	Employee   Employee `gorm:"foreignKey:EmployeeID"`
+
+	Vital    string    `valid:"required~Vital is required,min=4~Vital must be at least 4"`
+	Tooth    string    `valid:"required~Tooth is required,min=4~Tooth must be at least 4"`
+	Vaccine  string    `valid:"required~Vaccine is required,min=4~Vaccine must be at least 4"`
+	Parasite string    `valid:"required~Parasite is required,min=4~Parasite must be at least 4"`
+	Blood    string    `valid:"required~Blood is required,min=4~Blood must be at least 4"`
+	Date     time.Time `valid:"required~Date is required,future~Date must be in the future"`
 }
 
 type Food struct {
