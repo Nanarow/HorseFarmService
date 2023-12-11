@@ -107,8 +107,11 @@ export interface Gender {
 export interface Employee {
   ID?: number;
   PositionID: number;
+  Position?: Position;
   GenderID: number;
+  Gender?: Gender;
   PrecedeID: number;
+  Precede?: Precede;
   FirstName: string;
   LastName: string;
   Email: string;
@@ -119,7 +122,9 @@ export interface Employee {
 export interface Health {
   ID?: number;
   EmployeeID: number;
+  Employee?: Employee;
   HorseID: number;
+  Horse?: Horse;
   Vital: string;
   Tooth: string;
   Vaccine: string;

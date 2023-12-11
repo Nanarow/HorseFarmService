@@ -36,10 +36,10 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.RidingLevel](route, "/riding/levels")
 	InitBasicApi[*entity.Course](route, "/courses")
 	InitBasicApi[*entity.Schedule](route, "/schedules")
-	InitBasicApi[*entity.Health](route, "/healths")
+	// InitBasicApi[*entity.Health](route, "/healths") complete
 	InitBasicApi[*entity.Horse](route, "/horses")
-	InitBasicApi[*entity.Gender](route, "/gender")
-	InitBasicApi[*entity.Position](route, "/positions")
+	// InitBasicApi[*entity.Gender](route, "/gender") complete
+	// InitBasicApi[*entity.Position](route, "/positions") complete
 	InitBasicApi[*entity.TourType](route, "/tour/types")
 	// InitBasicApi[*entity.TourRegistration](route, "/tours") complete
 	// InitBasicApi[*entity.Enrollment](route, "/enrollments") complete
@@ -48,9 +48,9 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.Sex](route, "/sexes")
 	InitBasicApi[*entity.Location](route, "/locations")
 	InitBasicApi[*entity.Stable](route, "/stables")
-	InitBasicApi[*entity.Employee](route, "/employees")
+	// InitBasicApi[*entity.Employee](route, "/employees") complete
 	InitBasicApi[*entity.Plan](route, "/plans")
-	InitBasicApi[*entity.Precede](route, "/precedes")
+	// InitBasicApi[*entity.Precede](route, "/precedes") complete
 
 	// tour registration system
 	route.GET("/tours/:id", controllers.GetTour)
@@ -62,4 +62,19 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	// prepare for enrollment system
 	// route.GET("/enrollments/user/:id", controllers.GetAllEnrollmentsOfUser)
 	// route.POST("/enrollments", controllers.CreateEnrollment)
+
+	// employee system
+	route.GET("/employees/:id", controllers.GetEmployee)
+	route.GET("/employees", controllers.GetAllEmployee)
+	route.POST("/employees", controllers.CreateEmployee)
+	route.PUT("/employees/:id", controllers.UpdateEmployee)
+	route.DELETE("/employees/:id", controllers.DeleteEmployee)
+
+	route.GET("/employees/precedes", controllers.GetAllPrecede)
+	route.GET("/employees/positions", controllers.GetAllPosition)
+	route.GET("/employees/genders", controllers.GetAllGender)
+
+	// health system
+	route.POST("/healths", controllers.CreateHealth)
+
 }
