@@ -16,7 +16,7 @@ func GetAllHorse(c *gin.Context) {
 	var horses []entity.Horse
 
 	// get data form database and check error
-	if err := entity.DB().Joins("Stable").Joins("Bleed").Joins("Sex").Omit("EmployeeID", "StableID", "BleedID", "SexID").Find(&horses).Error; err != nil {
+	if err := entity.DB().Joins("Stable").Joins("Bleed").Joins("Sex").Joins("Employee").Omit("EmployeeID", "StableID", "BleedID", "SexID").Find(&horses).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -144,16 +144,16 @@ func GetAllBleeds(c *gin.Context) {
 }
 
 // GET /horses/sexs
-func GetAllSexs(c *gin.Context) {
+func GetAllSexes(c *gin.Context) {
 	// create variable for store data as type of Plan array
-	var sexs []entity.Sex
+	var sexes []entity.Sex
 
 	// get data form database and check error
-	if err := entity.DB().Find(&sexs).Error; err != nil {
+	if err := entity.DB().Find(&sexes).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": sexs})
+	c.JSON(http.StatusOK, gin.H{"data": sexes})
 }

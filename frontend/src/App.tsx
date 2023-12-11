@@ -18,6 +18,7 @@ import PrivateRoute from "./components/privateRoute";
 import ValidateForm from "./examples/form-with-validation";
 import NoPage from "./pages/noPage";
 import DragDropTable from "./examples/drag-drop-table";
+import EmployeeList from "./components/Employee/EmployeeList";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
 
       <Route element={<PrivateRoute role={100} path="/login/admin" />}>
         <Route path="/employee" element={<Employee />}></Route>
+        <Route path="/employee/list" element={<EmployeeList/>}></Route>
         <Route path="/user" element={<User />}></Route>
       </Route>
 

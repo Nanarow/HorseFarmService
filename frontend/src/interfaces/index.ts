@@ -35,10 +35,15 @@ export interface Horse {
   Age: number;
   Date: Date;
   Image: string;
-  EmployeeID: number;
-  BleedID: number;
-  SexID: number;
-  StableID: number;
+  Employee:Employee
+  Bleed:Bleed
+  Sex:Sex
+  Stable:Stable
+  // EmployeeID: number;
+  
+  // BleedID: number;
+  // SexID: number;
+  // StableID: number;
 }
 
 export interface Stable {
@@ -104,9 +109,11 @@ export interface Gender {
 export interface Employee {
   ID?: number;
   PositionID: number;
-  Position: Position;
+  Position?: Position;
   GenderID: number;
+  Gender?: Gender;
   PrecedeID: number;
+  Precede?: Precede;
   FirstName: string;
   LastName: string;
   Email: string;
@@ -117,7 +124,9 @@ export interface Employee {
 export interface Health {
   ID?: number;
   EmployeeID: number;
+  Employee?: Employee;
   HorseID: number;
+  Horse?: Horse;
   Vital: string;
   Tooth: string;
   Vaccine: string;
