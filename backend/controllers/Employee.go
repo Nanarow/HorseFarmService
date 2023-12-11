@@ -170,3 +170,5 @@ func GetAllPrecede(c *gin.Context) {
 	// response data
 	c.JSON(http.StatusOK, gin.H{"data": precedes})
 }
+
+// commit from 131b04201fd0b2d21363d877a0ebc0f06192ba27
