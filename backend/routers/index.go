@@ -29,12 +29,12 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	// route.Use(middlewares.Authentication())
 	// route.Use(middlewares.Authorization())
 
-	InitBasicApi[*entity.Food](route, "/foods")
-	InitBasicApi[*entity.User](route, "/users")
+	// InitBasicApi[*entity.Food](route, "/foods")
+	// InitBasicApi[*entity.User](route, "/users")
 	InitBasicApi[*entity.Role](route, "/roles")
-	InitBasicApi[*entity.RidingLevel](route, "/riding/levels")
-	InitBasicApi[*entity.Course](route, "/courses")
-	InitBasicApi[*entity.Schedule](route, "/schedules")
+	// InitBasicApi[*entity.RidingLevel](route, "/riding/levels")
+	// InitBasicApi[*entity.Course](route, "/courses")
+	// InitBasicApi[*entity.Schedule](route, "/schedules")
 	// InitBasicApi[*entity.Health](route, "/healths") complete
 	// InitBasicApi[*entity.Horse](route, "/horses") complete
 	// InitBasicApi[*entity.Gender](route, "/gender") complete
@@ -46,7 +46,7 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	InitBasicApi[*entity.Support](route, "/supports")
 	// InitBasicApi[*entity.Bleed](route, "/bleeds") complete
 	// InitBasicApi[*entity.Sex](route, "/sexes") complete
-	InitBasicApi[*entity.Location](route, "/locations")
+	// InitBasicApi[*entity.Location](route, "/locations")
 	InitBasicApi[*entity.Stable](route, "/stables")
 	// InitBasicApi[*entity.Employee](route, "/employees") complete
 	// InitBasicApi[*entity.Precede](route, "/precedes") complete
@@ -60,9 +60,19 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	route.GET("tours/types", controllers.GetAllTourTypes)
 	route.GET("tours/plans", controllers.GetAllPlans)
 
-	// prepare for enrollment system
+    // prepare for enrollment system
 	// route.GET("/enrollments/user/:id", controllers.GetAllEnrollmentsOfUser)
 	// route.POST("/enrollments", controllers.CreateEnrollment)
+
+	// User account management
+	route.GET("/users", controllers.GetAllUser)
+	route.POST("/users", controllers.CreateUser)
+	route.PUT("/users/:id", controllers.UpdateUser)
+	route.DELETE("/users/:id", controllers.DeleteUser)
+
+	route.GET("/genders", controllers.GetAllGenders)
+	route.GET("/riding/levels", controllers.GetAllRidingLevels)
+	
 
 	// horse info managemnet system
 	route.GET("/horses", controllers.GetAllHorse)
@@ -71,7 +81,7 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	route.DELETE("/horses/:id", controllers.DeleteHorse)
 
 	route.GET("horses/bleeds", controllers.GetAllBleeds)
-	route.GET("horses/sexes", controllers.GetAllSexs)
+	route.GET("horses/sexes", controllers.GetAllSexes)
 
 	// employee system
 	route.GET("/employees/:id", controllers.GetEmployee)
@@ -87,4 +97,16 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	// health system
 	route.POST("/healths", controllers.CreateHealth)
 
+
+	route.GET("/courses", controllers.GetAllCourses)
+	route.POST("/courses", controllers.CreateCourse)
+	route.PUT("/courses/:id", controllers.UpdateCourse)
+
+	route.GET("/schedules", controllers.GetAllSchedules)
+	route.POST("/schedules", controllers.CreateSchedule)
+	route.GET("/schedules/locations", controllers.GetAllLocations)
+
+	route.POST("/foods", controllers.CreateFood)
+	route.PUT("/foods/:id", controllers.UpdateFood)
+	route.DELETE("/foods/:id", controllers.DeleteFood)
 }

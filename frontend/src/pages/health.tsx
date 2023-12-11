@@ -13,11 +13,11 @@ import { Link } from "react-router-dom";
 const HealthPage = () => {
   const { toast } = useToast();
   const formHealth = z.object({
-    Vital: z.string().min(3, "Vital must be at least 3 characters"),
-    Tooth: z.string().min(3, "Tooth must be at least 3 characters"),
-    Vaccine: z.string().min(3, "Vaccine must be at least 3 characters"),
-    Parasite: z.string().min(3, "Parasite must be at least 3 characters"),
-    Blood: z.string().min(3, "Blood must be at least 3 characters"),
+    Vital: z.string().min(4, "Vital must be at least 4 characters"),
+    Tooth: z.string().min(4, "Tooth must be at least 4 characters"),
+    Vaccine: z.string().min(4, "Vaccine must be at least 4 characters"),
+    Parasite: z.string().min(4, "Parasite must be at least 4 characters"),
+    Blood: z.string().min(4, "Blood must be at least 4 characters"),
     Date: z.date().min(new Date(), "Date must be in the future"),
     HorseID: z.number(),
     EmployeeID: z.number(),
@@ -64,26 +64,15 @@ const HealthPage = () => {
   }
 
   async function onValid(formData: z.infer<typeof formHealth>) {
-    const healthData: Health = {
-      ...formData,
-      // Vital: "",
-      // Tooth: "",
-      // Vaccine: "",
-      // Parasite: "",
-      // Blood: "",
-      // Date: new Date(),
-      // HorseID: ,
-      // EmployeeID: ,
-    };
-
-    const res = await http.Post<Health, Health>("/healths", healthData);
+    
+    const res = await http.Post<Health, Health>("/healths", formData);
     if (res.ok) {
       toast({
         title: "You submitted the following values:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">
-              {JSON.stringify(healthData, null, 2)}
+              {JSON.stringify(res.data, null, 2)}
             </code>
           </pre>
         ),

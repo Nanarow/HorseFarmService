@@ -62,9 +62,11 @@ type Course struct {
 	Duration     int
 	Participants int
 	Description  string
+	Experience   float32
 	EmployeeID   uint
-	ScheduleID   uint
-	Horses       []*Horse `gorm:"many2many:horse_courses;"`
+	Employee     Employee   `gorm:"foreignKey:EmployeeID"`
+	Schedules    []Schedule `json:"-"`
+	Horses       []*Horse   `gorm:"many2many:horse_courses;"`
 }
 
 type Schedule struct {
@@ -73,7 +75,9 @@ type Schedule struct {
 	StartTime   time.Time
 	Description string
 	LocationID  uint
-	Courses     []Course `json:"-"`
+	Location    Location `gorm:"foreignKey:LocationID"`
+	CourseID    uint
+	Course      Course `gorm:"foreignKey:CourseID"`
 }
 
 type Location struct {
@@ -177,9 +181,9 @@ type Employee struct {
 	FirstName  string    `gorm:"default:Employee" `
 	LastName   string    `gorm:"default:Employee" `
 	Email      string    `valid:"required~Email is required,email~Invalid email"`
-	Password   string    `valid:"required~Password is required,min=4~Password must be at 4 characters"`
+	Password   string    `valid:"required~Password is required,minstringlength(4)~Password must be at 4 characters"`
 	DayOfBirth time.Time `valid:"required~DayOfBirth is required,past~DayOfBirth must be in the past"`
-	Phone      string    `valid:"required~Phone is required,min=10~Phone must be at 10 characters"`
+	Phone      string    `valid:"required~Phone is required,minstringlength(10)~Phone must be at 10 characters"`
 
 	Healths []Health `json:",omitempty"`
 	Horses  []Horse  `json:",omitempty"`
@@ -210,16 +214,16 @@ type Precede struct {
 type Health struct {
 	BaseModel
 	HorseID uint  `json:",omitempty"`
-	Horse   Horse `gorm:"foreignKey:HorseID"`
+	Horse   Horse `gorm:"foreignKey:HorseID" valid:"-"`
 
 	EmployeeID uint     `json:",omitempty"`
-	Employee   Employee `gorm:"foreignKey:EmployeeID"`
+	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
 
-	Vital    string    `valid:"required~Vital is required,min=4~Vital must be at least 4"`
-	Tooth    string    `valid:"required~Tooth is required,min=4~Tooth must be at least 4"`
-	Vaccine  string    `valid:"required~Vaccine is required,min=4~Vaccine must be at least 4"`
-	Parasite string    `valid:"required~Parasite is required,min=4~Parasite must be at least 4"`
-	Blood    string    `valid:"required~Blood is required,min=4~Blood must be at least 4"`
+	Vital    string    `valid:"required~Vital is required,minstringlength(4)~Vital must be at least 4"`
+	Tooth    string    `valid:"required~Tooth is required,minstringlength(4)~Tooth must be at least 4"`
+	Vaccine  string    `valid:"required~Vaccine is required,minstringlength(4)~Vaccine must be at least 4"`
+	Parasite string    `valid:"required~Parasite is required,minstringlength(4)~Parasite must be at least 4"`
+	Blood    string    `valid:"required~Blood is required,minstringlength(4)~Blood must be at least 4"`
 	Date     time.Time `valid:"required~Date is required,future~Date must be in the future"`
 }
 
@@ -233,4 +237,5 @@ type Food struct {
 	Forage       string
 	Date         time.Time
 	EmployeeID   uint
+	Employee     Employee `gorm:"foreignKey:EmployeeID"`
 }

@@ -2,6 +2,8 @@ import { ArrowLeftSquareIcon, Edit, XSquare } from "lucide-react";
 import { Employee } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
+import EmployeeAlert from "../Employee/EmployeeAlert";
+//import EmployeeEdit from "./EmployeeEdit";
 import {
   Table,
   TableBody,
@@ -22,10 +24,9 @@ interface Props {
 }
 
 function EmployeeList() {
-    const [employees, setEmployee] = useState<Employee[] | undefined>(undefined);
-    const { employee } = useAuth();
+    const [employees, setEmployee] = useState<Employee[]>([]);
     async function fetchEmployee() {
-        const res = await http.Get<Employee[]>("/employee" + employee?.ID);
+        const res = await http.Get<Employee[]>("/employees");
         if (res.ok) {
             setEmployee(res.data);
         }
@@ -36,6 +37,7 @@ function EmployeeList() {
         };
     }, []);
 
+    
     return (
         <div className="w-full h-full relative p-8">
             <Tooltip content={() => <span>Back to employee</span>} side="right">
@@ -45,7 +47,7 @@ function EmployeeList() {
             </Tooltip>
 
             <Table className="border mt-6">
-                <TableCaption>A list of your recent registration.</TableCaption>
+                <TableCaption>A list of your recent Employee.</TableCaption>
                 <TableHeader>
                     <TableRow>
                         <TableHead className="w-[10%] text-center">Percede</TableHead>
@@ -101,10 +103,10 @@ function EmployeeList() {
                                         <DialogTrigger asChild>
                                             <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
                                         </DialogTrigger>
-                                        {/* <EmployeeAlert
+                                        <EmployeeAlert
                                             employeeID={employee.ID!}
                                             onCancel={fetchEmployee}
-                                        ></EmployeeAlert> */}
+                                        ></EmployeeAlert>
                                     </Dialog>
                                 </TableCell>
                             </TableRow>
