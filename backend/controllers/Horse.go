@@ -16,7 +16,7 @@ func GetAllHorse(c *gin.Context) {
 	var horses []entity.Horse
 
 	// get data form database and check error
-	if err := entity.DB().Joins("Stable").Joins("Bleed").Joins("Sex").Omit("EmployeeID", "StableID", "BleedID", "SexID").Find(&horses).Error; err != nil {
+	if err := entity.DB().Joins("Stable").Joins("Bleed").Joins("Sex").Joins("Employee").Omit("EmployeeID", "StableID", "BleedID", "SexID").Find(&horses).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

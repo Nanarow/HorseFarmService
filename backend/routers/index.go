@@ -71,5 +71,5 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	route.DELETE("/horses/:id", controllers.DeleteHorse)
 
 	route.GET("horses/bleeds", controllers.GetAllBleeds)
-	route.GET("horses/sexs", controllers.GetAllSexs)
+	route.GET("horses/sexes", controllers.GetAllSexs)
 }

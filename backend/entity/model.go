@@ -89,9 +89,13 @@ type Horse struct {
 	Date       time.Time
 	Image      string
 	EmployeeID uint
+	Employee   Employee `gorm:"foreignKey:EmployeeID"`
 	BleedID    uint
+	Bleed      Bleed `gorm:"foreignKey:BleedID"`
 	SexID      uint
+	Sex        Sex `gorm:"foreignKey:SexID"`
 	StableID   uint
+	Stable     Stable    `gorm:"foreignKey:StableID"`
 	Courses    []*Course `gorm:"many2many:horse_courses;" json:"-"`
 	Healths    []Health  `json:"-"`
 }

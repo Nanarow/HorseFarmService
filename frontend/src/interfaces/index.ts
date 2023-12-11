@@ -35,10 +35,15 @@ export interface Horse {
   Age: number;
   Date: Date;
   Image: string;
-  EmployeeID: number;
-  BleedID: number;
-  SexID: number;
-  StableID: number;
+  Employee:Employee
+  Bleed:Bleed
+  Sex:Sex
+  Stable:Stable
+  // EmployeeID: number;
+  
+  // BleedID: number;
+  // SexID: number;
+  // StableID: number;
 }
 
 export interface Stable {

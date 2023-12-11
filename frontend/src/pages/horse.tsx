@@ -15,7 +15,6 @@ const HorsePage = () => {
   const { toast } = useToast();
 
   const formHorse = z.object({
-    ID: z.number(),
     Name: z.string(),
     Age: z.number(),
     Date: z.date().min(new Date(), "Date must be in the future"),
@@ -26,29 +25,29 @@ const HorsePage = () => {
     StableID: z.number(),
   });
   
-  const [employee, setEmployees] = useState<Employee[] | undefined>(undefined);
-  const [bleed, setBleeds] = useState<Bleed[] | undefined>(undefined);
-  const [sex, setSexs] = useState<Sex[] | undefined>(undefined);
-  const [stable, setStables] = useState<Stable[] | undefined>(undefined);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [bleeds, setBleeds] = useState<Bleed[]>([]);
+  const [sexs, setSexs] = useState<Sex[]>([]);
+  const [stables, setStables] = useState<Stable[]>([]);
 
-  const [horse, setHorses] = useState<Horse[] | undefined>(undefined);
+  const [horses, setHorses] = useState<Horse[]>([]);
 
   async function fetchEmployees() {
-    const res = await http.Get<Employee[]>("/employees/id/" + employee);
+    const res = await http.Get<Employee[]>("/employees");
     if (res.ok) {
       setEmployees(res.data);
     }
   }
 
   async function fetchBleeds() {
-    const res = await http.Get<Bleed[]>("/bleeds");
+    const res = await http.Get<Bleed[]>("/horses/bleeds");
     if (res.ok) {
       setBleeds(res.data);
     }
   }
   
   async function fetchSexs() {
-    const res = await http.Get<Sex[]>("/sexes");
+    const res = await http.Get<Sex[]>("/horses/sexes");
     if (res.ok) {
       setSexs(res.data);
     }
@@ -79,23 +78,32 @@ const HorsePage = () => {
   },[])
 
   async function onValid(formData: z.infer<typeof formHorse>) {
-    const horseData: Horse = {
-      ...formData,
     
-    };
-
-    const res = await http.Post<Horse, Horse>("/horses", horseData);
+    console.log(formData)
+    const res = await http.Post<Horse>("/horses", formData);
     if (res.ok) {
       toast({
         title: "You submitted the following values:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(horseData, null, 2)}</code>
+            <code className="text-white">{JSON.stringify(res.data, null, 2)}</code>
           </pre>
         ),
         duration: 1500,
       });
     }
+  }
+  function StableTolist() {
+    const res = stables.map((stable) => {
+      return {ID:stable.ID,Name:String(stable.ID)}
+    })
+    return res
+  }
+  function empTolist() {
+    const res = employees.map((emp) => {
+      return {ID:emp.ID!,Name:emp.FirstName + " " + emp.LastName}
+    })
+    return res
   }
 
   return (
@@ -129,15 +137,14 @@ const HorsePage = () => {
                     />   
                   </div>
                   <div className="grid grid-cols-6 items-center gap-4">
-                    {sex && (
+                    {sexs.length > 0  && (
                       <>
                         <Label className="text-right">เพศ</Label>
                         <Form.Select
-                          defaultValue={String(sex)}
                           valueAsNumber
                           useForm={form}
                           name="SexID"
-                          items={ToItemList(sex)}
+                          items={ToItemList(sexs)}
                           className="col-span-3 font-extralight"  
                           placeholder="Sex"
                         ></Form.Select> 
@@ -155,14 +162,13 @@ const HorsePage = () => {
                     />   
                   </div>
                   <div className="grid grid-cols-6 items-center gap-4">
-                    {bleed && (
+                    {bleeds.length > 0 && (
                       <>                      
                         <Label className="text-right">สายพันธุ์</Label>
                         <Form.Select
-                          defaultValue={String(bleed)}
                           valueAsNumber
                           useForm={form}
-                          items={ToItemList(bleed)}
+                          items={ToItemList(bleeds)}
                           name="BleedID"
                           className="col-span-3 font-extralight"  
                           placeholder="Bleed"
@@ -172,28 +178,27 @@ const HorsePage = () => {
                   </div>
                   <div className="grid grid-cols-6 items-center gap-4">
                     <Label className="text-right">คอกม้า</Label>
-                      <Form.Input
-                        defaultValue={String(stable)}
+                      <Form.Select
+                      items={ToItemList(StableTolist())}
+                        valueAsNumber
                         useForm={form}
                         name="StableID"
-                        type="number"
                         className="col-span-3 font-extralight"  
                         placeholder="Stable"
-                     ></Form.Input>                                
+                     ></Form.Select>                                
                   </div>
                   <div className="grid grid-cols-6 items-center gap-4">
-                    {employee && (
+                    {employees.length > 0 && (
                       <>
                         <Label className="text-right">ผู้ดูแล</Label>
-                        {/*<Form.Select
-                          defaultValue={String(employee)}
+                        <Form.Select
                           valueAsNumber
                           useForm={form}
-                          items={ToItemList(employee)}
+                          items={ToItemList(empTolist())}
                           name="EmployeeID"
                           className="col-span-3 font-extralight"  
                           placeholder="Employee"
-                    ></Form.Select>*/}
+                    ></Form.Select>
                       </>
                     )}
                   </div>
@@ -250,17 +255,17 @@ const HorsePage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {horse && horse.map((horse) => (
+              {horses.length > 0 && horses.map((horse) => (
                 <TableRow key={horse.ID}>
                   <TableCell className=" text-center ">{horse.ID}</TableCell>
                   <TableCell className=" text-center "><img src={horse.Image} alt={horse.Name} /></TableCell>
                   <TableCell className=" text-center ">{horse.Name}</TableCell>
-                  <TableCell className=" text-center ">{horse.SexID}</TableCell>
+                  <TableCell className=" text-center ">{horse.Sex.Name}</TableCell>
                   <TableCell className=" text-center ">{horse.Age}</TableCell>
-                  <TableCell className=" text-center ">{horse.BleedID}</TableCell>
-                  <TableCell className=" text-center ">{horse.StableID}</TableCell>
+                  <TableCell className=" text-center ">{horse.Bleed.Name}</TableCell>
+                  <TableCell className=" text-center ">{horse.Stable.ID}</TableCell>
                   <TableCell className=" text-center ">{`${horse.Date}`}</TableCell>
-                  <TableCell className=" text-center ">{horse.EmployeeID}</TableCell>
+                  <TableCell className=" text-center ">{horse.Employee.FirstName}</TableCell>
                   <TableCell className=" text-center ">
                     
                     
