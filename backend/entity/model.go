@@ -58,13 +58,13 @@ type Support struct {
 
 type Course struct {
 	BaseModel
-	Name         string		
+	Name         string
 	Duration     int
 	Participants int
 	Description  string
 	Experience   float32
 	EmployeeID   uint
-	Employee	 Employee	`gorm:"foreignKey:EmployeeID"`
+	Employee     Employee   `gorm:"foreignKey:EmployeeID"`
 	Schedules    []Schedule `json:"-"`
 	Horses       []*Horse   `gorm:"many2many:horse_courses;"`
 }
@@ -75,9 +75,9 @@ type Schedule struct {
 	StartTime   time.Time
 	Description string
 	LocationID  uint
-	Location	Location	`gorm:"foreignKey:LocationID"`
+	Location    Location `gorm:"foreignKey:LocationID"`
 	CourseID    uint
-	Course		Course		`gorm:"foreignKey:CourseID"`
+	Course      Course `gorm:"foreignKey:CourseID"`
 }
 
 type Location struct {
@@ -214,10 +214,10 @@ type Precede struct {
 type Health struct {
 	BaseModel
 	HorseID uint  `json:",omitempty"`
-	Horse   Horse `gorm:"foreignKey:HorseID"`
+	Horse   Horse `gorm:"foreignKey:HorseID" valid:"-"`
 
 	EmployeeID uint     `json:",omitempty"`
-	Employee   Employee `gorm:"foreignKey:EmployeeID"`
+	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
 
 	Vital    string    `valid:"required~Vital is required,minstringlength(4)~Vital must be at least 4"`
 	Tooth    string    `valid:"required~Tooth is required,minstringlength(4)~Tooth must be at least 4"`
@@ -237,5 +237,5 @@ type Food struct {
 	Forage       string
 	Date         time.Time
 	EmployeeID   uint
-	Employee	 Employee	`gorm:"foreignKey:EmployeeID"`
+	Employee     Employee `gorm:"foreignKey:EmployeeID"`
 }
