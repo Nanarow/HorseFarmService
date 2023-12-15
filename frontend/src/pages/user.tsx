@@ -141,7 +141,7 @@ const UserPage = () => {
                   accept="image/*"
                   placeholder="Name"
                 />
-                <Form.SubmitButton useForm={form}>Submit</Form.SubmitButton>
+                <Form.SubmitButton useForm={form}>Create</Form.SubmitButton>
               </>
             )}
           />
