@@ -16,8 +16,8 @@ interface Props {
 }
 const TourRegister = ({ setTabs }: Props) => {
   const { toast } = useToast();
-  const [tourType, setTourType] = useState<TourType[] | undefined>(undefined);
-  const [plans, setPlans] = useState<Plan[] | undefined>(undefined);
+  const [tourType, setTourType] = useState<TourType[]>([]);
+  const [plans, setPlans] = useState<Plan[]>([]);
   const { user } = useAuth();
   const [email, setEmail] = useState<undefined | string>(undefined);
 
@@ -25,7 +25,7 @@ const TourRegister = ({ setTabs }: Props) => {
     Date: z.date().min(new Date(), "Date must be in the future"),
     Participants: z.number().min(8, "Participants must be at least 8"),
     Email: z.string().email("Invalid email"),
-    Name: z.string(),
+    Name: z.string().optional(),
     TourTypeID: z.number(),
     PlanID: z.number(),
   });
@@ -81,7 +81,7 @@ const TourRegister = ({ setTabs }: Props) => {
       <section className="h-full w-full flex justify-center items-center relative">
         <Tooltip content={() => <span>My tours registration</span>} side="left">
           <ArrowRightSquareIcon
-            className="absolute top-4 right-8 text-green-500"
+            className="absolute top-4 right-8 text-green-500 hover:scale-105"
             onClick={() => setTabs("list")}
           />
         </Tooltip>
@@ -101,7 +101,7 @@ const TourRegister = ({ setTabs }: Props) => {
                   Tour Date<span className="text-red-500">*</span>
                 </Label>
                 <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
-                {tourType && (
+                {tourType.length > 0 ? (
                   <>
                     <Label>
                       Type of tour<span className="text-red-500">*</span>
@@ -114,8 +114,8 @@ const TourRegister = ({ setTabs }: Props) => {
                       placeholder="Pick type of tour"
                     ></Form.Select>
                   </>
-                )}
-                {plans && (
+                ) : null}
+                {plans.length > 0 ? (
                   <>
                     <Label>
                       Plan<span className="text-red-500">*</span>
@@ -128,7 +128,7 @@ const TourRegister = ({ setTabs }: Props) => {
                       placeholder="Pick your plan"
                     ></Form.Select>
                   </>
-                )}
+                ) : null}
 
                 <Label>
                   Email<span className="text-red-500">*</span>
