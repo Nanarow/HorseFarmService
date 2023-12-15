@@ -4,24 +4,22 @@ import { User, Gender, RidingLevel } from "../interfaces";
 import { http } from "../services/httpRequest";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/ui/card";
-import { z } from "zod";
-import { domainToUnicode } from "url";
-import { useAuth } from "@src/providers/authProvider";
+import { string, z } from "zod";
+import { ToItemList } from "@src/utils";
 
-interface Props {
-  setTabs: React.Dispatch<React.SetStateAction<string>>;
-}
+// interface Props {
+//   setTabs: React.Dispatch<React.SetStateAction<string>>;
+// }
 const UserPage = () => {
-
-  const [Users, setUser] = useState<User[] | undefined>(undefined);
-  const [Genders, setGender] = useState<Gender[] | undefined>(undefined);
-  const [RidindLevels, setRidingLevel] = useState<RidingLevel[] | undefined>(undefined);
+  // const [users, setUser] = useState<User[] | undefined>(undefined);
+  const [genders, setGender] = useState<Gender[]>([]);
+  const [ridingLevels, setRidingLevel] = useState<RidingLevel[]>([]);
 
   const formUser = z.object({
     FirstName: z.string().min(1, "FirstName is required"),
     LastName: z.string().min(1, "LastName is required"),
     Age: z.number({ required_error: "Age is required" }),
-    ExperiencePoint: z.number(),
+    ExperiencePoint: z.number().nonnegative(),
     // Gender: z.enum(["male", "female"]),
     Email: z.string().email({ message: "Invalid email address" }),
     Password: z.string().min(8, "Password must be at least 8 characters"),
@@ -33,13 +31,13 @@ const UserPage = () => {
   });
 
   async function fetchGender() {
-    const res = await http.Get<Gender[]>("/genders/:id")
+    const res = await http.Get<Gender[]>("/genders")
     if (res.ok) {
       setGender(res.data);
     }
   }
   async function fetchRidingLevel() {
-    const res = await http.Get<RidingLevel[]>("/ridingLevels/:id")
+    const res = await http.Get<RidingLevel[]>("/riding/levels")
     if (res.ok) {
       setRidingLevel(res.data);
     }
@@ -53,22 +51,10 @@ const UserPage = () => {
 
   async function onValid(formData: z.infer<typeof formUser>) {
     const res = await http.Post<string>("/users", formData);
-    if (res.ok) {
+    // if (res.ok) {
 
-    }
+    // }
   }
-
-  const Items = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-    { label: "Other", value: "other" },
-  ];
-
-  const RidingLevelItems = [
-    { label: "Newbie", value: "newbie" },
-    { label: "Moderate", value: "Moderate" },
-    { label: "Expert", value: "Expert" },
-  ]
 
   return (
     <div className="flex justify-center items-center w-full h-screen">
@@ -114,26 +100,32 @@ const UserPage = () => {
                   type="password"
                   placeholder="password"
                 />
-                <Form.Select
-                  className="w-[90px]"
-                  useForm={form}
-                  name="GenderID"
-                  placeholder="Gender"
-                  items={Items}
-                />
-                <Form.Select
+                {genders.length > 0 ? (
+                  <Form.Select
+                    valueAsNumber
+                    className="w-[90px]"
+                    useForm={form}
+                    name="GenderID"
+                    placeholder="Gender"
+                    items={ToItemList(genders)}
+                  />) : null}
+
+                <Form.Input
                   useForm={form}
                   name="ExperiencePoint"
+                  type="number"
                   placeholder="Experience Point"
-                  items={Items}
                 />
-                <Form.Select
-                  className="w-[130px]"
-                  useForm={form}
-                  name="RidingLevelID"
-                  placeholder="Riding Level"
-                  items={RidingLevelItems}
-                />
+                {ridingLevels.length > 0 ? (
+                  <Form.Select
+                    valueAsNumber
+                    className="w-[130px]"
+                    useForm={form}
+                    name="RidingLevelID"
+                    placeholder="Riding Level"
+                    items={ToItemList(ridingLevels)}
+                  />) : null}
+
                 <Form.Input
                   useForm={form}
                   name="Profile"

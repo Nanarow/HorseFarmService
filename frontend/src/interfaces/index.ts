@@ -97,6 +97,7 @@ export interface Role {
 }
 
 export interface RidingLevel {
+  ID: number;
   Name: string;
   Description: string;
 }

@@ -70,11 +70,11 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	route.PUT("/users/:id", controllers.UpdateUser)
 	route.DELETE("/users/:id", controllers.DeleteUser)
 
-	route.GET("/genders", controllers.GetAllGenders)
+	route.GET("/users/genders", controllers.GetAllGenders)
 	route.GET("/riding/levels", controllers.GetAllRidingLevels)
 	
 
-	// horse info managemnet system
+	// horse info management system
 	route.GET("/horses", controllers.GetAllHorse)
 	route.POST("/horses", controllers.CreateHorse)
 	route.PUT("/horses", controllers.UpdateHorse)
