@@ -30,14 +30,18 @@ const ValidateForm = () => {
             validator={ValidUser}
             onValid={(data) => console.log(data)}
             onInvalid={(errorFields) => console.log(errorFields)}
-            fields={({ form }) => (
+            fields={({ form, errors }) => (
               <>
                 <Form.Input
+                  defaultValue={"shadcn"}
                   useForm={form}
                   name="name"
                   type="text"
                   placeholder="enter your name"
                 />
+                {errors.name ? (
+                  <p className="text-sm text-red-500">{errors.name.message}</p>
+                ) : null}
                 <Form.Input
                   useForm={form}
                   name="age"

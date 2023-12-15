@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// GET /user/:id
+// GET /user
 func GetAllUser(c *gin.Context) {
 	// create variable for store data as type of User array
 	var users []entity.User
@@ -144,7 +144,7 @@ func GetAllGenders(c *gin.Context) {
 }
 
 func GetAllRidingLevels(c *gin.Context) {
-	// create variable for store data as type of TourType array
+	// create variable for store data as type of Riding Level array
 	var ridingLevels []entity.RidingLevel
 
 	// get data form database and check error

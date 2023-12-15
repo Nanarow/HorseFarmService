@@ -20,7 +20,7 @@ type User struct {
 	Age             int
 	ExperiencePoint int
 
-	RoleID uint
+	RoleID uint `gorm:"default:101"`
 	Role   Role `gorm:"foreignKey:RoleID"`
 
 	GenderID uint
@@ -93,13 +93,13 @@ type Horse struct {
 	Date       time.Time
 	Image      string
 	EmployeeID uint
-	Employee   Employee `gorm:"foreignKey:EmployeeID"`
+	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
 	BleedID    uint
-	Bleed      Bleed `gorm:"foreignKey:BleedID"`
+	Bleed      Bleed `gorm:"foreignKey:BleedID" valid:"-"`
 	SexID      uint
-	Sex        Sex `gorm:"foreignKey:SexID"`
+	Sex        Sex `gorm:"foreignKey:SexID" valid:"-"`
 	StableID   uint
-	Stable     Stable    `gorm:"foreignKey:StableID"`
+	Stable     Stable    `gorm:"foreignKey:StableID" valid:"-"`
 	Courses    []*Course `gorm:"many2many:horse_courses;" json:"-"`
 	Healths    []Health  `json:",omitempty"`
 }
