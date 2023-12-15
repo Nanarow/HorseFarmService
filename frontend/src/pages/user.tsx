@@ -4,6 +4,7 @@ import { User, Gender, RidingLevel } from "../interfaces";
 import { http } from "../services/httpRequest";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/ui/card";
+import { useToast } from "@shadcn/ui/use-toast";
 import { string, z } from "zod";
 import { ToItemList } from "@src/utils";
 
@@ -12,6 +13,7 @@ import { ToItemList } from "@src/utils";
 // }
 const UserPage = () => {
   // const [users, setUser] = useState<User[] | undefined>(undefined);
+  const { toast } = useToast();
   const [genders, setGender] = useState<Gender[]>([]);
   const [ridingLevels, setRidingLevel] = useState<RidingLevel[]>([]);
 
@@ -25,7 +27,6 @@ const UserPage = () => {
     Password: z.string().min(8, "Password must be at least 8 characters"),
     Phone: z.string().length(10, "Phone number must be 10 characters"),
     Profile: z.string(),
-    RoleID: z.number(),
     GenderID: z.number(),
     RidingLevelID: z.number(),
   });
@@ -51,9 +52,32 @@ const UserPage = () => {
 
   async function onValid(formData: z.infer<typeof formUser>) {
     const res = await http.Post<string>("/users", formData);
-    // if (res.ok) {
-
-    // }
+    if (res.ok) {
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              {JSON.stringify(res.data, null, 2)}
+            </code>
+          </pre>
+        ),
+        duration: 1500,
+      });
+    }
+    else {
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <div className="text-white">
+              fail to create user
+            </div>
+          </pre>
+        ),
+        duration: 1500,
+      });
+    }
   }
 
   return (
@@ -86,7 +110,13 @@ const UserPage = () => {
                   useForm={form}
                   name="Age"
                   type="number"
-                  placeholder="age"
+                  placeholder="Age"
+                />
+                <Form.Input
+                  useForm={form}
+                  name="Phone"
+                  type="text"
+                  placeholder="Phone"
                 />
                 <Form.Input
                   useForm={form}

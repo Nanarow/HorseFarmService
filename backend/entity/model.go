@@ -20,7 +20,7 @@ type User struct {
 	Age             int
 	ExperiencePoint int
 
-	RoleID uint
+	RoleID uint `gorm:"default:101"`
 	Role   Role `gorm:"foreignKey:RoleID"`
 
 	GenderID uint
