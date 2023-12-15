@@ -129,7 +129,6 @@ const FormInput = <T extends FieldValues>({
         const file = fileList.item(0);
         if (file) {
           const base64 = await FileToBase64(file);
-          console.log("base64: ", base64);
           setValue(name, base64 as PathValue<T, Path<T>>, options);
         }
       }
