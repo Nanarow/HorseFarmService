@@ -1,6 +1,6 @@
 import { ItemList } from "@shadcn/simplify/form";
 
-export function ImageToBase64(file: Blob | File): Promise<string> {
+export function FileToBase64(file: Blob | File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result as string);
