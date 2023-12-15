@@ -101,7 +101,7 @@ type Horse struct {
 	StableID   uint
 	Stable     Stable    `gorm:"foreignKey:StableID"`
 	Courses    []*Course `gorm:"many2many:horse_courses;" json:"-"`
-	Healths    []Health  `json:"-"`
+	Healths    []Health  `json:",omitempty"`
 }
 
 type Stable struct {
