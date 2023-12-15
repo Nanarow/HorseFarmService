@@ -33,6 +33,7 @@ const ValidateForm = () => {
             fields={({ form, errors }) => (
               <>
                 <Form.Input
+                  defaultValue={"shadcn"}
                   useForm={form}
                   name="name"
                   type="text"

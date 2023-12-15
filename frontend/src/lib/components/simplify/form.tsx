@@ -152,6 +152,7 @@ const FormInput = <T extends FieldValues>({
       value={value}
       {...props}
       onChange={onValueChange}
+      defaultValue={defaultValue}
       className={cn(
         errors[name] ? " border-red-500 focus-visible:ring-red-500" : "",
         className
