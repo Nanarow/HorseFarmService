@@ -40,7 +40,7 @@ func ValidateJWT(token_name string, c *gin.Context) (*jwt.Token, jwt.MapClaims, 
 }
 
 func GenerateJWT(token_name string, c *gin.Context, email string, hour int) error {
-	expiration := time.Now().Add(time.Hour * time.Duration(hour) * 30).Unix()
+	expiration := time.Now().Add(time.Hour * time.Duration(hour)).Unix()
 	claims := jwt.MapClaims{
 		"email": email,
 		"exp":   expiration,
@@ -51,6 +51,6 @@ func GenerateJWT(token_name string, c *gin.Context, email string, hour int) erro
 	if err != nil {
 		return err
 	}
-	c.SetCookie(token_name, tokenString, 3600*hour*30, "", "", true, true)
+	c.SetCookie(token_name, tokenString, 3600*hour, "", "", true, true)
 	return nil
 }
