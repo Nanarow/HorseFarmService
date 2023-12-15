@@ -32,6 +32,7 @@ const HorsePage = () => {
   const [stables, setStables] = useState<Stable[]>([]);
 
   const [horses, setHorses] = useState<Horse[]>([]);
+  
 
   async function fetchEmployees() {
     const res = await http.Get<Employee[]>("/employees");
@@ -80,7 +81,7 @@ const HorsePage = () => {
     }
   },[])
 
-  //post
+  
   async function onValid(formData: z.infer<typeof formHorse>) {  
     console.log(formData)
 
@@ -90,7 +91,9 @@ const HorsePage = () => {
         title: "You submitted the following values:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(res.data, null, 2)}</code>
+            <code className="text-white">
+              {JSON.stringify(res.data, null, 2)}
+            </code>
           </pre>
         ),
         duration: 1500,
@@ -125,7 +128,7 @@ const HorsePage = () => {
       ...formData,
 
     }
-    const res = await http.Put<string>("/tours", ID, newHorse);
+    const res = await http.Put<string>("/horses", ID, newHorse);
     if (res.ok) {
       
       toast({
@@ -258,9 +261,9 @@ const HorsePage = () => {
                       
                     />
                   </div>
-                  <DialogFooter className="items-center grid grid-row-reverse justify-between">
-                    <div className="space-x-4">
-                      <Button variant="secondary" className=" bg-red-500">ยกเลิก</Button>
+                  <DialogFooter className="items-center grid grid-row-reverse justify-between" >
+                    <div className="space-x-4" >
+                      <Button variant="secondary" type="submit" className=" bg-red-500">ยกเลิก</Button>
                       <Button variant="outline" type="submit" className=" bg-green-500">บันทึกข้อมูล</Button>
                     </div>           
                   </DialogFooter>
@@ -321,7 +324,7 @@ const HorsePage = () => {
                                 <div className="grid grid-cols-6 items-center gap-4 ">
                                   <Label className="text-right">ชื่อ</Label>
                                   <Form.Input
-                                    defaultValue={horse.Name}
+                                    defaultValue={horse.Name} 
                                     useForm={form}
                                     name="Name"
                                     type="text"
