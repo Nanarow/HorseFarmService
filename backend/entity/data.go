@@ -9,7 +9,7 @@ func SetupData(db *gorm.DB) {
 		return
 	}
 	// roles
-	roles := []Role{
+	roles := []*Role{
 		{
 			BaseModel: BaseModel{ID: 100},
 			Name:      "admin",
@@ -19,9 +19,10 @@ func SetupData(db *gorm.DB) {
 			Name:      "user",
 		},
 	}
-	for _, role := range roles {
-		db.Create(&role)
-	}
+	// for _, role := range roles {
+	// 	db.Create(&role)
+	// }
+	db.Create(roles)
 	// users
 	users := []User{
 		{

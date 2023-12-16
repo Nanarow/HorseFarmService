@@ -120,8 +120,10 @@ const DropZone = ({
   className,
   render,
   onValueChange,
+  value,
 }: {
   className?: string;
+  value?: string;
   onValueChange?: (value: string | undefined) => void;
   render: ({}: {
     value: string | undefined;
@@ -140,13 +142,13 @@ const DropZone = ({
 
   useEffect(() => {
     return () => {
-      addDropZone(id, { value: undefined, state: "empty" });
+      addDropZone(id, { value: value, state: value ? "added" : "empty" });
     };
   }, []);
 
   const setValue = (value: string | undefined) => {
     setDropZoneValue(id, value);
-    setDropZoneState(id, "added");
+    setDropZoneState(id, value ? "added" : "empty");
     onValueChange && onValueChange(value);
   };
 
@@ -155,14 +157,17 @@ const DropZone = ({
     setDropZoneState(id, "empty");
     onValueChange && onValueChange(undefined);
   };
-  const value = dropZones[id] ? dropZones[id].value : undefined;
   const renderItems: DropZoneRender = {
     empty: (
       <div className=" w-full h-full rounded-md relative">
         <p className="abs-center">+</p>
       </div>
     ),
-    added: render({ value, setValue, clear }),
+    added: render({
+      value: dropZones[id] ? dropZones[id].value : undefined,
+      setValue,
+      clear,
+    }),
     adding: (
       <div className=" w-full h-full border border-dashed rounded-md relative">
         <p className="abs-center">Drop here</p>

@@ -42,7 +42,7 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	// InitBasicApi[*entity.Bleed](route, "/bleeds") complete
 	// InitBasicApi[*entity.Sex](route, "/sexes") complete
 	// InitBasicApi[*entity.Location](route, "/locations")
-	InitBasicApi[*entity.Stable](route, "/stables") 
+	InitBasicApi[*entity.Stable](route, "/stables")
 	// InitBasicApi[*entity.Employee](route, "/employees") complete
 	// InitBasicApi[*entity.Precede](route, "/precedes") complete
 
@@ -98,6 +98,7 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	route.GET("/schedules", controllers.GetAllSchedules)
 	route.POST("/schedules", controllers.CreateSchedule)
 	route.GET("/schedules/locations", controllers.GetAllLocations)
+	route.DELETE("/schedules/:id", controllers.DeleteSchedule)
 
 	route.POST("/foods", controllers.CreateFood)
 	route.PUT("/foods/:id", controllers.UpdateFood)
