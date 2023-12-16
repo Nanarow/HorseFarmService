@@ -20,7 +20,7 @@ type User struct {
 	Age             int
 	ExperiencePoint int
 
-	RoleID uint
+	RoleID uint `gorm:"default:101"`
 	Role   Role `gorm:"foreignKey:RoleID"`
 
 	GenderID uint
@@ -101,7 +101,7 @@ type Horse struct {
 	StableID   uint
 	Stable     Stable    `gorm:"foreignKey:StableID" valid:"-"`
 	Courses    []*Course `gorm:"many2many:horse_courses;" json:"-"`
-	Healths    []Health  `json:"-"`
+	Healths    []Health  `json:",omitempty"`
 }
 
 type Stable struct {

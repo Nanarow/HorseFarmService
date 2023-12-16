@@ -203,4 +203,47 @@ func SetupData(db *gorm.DB) {
 		db.Create(&bleed)
 	}
 
+	// precedes data
+	precedes := []Precede{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "นาย",
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "นางสาว",
+		},
+		{
+			BaseModel: BaseModel{ID: 3},
+			Name:      "เด็กหญิง",
+		},
+		{
+			BaseModel: BaseModel{ID: 4},
+			Name:      "เด็กชาย",
+		},
+	}
+	for _, precede := range precedes {
+		db.Create(&precede)
+	}
+
+	// gender data
+	genders := []Gender{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "Male",
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "Female",
+		},
+		{
+			BaseModel: BaseModel{ID: 3},
+			Name:      "Others",
+		},
+	}
+		
+	for _, gender := range genders {
+		db.Create(&gender)
+	}
+
 }

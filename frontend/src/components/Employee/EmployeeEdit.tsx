@@ -1,15 +1,22 @@
 import { z } from "zod";
-import { Button } from "@shadcn/ui/button";
 import { Position, Precede, Gender, Employee } from "../../interfaces";
 import {http} from "../../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 import { useEffect, useState } from "react";
 import Form, { ItemList } from "@shadcn/simplify/form";
-import { Label } from "@shadcn/ui";
-import EmployeeImage from "../../assets/healthbg.jpg";
-import { ChevronLeftSquare } from 'lucide-react';
-import { Link } from "react-router-dom";
-import { useAuth } from "@src/providers/authProvider";
+import { Button, Label } from "@shadcn/ui";
+import { Edit } from "lucide-react";
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@shadcn/ui/dialog";
 
 interface Props {
     employees: Employee;
@@ -17,26 +24,25 @@ interface Props {
   }
 
 const EmployeeEdit = ({ employees, onSave }: Props) => {
-  const { employee } = useAuth();
   const { toast } = useToast();
   const formEmployee = z.object({
-    FirstName: z.string().min(3, "FirstName must be at least 3 characters"),
-    LastName: z.string().min(3, "Tooth must be at least 3 characters"),
+    FirstName: z.string().min(4, "FirstName must be at least 4 characters"),
+    LastName: z.string().min(4, "Tooth must be at least 4 characters"),
     Email: z.string().email("Please enter a valid email"),
     Phone: z.string().max(10, "Phone must be at least 10 characters"),
     Password: z
       .string()
       .min(2, "Password must be at least 8 characters long")
       .max(20, "Password must be at most 20 characters long"),
-    DayOfBirth: z.date().min(new Date(), "Date must be in the future"),
+    DayOfBirth: z.date().max(new Date(), "Date must be in the past"),
     PositionID: z.number(),
     PrecedeID: z.number(),
     GenderID: z.number(),
   });
-
-  const [position, setPosition] = useState<Position[] | undefined>(undefined);
-  const [precede, setPrecede] = useState<Precede[] | undefined>(undefined);
-  const [gender, setGender] = useState<Gender[] | undefined>(undefined);
+  const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState<Position[]>([]);
+  const [precede, setPrecede] = useState<Precede[]>([]);
+  const [gender, setGender] = useState<Gender[]>([]);
 
   useEffect(() => {
     async function fetchPosition() {
@@ -54,7 +60,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
     }
 
     async function fetchGender() {
-      const res = await http.Get<Gender[]>("/employees/gender");
+      const res = await http.Get<Gender[]>("/employees/genders");
       if (res.ok) {
         setGender(res.data);
       }
@@ -94,7 +100,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
   async function onValid(formData: z.infer<typeof formEmployee>) {
     const newEmployee = {
       ...formData,
-      EmployeeID: employee?.ID,
+      
     };
 
     const res = await http.Put<string>("/employees/:id", employees.ID!, newEmployee);
@@ -113,169 +119,165 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
     
   }
   return (
-    <div className="relative ">
-      <section className="w-2/5 h-full  bg-cover bg-center absolute  	">
-        <img
-          src={EmployeeImage}
-          className="w-full h-full object-cover rounded "
-          alt="Health"
-        />
-      </section>
-      
-    <div className="flex justify-end mt-8">
-      
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Edit className="text-yellow-500 abs-center hover:scale-110 cursor-pointer" />
+      </DialogTrigger>
 
-   
-      <Form
-        className="flex justify-items-center gap-2 "
-        validator={formEmployee}
-        onValid={onValid}
-        onInvalid={console.log}
-        fields={({ form }) => (
-
-          <div className="flex flex-col ">
-
-            <h1 className="text-4xl font-black text-primary  mt-2 mx-32 text-center">
-            แก้ไขข้อมูลพนักงาน
-            </h1>
-            {precede && (
-              <>
-                <div className="flex gap-14 mx-64 mt-6"> 
-                  <Label className="text-2xl text-primary w-64 ">
-                    คำนำหน้า:<span className="text-red-500">*</span>
-                  </Label>
-                  <Form.Select
-                    valueAsNumber
-                    className="h-14 px-16 text-xl text-primary"
-                    useForm={form}
-                    items={PrecedeToSelectItems(precede)}
-                    name="PrecedeID"
-                    placeholder="Choose your preceed"
-                    />
-                  </div>
-                </>
-              )}
-
-              <Label className="flex text-primary text-2xl mx-64 mt-8 ">
-                ชื่อ:<span className="text-red-500">*</span>
+      <DialogContent className="sm:max-w-[480px]">
+        <DialogHeader>
+          <DialogTitle>Edit Employee Data</DialogTitle>
+          <DialogDescription>
+            Make changes to your Employee here. Click save when you're done.
+          </DialogDescription>
+        </DialogHeader>
+        <Form
+          className="grid gap-2 mt-4"
+          validator={formEmployee}
+          onValid={onValid}
+          onInvalid={(data) => console.log(data)}
+          fields={({ form }) => (
+            <>
+              <div className="grid grid-cols-4 items-center">
+                {precede.length > 0 && (
+                  <>
+                    <Label>
+                      Precede<span className="text-red-500">*</span>
+                    </Label>
+                    <Form.Select
+                      valueAsNumber
+                      useForm={form}
+                      items={PrecedeToSelectItems(precede)}
+                      defaultValue={String(employees.Precede?.ID)}
+                      name="PrecedeID"
+                      placeholder="Pick type of tour"
+                      className="col-span-3"
+                    ></Form.Select>
+                  </>
+                )}
+              </div>
+              <div className="grid grid-cols-4 items-center">
+                <Label>
+                  FirstName<span className="text-red-500">*</span>
+                </Label>
                 <Form.Input
-                  className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="FirstName"
                   type="text"
+                  defaultValue={employees.FirstName}
+                  className="col-span-3"
                 ></Form.Input>
-              </Label>
-              <Label className="flex text-2xl mt-6 text-primary mx-64 ">
-                นามสกุล:<span className="text-red-500">*</span>
+              </div>
+              <div className=" grid grid-cols-4 items-center">
+                <Label>LastName</Label>
                 <Form.Input
-                  className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="LastName"
                   type="text"
+                  defaultValue={employees.LastName}
+                  className="col-span-3"
                 ></Form.Input>
-              </Label>
-
-              {gender && (
-                <>
-                  <div className="flex gap-16 mx-64 mt-6">
-                    <Label className="text-2xl text-primary flex">
-                      เพศ: <span className="text-red-500">*</span>
+              </div>
+              <div className="grid grid-cols-4 items-center">
+                {gender.length > 0 && (
+                  <>
+                    <Label>
+                      Gender<span className="text-red-500">*</span>
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-14 px-16 text-xl text-primary"
                       useForm={form}
                       items={GenderToSelectItems(gender)}
+                      defaultValue={String(employees.Gender?.ID)}
                       name="GenderID"
-                      placeholder="Choose your gender"
-                    />
-                  </div>
-                </>
-              )}
-
-              <div className="flex">
-                <Label className=" text-2xl text-primary mx-64 flex mt-6">
-                  วันเกิด:<span className="text-red-500 ">*</span>
-                  <div className=" px-16 ">
-                    <Form.DatePicker
-                      className="w-96 h-14 text-xl text-primary"
-                      useForm={form}
-                      name="DayOfBirth"
-                    />
-                  </div>
-                </Label>
+                      placeholder="Pick Gender"
+                      className="col-span-3"
+                    ></Form.Select>
+                  </>
+                )}
               </div>
-
-              {position && (
-                <>
-                  <div className="flex gap-16 mx-64 mt-6">
-                    <Label className="text-2xl text-primary flex">
-                      ตำแหน่ง: <span className="text-red-500">*</span>
+              <div className="grid grid-cols-4 items-center">
+                <Label>
+                Day Of Birth<span className="text-red-500">*</span>
+                </Label>
+                <Form.DatePicker
+                  useForm={form}
+                  name="DayOfBirth"
+                  defaultValue={new Date(employees.DayOfBirth)}
+                  className="col-span-3"
+                ></Form.DatePicker>
+              </div>
+              <div className="grid grid-cols-4 items-center">
+                {position.length > 0 && (
+                  <>
+                    <Label>
+                      Position<span className="text-red-500">*</span>
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-14 px-16 text-xl text-primary"
                       useForm={form}
                       items={PositionToSelectItems(position)}
+                      defaultValue={String(employees.Position?.ID)}
                       name="PositionID"
-                      placeholder="Choose your position"
-                    />
-                  </div>
-                </>
-              )}
+                      placeholder="Pick Position"
+                      className="col-span-3"
+                    ></Form.Select>
+                  </>
+                )}
+              </div>
+              
 
-              <Label className="flex text-primary text-2xl mx-64 mt-6">
-                เบอร์โทร:<span className="text-red-500">*</span>
+              <div className="grid grid-cols-4 items-center">
+                <Label>
+                  Email<span className="text-red-500">*</span>
+                </Label>
                 <Form.Input
-                  className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  useForm={form}
+                  name="Email"
+                  type="email"
+                  defaultValue={employees.Email}
+                  className="col-span-3"
+                ></Form.Input>
+              </div>
+              <div className="grid grid-cols-4 items-center">
+                <Label>
+                  Phone<span className="text-red-500">*</span>
+                </Label>
+                <Form.Input
                   useForm={form}
                   name="Phone"
                   type="text"
+                  defaultValue={employees.Phone}
+                  className="col-span-3"
                 ></Form.Input>
-              </Label>
-              <Label className="flex text-2xl mt-6 text-primary mx-64  ">
-                อีเมล:<span className="text-red-500">*</span>
+              </div>
+              <div className="grid grid-cols-4 items-center">
+                <Label>
+                  Password<span className="text-red-500">*</span>
+                </Label>
                 <Form.Input
-                  className="w-3/4 h-14 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
-                  useForm={form}
-                  name="Email"
-                  type="text"
-                ></Form.Input>
-              </Label>
-              <Label className="flex text-2xl mt-6 text-primary mx-64 ">
-                Password:<span className="text-red-500">*</span>
-                <Form.Input
-                  className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="Password"
                   type="text"
+                  defaultValue={employees.Password}
+                  className="col-span-3"
                 ></Form.Input>
-              </Label>
-              <div className="mx-64 mt-2">
-                <Button
-                  type="submit"
-                  className="w-48 h-12 text-2xl  text-center bg-green-600 rounded-md	mt-5 mx-16	text-primary text-white	 	"
-                >
-                  บันทึกข้อมูล
-                </Button>
-
-                <Button
-                  type="reset"
-                  className="w-48 h-12 text-2xl  text-center bg-red-600 rounded-md	mt-5 mx-16	text-primary text-white	 	"
-                >
-                  ยกเลิก
-                </Button>
-
-                <Link to="/login/employee">
-                <ChevronLeftSquare className="fixed bottom-4 right-16 w-10 h-10 text-red-500 cursor-pointer"/>
-                </Link>
-
               </div>
-            </div>
+              
+
+              {/* <Form.SubmitButton useForm={form}>Employee</Form.SubmitButton> */}
+            </>
           )}
-        />
-      </div>
-    </div>
+        >
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="secondary">Close</Button>
+            </DialogClose>
+            <Button type="submit">Save changes</Button>
+          </DialogFooter>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };
 
