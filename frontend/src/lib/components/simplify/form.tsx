@@ -270,7 +270,7 @@ const FormSelect = <T extends FieldValues>({
     >
       <SelectTrigger
         className={cn(
-          errors[name] ? " border-red-500 focus-visible:ring-red-500" : "",
+          errors[name] ? " border-red-500 focus:ring-red-500" : "",
           className
         )}
       >

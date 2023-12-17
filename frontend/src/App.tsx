@@ -1,7 +1,6 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import {
-  Account,
   Course,
   CourseSetting,
   Employee,
@@ -34,12 +33,11 @@ function App() {
       <Route element={<PrivateRoute role={101} />}>
         <Route path="/course" element={<Course />}></Route>
         <Route path="/tour" element={<Tour />}></Route>
-        <Route path="/account" element={<Account />}></Route>
       </Route>
 
       <Route element={<PrivateRoute role={100} path="/login/admin" />}>
         <Route path="/employee" element={<Employee />}></Route>
-        <Route path="/employee/list" element={<EmployeeList/>}></Route>
+        <Route path="/employee/list" element={<EmployeeList />}></Route>
         <Route path="/user" element={<User />}></Route>
       </Route>
 

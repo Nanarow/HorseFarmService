@@ -1,9 +1,9 @@
-import tourImage from "../../assets/tourbg-2.jpg";
+import tourImage from "@src/assets/tourbg-2.jpg";
 import Form from "@shadcn/simplify/form";
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import { Plan, TourType } from "../../interfaces";
-import { http } from "../../services/httpRequest";
+import { Plan, TourType } from "@src/interfaces";
+import { http } from "@src/services/httpRequest";
 import { Checkbox, Label } from "@shadcn/ui";
 import { useToast } from "@shadcn/ui/use-toast";
 
@@ -11,15 +11,15 @@ import { ArrowRightSquareIcon } from "lucide-react";
 import { ToItemList } from "@src/utils";
 import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
-interface Props {
-  setTabs: React.Dispatch<React.SetStateAction<string>>;
-}
-const TourRegister = ({ setTabs }: Props) => {
+import { Skeleton } from "@shadcn/ui/skeleton";
+
+const TourRegister = ({ onClick }: { onClick: () => void }) => {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [tourType, setTourType] = useState<TourType[]>([]);
   const [plans, setPlans] = useState<Plan[]>([]);
-  const { user } = useAuth();
-  const [email, setEmail] = useState<undefined | string>(undefined);
+  const [email, setEmail] = useState("");
+  const [check, setCheck] = useState(false);
 
   const formSchema = z.object({
     Date: z.date().min(new Date(), "Date must be in the future"),
@@ -57,14 +57,7 @@ const TourRegister = ({ setTabs }: Props) => {
     const res = await http.Post<string>("/tours", tour);
     if (res.ok) {
       toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(res.data, null, 2)}
-            </code>
-          </pre>
-        ),
+        title: res.data,
         duration: 1500,
       });
     }
@@ -79,10 +72,10 @@ const TourRegister = ({ setTabs }: Props) => {
         />
       </section>
       <section className="h-full w-full flex justify-center items-center relative">
-        <Tooltip content={() => <span>My tours registration</span>} side="left">
+        <Tooltip content={"My tours registration"} side="left">
           <ArrowRightSquareIcon
             className="absolute top-4 right-8 text-green-500 hover:scale-105"
-            onClick={() => setTabs("list")}
+            onClick={onClick}
           />
         </Tooltip>
 
@@ -95,40 +88,43 @@ const TourRegister = ({ setTabs }: Props) => {
             validator={formSchema}
             onValid={onValid}
             onInvalid={(data) => console.log(data)}
-            fields={({ form }) => (
+            fields={({ form, errors }) => (
               <>
                 <Label>
                   Tour Date<span className="text-red-500">*</span>
                 </Label>
                 <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
+                {errors.Date && (
+                  <p className="text-sm text-red-500">{errors.Date.message}</p>
+                )}
+                <Label>
+                  Type of tour<span className="text-red-500">*</span>
+                </Label>
                 {tourType.length > 0 ? (
-                  <>
-                    <Label>
-                      Type of tour<span className="text-red-500">*</span>
-                    </Label>
-                    <Form.Select
-                      valueAsNumber
-                      useForm={form}
-                      items={ToItemList(tourType)}
-                      name="TourTypeID"
-                      placeholder="Pick type of tour"
-                    ></Form.Select>
-                  </>
-                ) : null}
+                  <Form.Select
+                    valueAsNumber
+                    useForm={form}
+                    items={ToItemList(tourType)}
+                    name="TourTypeID"
+                    placeholder="Pick type of tour"
+                  />
+                ) : (
+                  <Skeleton className=" h-9 w-full" />
+                )}
+                <Label>
+                  Plan<span className="text-red-500">*</span>
+                </Label>
                 {plans.length > 0 ? (
-                  <>
-                    <Label>
-                      Plan<span className="text-red-500">*</span>
-                    </Label>
-                    <Form.Select
-                      valueAsNumber
-                      useForm={form}
-                      items={ToItemList(plans)}
-                      name="PlanID"
-                      placeholder="Pick your plan"
-                    ></Form.Select>
-                  </>
-                ) : null}
+                  <Form.Select
+                    valueAsNumber
+                    useForm={form}
+                    items={ToItemList(plans)}
+                    name="PlanID"
+                    placeholder="Pick your plan"
+                  />
+                ) : (
+                  <Skeleton className=" h-9 w-full" />
+                )}
 
                 <Label>
                   Email<span className="text-red-500">*</span>
@@ -138,13 +134,17 @@ const TourRegister = ({ setTabs }: Props) => {
                   name="Email"
                   type="email"
                   value={email}
-                  disabled={!!email}
+                  disabled={check}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 ></Form.Input>
                 <div className="flex gap-2 items-center">
                   <Checkbox
-                    onCheckedChange={(s) =>
-                      s ? setEmail(user?.Email) : setEmail(undefined)
-                    }
+                    onCheckedChange={(s) => {
+                      s && setEmail(user?.Email!);
+                      setCheck(s ? true : false);
+                    }}
                   ></Checkbox>
                   <p className="text-sm text-muted-foreground">
                     use account email

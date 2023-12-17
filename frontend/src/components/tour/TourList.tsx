@@ -18,18 +18,13 @@ import TourAlert from "./TourAlert";
 import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 
-interface Props {
-  setTabs: React.Dispatch<React.SetStateAction<string>>;
-}
-
-const TourList = ({ setTabs }: Props) => {
+const TourList = ({ onClick }: { onClick: () => void }) => {
   const [tours, setTours] = useState<TourRegistration[]>([]);
 
   const { user } = useAuth();
   async function fetchTours() {
     const res = await http.Get<TourRegistration[]>("/tours/user/" + user?.ID);
     if (res.ok) {
-      console.log(res.data);
       setTours(res.data);
     }
   }
@@ -41,9 +36,9 @@ const TourList = ({ setTabs }: Props) => {
 
   return (
     <div className="w-full h-full relative p-8">
-      <Tooltip content={() => <span>Back to registration</span>} side="right">
+      <Tooltip content={"Back to registration"} side="right">
         <ArrowLeftSquareIcon
-          onClick={() => setTabs("register")}
+          onClick={onClick}
           className="absolute top-4 left-8 text-blue-500"
         />
       </Tooltip>
