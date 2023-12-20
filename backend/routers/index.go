@@ -7,6 +7,10 @@ import (
 	"github.com/sut66/team16/backend/middlewares"
 )
 
+func SetUpRouter() *gin.Engine {
+	return gin.Default()
+}
+
 func InitRouter(route *gin.Engine) {
 
 	route.Use(middlewares.CORS())
@@ -17,10 +21,10 @@ func InitRouter(route *gin.Engine) {
 	route.POST("/logout/:role", controllers.Logout)
 
 	authRouter := route.Group("/")
-	initRequiredAuth(authRouter)
+	initRequiredAuthRouter(authRouter)
 
 }
-func initRequiredAuth(route *gin.RouterGroup) {
+func initRequiredAuthRouter(route *gin.RouterGroup) {
 	// route.Use(middlewares.Authentication())
 	// route.Use(middlewares.Authorization())
 

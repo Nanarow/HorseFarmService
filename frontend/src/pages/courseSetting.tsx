@@ -42,29 +42,22 @@ const courseSetting = () => {
   }, []);
 
   async function handleChange(time: Date, value: string | undefined) {
-    // เอาเวลาที่เลือกมาแยกออกก่อน
-    const date = new Date(time).toDateString();
-    const start_time = new Date(time).toTimeString().slice(0, 8);
-    // loop schedules
     for (let i = 0; i < schedules.length; i++) {
       const s = schedules[i];
-      const s_date = new Date(s.Date).toDateString();
-      const s_time = new Date(s.StartTime).toTimeString().slice(0, 8);
+      const start_time = new Date(s.StartTime);
       // check ว่าเวลาที่เลือกเหมือนกันกับ schedule ใด
-      if (s_time === start_time && s_date === date) {
+      if (time.getTime() === start_time.getTime()) {
         // delete schedule ที่เลือก แล้วเพิ่ม schedule ใหม่
         await http.Delete("/schedules", s.ID!);
         if (value) {
-          const res = await http.Post<Schedule>("/schedules", {
+          await http.Post<Schedule>("/schedules", {
             Date: s.Date,
             StartTime: s.StartTime,
             CourseID: +value,
           });
-          if (res.ok) {
-            // refetch schedules
-            return await fetchSchedules();
-          }
         }
+        await fetchSchedules();
+        return;
       }
     }
     // ถ้าเข้าใน loop แล้วไม่เจอ ให้เพิ่ม schedule
@@ -75,18 +68,15 @@ const courseSetting = () => {
         CourseID: +value,
       });
       if (res.ok) {
-        return await fetchSchedules();
+        await fetchSchedules();
       }
     }
   }
   function getCourse(time: Date) {
-    const date = new Date(time).toDateString();
-    const start_time = new Date(time).toTimeString().slice(0, 8);
     for (let i = 0; i < schedules.length; i++) {
       const s = schedules[i];
-      const s_date = new Date(s.Date).toDateString();
-      const s_time = new Date(s.StartTime).toTimeString().slice(0, 8);
-      if (s_time === start_time && s_date === date) {
+      const start_time = new Date(s.StartTime);
+      if (time.getTime() === start_time.getTime()) {
         return String(s.CourseID);
       }
     }
@@ -158,8 +148,17 @@ const courseSetting = () => {
                             onValueChange={(value) =>
                               handleChange(start_time, value)
                             }
-                            render={({ value }) =>
-                              value && <p>{getCourseName(+value)}</p>
+                            render={({ value, setValue }) =>
+                              value && (
+                                <>
+                                  <p className=" " key={value}>
+                                    {getCourseName(+value)}
+                                  </p>
+                                  <button onClick={() => setValue(undefined)}>
+                                    -
+                                  </button>
+                                </>
+                              )
                             }
                           ></DropZone>
                         </TableCell>
@@ -185,6 +184,25 @@ const courseSetting = () => {
 export default courseSetting;
 
 // backup
+// import { DragDrop, DraggableCard, DropZone } from "@shadcn/simplify/drag-drop";
+// import { Button } from "@shadcn/ui";
+// import {
+//   Table,
+//   TableBody,
+//   TableCaption,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "@shadcn/ui/table";
+// import { Course, Schedule } from "@src/interfaces";
+// import { addTimeToDate } from "@src/utils";
+// import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
+// import AddCourse from "../components/coursesetting/addCourse";
+// import { Star, XSquare } from "lucide-react";
+// import { useEffect, useState } from "react";
+// import { http } from "@src/services/httpRequest";
+
 // const courseSetting = () => {
 //   const [courses, setCourses] = useState<Course[]>([]);
 //   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -210,29 +228,22 @@ export default courseSetting;
 //   }, []);
 
 //   async function handleChange(time: Date, value: string | undefined) {
-//     // เอาเวลาที่เลือกมาแยกออกก่อน
-//     const date = new Date(time).toDateString();
-//     const start_time = new Date(time).toTimeString().slice(0, 8);
-//     // loop schedules
 //     for (let i = 0; i < schedules.length; i++) {
 //       const s = schedules[i];
-//       const s_date = new Date(s.Date).toDateString();
-//       const s_time = new Date(s.StartTime).toTimeString().slice(0, 8);
+//       const start_time = new Date(s.StartTime);
 //       // check ว่าเวลาที่เลือกเหมือนกันกับ schedule ใด
-//       if (s_time === start_time && s_date === date) {
+//       if (time.getTime() === start_time.getTime()) {
 //         // delete schedule ที่เลือก แล้วเพิ่ม schedule ใหม่
 //         await http.Delete("/schedules", s.ID!);
 //         if (value) {
-//           const res = await http.Post<Schedule>("/schedules", {
+//           await http.Post<Schedule>("/schedules", {
 //             Date: s.Date,
 //             StartTime: s.StartTime,
 //             CourseID: +value,
 //           });
-//           if (res.ok) {
-//             // refetch schedules
-//             return await fetchSchedules();
-//           }
 //         }
+//         await fetchSchedules();
+//         return;
 //       }
 //     }
 //     // ถ้าเข้าใน loop แล้วไม่เจอ ให้เพิ่ม schedule
@@ -243,18 +254,15 @@ export default courseSetting;
 //         CourseID: +value,
 //       });
 //       if (res.ok) {
-//         return await fetchSchedules();
+//         await fetchSchedules();
 //       }
 //     }
 //   }
 //   function getCourse(time: Date) {
-//     const date = new Date(time).toDateString();
-//     const start_time = new Date(time).toTimeString().slice(0, 8);
 //     for (let i = 0; i < schedules.length; i++) {
 //       const s = schedules[i];
-//       const s_date = new Date(s.Date).toDateString();
-//       const s_time = new Date(s.StartTime).toTimeString().slice(0, 8);
-//       if (s_time === start_time && s_date === date) {
+//       const start_time = new Date(s.StartTime);
+//       if (time.getTime() === start_time.getTime()) {
 //         return String(s.CourseID);
 //       }
 //     }
@@ -326,8 +334,17 @@ export default courseSetting;
 //                             onValueChange={(value) =>
 //                               handleChange(start_time, value)
 //                             }
-//                             render={({ value }) =>
-//                               value && <p>{getCourseName(+value)}</p>
+//                             render={({ value, setValue }) =>
+//                               value && (
+//                                 <>
+//                                   <p className=" " key={value}>
+//                                     {getCourseName(+value)}
+//                                   </p>
+//                                   <button onClick={() => setValue(undefined)}>
+//                                     -
+//                                   </button>
+//                                 </>
+//                               )
 //                             }
 //                           ></DropZone>
 //                         </TableCell>
@@ -349,5 +366,3 @@ export default courseSetting;
 //     </main>
 //   );
 // };
-
-// export default courseSetting;

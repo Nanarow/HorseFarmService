@@ -57,8 +57,14 @@ const NavBar = () => {
                 </DropdownMenuItem>
               ) : (
                 <DropdownMenuItem className="cursor-pointer">
-                  <LogInIcon className="mr-2" />
-                  Log In
+                  <Link
+                    to={"/login"}
+                    state={{ from: "/" }}
+                    className="flex items-center"
+                  >
+                    <LogInIcon className="mr-2" />
+                    Log In
+                  </Link>
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>

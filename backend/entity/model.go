@@ -143,7 +143,7 @@ type TourRegistration struct {
 	TourTypeID uint     `json:",omitempty"`
 	TourType   TourType `gorm:"foreignKey:TourTypeID"`
 
-	PlanID uint `json:",omitempty"`
+	PlanID uint `json:",omitempty" valid:"required~Plan is required,refer=plans~Plan does not exist"`
 	Plan   Plan `gorm:"foreignKey:PlanID"`
 
 	Email        string    `valid:"required~Email is required,email~Invalid email"`
