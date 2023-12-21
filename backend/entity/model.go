@@ -183,7 +183,7 @@ type Employee struct {
 	Email      string    `valid:"required~Email is required,email~Invalid email"`
 	Password   string    `valid:"required~Password is required,minstringlength(4)~Password must be at 4 characters"`
 	DayOfBirth time.Time `valid:"required~DayOfBirth is required,past~DayOfBirth must be in the past"`
-	Phone      string    `valid:"required~Phone is required,minstringlength(10)~Phone must be at 10 characters"`
+	Phone      string    `valid:"required~Phone is required,stringlength(10|10)~Phone must be at 10 characters"`
 
 	Healths []Health `json:",omitempty"`
 	Horses  []Horse  `json:",omitempty"`
