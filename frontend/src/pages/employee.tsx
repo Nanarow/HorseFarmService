@@ -32,7 +32,7 @@ const EmployeePage = () => {
   const [position, setPosition] = useState<Position[] | undefined>(undefined);
   const [precede, setPrecede] = useState<Precede[] | undefined>(undefined);
   const [gender, setGender] = useState<Gender[] | undefined>(undefined);
-
+  // const [formData, setFormData] = useState<Employee>
   useEffect(() => {
     async function fetchPosition() {
       const res = await http.Get<Position[]>("/employees/positions");
@@ -105,6 +105,21 @@ const EmployeePage = () => {
         duration: 1500,
       });
     }
+
+    // const resetForm = () => {
+    //   formData({
+    //     FirstName: '',
+    //     LastName: '',
+    //     Email: '',
+    //     Phone: '',
+    //     Password: '',
+    //     DayOfBirth: '',
+    //     PositionID:  '',
+    //     PrecedeID:  '',
+    //     GenderID: '',
+    //     // Reset other fields as needed
+    //   });
+    // };
     
   }
   return (
@@ -263,7 +278,7 @@ const EmployeePage = () => {
 
                 <Link to="/employee/list">
                   <Tooltip content={() => <span>Back to Employee List</span>}>
-                  <ChevronLeftCircle className="fixed bottom-4 right-16 w-10 h-10 text-red-500 cursor-pointer"/>
+                  <ChevronLeftCircle  className="fixed bottom-4 right-16 w-10 h-10 text-red-500 cursor-pointer"/>
                   </Tooltip>
                 </Link>
 
