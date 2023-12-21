@@ -58,13 +58,15 @@ type Support struct {
 
 type Course struct {
 	BaseModel
-	Name         string
+	Name         string `gorm:"default:Course" `
 	Duration     int
-	Participants int
-	Description  string
+	Participants int    `valid:"required~Participants is required,gte=10~Participants must be at least 10 "`
+	Description  string `gorm:"default:Course" `
 	Experience   float32
-	EmployeeID   uint
+	EmployeeID   uint       `json:",omitempty"`
 	Employee     Employee   `gorm:"foreignKey:EmployeeID"`
+	LocationID   uint       `json:",omitempty"`
+	Location     Location   `gorm:"foreignKey:LocationID"`
 	Schedules    []Schedule `json:"-"`
 	Horses       []*Horse   `gorm:"many2many:horse_courses;"`
 }
@@ -74,8 +76,6 @@ type Schedule struct {
 	Date        time.Time
 	StartTime   time.Time
 	Description string
-	LocationID  uint
-	Location    Location `gorm:"foreignKey:LocationID"`
 	CourseID    uint
 	Course      Course `gorm:"foreignKey:CourseID"`
 }
@@ -84,7 +84,7 @@ type Location struct {
 	BaseModel
 	Name        string
 	Description string
-	Schedules   []Schedule `json:"-"`
+	Course      []Course `json:"-"`
 }
 type Horse struct {
 	BaseModel
@@ -143,7 +143,7 @@ type TourRegistration struct {
 	TourTypeID uint     `json:",omitempty"`
 	TourType   TourType `gorm:"foreignKey:TourTypeID"`
 
-	PlanID uint `json:",omitempty"`
+	PlanID uint `json:",omitempty" valid:"required~Plan is required,refer=plans~Plan does not exist"`
 	Plan   Plan `gorm:"foreignKey:PlanID"`
 
 	Email        string    `valid:"required~Email is required,email~Invalid email"`

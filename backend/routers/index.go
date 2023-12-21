@@ -7,6 +7,10 @@ import (
 	"github.com/sut66/team16/backend/middlewares"
 )
 
+func SetUpRouter() *gin.Engine {
+	return gin.Default()
+}
+
 func InitRouter(route *gin.Engine) {
 
 	route.Use(middlewares.CORS())
@@ -17,10 +21,10 @@ func InitRouter(route *gin.Engine) {
 	route.POST("/logout/:role", controllers.Logout)
 
 	authRouter := route.Group("/")
-	initRequiredAuth(authRouter)
+	initRequiredAuthRouter(authRouter)
 
 }
-func initRequiredAuth(route *gin.RouterGroup) {
+func initRequiredAuthRouter(route *gin.RouterGroup) {
 	// route.Use(middlewares.Authentication())
 	// route.Use(middlewares.Authorization())
 
@@ -42,7 +46,7 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	// InitBasicApi[*entity.Bleed](route, "/bleeds") complete
 	// InitBasicApi[*entity.Sex](route, "/sexes") complete
 	// InitBasicApi[*entity.Location](route, "/locations")
-	InitBasicApi[*entity.Stable](route, "/stables") 
+	InitBasicApi[*entity.Stable](route, "/stables")
 	// InitBasicApi[*entity.Employee](route, "/employees") complete
 	// InitBasicApi[*entity.Precede](route, "/precedes") complete
 
@@ -94,10 +98,12 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	route.GET("/courses", controllers.GetAllCourses)
 	route.POST("/courses", controllers.CreateCourse)
 	route.PUT("/courses/:id", controllers.UpdateCourse)
+	route.DELETE("/courses/:id", controllers.DeleteCourse)
 
 	route.GET("/schedules", controllers.GetAllSchedules)
 	route.POST("/schedules", controllers.CreateSchedule)
 	route.GET("/schedules/locations", controllers.GetAllLocations)
+	route.DELETE("/schedules/:id", controllers.DeleteSchedule)
 
 	route.POST("/foods", controllers.CreateFood)
 	route.PUT("/foods/:id", controllers.UpdateFood)

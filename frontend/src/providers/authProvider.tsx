@@ -8,7 +8,7 @@ type AuthContextProps = {
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   employee: Employee | undefined;
   setEmployee: React.Dispatch<React.SetStateAction<Employee | undefined>>;
-  logout: (r: Role) => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextProps | null>(null);
@@ -22,13 +22,27 @@ function useAuth() {
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User>();
   const [employee, setEmployee] = useState<Employee>();
-  const logout = async (role: Role) => {
+  const postLogout = async (role: Role) => {
+    console.log("logout as ", role);
     const res = await http.Post("/logout/" + role, {});
     if (res.ok) {
       setEmployee(undefined);
       setUser(undefined);
     }
   };
+  const logout = async () => {
+    if (user) {
+      if (user.RoleID === 101) {
+        await postLogout("user");
+      } else {
+        await postLogout("admin");
+      }
+    }
+    if (employee) {
+      await postLogout("employee");
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{ user, setUser, employee, setEmployee, logout }}

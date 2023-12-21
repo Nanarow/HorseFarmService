@@ -1,4 +1,4 @@
-import { Button, Label } from "@shadcn/ui";
+import { Button } from "@shadcn/ui";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import {
   DialogClose,
@@ -9,56 +9,58 @@ import {
   DialogTitle,
 } from "@shadcn/ui/dialog";
 import { useEffect, useState } from "react";
-import { Course, Employee } from "@src/interfaces";
+import { Course, Location } from "@src/interfaces";
 import { http } from "@src/services/httpRequest";
 import { toast } from "@shadcn/ui/use-toast";
 import { z } from "zod";
+import { Label } from "@shadcn/ui";
+import { useAuth } from "@src/providers/authProvider";
 
 const AddCourse = () => {
-  const [employee, setEmployees] = useState<Employee[] | undefined>(undefined);
-
-  useEffect(() => {
-    async function fetchEmployees() {
-      const res = await http.Get<Employee[]>("/employees");
-      if (res.ok) {
-        setEmployees(res.data);
-      }
+  const {employee} = useAuth()
+  const [location, setLocation] = useState<Location[] | undefined>(undefined);
+  async function fetchLocation() {
+    const res = await http.Get<Location[]>("/schedules/locations");
+    if (res.ok) {
+      setLocation(res.data);
     }
-
-    fetchEmployees();
+  }
+  useEffect(() => {
+    return () => {
+      fetchLocation();
+    };
   }, []);
 
-
-  function EmployeeToSelectItems(
-    Employee: { ID?: number; FirstName: string }[]
+  function LocationToSelectItems(
+    Location: { ID: number; Name: string }[]
   ): ItemList[] {
-    return Employee.map((Employee) => ({
-      value: Employee.ID!,
-      label: Employee.FirstName,
+    return Location.map((Location) => ({
+      value: Location.ID,
+      label: Location.Name,
     }));
   }
 
+
   const ValidCourseSetting = z.object({
-    Name: z.string().min(1, "Name is required"),
+    Name: z.string(),
     Duration: z.number({ required_error: "Duration is required" }),
-    Participants: z.number({ required_error: "Participants is required" }),
+    Participants: z.number().min(10, "Participants must be at least 15"),
     Description: z.string().min(1, "Description is required"),
-    Experience: z.number({ required_error: "Participants is required" }),
+    Experience: z.number({ required_error: "Experience is required" }),
+    LocationID: z.number(),
     EmployeeID: z.number(),
   });
 
   async function onValid(formData: z.infer<typeof ValidCourseSetting>) {
-    console.log(formData)
+    const data = {
+      ...formData,
+      EmployeeID: employee?.ID!
+    }
 
-    const res = await http.Post<Course>("/courses", formData);
+    const res = await http.Post<string>("/courses", data);
     if (res.ok) {
       toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(res.data, null, 2)}</code>
-          </pre>
-        ),
+        title: res.data,
         duration: 1500,
       });
     }
@@ -66,7 +68,7 @@ const AddCourse = () => {
   return (
     <DialogContent className="sm:max-w-[480px]">
       <DialogHeader>
-        <DialogTitle>+ Course</DialogTitle>
+        <DialogTitle>Add Course</DialogTitle>
         <DialogDescription>
           Click save when you're done.
         </DialogDescription>
@@ -78,24 +80,9 @@ const AddCourse = () => {
         onInvalid={(errorFields) => console.log(errorFields)}
         fields={({ form }) => (
           <>
-            {employee && (
-              <>
-                {/* <div className=" flex gap-14 mx-64 mt-6"> */}
-                <Label className="text-2xl text-primary w-64">
-                  ผู้สร้างคอร์ส:<span className="text-red-500">*</span>
-                </Label>
-                <Form.Select
-                  valueAsNumber
-                  className="h-14 px-24 text-xl text-primary"
-                  useForm={form}
-                  items={EmployeeToSelectItems(employee)}
-                  name="EmployeeID"
-                  placeholder="Select your name"
-                />
-                {/* </div> */}
-              </>
-            )}
-
+            <Label>
+              Course Name<span className="text-red-500">*</span>
+            </Label>
             <Form.Input
               useForm={form}
               name="Name"
@@ -103,6 +90,9 @@ const AddCourse = () => {
               placeholder="Course Name"
               className="w-full"
             />
+            <Label>
+              Duration<span className="text-red-500">*</span>
+            </Label>
             <Form.Input
               useForm={form}
               name="Duration"
@@ -110,6 +100,9 @@ const AddCourse = () => {
               placeholder="Duration"
               className="w-full"
             />
+            <Label>
+              Participants<span className="text-red-500">*</span>
+            </Label>
             <Form.Input
               useForm={form}
               name="Participants"
@@ -117,6 +110,9 @@ const AddCourse = () => {
               placeholder="Participants"
               className="w-full"
             />
+            <Label>
+              Description<span className="text-red-500">*</span>
+            </Label>
             <Form.Input
               useForm={form}
               name="Description"
@@ -124,6 +120,9 @@ const AddCourse = () => {
               placeholder="Description"
               className="w-full"
             />
+            <Label>
+              Experience<span className="text-red-500">*</span>
+            </Label>
             <Form.Input
               useForm={form}
               name="Experience"
@@ -131,6 +130,21 @@ const AddCourse = () => {
               placeholder="Experience"
               className="w-full"
             />
+            {location && (
+              <>
+                <Label>
+                  Location<span className="text-red-500">*</span>
+                </Label>
+                <Form.Select
+                  valueAsNumber
+                  useForm={form}
+                  items={LocationToSelectItems(location)}
+                  name="LocationID"
+                  placeholder="Location"
+                >
+                </Form.Select>
+              </>
+            )}
           </>
         )}
       ><DialogFooter>
