@@ -60,6 +60,11 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
         title: res.data,
         duration: 1500,
       });
+    } else {
+      toast({
+        title: res.error,
+        duration: 1500,
+      });
     }
   }
   return (
