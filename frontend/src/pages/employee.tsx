@@ -7,21 +7,23 @@ import { useEffect, useState } from "react";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { Label } from "@shadcn/ui";
 import EmployeeImage from "./../assets/healthbg.jpg";
-import { ChevronLeftSquare } from 'lucide-react';
+import { ChevronLeftCircle} from 'lucide-react';
 import { Link } from "react-router-dom";
+import { Tooltip } from "@shadcn/simplify/tooltip";
+
 
 const EmployeePage = () => {
   const { toast } = useToast();
   const formEmployee = z.object({
-    FirstName: z.string().min(3, "FirstName must be at least 3 characters"),
-    LastName: z.string().min(3, "Tooth must be at least 3 characters"),
+    FirstName: z.string().min(2, "FirstName must be at least 2 characters"),
+    LastName: z.string().min(2, "Tooth must be at least 2 characters"),
     Email: z.string().email("Please enter a valid email"),
     Phone: z.string().max(10, "Phone must be at least 10 characters"),
     Password: z
       .string()
       .min(2, "Password must be at least 8 characters long")
       .max(20, "Password must be at most 20 characters long"),
-    DayOfBirth: z.date().min(new Date(), "Date must be in the future"),
+    DayOfBirth: z.date().max(new Date(), "Date must be in the past"),
     PositionID: z.number(),
     PrecedeID: z.number(),
     GenderID: z.number(),
@@ -33,21 +35,21 @@ const EmployeePage = () => {
 
   useEffect(() => {
     async function fetchPosition() {
-      const res = await http.Get<Position[]>("/positions");
+      const res = await http.Get<Position[]>("/employees/positions");
       if (res.ok) {
         setPosition(res.data);
       }
     }
 
     async function fetchPrecede() {
-      const res = await http.Get<Precede[]>("/precedes");
+      const res = await http.Get<Precede[]>("/employees/precedes");
       if (res.ok) {
         setPrecede(res.data);
       }
     }
 
     async function fetchGender() {
-      const res = await http.Get<Gender[]>("/gender");
+      const res = await http.Get<Gender[]>("/employees/genders");
       if (res.ok) {
         setGender(res.data);
       }
@@ -139,11 +141,11 @@ const EmployeePage = () => {
                   </Label>
                   <Form.Select
                     valueAsNumber
-                    className="h-14 px-24 text-xl text-primary"
+                    className="h-14 px-10 ml-12 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                     useForm={form}
                     items={PrecedeToSelectItems(precede)}
                     name="PrecedeID"
-                    placeholder="Choose your preceed"
+                    placeholder="Choose your precede"
                     />
                   </div>
                 </>
@@ -152,7 +154,7 @@ const EmployeePage = () => {
               <Label className="flex text-primary text-xl mx-64 mt-8 ">
                 ชื่อ:<span className="text-red-500">*</span>
                 <Form.Input
-                  className="w-3/4 h-14  ml-28 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  className="w-3/4 h-14  ml-24 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="FirstName"
                   type="text"
@@ -161,7 +163,7 @@ const EmployeePage = () => {
               <Label className="flex text-xl mt-6 text-primary mx-64 ">
                 นามสกุล:<span className="text-red-500">*</span>
                 <Form.Input
-                  className="w-3/4 h-14 px-10 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  className="w-3/4 h-14 ml-14 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="LastName"
                   type="text"
@@ -176,7 +178,7 @@ const EmployeePage = () => {
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-14 px-10 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                      className="h-14 px-10 text-xl text-primary border rounded-md focus:outline-none bg-white focus:border-black"
                       useForm={form}
                       items={GenderToSelectItems(gender)}
                       name="GenderID"
@@ -191,7 +193,7 @@ const EmployeePage = () => {
                   วันเกิด:<span className="text-red-500 ">*</span>
                   <div className=" px-16 ml-4">
                     <Form.DatePicker
-                      className="w-96 h-14 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                      className="w-96 h-14  text-xl "
                       useForm={form}
                       name="DayOfBirth"
                     />
@@ -207,7 +209,7 @@ const EmployeePage = () => {
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-14 px-16 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                      className="h-14 px-14 text-xl text-primary border rounded-md  focus:outline-none bg-white focus:border-black"
                       useForm={form}
                       items={PositionToSelectItems(position)}
                       name="PositionID"
@@ -238,7 +240,7 @@ const EmployeePage = () => {
               <Label className="flex text-xl mt-6 text-primary mx-64 ">
                 Password:<span className="text-red-500">*</span>
                 <Form.Input
-                  className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  className="w-3/4 h-14 ml-14 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="Password"
                   type="text"
@@ -259,8 +261,10 @@ const EmployeePage = () => {
                   ยกเลิก
                 </Button>
 
-                <Link to="/login/employee">
-                <ChevronLeftSquare className="fixed bottom-4 right-16 w-10 h-10 text-red-500 cursor-pointer"/>
+                <Link to="/employee/list">
+                  <Tooltip content={() => <span>Back to Employee List</span>}>
+                  <ChevronLeftCircle className="fixed bottom-4 right-16 w-10 h-10 text-red-500 cursor-pointer"/>
+                  </Tooltip>
                 </Link>
 
               </div>

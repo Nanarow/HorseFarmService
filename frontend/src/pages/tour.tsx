@@ -1,4 +1,4 @@
-import NavBar from "../components/navBar";
+import NavBar from "../components/navbar/navBar";
 import { Tabs, TabsContent } from "@shadcn/ui/tabs";
 import TourList from "../components/tour/TourList";
 import { useState } from "react";
@@ -19,11 +19,11 @@ const Tour = () => {
           value="register"
           className="w-full h-full mt-0 slide-in-right "
         >
-          <TourRegister setTabs={setTabs} />
+          <TourRegister onClick={() => setTabs("list")} />
         </TabsContent>
         <TabsContent value="list" className="w-full h-full mt-0 slide-in-left">
           <div className="w-full h-full flex">
-            <TourList setTabs={setTabs} />
+            <TourList onClick={() => setTabs("register")} />
           </div>
         </TabsContent>
       </Tabs>

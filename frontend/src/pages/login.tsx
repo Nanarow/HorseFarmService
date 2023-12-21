@@ -27,9 +27,8 @@ const Login = ({ role }: LoginProps) => {
   const from = location.state?.from || "/home";
 
   async function onLogin(data?: TLogin) {
-    // console.log(data);
     if (role === "user") {
-      const res = await http.Post<User>("/login", data ? data : {});
+      const res = await http.Post<User>("/login", data || {});
       if (res.ok) {
         setUser(res.data);
         navigate(from, { replace: true });
@@ -44,7 +43,7 @@ const Login = ({ role }: LoginProps) => {
         navigate(from, { replace: true });
       }
     } else if (role === "admin") {
-      const res = await http.Post<User>("/login/admin", data ? data : {});
+      const res = await http.Post<User>("/login/admin", data || {});
       if (res.ok) {
         setUser(res.data);
         navigate(from, { replace: true });

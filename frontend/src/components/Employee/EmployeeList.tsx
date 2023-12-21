@@ -1,7 +1,12 @@
-import { ArrowLeftSquareIcon, Edit, XSquare } from "lucide-react";
 import { Employee } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
+import EmployeeAlert from "../Employee/EmployeeAlert";
+import { LogOut } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
+import {  XSquare } from "lucide-react";
+import { format } from "date-fns";
+import {  useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -11,21 +16,18 @@ import {
   TableHeader,
   TableRow,
 } from "@shadcn/ui/table";
-// import EmployeeEdit from "../Employee/EmployeeEdit";
 import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
-// import EmployeeAlert from "../Employee/EmployeeAlert";
-import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
+import EmployeeEdit from "./EmployeeEdit";
+import { useAuth } from "@src/providers/authProvider";
 
-interface Props {
-  setTabs: React.Dispatch<React.SetStateAction<string>>;
-}
 
 function EmployeeList() {
-    const [employees, setEmployee] = useState<Employee[] | undefined>(undefined);
-    const { employee } = useAuth();
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+    const [employees, setEmployee] = useState<Employee[]>([]);
     async function fetchEmployee() {
-        const res = await http.Get<Employee[]>("/employee" + employee?.ID);
+        const res = await http.Get<Employee[]>("/employees");
         if (res.ok) {
             setEmployee(res.data);
         }
@@ -36,30 +38,46 @@ function EmployeeList() {
         };
     }, []);
 
+    const handleClick = () => {
+        // Use navigate to redirect to "/employee"
+        navigate('/employee');
+      };
+
+    
+    
     return (
-        <div className="w-full h-full relative p-8">
-            <Tooltip content={() => <span>Back to employee</span>} side="right">
-                <ArrowLeftSquareIcon
-                    // onClick={() => setTabs("employee")}
-                    className="absolute top-4 left-8 text-blue-500" />
+        <div className="w-full h-full relative p-14">
+            <Tooltip content={() => <span>เพิ่มข้อมูลพนักงาน</span>} side="right">
+                <UserPlus 
+                    onClick={handleClick}
+                    className="absolute top-4 left-8 text-blue-500 h-12 w-8" />
+            </Tooltip>
+
+            <Tooltip content={() => <span>Log out</span>}>
+                <LogOut onClick={() => {
+                    console.log("logout");
+                    logout("admin");
+                  }}
+                  className=" absolute top-4 right-8  text-red-500 h-12 w-8" />  
             </Tooltip>
 
             <Table className="border mt-6">
-                <TableCaption>A list of your recent registration.</TableCaption>
+                <TableCaption>A list of your recent Employee.</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[10%] text-center">Percede</TableHead>
-                        <TableHead className="w-[10%] text-center">FirstName</TableHead>
-                        <TableHead className="w-[10%] text-center">LastName</TableHead>
-                        <TableHead className="w-[10%] text-center">Gender</TableHead>
-                        <TableHead className="w-[28%] text-center hidden md:table-cell">
+                        <TableHead className="w-[12%] text-center">Percede</TableHead>
+                        <TableHead className="w-[12%] text-center">FirstName</TableHead>
+                        <TableHead className="w-[12%] text-center">LastName</TableHead>
+                        <TableHead className="w-[12%] text-center">Gender</TableHead>
+                        <TableHead className="w-[12%] text-center">Day of birth</TableHead>
+                        <TableHead className="w-[12%] text-center hidden md:table-cell">
                             Position
                         </TableHead>
                         <TableHead className="w-[12%] text-center">Email</TableHead>
                         <TableHead className="w-[12%] text-center">Phone</TableHead>
 
-                        <TableHead className="w-[4%] text-center">Edit</TableHead>
-                        <TableHead className="w-[4%] text-center">Delete</TableHead>
+                        <TableHead className="w-[5%] text-center">Edit</TableHead>
+                        <TableHead className="w-[5%] text-center">Delete</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -79,6 +97,9 @@ function EmployeeList() {
                                     {employee.Gender?.Name}
                                 </TableCell>
                                 <TableCell className=" text-center">
+                                    {format(new Date(employee.DayOfBirth), "PPP")}
+                                </TableCell>
+                                <TableCell className=" text-center">
                                     {employee.Position?.Name}
                                 </TableCell>
                                 <TableCell className=" text-center hidden md:table-cell">
@@ -89,22 +110,19 @@ function EmployeeList() {
                                 </TableCell>
 
                                 <TableCell className=" relative">
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Edit className="text-yellow-500 abs-center hover:scale-110 cursor-pointer" />
-                                        </DialogTrigger>
-                                        {/* <EmployeeEdit employees={employee} onSave={fetchEmployee}></EmployeeEdit> */}
-                                    </Dialog>
+                                    
+                                    <EmployeeEdit employees={employee} onSave={fetchEmployee}></EmployeeEdit>
+                                    
                                 </TableCell>
                                 <TableCell className=" relative">
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
                                         </DialogTrigger>
-                                        {/* <EmployeeAlert
+                                        <EmployeeAlert
                                             employeeID={employee.ID!}
                                             onCancel={fetchEmployee}
-                                        ></EmployeeAlert> */}
+                                        ></EmployeeAlert>
                                     </Dialog>
                                 </TableCell>
                             </TableRow>

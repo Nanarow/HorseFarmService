@@ -34,10 +34,17 @@ import {
   InputProps,
   TextareaProps,
 } from "@shadcn/ui";
-import { ImageToBase64 } from "../../../utils";
-import { CheckedState } from "@radix-ui/react-checkbox";
 
-const defaultOptions = {
+import { CheckedState } from "@radix-ui/react-checkbox";
+import { FileToBase64 } from "@src/utils";
+import { cn } from "@cn/utils";
+
+interface Options {
+  shouldValidate: boolean;
+  shouldDirty: boolean;
+  shouldTouch: boolean;
+}
+const defaultOptions: Options = {
   shouldValidate: true,
   shouldDirty: true,
   shouldTouch: true,
@@ -45,6 +52,7 @@ const defaultOptions = {
 
 interface Fields<T extends FieldValues> {
   form: UseFormReturn<T, any, undefined>;
+  errors: FieldErrors<T>;
 }
 
 interface FormProps<T extends FieldValues> extends PropsWithChildren {
@@ -73,12 +81,13 @@ const Form: FormType & {
   className,
 }: FormProps<T>) => {
   const form = useForm<T>({ resolver: zodResolver(validator) });
+  const errors = form.formState.errors;
   return (
     <form
       onSubmit={form.handleSubmit(onValid, onInvalid)}
       className={className}
     >
-      {fields({ form })}
+      {fields({ form, errors })}
       {children}
     </form>
   );
@@ -98,53 +107,57 @@ const FormInput = <T extends FieldValues>({
   useForm,
   value,
   onChange,
+  defaultValue,
+  className,
   ...props
 }: FormInputProps<T>) => {
   const {
     formState: { errors },
     setValue,
-    register,
   } = useForm;
 
   async function onValueChange(e: React.ChangeEvent<HTMLInputElement>) {
     onChange?.(e);
-    const options = errors[name] ? defaultOptions : {};
+    const options = errors[name]
+      ? defaultOptions
+      : { shouldDirty: true, shouldTouch: true };
     if (type === "number") {
       setValue(name, +e.target.value as PathValue<T, Path<T>>, options);
     } else if (type === "file") {
-      const b64 = await ImageToBase64(e.target.files?.item(0) as File);
-      setValue(name, b64 as PathValue<T, Path<T>>, options);
+      const fileList = e.target.files;
+      if (fileList) {
+        const file = fileList.item(0);
+        if (file) {
+          const base64 = await FileToBase64(file);
+          setValue(name, base64 as PathValue<T, Path<T>>, options);
+        }
+      }
     } else {
       setValue(name, e.target.value as PathValue<T, Path<T>>, options);
     }
   }
 
   useEffect(() => {
-    return () => {
-      if (props.defaultValue) {
-        setValue(name, props.defaultValue as PathValue<T, Path<T>>);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     if (value) {
-      setValue(name, value as PathValue<T, Path<T>>);
+      setValue(name, value as PathValue<T, Path<T>>, defaultOptions);
     }
-  }, [value]);
+    if (defaultValue) {
+      setValue(name, defaultValue as PathValue<T, Path<T>>);
+    }
+  }, [value, defaultValue]);
 
   return (
-    <>
-      <Input
-        type={type}
-        {...props}
-        onChange={onValueChange}
-        ref={register(name).ref}
-      />
-      {errors[name] && (
-        <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
+    <Input
+      type={type}
+      value={value}
+      {...props}
+      onChange={onValueChange}
+      defaultValue={type === "file" ? undefined : defaultValue}
+      className={cn(
+        errors[name] ? " border-red-500 focus-visible:ring-red-500" : "",
+        className
       )}
-    </>
+    />
   );
 };
 
@@ -158,34 +171,45 @@ const FormTextArea = <T extends FieldValues>({
   name,
   useForm,
   className,
+  defaultValue,
+  value,
   ...props
 }: FormTextAreaProps<T>) => {
   const {
     setValue,
     formState: { errors },
   } = useForm;
-  function setNewValue(value: string | number | readonly string[]) {
-    const options = errors[name] ? defaultOptions : {};
+  function handleChange(value: string) {
+    const options = errors[name]
+      ? defaultOptions
+      : { shouldDirty: true, shouldTouch: true };
+    return setNewValue(value, options);
+  }
+  function setNewValue(
+    value: string | number | readonly string[],
+    options?: Partial<Options>
+  ) {
     setValue(name, value as PathValue<T, Path<T>>, options);
   }
   useEffect(() => {
-    return () => {
-      if (props.defaultValue) {
-        setNewValue(props.defaultValue);
-      }
-    };
-  }, []);
+    if (value) {
+      setNewValue(value, defaultOptions);
+    }
+    if (defaultValue) {
+      setNewValue(defaultValue);
+    }
+  }, [value, defaultValue]);
+
   return (
-    <>
-      <Textarea
-        {...props}
-        onChange={(e) => setNewValue(e.target.value)}
-        className={className}
-      />
-      {errors[name] && (
-        <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
+    <Textarea
+      defaultValue={defaultValue}
+      {...props}
+      onChange={(e) => handleChange(e.target.value)}
+      className={cn(
+        errors[name] ? " border-red-500 focus-visible:ring-red-500" : "",
+        className
       )}
-    </>
+    />
   );
 };
 
@@ -219,8 +243,13 @@ const FormSelect = <T extends FieldValues>({
     formState: { errors },
   } = useForm;
 
-  function setNewValue(value: string | number) {
-    const options = errors[name] ? defaultOptions : {};
+  function handleChange(value: string) {
+    const options = errors[name]
+      ? defaultOptions
+      : { shouldDirty: true, shouldTouch: true };
+    return setNewValue(value, options);
+  }
+  function setNewValue(value: string | number, options?: Partial<Options>) {
     setValue(
       name,
       valueAsNumber
@@ -230,44 +259,42 @@ const FormSelect = <T extends FieldValues>({
     );
   }
   useEffect(() => {
-    return () => {
-      if (defaultValue) {
-        setNewValue(defaultValue);
-      }
-    };
-  }, []);
+    if (defaultValue) {
+      setNewValue(defaultValue);
+    }
+  }, [defaultValue]);
   return (
-    <>
-      <Select
-        onValueChange={setNewValue}
-        defaultValue={defaultValue ? String(defaultValue) : undefined}
+    <Select
+      onValueChange={handleChange}
+      defaultValue={defaultValue ? String(defaultValue) : undefined}
+    >
+      <SelectTrigger
+        className={cn(
+          errors[name] ? " border-red-500 focus:ring-red-500" : "",
+          className
+        )}
       >
-        <SelectTrigger className={className}>
-          <SelectValue
-            placeholder={
-              <span className=" text-muted-foreground">{placeholder}</span>
+        <SelectValue
+          placeholder={
+            <span className=" text-muted-foreground">{placeholder}</span>
+          }
+        />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          {items.map((item) => {
+            if (item.value === "label-separator") {
+              return <SelectLabel key={item.label}>{item.label}</SelectLabel>;
             }
-          />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {items.map((item) => {
-              if (item.value === "label-separator") {
-                return <SelectLabel key={item.label}>{item.label}</SelectLabel>;
-              }
-              return (
-                <SelectItem key={item.value} value={String(item.value)}>
-                  {item.label}
-                </SelectItem>
-              );
-            })}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      {errors[name] && (
-        <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
-      )}
-    </>
+            return (
+              <SelectItem key={item.value} value={String(item.value)}>
+                {item.label}
+              </SelectItem>
+            );
+          })}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
 };
 
@@ -289,28 +316,29 @@ const FormDatePicker = <T extends FieldValues>({
     setValue,
     formState: { errors },
   } = useForm;
-  function setNewValue(value: Date) {
-    const options = errors[name] ? defaultOptions : {};
+  function handleChange(value: Date) {
+    const options = errors[name]
+      ? defaultOptions
+      : { shouldDirty: true, shouldTouch: true };
+    return setNewValue(value, options);
+  }
+  function setNewValue(value: Date, options?: Partial<Options>) {
     setValue(name, value as PathValue<T, Path<T>>, options);
   }
   useEffect(() => {
-    return () => {
-      if (defaultValue) {
-        setNewValue(defaultValue);
-      }
-    };
-  }, []);
+    if (defaultValue) {
+      setNewValue(defaultValue);
+    }
+  }, [defaultValue]);
   return (
-    <>
-      <DatePicker
-        defaultValue={defaultValue}
-        onSelect={setNewValue}
-        className={className}
-      />
-      {errors[name] && (
-        <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
+    <DatePicker
+      defaultValue={defaultValue}
+      onSelect={handleChange}
+      className={cn(
+        errors[name] ? " border-red-500 focus-visible:ring-red-500" : "",
+        className
       )}
-    </>
+    />
   );
 };
 
@@ -354,32 +382,30 @@ const FormCheckbox = <T extends FieldValues>({
     setValue,
     formState: { errors },
   } = useForm;
-  function setNewValue(value: CheckedState) {
-    const options = errors[name] ? defaultOptions : {};
+  function handleChange(value: CheckedState) {
+    const options = errors[name]
+      ? defaultOptions
+      : { shouldDirty: true, shouldTouch: true };
+    return setNewValue(value, options);
+  }
+  function setNewValue(value: CheckedState, options?: Partial<Options>) {
     setValue(name, value as PathValue<T, Path<T>>, options);
   }
   useEffect(() => {
-    return () => {
-      if (defaultValue) {
-        setNewValue(defaultValue);
-      }
-    };
-  }, []);
-  return (
-    <div className="flex flex-col grow">
-      <div className="flex gap-2 items-center">
-        <Checkbox
-          defaultChecked={defaultValue}
-          id={id}
-          onCheckedChange={setNewValue}
-          className={className}
-        />
-        {label && <Label>{label}</Label>}
-      </div>
+    if (defaultValue) {
+      setNewValue(defaultValue);
+    }
+  }, [defaultValue]);
 
-      {errors[name] && (
-        <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
-      )}
+  return (
+    <div className="flex gap-2 items-center">
+      <Checkbox
+        defaultChecked={defaultValue}
+        id={id}
+        onCheckedChange={handleChange}
+        className={className}
+      />
+      {label && <Label>{label}</Label>}
     </div>
   );
 };
@@ -403,31 +429,29 @@ const FormSwitch = <T extends FieldValues>({
     setValue,
     formState: { errors },
   } = useForm;
-  function setNewValue(value: boolean) {
-    const options = errors[name] ? defaultOptions : {};
+  function handleChange(value: boolean) {
+    const options = errors[name]
+      ? defaultOptions
+      : { shouldDirty: true, shouldTouch: true };
+    return setNewValue(value, options);
+  }
+  function setNewValue(value: boolean, options?: Partial<Options>) {
     setValue(name, value as PathValue<T, Path<T>>, options);
   }
   useEffect(() => {
-    return () => {
-      if (defaultValue) {
-        setNewValue(defaultValue);
-      }
-    };
-  }, []);
+    if (defaultValue) {
+      setNewValue(defaultValue);
+    }
+  }, [defaultValue]);
 
   return (
-    <div className="flex flex-col grow">
-      <div className="flex gap-2 items-center">
-        <Switch
-          defaultChecked={defaultValue}
-          onCheckedChange={setNewValue}
-          className={className}
-        />
-        {label && <Label>{label}</Label>}
-      </div>
-      {errors[name] && (
-        <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
-      )}
+    <div className="flex gap-2 items-center">
+      <Switch
+        defaultChecked={defaultValue}
+        onCheckedChange={handleChange}
+        className={className}
+      />
+      {label && <Label>{label}</Label>}
     </div>
   );
 };
@@ -453,8 +477,13 @@ const FormRadioGroup = <T extends FieldValues>({
     setValue,
     formState: { errors },
   } = useForm;
-  function setNewValue(value: string | number) {
-    const options = errors[name] ? defaultOptions : {};
+  function handleChange(value: string) {
+    const options = errors[name]
+      ? defaultOptions
+      : { shouldDirty: true, shouldTouch: true };
+    return setNewValue(value, options);
+  }
+  function setNewValue(value: string | number, options?: Partial<Options>) {
     setValue(
       name,
       valueAsNumber
@@ -464,39 +493,32 @@ const FormRadioGroup = <T extends FieldValues>({
     );
   }
   useEffect(() => {
-    return () => {
-      if (defaultValue) {
-        setNewValue(defaultValue);
-      }
-    };
-  }, []);
+    if (defaultValue) {
+      setNewValue(defaultValue);
+    }
+  }, [defaultValue]);
   return (
-    <div className="flex flex-col grow">
-      <RadioGroup
-        className={className}
-        onValueChange={setNewValue}
-        defaultValue={
-          defaultValue
-            ? defaultValue
-            : items[0].value !== "label-separator"
-            ? String(items[0].value)
-            : String(items[1].value)
-        }
-      >
-        {items.map(
-          (item) =>
-            item.value !== "label-separator" && (
-              <div className="flex items-center space-x-2" key={item.value}>
-                <RadioGroupItem value={String(item.value)} />
-                <Label>{item.label}</Label>
-              </div>
-            )
-        )}
-      </RadioGroup>
-      {errors[name] && (
-        <p className="text-sm text-red-500">{`${errors[name]?.message}`}</p>
+    <RadioGroup
+      className={className}
+      onValueChange={handleChange}
+      defaultValue={
+        defaultValue
+          ? defaultValue
+          : items[0].value !== "label-separator"
+          ? String(items[0].value)
+          : String(items[1].value)
+      }
+    >
+      {items.map(
+        (item) =>
+          item.value !== "label-separator" && (
+            <div className="flex items-center space-x-2" key={item.value}>
+              <RadioGroupItem value={String(item.value)} />
+              <Label>{item.label}</Label>
+            </div>
+          )
       )}
-    </div>
+    </RadioGroup>
   );
 };
 

@@ -8,16 +8,19 @@ import { useToast } from "@shadcn/ui/use-toast";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import HealthImage from "./../assets/health3.jpg";
 import { LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Tooltip } from "@shadcn/simplify/tooltip";
+import { useAuth } from "@src/providers/authProvider";
+
 
 const HealthPage = () => {
+  const { logout } = useAuth();
   const { toast } = useToast();
   const formHealth = z.object({
-    Vital: z.string().min(3, "Vital must be at least 3 characters"),
-    Tooth: z.string().min(3, "Tooth must be at least 3 characters"),
-    Vaccine: z.string().min(3, "Vaccine must be at least 3 characters"),
-    Parasite: z.string().min(3, "Parasite must be at least 3 characters"),
-    Blood: z.string().min(3, "Blood must be at least 3 characters"),
+    Vital: z.string().min(4, "Vital must be at least 4 characters"),
+    Tooth: z.string().min(4, "Tooth must be at least 4 characters"),
+    Vaccine: z.string().min(4, "Vaccine must be at least 4 characters"),
+    Parasite: z.string().min(4, "Parasite must be at least 4 characters"),
+    Blood: z.string().min(4, "Blood must be at least 4 characters"),
     Date: z.date().min(new Date(), "Date must be in the future"),
     HorseID: z.number(),
     EmployeeID: z.number(),
@@ -64,26 +67,15 @@ const HealthPage = () => {
   }
 
   async function onValid(formData: z.infer<typeof formHealth>) {
-    const healthData: Health = {
-      ...formData,
-      // Vital: "",
-      // Tooth: "",
-      // Vaccine: "",
-      // Parasite: "",
-      // Blood: "",
-      // Date: new Date(),
-      // HorseID: ,
-      // EmployeeID: ,
-    };
-
-    const res = await http.Post<Health, Health>("/healths", healthData);
+    
+    const res = await http.Post<Health, Health>("/healths", formData);
     if (res.ok) {
       toast({
         title: "You submitted the following values:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">
-              {JSON.stringify(healthData, null, 2)}
+              {JSON.stringify(res.data, null, 2)}
             </code>
           </pre>
         ),
@@ -173,7 +165,7 @@ const HealthPage = () => {
               </Label>
               <Label className="flex text-2xl mt-6 text-primary mx-64 ">
                 สุขภาพฟัน:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-4 ml-12 border  rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Tooth" type="text"></Form.Input>
+                <Form.Input className="w-3/4 h-14  ml-16 border  rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Tooth" type="text"></Form.Input>
               </Label >
               <Label className="flex text-primary text-2xl mt-6 mx-64 ">
                 วัคซีนป้องกัน:<span className="text-red-500">*</span>
@@ -185,24 +177,26 @@ const HealthPage = () => {
               </Label>
               <Label className="flex text-primary text-2xl mt-6 mx-64 ">
                 ตรวจเลือด:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-4 ml-12 border gap-5 rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
+                <Form.Input className="w-3/4 h-14 ml-16 border gap-5 rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
               </Label>
             
 
 
                 <Button
                   type="submit"
-                  className="w-48 h-12 text-2xl  text-center bg-green-600 rounded-md	mt-5 mx-auto	text-primary text-white	 	"
+                  className="w-48 h-12 text-2xl  text-center bg-green-600 rounded-md	mt-7 mx-auto	text-primary text-white	 	"
                 >
                   บันทึกข้อมูล
                 </Button>
               </div>
-              <Link to="/login/employee">
-                <LogOut className=" fixed bottom-9 right-16 w-10 h-10  cursor-pointer  text-red-500" />
-                <Label className="fixed bottom-2 right-16 text-primary text-1xl text-red-500 cursor-pointer">
-                  Log out
-                </Label>
-              </Link>
+                <Tooltip content={() => <span>Log out</span>}>
+                <LogOut 
+                  onClick={() => {
+                  console.log("logout");
+                  logout("employee");
+                }}
+                className=" fixed bottom-9 right-16 w-10 h-10  cursor-pointer  text-red-500" />
+                </Tooltip>
             </div>
           </div>
         )}

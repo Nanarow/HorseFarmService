@@ -7,7 +7,7 @@ import {
 
 interface TooltipProps {
   children: React.ReactNode;
-  content: () => React.ReactNode;
+  content: React.ReactNode;
   className?: string;
   side?: "top" | "right" | "bottom" | "left";
 }
@@ -22,7 +22,7 @@ export function Tooltip({
       <TooltipRoot>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent className={className} side={side}>
-          {content()}
+          {content}
         </TooltipContent>
       </TooltipRoot>
     </TooltipProvider>

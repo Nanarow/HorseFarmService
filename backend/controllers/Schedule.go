@@ -44,7 +44,7 @@ func CreateSchedule(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": "schedule successfully"})
+	c.JSON(http.StatusOK, gin.H{"data": "create schedule successfully"})
 }
 
 func GetAllLocations(c *gin.Context) {
@@ -56,4 +56,21 @@ func GetAllLocations(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": locations})
+}
+
+func DeleteSchedule(c *gin.Context) {
+	// create variable for store data as type of Schedule
+	var schedule entity.Schedule
+
+	// get id from url
+	id := c.Param("id")
+
+	// delete data in database and check error
+	if rows := entity.DB().Unscoped().Delete(&schedule, id).RowsAffected; rows == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "record not found"})
+		return
+	}
+
+	// response deleted data
+	c.JSON(http.StatusOK, gin.H{"data": "delete schedule successfully"})
 }

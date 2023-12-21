@@ -11,8 +11,8 @@ import {
 } from "react";
 
 type DragDropContextProps = {
-  dragData: string | undefined;
-  setDragData: React.Dispatch<React.SetStateAction<string | undefined>>;
+  selectedData: string | undefined;
+  setSelectedData: React.Dispatch<React.SetStateAction<string | undefined>>;
   dropZones: DropZone;
   addDropZone: (id: string, item: DropZoneItem) => void;
   removeDropZone: (id: string) => void;
@@ -29,9 +29,9 @@ function useDragDrop() {
   }
   return context;
 }
-type DropZoneState = "empty" | "added" | "adding" | "replacing";
+type DropZoneState = "empty" | "nonempty" | "adding" | "replacing";
 
-type DropZoneRender = {
+type DropZoneRenderer = {
   [x in DropZoneState]: React.ReactNode;
 };
 interface DropZoneItem {
@@ -43,7 +43,9 @@ interface DropZone {
 }
 
 const DragDrop = ({ children }: PropsWithChildren) => {
-  const [dragData, setDragData] = useState<string | undefined>(undefined);
+  const [selectedData, setSelectedData] = useState<string | undefined>(
+    undefined
+  );
   const [dropZones, setDropZones] = useState<DropZone>({});
 
   const addDropZone = (id: string, item: DropZoneItem) => {
@@ -68,8 +70,8 @@ const DragDrop = ({ children }: PropsWithChildren) => {
   return (
     <DragDropContext.Provider
       value={{
-        dragData,
-        setDragData,
+        selectedData,
+        setSelectedData,
         dropZones,
         addDropZone,
         removeDropZone,
@@ -90,26 +92,33 @@ const DraggableCard = ({
   value: string;
   className?: string;
 }>) => {
-  const { setDragData } = useDragDrop();
+  const { setSelectedData, selectedData } = useDragDrop();
+  const [isSelfSelected, setSelfSelected] = useState(false);
+  function setValue() {
+    if (selectedData === value) {
+      setSelectedData(undefined);
+      return;
+    }
+    setSelectedData(value);
+  }
+  useEffect(() => {
+    if (selectedData === value) {
+      setSelfSelected(true);
+    } else {
+      setSelfSelected(false);
+    }
+  }, [selectedData]);
+
   return (
     <Card
       className={cn(
         " w-full h-full rounded-sm flex justify-center items-center",
+        isSelfSelected ? "ring-ring ring-1" : "",
         className
       )}
       draggable
-      onDragStart={() => setDragData(value)}
-      // onDragEnd={() => {
-      //   setDragData(undefined);
-      //   Object.entries(dropZones).forEach(([id]) => {
-      //     if (!dropZones[id].value && dropZones[id].state === "adding") {
-      //       setDropZoneState(id, "empty");
-      //     }
-      //     if (dropZones[id].value && dropZones[id].state === "replacing") {
-      //       setDropZoneState(id, "added");
-      //     }
-      //   });
-      // }}
+      onDragStart={setValue}
+      onDoubleClick={setValue}
     >
       {children}
     </Card>
@@ -120,49 +129,64 @@ const DropZone = ({
   className,
   render,
   onValueChange,
+  value,
+  renderer,
 }: {
   className?: string;
+  value?: string;
   onValueChange?: (value: string | undefined) => void;
   render: ({}: {
     value: string | undefined;
     setValue: (value: string | undefined) => void;
     clear: () => void;
   }) => ReactNode;
+  renderer?: Partial<Omit<DropZoneRenderer, "nonempty">>;
 }) => {
   const id = useId();
   const {
     addDropZone,
-    dragData,
+    selectedData,
     setDropZoneValue,
     dropZones,
     setDropZoneState,
+    setSelectedData,
   } = useDragDrop();
 
   useEffect(() => {
     return () => {
-      addDropZone(id, { value: undefined, state: "empty" });
+      addDropZone(id, { value: value, state: value ? "nonempty" : "empty" });
     };
   }, []);
 
-  const setValue = (value: string | undefined) => {
-    setDropZoneValue(id, value);
-    setDropZoneState(id, "added");
-    onValueChange && onValueChange(value);
+  const setValue = () => {
+    if (dropZones[id]) {
+      if (dropZones[id].value === selectedData) {
+        return;
+      }
+    }
+    setSelectedData(undefined);
+    setDropZoneValue(id, selectedData);
+    setDropZoneState(id, selectedData ? "nonempty" : "empty");
+    onValueChange && onValueChange(selectedData);
   };
 
   const clear = () => {
+    setSelectedData(undefined);
     setDropZoneValue(id, undefined);
     setDropZoneState(id, "empty");
     onValueChange && onValueChange(undefined);
   };
-  const value = dropZones[id] ? dropZones[id].value : undefined;
-  const renderItems: DropZoneRender = {
+  const renderItems: DropZoneRenderer = {
     empty: (
       <div className=" w-full h-full rounded-md relative">
         <p className="abs-center">+</p>
       </div>
     ),
-    added: render({ value, setValue, clear }),
+    nonempty: render({
+      value: dropZones[id] ? dropZones[id].value : undefined,
+      setValue,
+      clear,
+    }),
     adding: (
       <div className=" w-full h-full border border-dashed rounded-md relative">
         <p className="abs-center">Drop here</p>
@@ -173,14 +197,16 @@ const DropZone = ({
         <p className="abs-center">Replace here</p>
       </div>
     ),
+    ...renderer,
   };
   return (
     <div
       onDrop={(e) => {
         e.stopPropagation();
         e.preventDefault();
-        setValue(dragData);
+        setValue();
       }}
+      onClick={() => setValue()}
       onDragEnter={(e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -191,7 +217,7 @@ const DropZone = ({
         if (dropZones[id]) {
           if (!dropZones[id].value) {
             setDropZoneState(id, "adding");
-          } else if (dropZones[id].value !== dragData) {
+          } else if (dropZones[id].value !== selectedData) {
             setDropZoneState(id, "replacing");
           }
         }
@@ -200,11 +226,11 @@ const DropZone = ({
         e.stopPropagation();
         e.preventDefault();
         if (dropZones[id]) {
-          if (!dropZones[id].value && dropZones[id].state === "adding") {
+          if (dropZones[id].state === "adding") {
             setDropZoneState(id, "empty");
           }
-          if (dropZones[id].value && dropZones[id].state === "replacing") {
-            setDropZoneState(id, "added");
+          if (dropZones[id].state === "replacing") {
+            setDropZoneState(id, "nonempty");
           }
         }
       }}

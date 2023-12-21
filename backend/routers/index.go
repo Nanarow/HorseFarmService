@@ -7,6 +7,10 @@ import (
 	"github.com/sut66/team16/backend/middlewares"
 )
 
+func SetUpRouter() *gin.Engine {
+	return gin.Default()
+}
+
 func InitRouter(route *gin.Engine) {
 
 	route.Use(middlewares.CORS())
@@ -16,25 +20,20 @@ func InitRouter(route *gin.Engine) {
 	route.POST("/login/employee", controllers.LoginEmployee)
 	route.POST("/logout/:role", controllers.Logout)
 
-	// example
-	// route.GET("/query", func(c *gin.Context) {
-	// 	c.JSON(200, gin.H{"message": c.Request.URL.Query()})
-	// })
-
 	authRouter := route.Group("/")
-	initRequiredAuth(authRouter)
+	initRequiredAuthRouter(authRouter)
 
 }
-func initRequiredAuth(route *gin.RouterGroup) {
+func initRequiredAuthRouter(route *gin.RouterGroup) {
 	// route.Use(middlewares.Authentication())
 	// route.Use(middlewares.Authorization())
 
-	// InitBasicApi[*entity.Food](route, "/foods")
-	// InitBasicApi[*entity.User](route, "/users")
-	InitBasicApi[*entity.Role](route, "/roles")
-	// InitBasicApi[*entity.RidingLevel](route, "/riding/levels")
-	// InitBasicApi[*entity.Course](route, "/courses")
-	// InitBasicApi[*entity.Schedule](route, "/schedules")
+	// InitBasicApi[*entity.Food](route, "/foods") complete
+	// InitBasicApi[*entity.User](route, "/users") complete
+	// InitBasicApi[*entity.Role](route, "/roles") unused
+	// InitBasicApi[*entity.RidingLevel](route, "/riding/levels") complete
+	// InitBasicApi[*entity.Course](route, "/courses") complete
+	// InitBasicApi[*entity.Schedule](route, "/schedules") complete
 	// InitBasicApi[*entity.Health](route, "/healths") complete
 	// InitBasicApi[*entity.Horse](route, "/horses") complete
 	// InitBasicApi[*entity.Gender](route, "/gender") complete
@@ -60,7 +59,7 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	route.GET("tours/types", controllers.GetAllTourTypes)
 	route.GET("tours/plans", controllers.GetAllPlans)
 
-    // prepare for enrollment system
+	// prepare for enrollment system
 	// route.GET("/enrollments/user/:id", controllers.GetAllEnrollmentsOfUser)
 	// route.POST("/enrollments", controllers.CreateEnrollment)
 
@@ -70,11 +69,10 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	route.PUT("/users/:id", controllers.UpdateUser)
 	route.DELETE("/users/:id", controllers.DeleteUser)
 
-	route.GET("/genders", controllers.GetAllGenders)
+	route.GET("/users/genders", controllers.GetAllGenders)
 	route.GET("/riding/levels", controllers.GetAllRidingLevels)
-	
 
-	// horse info managemnet system
+	// horse info management system
 	route.GET("/horses", controllers.GetAllHorse)
 	route.POST("/horses", controllers.CreateHorse)
 	route.PUT("/horses", controllers.UpdateHorse)
@@ -97,7 +95,6 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	// health system
 	route.POST("/healths", controllers.CreateHealth)
 
-
 	route.GET("/courses", controllers.GetAllCourses)
 	route.POST("/courses", controllers.CreateCourse)
 	route.PUT("/courses/:id", controllers.UpdateCourse)
@@ -106,8 +103,13 @@ func initRequiredAuth(route *gin.RouterGroup) {
 	route.GET("/schedules", controllers.GetAllSchedules)
 	route.POST("/schedules", controllers.CreateSchedule)
 	route.GET("/schedules/locations", controllers.GetAllLocations)
+	route.DELETE("/schedules/:id", controllers.DeleteSchedule)
 
 	route.POST("/foods", controllers.CreateFood)
 	route.PUT("/foods/:id", controllers.UpdateFood)
 	route.DELETE("/foods/:id", controllers.DeleteFood)
+
+	// stable managemnet system
+	// route.POST("/stables", controllers.CreateHorse)
+	// route.PUT("/stables/:id", controllers.UpdateHorse)
 }
