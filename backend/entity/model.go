@@ -62,7 +62,7 @@ type Course struct {
 	Duration     int
 	Participants int    `valid:"required~Participants is required,gte=10~Participants must be at least 10 "`
 	Description  string `gorm:"default:Course" `
-	Experience   float32
+	Experience   float64
 	EmployeeID   uint       `json:",omitempty"`
 	Employee     Employee   `gorm:"foreignKey:EmployeeID"`
 	LocationID   uint       `json:",omitempty"`

@@ -140,7 +140,7 @@ const CourseEdit = ({ course }: Props) => {
                 Experience<span className="text-red-500">*</span>
               </Label>
               <Form.Input
-                
+                defaultValue={course.Experience}
                 useForm={form}
                 name="Experience"
                 type="number"
