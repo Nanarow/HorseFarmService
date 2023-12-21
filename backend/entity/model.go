@@ -88,42 +88,48 @@ type Location struct {
 }
 type Horse struct {
 	BaseModel
-	Name       string
-	Age        int
-	Date       time.Time
-	Image      string
-	EmployeeID uint
-	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
-	BleedID    uint
-	Bleed      Bleed `gorm:"foreignKey:BleedID" valid:"-"`
-	SexID      uint
-	Sex        Sex `gorm:"foreignKey:SexID" valid:"-"`
-	StableID   uint
+	Name       string	 `gorm:"default:Horse" `
+	Age        int		 `valid:"required~Age is required,gte=0~Age must be at least 0 "`
+	Date       time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Image      string    `gorm:"default:Horse" `
+
+	EmployeeID uint      `json:",omitempty"`
+	Employee   Employee  `gorm:"foreignKey:EmployeeID" valid:"-"`
+
+	BleedID    uint      `json:",omitempty"`
+	Bleed      Bleed     `gorm:"foreignKey:BleedID" valid:"-"`
+
+	SexID      uint      `json:",omitempty"`
+	Sex        Sex       `gorm:"foreignKey:SexID" valid:"-"`
+
+	StableID   uint      `json:",omitempty"`
 	Stable     Stable    `gorm:"foreignKey:StableID" valid:"-"`
+
 	Courses    []*Course `gorm:"many2many:horse_courses;" json:"-"`
+
 	Healths    []Health  `json:"-"`
 }
 
 type Stable struct {
 	BaseModel
-	Maintenance time.Time
-	Cleaning    time.Time
-	Temperature int
+	Maintenance time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Cleaning    time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Temperature int 
 	Humidity    int
-	Description string
+	Description string  `valid:"required~Description is required,minstringlength(4)~Description must be at least 4"`
 	Horses      []Horse `json:"-"`
 }
 
 type Bleed struct {
 	BaseModel
-	Name        string
-	Description string
+	Name        string	`gorm:"default:Bleed" `
+	Description string  `json:",omitempty"`
 	Horses      []Horse `json:"-"`
 }
 
 type Sex struct {
 	BaseModel
-	Name   string
+	Name   string  `gorm:"default:Sex" `
 	Horses []Horse `json:"-"`
 }
 
