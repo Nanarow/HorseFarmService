@@ -202,4 +202,23 @@ func SetupData(db *gorm.DB) {
 		db.Create(&bleed)
 	}
 
+	// location data
+	locations := []Location{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "สนาม 1",
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "สนาม 2",
+		},
+		{
+			BaseModel: BaseModel{ID: 3},
+			Name:      "สนาม 3",
+		},
+	}
+	for _, location := range locations {
+		db.Create(&location)
+	}
+
 }

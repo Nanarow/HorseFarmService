@@ -154,6 +154,7 @@ export interface Course {
   Participants: number;
   Description: string;
   EmployeeID: number;
+  LocationID: number;
 }
 
 export interface Schedule {
@@ -162,7 +163,6 @@ export interface Schedule {
   Date: Date;
   StartTime: Date;
   Description: string;
-  LocationID: number;
 }
 
 export interface Location {

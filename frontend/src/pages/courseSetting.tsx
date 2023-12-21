@@ -9,28 +9,30 @@ import {
   TableHeader,
   TableRow,
 } from "@shadcn/ui/table";
-import { Course, Schedule } from "@src/interfaces";
+import { Course, Schedule } from "../../src/interfaces";
 import { addTimeToDate } from "@src/utils";
 import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import AddCourse from "../components/coursesetting/addCourse";
-import { XSquare } from "lucide-react";
+import CourseAlert from "@src/components/coursesetting/CourseAlert";
 import { useEffect, useState } from "react";
 import { http } from "@src/services/httpRequest";
-
-
+import CourseEdit from "@src/components/coursesetting/CourseEdit";
+import { XSquare } from "lucide-react";
 
 const courseSetting = () => {
   const [courses, setCourses] = useState<Course[]>([]);
-  useEffect(() => {
-    async function fetchCourses() {
+  async function fetchCourses() {
       const res = await http.Get<Course[]>("/courses");
       if (res.ok) {
         setCourses(res.data);
       }
     }
-
-    fetchCourses();
+  useEffect(() => {
+    return () => {
+      fetchCourses();
+    }
   }, []);
+
 
   function initSchedule() {
     const dayList: Schedule[][] = [];
@@ -45,7 +47,6 @@ const courseSetting = () => {
         scheduleList.push({
           CourseID: 0,
           Description: "",
-          LocationID: 0,
           Date: day,
           StartTime: addTimeToDate(day, {
             hours: i + 9,
@@ -71,29 +72,35 @@ const courseSetting = () => {
 
   return (
     <main className="w-full h-screen p-16">
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="hover:scale-110">Add Course</Button>
+        </DialogTrigger>
+        <AddCourse>
+        </AddCourse>
+      </Dialog>
       <DragDrop>
         <section className=" w-full flex gap-2 my-4">
-          {/* {courses().map((course) => (
-            <DraggableCard
-              key={course.id}
-              value={course.id.toString()}
-              className="h-10"
-            >
-              {course.title}
-            </DraggableCard>
-          ))} */}
-          {
-            courses.map((course,index) => (
+          {courses.map((course,index) => (
               <DraggableCard
                 key={index}
-                value={String(course.ID)}
-                className="h-10"
+                value={String(course.Name)}
+                className="h-10 reletive"
               >
                 {course.Name}
+                <span>--</span>
+                {course.Description}
+                <CourseEdit course={course} onSave={fetchCourses}></CourseEdit>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <XSquare className="text-red-500 hover:scale-110 cursor-pointer"></XSquare>
+                  </DialogTrigger>
+                  <CourseAlert courseID={course.ID!} onCancel={fetchCourses}></CourseAlert>
+                </Dialog>
               </DraggableCard>
             ))}
         </section>
-        <Table className=" border">
+        {/* <Table className=" border">
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
             <TableRow>
@@ -134,16 +141,9 @@ const courseSetting = () => {
               </TableRow>
             ))}
           </TableBody>
-        </Table>
+        </Table> */}
       </DragDrop>
       <Button onClick={onSave}>Save</Button>  
-      <Dialog>
-        <DialogTrigger asChild>
-          <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
-        </DialogTrigger>
-        <AddCourse>
-        </AddCourse>
-      </Dialog>
     </main>
   );
 };

@@ -9,7 +9,7 @@ import (
 )
 
 func GetAllSchedules(c *gin.Context) {
-	var schedules []entity.Course
+	var schedules []entity.Schedule
 
 	if err := entity.DB().Preload(clause.Associations).Find(&schedules).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -20,7 +20,7 @@ func GetAllSchedules(c *gin.Context) {
 }
 
 func GetSchedule(c *gin.Context) {
-	var schedule entity.Course
+	var schedule entity.Schedule
 	id := c.Param("id")
 
 	if err := entity.DB().Preload(clause.Associations).First(&schedule, id).Error; err != nil {
@@ -33,6 +33,11 @@ func GetSchedule(c *gin.Context) {
 
 func CreateSchedule(c *gin.Context) {
 	var schedule entity.Schedule
+
+	if err := c.ShouldBindJSON(&schedule); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	if err := entity.DB().Create(&schedule).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
