@@ -1,4 +1,4 @@
-import NavBar from "@src/components/navBar";
+import NavBar from "@src/components/navbar/navBar";
 
 const Course = () => {
   return (

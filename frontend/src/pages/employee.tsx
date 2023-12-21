@@ -7,8 +7,10 @@ import { useEffect, useState } from "react";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { Label } from "@shadcn/ui";
 import EmployeeImage from "./../assets/healthbg.jpg";
-import { ChevronLeftSquare } from 'lucide-react';
+import { ChevronLeftCircle} from 'lucide-react';
 import { Link } from "react-router-dom";
+import { Tooltip } from "@shadcn/simplify/tooltip";
+
 
 const EmployeePage = () => {
   const { toast } = useToast();
@@ -30,7 +32,7 @@ const EmployeePage = () => {
   const [position, setPosition] = useState<Position[] | undefined>(undefined);
   const [precede, setPrecede] = useState<Precede[] | undefined>(undefined);
   const [gender, setGender] = useState<Gender[] | undefined>(undefined);
-
+  // const [formData, setFormData] = useState<Employee>
   useEffect(() => {
     async function fetchPosition() {
       const res = await http.Get<Position[]>("/employees/positions");
@@ -103,6 +105,21 @@ const EmployeePage = () => {
         duration: 1500,
       });
     }
+
+    // const resetForm = () => {
+    //   formData({
+    //     FirstName: '',
+    //     LastName: '',
+    //     Email: '',
+    //     Phone: '',
+    //     Password: '',
+    //     DayOfBirth: '',
+    //     PositionID:  '',
+    //     PrecedeID:  '',
+    //     GenderID: '',
+    //     // Reset other fields as needed
+    //   });
+    // };
     
   }
   return (
@@ -139,11 +156,11 @@ const EmployeePage = () => {
                   </Label>
                   <Form.Select
                     valueAsNumber
-                    className="h-14 px-24 text-xl text-primary"
+                    className="h-14 px-10 ml-12 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                     useForm={form}
                     items={PrecedeToSelectItems(precede)}
                     name="PrecedeID"
-                    placeholder="Choose your preceed"
+                    placeholder="Choose your precede"
                     />
                   </div>
                 </>
@@ -152,7 +169,7 @@ const EmployeePage = () => {
               <Label className="flex text-primary text-xl mx-64 mt-8 ">
                 ชื่อ:<span className="text-red-500">*</span>
                 <Form.Input
-                  className="w-3/4 h-14  ml-28 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  className="w-3/4 h-14  ml-24 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="FirstName"
                   type="text"
@@ -161,7 +178,7 @@ const EmployeePage = () => {
               <Label className="flex text-xl mt-6 text-primary mx-64 ">
                 นามสกุล:<span className="text-red-500">*</span>
                 <Form.Input
-                  className="w-3/4 h-14 px-10 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  className="w-3/4 h-14 ml-14 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="LastName"
                   type="text"
@@ -176,7 +193,7 @@ const EmployeePage = () => {
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-14 px-10 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                      className="h-14 px-10 text-xl text-primary border rounded-md focus:outline-none bg-white focus:border-black"
                       useForm={form}
                       items={GenderToSelectItems(gender)}
                       name="GenderID"
@@ -191,7 +208,7 @@ const EmployeePage = () => {
                   วันเกิด:<span className="text-red-500 ">*</span>
                   <div className=" px-16 ml-4">
                     <Form.DatePicker
-                      className="w-96 h-14 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                      className="w-96 h-14  text-xl "
                       useForm={form}
                       name="DayOfBirth"
                     />
@@ -207,7 +224,7 @@ const EmployeePage = () => {
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-14 px-16 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                      className="h-14 px-14 text-xl text-primary border rounded-md  focus:outline-none bg-white focus:border-black"
                       useForm={form}
                       items={PositionToSelectItems(position)}
                       name="PositionID"
@@ -238,7 +255,7 @@ const EmployeePage = () => {
               <Label className="flex text-xl mt-6 text-primary mx-64 ">
                 Password:<span className="text-red-500">*</span>
                 <Form.Input
-                  className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  className="w-3/4 h-14 ml-14 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="Password"
                   type="text"
@@ -259,8 +276,10 @@ const EmployeePage = () => {
                   ยกเลิก
                 </Button>
 
-                <Link to="/login/employee">
-                <ChevronLeftSquare className="fixed bottom-4 right-16 w-10 h-10 text-red-500 cursor-pointer"/>
+                <Link to="/employee/list">
+                  <Tooltip content={() => <span>Back to Employee List</span>}>
+                  <ChevronLeftCircle  className="fixed bottom-4 right-16 w-10 h-10 text-red-500 cursor-pointer"/>
+                  </Tooltip>
                 </Link>
 
               </div>

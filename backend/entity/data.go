@@ -9,7 +9,7 @@ func SetupData(db *gorm.DB) {
 		return
 	}
 	// roles
-	roles := []Role{
+	roles := []*Role{
 		{
 			BaseModel: BaseModel{ID: 100},
 			Name:      "admin",
@@ -19,9 +19,10 @@ func SetupData(db *gorm.DB) {
 			Name:      "user",
 		},
 	}
-	for _, role := range roles {
-		db.Create(&role)
-	}
+	// for _, role := range roles {
+	// 	db.Create(&role)
+	// }
+	db.Create(roles)
 	// users
 	users := []User{
 		{
@@ -200,6 +201,68 @@ func SetupData(db *gorm.DB) {
 	}
 	for _, bleed := range bleeds {
 		db.Create(&bleed)
+	}
+
+	// precedes data
+	precedes := []Precede{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "นาย",
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "นางสาว",
+		},
+		{
+			BaseModel: BaseModel{ID: 3},
+			Name:      "เด็กหญิง",
+		},
+		{
+			BaseModel: BaseModel{ID: 4},
+			Name:      "เด็กชาย",
+		},
+	}
+	for _, precede := range precedes {
+		db.Create(&precede)
+	}
+
+	// gender data
+	genders := []Gender{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "Male",
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "Female",
+		},
+		{
+			BaseModel: BaseModel{ID: 3},
+			Name:      "Others",
+		},
+	}
+		
+	for _, gender := range genders {
+		db.Create(&gender)
+	}
+
+	// location data
+	locations := []Location{
+		{
+			BaseModel: BaseModel{ID: 1},
+			Name:      "สนาม 1",
+		},
+		{
+			BaseModel: BaseModel{ID: 2},
+			Name:      "สนาม 2",
+		},
+		{
+			BaseModel: BaseModel{ID: 3},
+			Name:      "สนาม 3",
+		},
+	}
+	for _, location := range locations {
+		db.Create(&location)
 	}
 
 }

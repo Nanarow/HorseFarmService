@@ -25,18 +25,18 @@ const EmployeeAlert = ({ employeeID, onCancel }: Props) => {
     <DialogContent className=" sm:max-w-[320px]">
       <DialogHeader className=" items-center sm:text-center">
         <AlertTriangleIcon className="text-red-500 h-16 w-16" />
-        <DialogTitle>Are you sure absolutely sure?</DialogTitle>
+        <DialogTitle>คุณแน่ใจใช่ไหม?</DialogTitle>
         <DialogDescription>
-          This action cannot be undone. This will cancel your Employee
+          การดำเนินการนี้ จะเป็นการลบข้อมูลทั้งหมดของพนักงาน
         </DialogDescription>
       </DialogHeader>
       <DialogFooter className="sm:justify-between">
         <DialogClose asChild>
-          <Button variant="secondary">No, Keep it</Button>
+          <Button variant="secondary">ไม่ ฉันไม่ต้องการลบ</Button>
         </DialogClose>
         <DialogClose asChild>
           <Button type="submit" variant={"destructive"} onClick={handleCancel}>
-            Yes, Cancel
+            ใช่ ฉันต้องการลบ
           </Button>
         </DialogClose>
       </DialogFooter>

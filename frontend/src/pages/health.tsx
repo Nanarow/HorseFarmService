@@ -8,9 +8,12 @@ import { useToast } from "@shadcn/ui/use-toast";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import HealthImage from "./../assets/health3.jpg";
 import { LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Tooltip } from "@shadcn/simplify/tooltip";
+import { useAuth } from "@src/providers/authProvider";
+
 
 const HealthPage = () => {
+  const { logout } = useAuth();
   const { toast } = useToast();
   const formHealth = z.object({
     Vital: z.string().min(4, "Vital must be at least 4 characters"),
@@ -162,7 +165,7 @@ const HealthPage = () => {
               </Label>
               <Label className="flex text-2xl mt-6 text-primary mx-64 ">
                 สุขภาพฟัน:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-4 ml-12 border  rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Tooth" type="text"></Form.Input>
+                <Form.Input className="w-3/4 h-14  ml-16 border  rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Tooth" type="text"></Form.Input>
               </Label >
               <Label className="flex text-primary text-2xl mt-6 mx-64 ">
                 วัคซีนป้องกัน:<span className="text-red-500">*</span>
@@ -174,24 +177,26 @@ const HealthPage = () => {
               </Label>
               <Label className="flex text-primary text-2xl mt-6 mx-64 ">
                 ตรวจเลือด:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-4 ml-12 border gap-5 rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
+                <Form.Input className="w-3/4 h-14 ml-16 border gap-5 rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
               </Label>
             
 
 
                 <Button
                   type="submit"
-                  className="w-48 h-12 text-2xl  text-center bg-green-600 rounded-md	mt-5 mx-auto	text-primary text-white	 	"
+                  className="w-48 h-12 text-2xl  text-center bg-green-600 rounded-md	mt-7 mx-auto	text-primary text-white	 	"
                 >
                   บันทึกข้อมูล
                 </Button>
               </div>
-              <Link to="/login/employee">
-                <LogOut className=" fixed bottom-9 right-16 w-10 h-10  cursor-pointer  text-red-500" />
-                <Label className="fixed bottom-2 right-16 text-primary text-1xl text-red-500 cursor-pointer">
-                  Log out
-                </Label>
-              </Link>
+                <Tooltip content={() => <span>Log out</span>}>
+                <LogOut 
+                  onClick={() => {
+                  console.log("logout");
+                  logout("employee");
+                }}
+                className=" fixed bottom-9 right-16 w-10 h-10  cursor-pointer  text-red-500" />
+                </Tooltip>
             </div>
           </div>
         )}

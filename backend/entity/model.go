@@ -20,7 +20,7 @@ type User struct {
 	Age             int
 	ExperiencePoint int
 
-	RoleID uint
+	RoleID uint `gorm:"default:101"`
 	Role   Role `gorm:"foreignKey:RoleID"`
 
 	GenderID uint
@@ -58,13 +58,15 @@ type Support struct {
 
 type Course struct {
 	BaseModel
-	Name         string
+	Name         string `gorm:"default:Course" `
 	Duration     int
-	Participants int
-	Description  string
-	Experience   float32
-	EmployeeID   uint
+	Participants int    `valid:"required~Participants is required,gte=10~Participants must be at least 10 "`
+	Description  string `gorm:"default:Course" `
+	Experience   float64
+	EmployeeID   uint       `json:",omitempty"`
 	Employee     Employee   `gorm:"foreignKey:EmployeeID"`
+	LocationID   uint       `json:",omitempty"`
+	Location     Location   `gorm:"foreignKey:LocationID"`
 	Schedules    []Schedule `json:"-"`
 	Horses       []*Horse   `gorm:"many2many:horse_courses;"`
 }
@@ -74,8 +76,6 @@ type Schedule struct {
 	Date        time.Time
 	StartTime   time.Time
 	Description string
-	LocationID  uint
-	Location    Location `gorm:"foreignKey:LocationID"`
 	CourseID    uint
 	Course      Course `gorm:"foreignKey:CourseID"`
 }
@@ -84,7 +84,7 @@ type Location struct {
 	BaseModel
 	Name        string
 	Description string
-	Schedules   []Schedule `json:"-"`
+	Course      []Course `json:"-"`
 }
 type Horse struct {
 	BaseModel
@@ -106,8 +106,7 @@ type Horse struct {
 	Stable     Stable    `gorm:"foreignKey:StableID" valid:"-"`
 
 	Courses    []*Course `gorm:"many2many:horse_courses;" json:"-"`
-
-	Healths    []Health  `json:"-"`
+	Healths    []Health  `json:",omitempty"`
 }
 
 type Stable struct {
@@ -149,7 +148,7 @@ type TourRegistration struct {
 	TourTypeID uint     `json:",omitempty"`
 	TourType   TourType `gorm:"foreignKey:TourTypeID"`
 
-	PlanID uint `json:",omitempty"`
+	PlanID uint `json:",omitempty" valid:"required~Plan is required,refer=plans~Plan does not exist"`
 	Plan   Plan `gorm:"foreignKey:PlanID"`
 
 	Email        string    `valid:"required~Email is required,email~Invalid email"`
@@ -189,7 +188,7 @@ type Employee struct {
 	Email      string    `valid:"required~Email is required,email~Invalid email"`
 	Password   string    `valid:"required~Password is required,minstringlength(4)~Password must be at 4 characters"`
 	DayOfBirth time.Time `valid:"required~DayOfBirth is required,past~DayOfBirth must be in the past"`
-	Phone      string    `valid:"required~Phone is required,minstringlength(10)~Phone must be at 10 characters"`
+	Phone      string    `valid:"required~Phone is required,stringlength(10|10)~Phone must be at 10 characters"`
 
 	Healths []Health `json:",omitempty"`
 	Horses  []Horse  `json:",omitempty"`

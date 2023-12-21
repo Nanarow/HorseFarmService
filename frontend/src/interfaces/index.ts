@@ -97,6 +97,7 @@ export interface Role {
 }
 
 export interface RidingLevel {
+  ID: number;
   Name: string;
   Description: string;
 }
@@ -153,7 +154,9 @@ export interface Course {
   Duration: number;
   Participants: number;
   Description: string;
+  Experience: number;
   EmployeeID: number;
+  LocationID: number;
 }
 
 export interface Schedule {
@@ -162,7 +165,6 @@ export interface Schedule {
   Date: Date;
   StartTime: Date;
   Description: string;
-  LocationID: number;
 }
 
 export interface Location {
