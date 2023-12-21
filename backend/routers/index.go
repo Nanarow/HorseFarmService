@@ -75,7 +75,7 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	// horse info management system
 	route.GET("/horses", controllers.GetAllHorse)
 	route.POST("/horses", controllers.CreateHorse)
-	route.PUT("/horses", controllers.UpdateHorse)
+	route.PUT("/horses/:id", controllers.UpdateHorse)
 	route.DELETE("/horses/:id", controllers.DeleteHorse)
 
 	route.GET("horses/bleeds", controllers.GetAllBleeds)
