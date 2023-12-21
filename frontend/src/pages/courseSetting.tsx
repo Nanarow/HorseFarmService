@@ -115,7 +115,7 @@ const courseSetting = () => {
               <DraggableCard
                 key={index}
                 value={course.ID.toString()}
-                className="h-10 reletive"
+                className="h-10 "
               >
                 {course.Name}
                 <span>--</span>
