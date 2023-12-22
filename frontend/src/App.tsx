@@ -18,6 +18,7 @@ import ValidateForm from "./examples/form-with-validation";
 import NoPage from "./pages/noPage";
 import DragDropTable from "./examples/drag-drop-table";
 import EmployeeList from "./components/Employee/EmployeeList";
+import UserList from "./components/User/UserList";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/employee" element={<Employee />}></Route>
         <Route path="/employee/list" element={<EmployeeList />}></Route>
         <Route path="/user" element={<User />}></Route>
+        <Route path="/user/list" element={<UserList />}></Route>
       </Route>
 
       <Route element={<PrivateRoute position={201} path="/login/employee" />}>

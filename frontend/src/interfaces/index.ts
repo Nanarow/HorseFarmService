@@ -80,6 +80,7 @@ export interface User {
   Gender: Gender;
   ExperiencePoint: number;
   RidingLevelID: number;
+  RidingLevel: RidingLevel;
 }
 
 export interface Support {

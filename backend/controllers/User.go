@@ -15,11 +15,8 @@ func GetAllUser(c *gin.Context) {
 	// create variable for store data as type of User array
 	var users []entity.User
 
-	// get id from url
-	id := c.Param("id")
-
 	// get data form database and check error
-	if err := entity.DB().Where("user_id = ?", id).Omit("UserID").Find(&users).Error; err != nil {
+	if err := entity.DB().Where("role_id = ?",101).Joins("Gender").Joins("RidingLevel").Omit("Password").Find(&users).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -30,7 +27,7 @@ func GetAllUser(c *gin.Context) {
 
 // GET /users/:id
 func GetUser(c *gin.Context) {
-	// create variable for store data as type of 
+	// create variable for store data as type of
 	var user entity.User
 	// get id from url
 	id := c.Param("id")
