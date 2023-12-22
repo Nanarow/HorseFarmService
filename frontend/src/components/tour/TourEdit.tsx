@@ -1,6 +1,5 @@
 import Form from "@shadcn/simplify/form";
 import { useEffect, useState } from "react";
-import { z } from "zod";
 import { Plan, TourRegistration, TourType } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
@@ -19,6 +18,7 @@ import {
 import { ToItemList } from "@src/utils";
 import { useAuth } from "@src/providers/authProvider";
 import { Edit } from "lucide-react";
+import { TourFormData, tourFormSchema } from "@src/validator";
 interface Props {
   tour: TourRegistration;
   onSave(): void;
@@ -26,14 +26,6 @@ interface Props {
 const TourEdit = ({ tour, onSave }: Props) => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const formSchema = z.object({
-    Name: z.string(),
-    Date: z.date(),
-    Participants: z.number(),
-    TourTypeID: z.number(),
-    PlanID: z.number(),
-    Email: z.string().email(),
-  });
   const [tourType, setTourType] = useState<TourType[]>([]);
   const [plans, setPlans] = useState<Plan[]>([]);
   const [open, setOpen] = useState(false);
@@ -56,7 +48,7 @@ const TourEdit = ({ tour, onSave }: Props) => {
     };
   }, []);
 
-  async function onValid(formData: z.infer<typeof formSchema>) {
+  async function onValid(formData: TourFormData) {
     const newTour = {
       ...formData,
       UserID: user?.ID,
@@ -93,7 +85,7 @@ const TourEdit = ({ tour, onSave }: Props) => {
         </DialogHeader>
         <Form
           className="grid gap-2 mt-4"
-          validator={formSchema}
+          validator={tourFormSchema}
           onValid={onValid}
           onInvalid={(data) => console.log(data)}
           fields={({ form }) => (
