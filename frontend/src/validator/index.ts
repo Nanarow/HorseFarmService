@@ -68,3 +68,19 @@ export const healthFormSchema = z.object({
 });
 
 export type HealthFormData = z.infer<typeof healthFormSchema>
+
+export const userFormSchema = z.object({
+  FirstName: z.string().min(1, "FirstName is required"),
+  LastName: z.string().min(1, "LastName is required"),
+  Age: z.number({ required_error: "Age is required" }),
+  ExperiencePoint: z.number().nonnegative(),
+  // Gender: z.enum(["male", "female"]),
+  Email: z.string().email({ message: "Invalid email address" }),
+  Password: z.string().min(8, "Password must be at least 8 characters"),
+  Phone: z.string().length(10, "Phone number must be 10 characters"),
+  Profile: z.string(),
+  GenderID: z.number(),
+  RidingLevelID: z.number(),
+});
+
+export type UserFormData =  z.infer<typeof userFormSchema>
