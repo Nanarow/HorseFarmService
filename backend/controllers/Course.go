@@ -83,3 +83,14 @@ func DeleteCourse(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": "delete course successfully"})
 }
+
+func GetAllLocations(c *gin.Context) {
+	var locations []entity.Course
+
+	if err := entity.DB().Preload(clause.Associations).Find(&locations).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": locations})
+}

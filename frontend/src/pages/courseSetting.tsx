@@ -21,7 +21,7 @@ import { XSquare } from "lucide-react";
 
 const courseSetting = () => {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [schedules, setSchedules] = useState<Schedule[] | undefined>(undefined);
 
   async function fetchSchedules() {
     const res = await http.Get<Schedule[]>("/schedules");
@@ -43,8 +43,11 @@ const courseSetting = () => {
     };
   }, []);
 
-
   async function handleChange(time: Date, value: string | undefined) {
+    console.log(time, value);
+    if (!schedules) {
+      return;
+    }
     for (let i = 0; i < schedules.length; i++) {
       const s = schedules[i];
       const start_time = new Date(s.StartTime);
@@ -76,6 +79,9 @@ const courseSetting = () => {
     }
   }
   function getCourse(time: Date) {
+    if (!schedules) {
+      return;
+    }
     for (let i = 0; i < schedules.length; i++) {
       const s = schedules[i];
       const start_time = new Date(s.StartTime);
@@ -101,17 +107,16 @@ const courseSetting = () => {
         <DialogTrigger asChild>
           <Button className="hover:scale-110">Add Course</Button>
         </DialogTrigger>
-        <AddCourse>
-        </AddCourse>
+        <AddCourse></AddCourse>
       </Dialog>
       <DragDrop>
         <section className=" w-full flex gap-2 my-4">
           {courses.length > 0 &&
-            courses.map((course,index) => (
+            courses.map((course, index) => (
               <DraggableCard
                 key={index}
-                value={String(course.Name)}
-                className="h-10 reletive"
+                value={course.ID.toString()}
+                className="h-10 "
               >
                 {course.Name}
                 <span>--</span>
@@ -121,7 +126,10 @@ const courseSetting = () => {
                   <DialogTrigger asChild>
                     <XSquare className="text-red-500 hover:scale-110 cursor-pointer"></XSquare>
                   </DialogTrigger>
-                  <CourseAlert courseID={course.ID!} onCancel={fetchCourses}></CourseAlert>
+                  <CourseAlert
+                    courseID={course.ID!}
+                    onCancel={fetchCourses}
+                  ></CourseAlert>
                 </Dialog>
               </DraggableCard>
             ))}
@@ -131,26 +139,33 @@ const courseSetting = () => {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[20%] border">Day</TableHead>
-              <TableHead className="w-[10%] border">time 1</TableHead>
-              {/* {days[0].map((head, index) => (
-                <TableHead key={index} className="border text-center w-[10%]">
-                  {head.StartTime.toLocaleTimeString()}
-                </TableHead>
-              ))} */}
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => {
+                const start_time = addTimeToDate(
+                  new Date(new Date().toDateString()),
+                  {
+                    hours: index + 9,
+                  }
+                );
+                return (
+                  <TableHead key={index} className="border text-center w-[10%]">
+                    {start_time.toTimeString().slice(0, 8)}
+                  </TableHead>
+                );
+              })}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[1, 2, 3, 4, 5, 6, 7].map((_, index) => {
-              const day = addTimeToDate(new Date(), {
-                days: index + 1,
-              });
-              return (
-                <TableRow key={index} className="border text-center">
-                  <TableCell className=" w-[20%]">
-                    {day.toDateString()}
-                  </TableCell>
-                  {schedules.length > 0 &&
-                    [1, 2, 3, 4, 5, 6, 7, 8].map((_, time_index) => {
+            {schedules &&
+              [1, 2, 3, 4, 5, 6, 7].map((_, index) => {
+                const day = addTimeToDate(new Date(), {
+                  days: index + 1,
+                });
+                return (
+                  <TableRow key={index} className="border text-center">
+                    <TableCell className=" w-[20%]">
+                      {day.toDateString()}
+                    </TableCell>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((_, time_index) => {
                       const start_time = addTimeToDate(
                         new Date(day.toDateString()),
                         {
@@ -167,35 +182,22 @@ const courseSetting = () => {
                             onValueChange={(value) =>
                               handleChange(start_time, value)
                             }
-                            render={({ value, setValue }) =>
-                              value && (
-                                <>
-                                  <p className=" " key={value}>
-                                    {getCourseName(+value)}
-                                  </p>
-                                  <button onClick={() => setValue(undefined)}>
-                                    -
-                                  </button>
-                                </>
-                              )
-                            }
+                            render={({ value, clear }) => (
+                              <>
+                                <p key={value}>{getCourseName(+value)}</p>
+                                <button onClick={clear}>-</button>
+                              </>
+                            )}
                           ></DropZone>
                         </TableCell>
                       );
                     })}
-                </TableRow>
-              );
-            })}
+                  </TableRow>
+                );
+              })}
           </TableBody>
-        </Table> 
+        </Table>
       </DragDrop>
-      {/* <Button onClick={onSave}>Save</Button> */}
-      <Dialog>
-        <DialogTrigger asChild>
-          <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
-        </DialogTrigger>
-        <AddCourse></AddCourse>
-      </Dialog>
     </main>
   );
 };

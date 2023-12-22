@@ -58,16 +58,16 @@ type Support struct {
 
 type Course struct {
 	BaseModel
-	Name         string `gorm:"default:Course" `
-	Duration     int
-	Participants int    `valid:"required~Participants is required,gte=10~Participants must be at least 10 "`
-	Description  string `gorm:"default:Course" `
-	Experience   float32
-	EmployeeID   uint       `json:",omitempty"`
+	Name         string     `gorm:"unique"`
+	Duration     int        `valid:"required~Duration is required"`
+	Participants int        `valid:"required~Participants is required,lte=12~Participants not more than 12"`
+	Description  string     
+	Experience   float64    `valid:"required~Experience is required"`
+	EmployeeID   uint       `json:",omitempty" valid:"required~Employee is required,refer=employees~Employee does not exist"`
 	Employee     Employee   `gorm:"foreignKey:EmployeeID"`
-	LocationID   uint       `json:",omitempty"`
+	LocationID   uint       `json:",omitempty" valid:"required~Location is required,refer=locations~Location does not exist"`
 	Location     Location   `gorm:"foreignKey:LocationID"`
-	Schedules    []Schedule `json:"-"`
+	Schedules    []Schedule `json:",omitempty"`
 	Horses       []*Horse   `gorm:"many2many:horse_courses;"`
 }
 
@@ -88,42 +88,47 @@ type Location struct {
 }
 type Horse struct {
 	BaseModel
-	Name       string
-	Age        int
-	Date       time.Time
-	Image      string
-	EmployeeID uint
-	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
-	BleedID    uint
-	Bleed      Bleed `gorm:"foreignKey:BleedID" valid:"-"`
-	SexID      uint
-	Sex        Sex `gorm:"foreignKey:SexID" valid:"-"`
-	StableID   uint
+	Name       string	 `gorm:"default:Horse" `
+	Age        int		 `valid:"required~Age is required,gte=0~Age must be at least 0 "`
+	Date       time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Image      string    `gorm:"default:Horse" `
+
+	EmployeeID uint      `json:",omitempty"`
+	Employee   Employee  `gorm:"foreignKey:EmployeeID" valid:"-"`
+
+	BleedID    uint      `json:",omitempty"`
+	Bleed      Bleed     `gorm:"foreignKey:BleedID" valid:"-"`
+
+	SexID      uint      `json:",omitempty"`
+	Sex        Sex       `gorm:"foreignKey:SexID" valid:"-"`
+
+	StableID   uint      `json:",omitempty"`
 	Stable     Stable    `gorm:"foreignKey:StableID" valid:"-"`
+
 	Courses    []*Course `gorm:"many2many:horse_courses;" json:"-"`
 	Healths    []Health  `json:",omitempty"`
 }
 
 type Stable struct {
 	BaseModel
-	Maintenance time.Time
-	Cleaning    time.Time
-	Temperature int
+	Maintenance time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Cleaning    time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Temperature int 
 	Humidity    int
-	Description string
+	Description string  `valid:"required~Description is required,minstringlength(4)~Description must be at least 4"`
 	Horses      []Horse `json:"-"`
 }
 
 type Bleed struct {
 	BaseModel
-	Name        string
-	Description string
+	Name        string	`gorm:"default:Bleed" `
+	Description string  `json:",omitempty"`
 	Horses      []Horse `json:"-"`
 }
 
 type Sex struct {
 	BaseModel
-	Name   string
+	Name   string  `gorm:"default:Sex" `
 	Horses []Horse `json:"-"`
 }
 
