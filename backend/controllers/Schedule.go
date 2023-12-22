@@ -47,16 +47,16 @@ func CreateSchedule(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": "create schedule successfully"})
 }
 
-func GetAllLocations(c *gin.Context) {
-	var locations []entity.Course
+// func GetAllLocations(c *gin.Context) {
+// 	var locations []entity.Course
 
-	if err := entity.DB().Preload(clause.Associations).Find(&locations).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+// 	if err := entity.DB().Preload(clause.Associations).Find(&locations).Error; err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": locations})
-}
+// 	c.JSON(http.StatusOK, gin.H{"data": locations})
+// }
 
 func DeleteSchedule(c *gin.Context) {
 	// create variable for store data as type of Schedule

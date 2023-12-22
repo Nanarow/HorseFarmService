@@ -58,10 +58,10 @@ type Support struct {
 
 type Course struct {
 	BaseModel
-	Name         string     `gorm:"default:Course"`
+	Name         string     `gorm:"unique"`
 	Duration     int        `valid:"required~Duration is required"`
-	Participants int        `valid:"required~Participants is required,gte=15~Participants must be at least 15"`
-	Description  string     `valid:"required~Description is required"`
+	Participants int        `valid:"required~Participants is required,lte=12~Participants not more than 12"`
+	Description  string     
 	Experience   float64    `valid:"required~Experience is required"`
 	EmployeeID   uint       `json:",omitempty" valid:"required~Employee is required,refer=employees~Employee does not exist"`
 	Employee     Employee   `gorm:"foreignKey:EmployeeID"`
