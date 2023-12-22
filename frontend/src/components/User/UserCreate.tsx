@@ -32,7 +32,7 @@ const UserPage = () => {
   });
 
   async function fetchGender() {
-    const res = await http.Get<Gender[]>("/genders")
+    const res = await http.Get<Gender[]>("/users/genders")
     if (res.ok) {
       setGender(res.data);
     }

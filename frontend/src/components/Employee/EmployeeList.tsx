@@ -23,7 +23,7 @@ import { useAuth } from "@src/providers/authProvider";
 
 
 function EmployeeList() {
-    const { logout } = useAuth();
+    const { logout} = useAuth();
     const navigate = useNavigate();
     const [employees, setEmployee] = useState<Employee[]>([]);
     async function fetchEmployee() {
@@ -47,18 +47,18 @@ function EmployeeList() {
     
     return (
         <div className="w-full h-full relative p-14">
-            <Tooltip content={() => <span>เพิ่มข้อมูลพนักงาน</span>} side="right">
+            <Tooltip content={"เพิ่มข้อมูลพนักงาน"} side="right">
                 <UserPlus 
                     onClick={handleClick}
-                    className="absolute top-4 left-8 text-blue-500 h-12 w-8" />
+                    className="absolute top-4 left-8 text-blue-500 h-8 w-6" />
             </Tooltip>
 
-            <Tooltip content={() => <span>Log out</span>}>
+            <Tooltip content={"Log out"}>
                 <LogOut onClick={() => {
                     console.log("logout");
-                    logout("admin");
+                    logout();
                   }}
-                  className=" absolute top-4 right-8  text-red-500 h-12 w-8" />  
+                  className=" absolute top-4 right-8  text-red-500 h-8 w-6" />  
             </Tooltip>
 
             <Table className="border mt-6">

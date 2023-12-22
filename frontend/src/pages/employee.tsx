@@ -145,18 +145,18 @@ const EmployeePage = () => {
 
           <div className="flex flex-col ">
 
-            <h1 className="text-4xl font-black text-primary  mt-2 mx-32 text-center">
+            <h1 className="text-2xl font-black text-primary  mt-2 mx-64 text-center">
             เพิ่มข้อมูลพนักงาน
             </h1>
             {precede && (
               <>
-                <div className="flex gap-10 mx-64 mt-6"> 
-                  <Label className="text-xl text-primary w-48 ">
+                <div className="flex gap-32 mx-72 mt-6 "> 
+                  <Label className="text-xl text-primary w-32 ">
                     คำนำหน้า:<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
                     valueAsNumber
-                    className="h-14 px-10 ml-12 text-xl text-primary border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                    className="h-9  text-primary border rounded-md focus:outline-none bg-white focus:border-black"
                     useForm={form}
                     items={PrecedeToSelectItems(precede)}
                     name="PrecedeID"
@@ -166,10 +166,10 @@ const EmployeePage = () => {
                 </>
               )}
 
-              <Label className="flex text-primary text-xl mx-64 mt-8 ">
+              <Label className="flex text-primary text-xl mx-72 gap-32 mt-5 ">
                 ชื่อ:<span className="text-red-500">*</span>
                 <Form.Input
-                  className="w-3/4 h-14  ml-24 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  className=" h-9  border rounded-md  focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="FirstName"
                   type="text"
@@ -187,13 +187,13 @@ const EmployeePage = () => {
 
               {gender && (
                 <>
-                  <div className="flex gap-24 mx-64 mt-6">
+                  <div className="flex gap-32 mx-72 text-xl mt-6">
                     <Label className="text-xl text-primary flex">
                       เพศ: <span className="text-red-500">*</span>
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-14 px-10 text-xl text-primary border rounded-md focus:outline-none bg-white focus:border-black"
+                      className="h-9 border rounded-md focus:outline-none bg-white focus:border-black"
                       useForm={form}
                       items={GenderToSelectItems(gender)}
                       name="GenderID"
@@ -218,13 +218,13 @@ const EmployeePage = () => {
 
               {position && (
                 <>
-                  <div className="flex gap-16 mx-64 mt-6">
+                  <div className="flex gap-32 mx-72 mt-6">
                     <Label className="text-xl text-primary flex">
                       ตำแหน่ง: <span className="text-red-500">*</span>
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-14 px-14 text-xl text-primary border rounded-md  focus:outline-none bg-white focus:border-black"
+                      className="h-19 px-14 border rounded-md  focus:outline-none bg-white focus:border-black"
                       useForm={form}
                       items={PositionToSelectItems(position)}
                       name="PositionID"
@@ -277,7 +277,7 @@ const EmployeePage = () => {
                 </Button>
 
                 <Link to="/employee/list">
-                  <Tooltip content={() => <span>Back to Employee List</span>}>
+                  <Tooltip content={"Back to Employee List"}>
                   <ChevronLeftCircle  className="fixed bottom-4 right-16 w-10 h-10 text-red-500 cursor-pointer"/>
                   </Tooltip>
                 </Link>

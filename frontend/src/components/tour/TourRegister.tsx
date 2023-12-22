@@ -5,7 +5,6 @@ import { Plan, TourType } from "@src/interfaces";
 import { http } from "@src/services/httpRequest";
 import { Checkbox, Label } from "@shadcn/ui";
 import { useToast } from "@shadcn/ui/use-toast";
-
 import { ArrowRightSquareIcon } from "lucide-react";
 import { ToItemList } from "@src/utils";
 import { useAuth } from "@src/providers/authProvider";
@@ -55,6 +54,7 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
       toast({
         title: res.error,
         duration: 1500,
+        variant: "destructive",
       });
     }
   }

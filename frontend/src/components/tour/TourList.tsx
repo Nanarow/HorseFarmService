@@ -1,4 +1,4 @@
-import { ArrowLeftSquareIcon, XSquare } from "lucide-react";
+import { ArrowLeftSquareIcon, CheckIcon } from "lucide-react";
 import { TourRegistration } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
@@ -12,7 +12,6 @@ import {
   TableRow,
 } from "@shadcn/ui/table";
 import TourEdit from "./TourEdit";
-import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import { format } from "date-fns";
 import TourAlert from "./TourAlert";
 import { useAuth } from "@src/providers/authProvider";
@@ -81,18 +80,14 @@ const TourList = ({ onClick }: { onClick: () => void }) => {
                 {tour.Participants}
               </TableCell>
               <TableCell className=" relative">
-                <TourEdit tour={tour} onSave={fetchTours}></TourEdit>
+                {new Date(tour.Date).getTime() > new Date().getTime() ? (
+                  <TourEdit tour={tour} onSave={fetchTours}></TourEdit>
+                ) : (
+                  <CheckIcon className="text-green-500 abs-center" />
+                )}
               </TableCell>
               <TableCell className=" relative">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
-                  </DialogTrigger>
-                  <TourAlert
-                    tourID={tour.ID!}
-                    onCancel={fetchTours}
-                  ></TourAlert>
-                </Dialog>
+                <TourAlert tourID={tour.ID!} onCancel={fetchTours}></TourAlert>
               </TableCell>
             </TableRow>
           ))}
