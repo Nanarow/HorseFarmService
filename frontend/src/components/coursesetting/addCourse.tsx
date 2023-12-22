@@ -20,7 +20,7 @@ const AddCourse = () => {
   const {employee} = useAuth()
   const [location, setLocation] = useState<Location[] | undefined>(undefined);
   async function fetchLocation() {
-    const res = await http.Get<Location[]>("/schedules/locations");
+    const res = await http.Get<Location[]>("/courses/locations");
     if (res.ok) {
       setLocation(res.data);
     }
@@ -44,11 +44,10 @@ const AddCourse = () => {
   const ValidCourseSetting = z.object({
     Name: z.string(),
     Duration: z.number({ required_error: "Duration is required" }),
-    Participants: z.number().min(10, "Participants must be at least 15"),
-    Description: z.string().min(1, "Description is required"),
+    Participants: z.number().max(12, "Participants not more than 12"),
+    Description: z.string().optional(),
     Experience: z.number({ required_error: "Experience is required" }),
     LocationID: z.number(),
-    EmployeeID: z.number(),
   });
 
   async function onValid(formData: z.infer<typeof ValidCourseSetting>) {
@@ -111,7 +110,7 @@ const AddCourse = () => {
               className="w-full"
             />
             <Label>
-              Description<span className="text-red-500">*</span>
+              Description
             </Label>
             <Form.Input
               useForm={form}

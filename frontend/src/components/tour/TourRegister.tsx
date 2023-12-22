@@ -1,17 +1,16 @@
 import tourImage from "@src/assets/tourbg-2.jpg";
 import Form from "@shadcn/simplify/form";
 import { useEffect, useState } from "react";
-import { z } from "zod";
 import { Plan, TourType } from "@src/interfaces";
 import { http } from "@src/services/httpRequest";
 import { Checkbox, Label } from "@shadcn/ui";
 import { useToast } from "@shadcn/ui/use-toast";
-
 import { ArrowRightSquareIcon } from "lucide-react";
 import { ToItemList } from "@src/utils";
 import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { Skeleton } from "@shadcn/ui/skeleton";
+import { TourFormData, tourFormSchema } from "@src/validator";
 
 const TourRegister = ({ onClick }: { onClick: () => void }) => {
   const { toast } = useToast();
@@ -20,15 +19,6 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [email, setEmail] = useState("");
   const [check, setCheck] = useState(false);
-
-  const formSchema = z.object({
-    Date: z.date().min(new Date(), "Date must be in the future"),
-    Participants: z.number().min(8, "Participants must be at least 8"),
-    Email: z.string().email("Invalid email"),
-    Name: z.string().optional(),
-    TourTypeID: z.number(),
-    PlanID: z.number(),
-  });
 
   async function fetchTour() {
     const res = await http.Get<TourType[]>("/tours/types");
@@ -49,7 +39,7 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
     };
   }, []);
 
-  async function onValid(formData: z.infer<typeof formSchema>) {
+  async function onValid(formData: TourFormData) {
     const tour = {
       ...formData,
       UserID: user?.ID,
@@ -64,6 +54,7 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
       toast({
         title: res.error,
         duration: 1500,
+        variant: "destructive",
       });
     }
   }
@@ -90,7 +81,7 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
           </Label>
           <Form
             className="flex flex-col gap-2 mt-4"
-            validator={formSchema}
+            validator={tourFormSchema}
             onValid={onValid}
             onInvalid={(data) => console.log(data)}
             fields={({ form, errors }) => (
