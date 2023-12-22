@@ -21,7 +21,7 @@ import { XSquare } from "lucide-react";
 
 const courseSetting = () => {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [schedules, setSchedules] = useState<Schedule[]|undefined>(undefined);
+  const [schedules, setSchedules] = useState<Schedule[] | undefined>(undefined);
 
   async function fetchSchedules() {
     const res = await http.Get<Schedule[]>("/schedules");
@@ -44,8 +44,9 @@ const courseSetting = () => {
   }, []);
 
   async function handleChange(time: Date, value: string | undefined) {
+    console.log(time, value);
     if (!schedules) {
-      return
+      return;
     }
     for (let i = 0; i < schedules.length; i++) {
       const s = schedules[i];
@@ -79,7 +80,7 @@ const courseSetting = () => {
   }
   function getCourse(time: Date) {
     if (!schedules) {
-      return
+      return;
     }
     for (let i = 0; i < schedules.length; i++) {
       const s = schedules[i];
@@ -115,7 +116,7 @@ const courseSetting = () => {
               <DraggableCard
                 key={index}
                 value={course.ID.toString()}
-                className="h-10 reletive"
+                className="h-10 "
               >
                 {course.Name}
                 <span>--</span>
@@ -147,23 +148,24 @@ const courseSetting = () => {
                 );
                 return (
                   <TableHead key={index} className="border text-center w-[10%]">
-                    {start_time.toTimeString().slice(0,8)}
+                    {start_time.toTimeString().slice(0, 8)}
                   </TableHead>
                 );
               })}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {schedules && [1, 2, 3, 4, 5, 6, 7].map((_, index) => {
-              const day = addTimeToDate(new Date(), {
-                days: index + 1,
-              });
-              return (
-                <TableRow key={index} className="border text-center">
-                  <TableCell className=" w-[20%]">
-                    {day.toDateString()}
-                  </TableCell>
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((_, time_index) => {
+            {schedules &&
+              [1, 2, 3, 4, 5, 6, 7].map((_, index) => {
+                const day = addTimeToDate(new Date(), {
+                  days: index + 1,
+                });
+                return (
+                  <TableRow key={index} className="border text-center">
+                    <TableCell className=" w-[20%]">
+                      {day.toDateString()}
+                    </TableCell>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((_, time_index) => {
                       const start_time = addTimeToDate(
                         new Date(day.toDateString()),
                         {
@@ -180,35 +182,22 @@ const courseSetting = () => {
                             onValueChange={(value) =>
                               handleChange(start_time, value)
                             }
-                            render={({ value, setValue }) =>
-                            value && (
+                            render={({ value, clear }) => (
                               <>
-                                <p key={value}>
-                                  {getCourseName(+value)}
-                                </p>
-                                <button onClick={() => setValue(undefined)}>
-                                  -
-                                </button>
+                                <p key={value}>{getCourseName(+value)}</p>
+                                <button onClick={clear}>-</button>
                               </>
-                            )
-                            }
+                            )}
                           ></DropZone>
                         </TableCell>
                       );
                     })}
-                </TableRow>
-              );
-            })}
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </DragDrop>
-      {/* <Button onClick={onSave}>Save</Button> */}
-      {/* <Dialog>
-        <DialogTrigger asChild>
-          <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
-        </DialogTrigger>
-        <AddCourse></AddCourse>
-      </Dialog> */}
     </main>
   );
 };

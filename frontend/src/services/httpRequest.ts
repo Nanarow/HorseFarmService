@@ -1,56 +1,39 @@
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 
-type SuccessResponse<DataType> = {
-  ok: true;
-  data: DataType;
-};
-
-type FailedResponse = {
-  ok: false;
-  error: string;
-};
-
 class HttpRequest {
   private readonly base_url: string = "http://localhost:8985";
   private content_type = "application/json";
 
   public async Get<DataType>(resource: string) {
-    const response = await this.sendRequest<DataType>(
-      "GET",
-      this.base_url + resource
-    );
-    return response;
+    return await this.sendRequest<DataType>("GET", this.base_url + resource);
   }
   public async Post<DataType, BodyType = unknown>(
     resource: string,
     body: BodyType
   ) {
-    const response = await this.sendRequest<DataType>(
+    return await this.sendRequest<DataType>(
       "POST",
       this.base_url + resource,
       JSON.stringify(body)
     );
-    return response;
   }
   public async Put<DataType, BodyType = unknown>(
     resource: string,
     id: number,
-    body: Partial<BodyType>
+    body: BodyType
   ) {
-    const response = await this.sendRequest<DataType>(
+    return await this.sendRequest<DataType>(
       "PUT",
       this.base_url + resource + "/" + id,
       JSON.stringify(body)
     );
-    return response;
   }
 
   public async Delete<DataType>(resource: string, id: number) {
-    const response = await this.sendRequest<DataType>(
+    return await this.sendRequest<DataType>(
       "DELETE",
       this.base_url + resource + "/" + id
     );
-    return response;
   }
 
   private async sendRequest<DataType = unknown>(
@@ -70,29 +53,21 @@ class HttpRequest {
     const result = await response.json();
 
     if (!response.ok) {
-      const fail: FailedResponse = {
+      const fail = {
         ok: false,
-        error: `${result.error}`,
-      };
-      console.log(fail.error);
+        error: String(result.error),
+      } as const;
+      console.log(result.error);
       return fail;
     }
 
-    const success: SuccessResponse<DataType> = {
+    const success = {
       ok: true,
       data: result.data as DataType,
-    };
+    } as const;
     return success;
   }
 }
 
 const http = new HttpRequest();
-// type User = {
-//   name: string;
-// };
-// const p = await http.Post<User, User>("/users", { name: "John" });
-
-// if (p.ok) {
-//   p.data.name;
-// }
 export { http };
