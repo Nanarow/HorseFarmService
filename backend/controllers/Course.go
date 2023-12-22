@@ -71,3 +71,15 @@ func UpdateCourse(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": "updated your course successfully"})
 }
+
+func DeleteCourse(c *gin.Context) {
+	var course entity.Course
+	id := c.Param("id")
+
+	if rows := entity.DB().Clauses(clause.Returning{}).Delete(&course, id).RowsAffected; rows == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "record not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": "delete course successfully"})
+}

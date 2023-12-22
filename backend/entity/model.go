@@ -58,14 +58,16 @@ type Support struct {
 
 type Course struct {
 	BaseModel
-	Name         string
-	Duration     int
-	Participants int
-	Description  string
-	Experience   float32
-	EmployeeID   uint
+	Name         string     `gorm:"default:Course"`
+	Duration     int        `valid:"required~Duration is required"`
+	Participants int        `valid:"required~Participants is required,gte=15~Participants must be at least 15"`
+	Description  string     `valid:"required~Description is required"`
+	Experience   float64    `valid:"required~Experience is required"`
+	EmployeeID   uint       `json:",omitempty" valid:"required~Employee is required,refer=employees~Employee does not exist"`
 	Employee     Employee   `gorm:"foreignKey:EmployeeID"`
-	Schedules    []Schedule `json:"-"`
+	LocationID   uint       `json:",omitempty" valid:"required~Location is required,refer=locations~Location does not exist"`
+	Location     Location   `gorm:"foreignKey:LocationID"`
+	Schedules    []Schedule `json:",omitempty"`
 	Horses       []*Horse   `gorm:"many2many:horse_courses;"`
 }
 
@@ -74,8 +76,6 @@ type Schedule struct {
 	Date        time.Time
 	StartTime   time.Time
 	Description string
-	LocationID  uint
-	Location    Location `gorm:"foreignKey:LocationID"`
 	CourseID    uint
 	Course      Course `gorm:"foreignKey:CourseID"`
 }
@@ -84,46 +84,51 @@ type Location struct {
 	BaseModel
 	Name        string
 	Description string
-	Schedules   []Schedule `json:"-"`
+	Course      []Course `json:"-"`
 }
 type Horse struct {
 	BaseModel
-	Name       string
-	Age        int
-	Date       time.Time
-	Image      string
-	EmployeeID uint
-	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
-	BleedID    uint
-	Bleed      Bleed `gorm:"foreignKey:BleedID" valid:"-"`
-	SexID      uint
-	Sex        Sex `gorm:"foreignKey:SexID" valid:"-"`
-	StableID   uint
+	Name       string	 `gorm:"default:Horse" `
+	Age        int		 `valid:"required~Age is required,gte=0~Age must be at least 0 "`
+	Date       time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Image      string    `gorm:"default:Horse" `
+
+	EmployeeID uint      `json:",omitempty"`
+	Employee   Employee  `gorm:"foreignKey:EmployeeID" valid:"-"`
+
+	BleedID    uint      `json:",omitempty"`
+	Bleed      Bleed     `gorm:"foreignKey:BleedID" valid:"-"`
+
+	SexID      uint      `json:",omitempty"`
+	Sex        Sex       `gorm:"foreignKey:SexID" valid:"-"`
+
+	StableID   uint      `json:",omitempty"`
 	Stable     Stable    `gorm:"foreignKey:StableID" valid:"-"`
+
 	Courses    []*Course `gorm:"many2many:horse_courses;" json:"-"`
 	Healths    []Health  `json:",omitempty"`
 }
 
 type Stable struct {
 	BaseModel
-	Maintenance time.Time
-	Cleaning    time.Time
-	Temperature int
+	Maintenance time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Cleaning    time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Temperature int 
 	Humidity    int
-	Description string
+	Description string  `valid:"required~Description is required,minstringlength(4)~Description must be at least 4"`
 	Horses      []Horse `json:"-"`
 }
 
 type Bleed struct {
 	BaseModel
-	Name        string
-	Description string
+	Name        string	`gorm:"default:Bleed" `
+	Description string  `json:",omitempty"`
 	Horses      []Horse `json:"-"`
 }
 
 type Sex struct {
 	BaseModel
-	Name   string
+	Name   string  `gorm:"default:Sex" `
 	Horses []Horse `json:"-"`
 }
 
@@ -143,7 +148,7 @@ type TourRegistration struct {
 	TourTypeID uint     `json:",omitempty"`
 	TourType   TourType `gorm:"foreignKey:TourTypeID"`
 
-	PlanID uint `json:",omitempty"`
+	PlanID uint `json:",omitempty" valid:"required~Plan is required,refer=plans~Plan does not exist"`
 	Plan   Plan `gorm:"foreignKey:PlanID"`
 
 	Email        string    `valid:"required~Email is required,email~Invalid email"`
@@ -183,7 +188,7 @@ type Employee struct {
 	Email      string    `valid:"required~Email is required,email~Invalid email"`
 	Password   string    `valid:"required~Password is required,minstringlength(4)~Password must be at 4 characters"`
 	DayOfBirth time.Time `valid:"required~DayOfBirth is required,past~DayOfBirth must be in the past"`
-	Phone      string    `valid:"required~Phone is required,minstringlength(10)~Phone must be at 10 characters"`
+	Phone      string    `valid:"required~Phone is required,stringlength(10|10)~Phone must be at 10 characters"`
 
 	Healths []Health `json:",omitempty"`
 	Horses  []Horse  `json:",omitempty"`

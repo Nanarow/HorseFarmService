@@ -84,10 +84,10 @@ func UpdateHorse(c *gin.Context) {
 	}
 
 	// validate struct
-	if _, err := govalidator.ValidateStruct(horse); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	// if _, err := govalidator.ValidateStruct(horse); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
 
 	// create data in database and check error
 	idUint, err := strconv.Atoi(id)

@@ -1,5 +1,6 @@
 /.vscode
 /backend/TestDB.db
+/backend/tests/integration/TestDB.db
 
 /backend/main
 !/backend/main.go
