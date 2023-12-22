@@ -99,10 +99,11 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	route.POST("/courses", controllers.CreateCourse)
 	route.PUT("/courses/:id", controllers.UpdateCourse)
 	route.DELETE("/courses/:id", controllers.DeleteCourse)
+	route.GET("/courses/locations", controllers.GetAllLocations)
 
 	route.GET("/schedules", controllers.GetAllSchedules)
 	route.POST("/schedules", controllers.CreateSchedule)
-	route.GET("/schedules/locations", controllers.GetAllLocations)
+	// route.GET("/schedules/locations", controllers.GetAllLocations)
 	route.DELETE("/schedules/:id", controllers.DeleteSchedule)
 
 	route.POST("/foods", controllers.CreateFood)
