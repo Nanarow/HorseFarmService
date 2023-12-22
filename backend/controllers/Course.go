@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut66/team16/backend/entity"
 	"gorm.io/gorm/clause"
@@ -12,7 +13,7 @@ import (
 func GetAllCourses(c *gin.Context) {
 	var courses []entity.Course
 
-	if err := entity.DB().Preload(clause.Associations).Find(&courses).Error; err != nil {
+	if err := entity.DB().Joins("Employee").Joins("Location").Omit("ScheduleID", "HorseID").Find(&courses).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -24,7 +25,7 @@ func GetCourse(c *gin.Context) {
 	var course entity.Course
 	id := c.Param("id")
 
-	if err := entity.DB().Preload(clause.Associations).First(&course, id).Error; err != nil {
+	if err := entity.DB().Joins("Employee").Joins("Location").Omit("ScheduleID", "HorseID").First(&course, id).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -40,6 +41,11 @@ func CreateCourse(c *gin.Context) {
 		return
 	}
 	
+	if _, err := govalidator.ValidateStruct(course); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	if err := entity.DB().Create(&course).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -53,6 +59,11 @@ func UpdateCourse(c *gin.Context) {
 	id := c.Param("id")
 
 	if err := c.ShouldBindJSON(&course); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if _, err := govalidator.ValidateStruct(course); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -85,9 +96,9 @@ func DeleteCourse(c *gin.Context) {
 }
 
 func GetAllLocations(c *gin.Context) {
-	var locations []entity.Course
+	var locations []entity.Location
 
-	if err := entity.DB().Preload(clause.Associations).Find(&locations).Error; err != nil {
+	if err := entity.DB().Find(&locations).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

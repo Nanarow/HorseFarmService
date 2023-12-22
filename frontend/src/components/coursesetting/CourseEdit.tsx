@@ -17,13 +17,14 @@ import {
 } from "@shadcn/ui/dialog";
 import { Button } from "@shadcn/ui";
 import { Edit } from "lucide-react";
+import { CourseFormData, courseFormSchema } from "@src/validator";
 interface Props {
   course: Course;
   onSave(): void;
 }
 
 const CourseEdit = ({ course }: Props) => {
-  const [location, setLocation] = useState<Location[] | undefined>(undefined);
+  const [locations, setLocation] = useState<Location[]>([]);
   const [open, setOpen] = useState(false);
   async function fetchLocation() {
     const res = await http.Get<Location[]>("/courses/locations");
@@ -45,30 +46,20 @@ const CourseEdit = ({ course }: Props) => {
       label: Location.Name,
     }));
   }
-  const ValidCourseSetting = z.object({
-    Name: z.string(),
-    Duration: z.number({ required_error: "Duration is required" }),
-    Participants: z.number().max(12, "Participants not more than 12"),
-    Description: z.string().optional(),
-    Experience: z.number({ required_error: "Experience is required" }),
-    LocationID: z.number(),
-  });
 
-  async function onValid(formData: z.infer<typeof ValidCourseSetting>) {
+  async function onValid(formData: CourseFormData) {
     console.log(formData);
 
-    const res = await http.Post<Course>("/courses", formData);
+    const res = await http.Post<string>("/courses", formData);
     if (res.ok) {
       setOpen(false);
       toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(res.data, null, 2)}
-            </code>
-          </pre>
-        ),
+        title: res.data,
+        duration: 1500,
+      });
+    } else {
+      toast({
+        title: res.error,
         duration: 1500,
       });
     }
@@ -86,7 +77,7 @@ const CourseEdit = ({ course }: Props) => {
         </DialogHeader>
         <Form
           className="flex flex-col gap-4"
-          validator={ValidCourseSetting}
+          validator={courseFormSchema}
           onValid={onValid}
           onInvalid={(errorFields) => console.log(errorFields)}
           fields={({ form }) => (
@@ -99,7 +90,7 @@ const CourseEdit = ({ course }: Props) => {
                 useForm={form}
                 name="Name"
                 type="text"
-                placeholder="Course Name"
+                placeholder="Type Course Name"
                 className="w-full"
               />
               <Label>
@@ -110,7 +101,7 @@ const CourseEdit = ({ course }: Props) => {
                 useForm={form}
                 name="Duration"
                 type="number"
-                placeholder="Duration"
+                placeholder="Type Duration"
                 className="w-full"
               />
               <Label>
@@ -121,7 +112,7 @@ const CourseEdit = ({ course }: Props) => {
                 useForm={form}
                 name="Participants"
                 type="number"
-                placeholder="Participants"
+                placeholder="Type Participants"
                 className="w-full"
               />
               <Label>
@@ -132,7 +123,7 @@ const CourseEdit = ({ course }: Props) => {
                 useForm={form}
                 name="Description"
                 type="text"
-                placeholder="Description"
+                placeholder="Type Description"
                 className="w-full"
               />
               <Label>
@@ -143,7 +134,7 @@ const CourseEdit = ({ course }: Props) => {
                 useForm={form}
                 name="Experience"
                 type="number"
-                placeholder="Experience"
+                placeholder="Type Experience"
                 className="w-full"
               />
               {location && (
@@ -155,9 +146,9 @@ const CourseEdit = ({ course }: Props) => {
                     defaultValue={course.LocationID}
                     valueAsNumber
                     useForm={form}
-                    items={LocationToSelectItems(location)}
+                    items={LocationToSelectItems(locations)}
                     name="LocationID"
-                    placeholder="Location"
+                    placeholder="Select Location"
                   ></Form.Select>
                 </>
               )}

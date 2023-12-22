@@ -14,3 +14,14 @@ export const tourFormSchema = z.object({
 });
 
 export type TourFormData = z.infer<typeof tourFormSchema>;
+
+export const courseFormSchema = z.object({
+  Name: z.string(),
+  Duration: z.number({ required_error: "Duration is required" }),
+  Participants: z.number().max(12, "Participants not more than 12"),
+  Description: z.string().optional(),
+  Experience: z.number({ required_error: "Experience is required" }),
+  LocationID: z.number({ required_error: "Please select a location" }),
+});
+
+export type CourseFormData = z.infer<typeof courseFormSchema>

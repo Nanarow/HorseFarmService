@@ -103,7 +103,6 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 
 	route.GET("/schedules", controllers.GetAllSchedules)
 	route.POST("/schedules", controllers.CreateSchedule)
-	// route.GET("/schedules/locations", controllers.GetAllLocations)
 	route.DELETE("/schedules/:id", controllers.DeleteSchedule)
 
 	route.POST("/foods", controllers.CreateFood)
