@@ -44,6 +44,7 @@ const courseSetting = () => {
   }, []);
 
   async function handleChange(time: Date, value: string | undefined) {
+    console.log(time, value);
     if (!schedules) {
       return;
     }
@@ -181,14 +182,12 @@ const courseSetting = () => {
                             onValueChange={(value) =>
                               handleChange(start_time, value)
                             }
-                            render={({ value, clear }) =>
-                              value && (
-                                <>
-                                  <p key={value}>{getCourseName(+value)}</p>
-                                  <button onClick={clear}>-</button>
-                                </>
-                              )
-                            }
+                            render={({ value, clear }) => (
+                              <>
+                                <p key={value}>{getCourseName(+value)}</p>
+                                <button onClick={clear}>-</button>
+                              </>
+                            )}
                           ></DropZone>
                         </TableCell>
                       );
@@ -199,13 +198,6 @@ const courseSetting = () => {
           </TableBody>
         </Table>
       </DragDrop>
-      {/* <Button onClick={onSave}>Save</Button> */}
-      {/* <Dialog>
-        <DialogTrigger asChild>
-          <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
-        </DialogTrigger>
-        <AddCourse></AddCourse>
-      </Dialog> */}
     </main>
   );
 };
