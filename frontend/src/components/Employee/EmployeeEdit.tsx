@@ -30,10 +30,6 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
     LastName: z.string().min(4, "Tooth must be at least 4 characters"),
     Email: z.string().email("Please enter a valid email"),
     Phone: z.string().max(10, "Phone must be at least 10 characters"),
-    Password: z
-      .string()
-      .min(2, "Password must be at least 8 characters long")
-      .max(20, "Password must be at most 20 characters long"),
     DayOfBirth: z.date().max(new Date(), "Date must be in the past"),
     PositionID: z.number(),
     PrecedeID: z.number(),
@@ -103,7 +99,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
       
     };
 
-    const res = await http.Put<string>("/employees/:id", employees.ID!, newEmployee);
+    const res = await http.Put<string>("/employees", employees.ID!, newEmployee);
       if (res.ok) {
         onSave();
         toast({
@@ -251,7 +247,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
                   className="col-span-3"
                 ></Form.Input>
               </div>
-              <div className="grid grid-cols-4 items-center">
+              {/* <div className="grid grid-cols-4 items-center">
                 <Label>
                   Password<span className="text-red-500">*</span>
                 </Label>
@@ -262,7 +258,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
                   defaultValue={employees.Password}
                   className="col-span-3"
                 ></Form.Input>
-              </div>
+              </div> */}
               
 
               {/* <Form.SubmitButton useForm={form}>Employee</Form.SubmitButton> */}

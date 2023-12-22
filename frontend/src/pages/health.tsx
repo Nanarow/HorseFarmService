@@ -189,11 +189,11 @@ const HealthPage = () => {
                   บันทึกข้อมูล
                 </Button>
               </div>
-                <Tooltip content={() => <span>Log out</span>}>
+                <Tooltip content={"Log out"}>
                 <LogOut 
                   onClick={() => {
                   console.log("logout");
-                  logout("employee");
+                  logout();
                 }}
                 className=" fixed bottom-9 right-16 w-10 h-10  cursor-pointer  text-red-500" />
                 </Tooltip>

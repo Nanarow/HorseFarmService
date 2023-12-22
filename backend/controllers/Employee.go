@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
+	"time"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
@@ -10,16 +10,25 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-//this is Employee controller
-
-
+// this is Employee controller
+type EmployeeForUpdate struct {
+	PositionID uint ` valid:"required~Position is required,refer=positions~Position does not exist"`
+	GenderID   uint ` valid:"required~Gender is required,refer=genders~Gender does not exist"`
+	PrecedeID  uint ` valid:"required~Precede is required,refer=precedes~Precede does not exist"`
+	FirstName  string
+	LastName   string
+	Email      string    `valid:"required~Email is required,email~Invalid email"`
+	DayOfBirth time.Time `valid:"required~DayOfBirth is required,past~DayOfBirth must be in the past"`
+	Phone      string    `valid:"required~Phone is required,stringlength(10|10)~Phone must be at 10 characters"`
+}
 
 func GetAllEmployee(c *gin.Context) {
+
 	// create variable for store data as type of Employee array
 	var employees []entity.Employee
 
 	// get data form database and check error
-	if err := entity.DB().Joins("Gender").Joins("Position").Joins("Precede").Omit("HorseID", "HealthID", "CourseID","FoodID").Find(&employees).Error; err != nil {
+	if err := entity.DB().Joins("Gender").Joins("Position").Joins("Precede").Omit("HorseID", "HealthID", "CourseID", "FoodID").Find(&employees).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -28,8 +37,6 @@ func GetAllEmployee(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": employees})
 }
 
-
-
 func GetEmployee(c *gin.Context) {
 	// create variable for store data as type of Employee
 	var employee entity.Employee
@@ -37,7 +44,7 @@ func GetEmployee(c *gin.Context) {
 	id := c.Param("id")
 
 	// get data form database and check error
-	if err := entity.DB().Joins("Gender").Joins("Position").Joins("Precede").Omit("HorseID", "HealthID", "CourseID","FoodID").First(&employee, id).Error; err != nil {
+	if err := entity.DB().Joins("Gender").Joins("Position").Joins("Precede").Omit("HorseID", "HealthID", "CourseID", "FoodID").First(&employee, id).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -74,7 +81,7 @@ func CreateEmployee(c *gin.Context) {
 
 func UpdateEmployee(c *gin.Context) {
 	// create variable for store data as type of TourRegistration
-	var employee entity.Employee
+	var employee EmployeeForUpdate
 	// get id from url
 	id := c.Param("id")
 
@@ -90,16 +97,8 @@ func UpdateEmployee(c *gin.Context) {
 		return
 	}
 
-	// convert id to uint and check error
-	idUint, err := strconv.Atoi(id)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	employee.ID = uint(idUint)
-
 	// update data in database and check error
-	if err := entity.DB().Save(&employee).Error; err != nil {
+	if err := entity.DB().Table("employees").Where("id = ?", id).Updates(employee).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
