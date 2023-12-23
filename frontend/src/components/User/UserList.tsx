@@ -14,7 +14,7 @@ import {
 // import UserEdit from "./UserEdit";
 import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import { format } from "date-fns";
-// import TourAlert from "./TourAlert";
+import UserAlert from "./UserAlert";
 import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import UserEdit from "./UserEdit";
@@ -107,10 +107,10 @@ const UserList = () => {
                   <DialogTrigger asChild>
                     <XSquare className=" text-red-500 abs-center hover:scale-110 cursor-pointer" />
                   </DialogTrigger>
-                  {/* <TourAlert
-                    tourID={tour.ID!}
-                    onCancel={fetchTours}
-                  ></TourAlert> */}
+                  <UserAlert
+                    userID={user.ID!}
+                    onCancel={fetchUsers}
+                  ></UserAlert>
                 </Dialog>
               </TableCell>
             </TableRow>

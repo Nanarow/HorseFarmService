@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { Position, Precede, Gender, Employee } from "../../interfaces";
 import {http} from "../../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
@@ -6,7 +5,7 @@ import { useEffect, useState } from "react";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { Button, Label } from "@shadcn/ui";
 import { Edit } from "lucide-react";
-
+import { employeeupdateFormSchema, EmployeeupdateFormData } from "@src/validator";
 import {
   Dialog,
   DialogClose,
@@ -25,16 +24,6 @@ interface Props {
 
 const EmployeeEdit = ({ employees, onSave }: Props) => {
   const { toast } = useToast();
-  const formEmployee = z.object({
-    FirstName: z.string().min(4, "FirstName must be at least 4 characters"),
-    LastName: z.string().min(4, "Tooth must be at least 4 characters"),
-    Email: z.string().email("Please enter a valid email"),
-    Phone: z.string().max(10, "Phone must be at least 10 characters"),
-    DayOfBirth: z.date().max(new Date(), "Date must be in the past"),
-    PositionID: z.number(),
-    PrecedeID: z.number(),
-    GenderID: z.number(),
-  });
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState<Position[]>([]);
   const [precede, setPrecede] = useState<Precede[]>([]);
@@ -93,7 +82,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
     }));
   }
 
-  async function onValid(formData: z.infer<typeof formEmployee>) {
+  async function onValid(formData: EmployeeupdateFormData) {
     const newEmployee = {
       ...formData,
       
@@ -129,7 +118,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
         </DialogHeader>
         <Form
           className="grid gap-2 mt-4"
-          validator={formEmployee}
+          validator={employeeupdateFormSchema}
           onValid={onValid}
           onInvalid={(data) => console.log(data)}
           fields={({ form }) => (

@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/ui/card";
 import { useToast } from "@shadcn/ui/use-toast";
 import { string, z } from "zod";
 import { ToItemList } from "@src/utils";
+import { UserFormData, userFormSchema } from "@src/validator";
+
 
 // interface Props {
 //   setTabs: React.Dispatch<React.SetStateAction<string>>;
@@ -16,20 +18,6 @@ const UserPage = () => {
   const { toast } = useToast();
   const [genders, setGender] = useState<Gender[]>([]);
   const [ridingLevels, setRidingLevel] = useState<RidingLevel[]>([]);
-
-  const formUser = z.object({
-    FirstName: z.string().min(1, "FirstName is required"),
-    LastName: z.string().min(1, "LastName is required"),
-    Age: z.number({ required_error: "Age is required" }),
-    ExperiencePoint: z.number().nonnegative(),
-    // Gender: z.enum(["male", "female"]),
-    Email: z.string().email({ message: "Invalid email address" }),
-    Password: z.string().min(8, "Password must be at least 8 characters"),
-    Phone: z.string().length(10, "Phone number must be 10 characters"),
-    Profile: z.string(),
-    GenderID: z.number(),
-    RidingLevelID: z.number(),
-  });
 
   async function fetchGender() {
     const res = await http.Get<Gender[]>("/users/genders")
@@ -50,7 +38,7 @@ const UserPage = () => {
     };
   }, []);
 
-  async function onValid(formData: z.infer<typeof formUser>) {
+  async function onValid(formData: UserFormData) {
     const res = await http.Post<string>("/users", formData);
     if (res.ok) {
       toast({
@@ -89,7 +77,7 @@ const UserPage = () => {
         <CardContent>
           <Form
             className="flex flex-col gap-4"
-            validator={formUser}
+            validator={userFormSchema}
             onValid={onValid}
             onInvalid={(errorFields) => console.log(errorFields)}
             fields={({ form }) => (
