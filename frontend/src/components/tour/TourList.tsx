@@ -1,4 +1,4 @@
-import { ArrowLeftSquareIcon, CheckIcon } from "lucide-react";
+import { ArrowLeftSquareIcon, TrashIcon, XSquare } from "lucide-react";
 import { TourRegistration } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
@@ -16,6 +16,8 @@ import { format } from "date-fns";
 import TourAlert from "./TourAlert";
 import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
+import { Badge } from "@shadcn/ui/badge";
+import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 
 const TourList = ({ onClick }: { onClick: () => void }) => {
   const [tours, setTours] = useState<TourRegistration[]>([]);
@@ -46,18 +48,18 @@ const TourList = ({ onClick }: { onClick: () => void }) => {
         <TableCaption>A list of your recent registration.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[10%] text-center">Name</TableHead>
-            <TableHead className="w-[28%] text-center">Date</TableHead>
-            <TableHead className="w-[18%] text-center hidden md:table-cell">
+            <TableHead className="w-[10%] text-center border">Name</TableHead>
+            <TableHead className="w-[28%] text-center border">Date</TableHead>
+            <TableHead className="w-[18%] text-center border hidden md:table-cell">
               Email
             </TableHead>
-            <TableHead className="w-[12%] text-center">Type</TableHead>
-            <TableHead className="w-[12%] text-center">Plan</TableHead>
-            <TableHead className="w-[12%] text-center hidden md:table-cell">
+            <TableHead className="w-[12%] text-center border">Type</TableHead>
+            <TableHead className="w-[12%] text-center border">Plan</TableHead>
+            <TableHead className="w-[12%] text-center border hidden md:table-cell">
               Participants
             </TableHead>
-            <TableHead className="w-[4%] text-center">Edit</TableHead>
-            <TableHead className="w-[4%] text-center">Cancel</TableHead>
+            <TableHead className="w-[4%] text-center border">Edit</TableHead>
+            <TableHead className="w-[4%] text-center border">Cancel</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -83,11 +85,25 @@ const TourList = ({ onClick }: { onClick: () => void }) => {
                 {new Date(tour.Date).getTime() > new Date().getTime() ? (
                   <TourEdit tour={tour} onSave={fetchTours}></TourEdit>
                 ) : (
-                  <CheckIcon className="text-green-500 abs-center" />
+                  <Badge className=" rounded-full bg-green-500 hover:bg-green-500/80">
+                    complete
+                  </Badge>
                 )}
               </TableCell>
               <TableCell className=" relative">
-                <TourAlert tourID={tour.ID!} onCancel={fetchTours}></TourAlert>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    {new Date(tour.Date).getTime() > new Date().getTime() ? (
+                      <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
+                    ) : (
+                      <TrashIcon className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
+                    )}
+                  </DialogTrigger>
+                  <TourAlert
+                    tourID={tour.ID!}
+                    onCancel={fetchTours}
+                  ></TourAlert>
+                </Dialog>
               </TableCell>
             </TableRow>
           ))}
