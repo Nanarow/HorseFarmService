@@ -3,9 +3,9 @@ package entity
 import "gorm.io/gorm"
 
 func SetupData(db *gorm.DB) {
-	var temp []Role
-	db.Find(&temp, 100)
-	if len(temp) > 0 {
+	var role []Role
+	db.Find(&role, 100)
+	if len(role) > 0 {
 		return
 	}
 	// roles
@@ -19,9 +19,6 @@ func SetupData(db *gorm.DB) {
 			Name:      "user",
 		},
 	}
-	// for _, role := range roles {
-	// 	db.Create(&role)
-	// }
 	db.Create(roles)
 	// users
 	users := []User{
@@ -49,9 +46,7 @@ func SetupData(db *gorm.DB) {
 			RoleID:    101,
 		},
 	}
-	for _, user := range users {
-		db.Create(&user)
-	}
+	db.Create(&users)
 
 	// position
 	positions := []Position{
@@ -76,9 +71,7 @@ func SetupData(db *gorm.DB) {
 			Name:      "Stable Quality Inspector",
 		},
 	}
-	for _, position := range positions {
-		db.Create(&position)
-	}
+	db.Create(&positions)
 
 	// employee
 	employees := []Employee{
@@ -95,9 +88,7 @@ func SetupData(db *gorm.DB) {
 			PositionID: 202,
 		},
 	}
-	for _, employee := range employees {
-		db.Create(&employee)
-	}
+	db.Create(&employees)
 
 	// tour type data
 	tourTypes := []TourType{
@@ -126,9 +117,7 @@ func SetupData(db *gorm.DB) {
 			Name:      "Other",
 		},
 	}
-	for _, tourType := range tourTypes {
-		db.Create(&tourType)
-	}
+	db.Create(&tourTypes)
 
 	// plan data
 	plans := []Plan{
@@ -149,12 +138,10 @@ func SetupData(db *gorm.DB) {
 			Name:      "Plan D",
 		},
 	}
-	for _, plan := range plans {
-		db.Create(&plan)
-	}
+	db.Create(&plans)
 
 	// sex data
-	sexs := []Sex{
+	sexes := []Sex{
 		{
 			BaseModel: BaseModel{ID: 1},
 			Name:      "Mare(เพศเมีย)",
@@ -164,9 +151,7 @@ func SetupData(db *gorm.DB) {
 			Name:      "Stallion(เพศผู้)",
 		},
 	}
-	for _, sex := range sexs {
-		db.Create(&sex)
-	}
+	db.Create(&sexes)
 
 	// bleed data
 	bleeds := []Bleed{
@@ -199,9 +184,7 @@ func SetupData(db *gorm.DB) {
 			Name:      "Other",
 		},
 	}
-	for _, bleed := range bleeds {
-		db.Create(&bleed)
-	}
+	db.Create(&bleeds)
 
 	// precedes data
 	precedes := []Precede{
@@ -222,9 +205,7 @@ func SetupData(db *gorm.DB) {
 			Name:      "เด็กชาย",
 		},
 	}
-	for _, precede := range precedes {
-		db.Create(&precede)
-	}
+	db.Create(&precedes)
 
 	// gender data
 	genders := []Gender{
@@ -241,10 +222,8 @@ func SetupData(db *gorm.DB) {
 			Name:      "Others",
 		},
 	}
-		
-	for _, gender := range genders {
-		db.Create(&gender)
-	}
+
+	db.Create(&genders)
 
 	// location data
 	locations := []Location{
@@ -261,8 +240,6 @@ func SetupData(db *gorm.DB) {
 			Name:      "สนาม 3",
 		},
 	}
-	for _, location := range locations {
-		db.Create(&location)
-	}
+	db.Create(&locations)
 
 }
