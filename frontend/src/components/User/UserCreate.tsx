@@ -5,7 +5,6 @@ import { http } from "../../services/httpRequest";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/ui/card";
 import { useToast } from "@shadcn/ui/use-toast";
-import { string, z } from "zod";
 import { ToItemList } from "@src/utils";
 import { UserFormData, userFormSchema } from "@src/validator";
 

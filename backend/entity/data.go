@@ -242,4 +242,24 @@ func SetupData(db *gorm.DB) {
 	}
 	db.Create(&locations)
 
+	ridingLevels := []RidingLevel{
+		{
+			BaseModel:   BaseModel{ID: 1},
+			Name:        "Newbie",
+			Description: "Horse riding beginner",
+		},
+		{
+			BaseModel:   BaseModel{ID: 2},
+			Name:        "Common",
+			Description: "Normal horse riding skill.",
+		},
+		{
+			BaseModel:   BaseModel{ID: 3},
+			Name:        "Professional",
+			Description: "Expert horse riding skill.",
+		},
+	}
+
+	db.Create(&ridingLevels)
+
 }
