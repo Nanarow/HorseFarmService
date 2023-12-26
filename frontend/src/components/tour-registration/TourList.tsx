@@ -1,7 +1,4 @@
 import { ArrowLeftSquareIcon, TrashIcon, XSquare } from "lucide-react";
-import { TourRegistration } from "../../interfaces";
-import { http } from "../../services/httpRequest";
-import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -14,37 +11,23 @@ import {
 import TourEdit from "./TourEdit";
 import { format } from "date-fns";
 import TourAlert from "./TourAlert";
-import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { Badge } from "@shadcn/ui/badge";
 import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
+import { useTours } from "@src/hooks";
 
 const TourList = ({ onClick }: { onClick: () => void }) => {
-  const [tours, setTours] = useState<TourRegistration[]>([]);
-
-  const { user } = useAuth();
-  async function fetchTours() {
-    const res = await http.Get<TourRegistration[]>("/tours/user/" + user?.ID);
-    if (res.ok) {
-      setTours(res.data);
-    }
-  }
-  useEffect(() => {
-    return () => {
-      fetchTours();
-    };
-  }, []);
-
+  const { tours, fetchTours } = useTours();
   return (
-    <div className="w-full h-full relative p-8">
+    <div className="w-full h-full relative px-4 py-6 ">
       <Tooltip content={"Back to registration"} side="right">
         <ArrowLeftSquareIcon
           onClick={onClick}
-          className="absolute top-4 left-8 text-blue-500"
+          className="absolute top-2  left-4  text-blue-500"
         />
       </Tooltip>
 
-      <Table className="border mt-6">
+      <Table className="border mt-4">
         <TableCaption>A list of your recent registration.</TableCaption>
         <TableHeader>
           <TableRow>

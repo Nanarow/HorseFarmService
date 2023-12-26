@@ -1,5 +1,13 @@
-export const Menus: { [key: string]: { label: string; to: string }[] } = {
-  emp: [
+type Role = "user" | "employee" | "admin";
+interface Menu {
+  label: string;
+  to: string;
+}
+type TMenus = {
+  [key in Role]: Menu[];
+};
+export const Menus: TMenus = {
+  employee: [
     {
       label: "Horse",
       to: "/horse",

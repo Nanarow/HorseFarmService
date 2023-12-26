@@ -10,7 +10,6 @@ import {
   TableRow,
 } from "@shadcn/ui/table";
 import { Course, Schedule } from "../../src/interfaces";
-import { addTimeToDate } from "@src/utils";
 import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import AddCourse from "../components/coursesetting/addCourse";
 import CourseAlert from "@src/components/coursesetting/CourseAlert";
@@ -18,6 +17,7 @@ import { useEffect, useState } from "react";
 import { http } from "@src/services/httpRequest";
 import CourseEdit from "@src/components/coursesetting/CourseEdit";
 import { XSquare } from "lucide-react";
+import { addDays, addHours } from "date-fns";
 
 const courseSetting = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -44,7 +44,7 @@ const courseSetting = () => {
   }, []);
 
   async function handleChange(time: Date, value: string | undefined) {
-    console.log(time, value);
+    // console.log(time, value);
     if (!schedules) {
       return;
     }
@@ -140,12 +140,18 @@ const courseSetting = () => {
             <TableRow>
               <TableHead className="w-[20%] border">Day</TableHead>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => {
-                const start_time = addTimeToDate(
-                  new Date(new Date().toDateString()),
-                  {
-                    hours: index + 9,
-                  }
+                const start_time = addHours(
+                  new Date().setHours(0, 0, 0, 0),
+                  index + 9
                 );
+                // const start_time = addTimeToDate(
+                //   new Date(new Date().toDateString()),
+                //   {
+                //     hours: index + 9,
+                //   }
+                // );
+                // console.log(test_time.getTime(), start_time.getTime());
+                // console.log(test_time.getTime() == start_time.getTime());
                 return (
                   <TableHead key={index} className="border text-center w-[10%]">
                     {start_time.toTimeString().slice(0, 8)}
@@ -157,21 +163,14 @@ const courseSetting = () => {
           <TableBody>
             {schedules &&
               [1, 2, 3, 4, 5, 6, 7].map((_, index) => {
-                const day = addTimeToDate(new Date(), {
-                  days: index + 1,
-                });
+                const day = addDays(new Date().setHours(0, 0, 0, 0), index + 1);
                 return (
                   <TableRow key={index} className="border text-center">
                     <TableCell className=" w-[20%]">
                       {day.toDateString()}
                     </TableCell>
                     {[1, 2, 3, 4, 5, 6, 7, 8].map((_, time_index) => {
-                      const start_time = addTimeToDate(
-                        new Date(day.toDateString()),
-                        {
-                          hours: time_index + 9,
-                        }
-                      );
+                      const start_time = addHours(day, time_index + 9);
                       return (
                         <TableCell
                           key={time_index}

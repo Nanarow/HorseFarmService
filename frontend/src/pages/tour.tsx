@@ -1,8 +1,8 @@
 import NavBar from "../components/navbar/navBar";
 import { Tabs, TabsContent } from "@shadcn/ui/tabs";
-import TourList from "../components/tour/TourList";
+import TourList from "../components/tour-registration/TourList";
 import { useState } from "react";
-import TourRegister from "../components/tour/TourRegister";
+import TourRegister from "../components/tour-registration/TourRegister";
 
 const Tour = () => {
   const [tabs, setTabs] = useState("register");

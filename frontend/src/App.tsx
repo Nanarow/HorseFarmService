@@ -8,14 +8,15 @@ import {
   Health,
   Home,
   Horse,
+  Loading,
   Login,
+  NoPage,
   Stable,
   Tour,
   User,
 } from "./pages";
 import PrivateRoute from "./components/privateRoute";
 import ValidateForm from "./examples/form-with-validation";
-import NoPage from "./pages/noPage";
 import DragDropTable from "./examples/drag-drop-table";
 import EmployeeList from "./components/Employee/EmployeeList";
 import UserList from "./components/User/UserList";
@@ -25,13 +26,14 @@ function App() {
     <Routes>
       <Route path="/*" element={<NoPage />}></Route>
       <Route path="/" element={<Home />}></Route>
+      <Route path="/loading/:page" element={<Loading />}></Route>
       <Route path="/login/admin" element={<Login role="admin" />}></Route>
       <Route path="/login/employee" element={<Login role="employee" />}></Route>
       <Route path="/login" element={<Login role="user" />}></Route>
       <Route path="/example/form" element={<ValidateForm />} />
       <Route path="/example/table" element={<DragDropTable />} />
 
-      <Route element={<PrivateRoute role={101} />}>
+      <Route element={<PrivateRoute role={101} path="/login" />}>
         <Route path="/course" element={<Course />}></Route>
         <Route path="/tour" element={<Tour />}></Route>
       </Route>

@@ -1,5 +1,5 @@
 import { Button } from "@shadcn/ui";
-import Form, { ItemList } from "@shadcn/simplify/form";
+import Form from "@shadcn/simplify/form";
 import {
   DialogClose,
   DialogContent,
@@ -18,13 +18,12 @@ import { CourseFormData, courseFormSchema } from "@src/validator";
 import { ToItemList } from "@src/utils";
 
 const AddCourse = () => {
-  const {employee} = useAuth()
+  const { getEmployee } = useAuth();
   const [locations, setLocations] = useState<Location[]>([]);
   async function fetchLocation() {
     const res = await http.Get<Location[]>("/courses/locations");
-    console.log(res)
+    console.log(res);
     if (res.ok) {
-
       setLocations(res.data);
     }
   }
@@ -46,8 +45,8 @@ const AddCourse = () => {
   async function onValid(formData: CourseFormData) {
     const data = {
       ...formData,
-      EmployeeID: employee?.ID!
-    }
+      EmployeeID: getEmployee().ID,
+    };
 
     const res = await http.Post<string>("/courses", data);
     if (res.ok) {
@@ -66,9 +65,7 @@ const AddCourse = () => {
     <DialogContent className="sm:max-w-[480px]">
       <DialogHeader>
         <DialogTitle>Add Course</DialogTitle>
-        <DialogDescription>
-          Click save when you're done.
-        </DialogDescription>
+        <DialogDescription>Click save when you're done.</DialogDescription>
       </DialogHeader>
       <Form
         className="flex flex-col gap-4"
@@ -107,9 +104,7 @@ const AddCourse = () => {
               placeholder="Type Participants"
               className="w-full"
             />
-            <Label>
-              Description
-            </Label>
+            <Label>Description</Label>
             <Form.Input
               useForm={form}
               name="Description"
@@ -127,7 +122,7 @@ const AddCourse = () => {
               placeholder="Type Experience"
               className="w-full"
             />
-            {locations.length>0 && (
+            {locations.length > 0 && (
               <>
                 <Label>
                   Location<span className="text-red-500">*</span>
@@ -138,13 +133,13 @@ const AddCourse = () => {
                   items={ToItemList(locations)}
                   name="LocationID"
                   placeholder="Select Location"
-                >
-                </Form.Select>
+                ></Form.Select>
               </>
             )}
           </>
         )}
-      ><DialogFooter>
+      >
+        <DialogFooter>
           <DialogClose asChild>
             <Button variant="secondary">Close</Button>
           </DialogClose>
@@ -155,4 +150,4 @@ const AddCourse = () => {
   );
 };
 
-export default AddCourse;  
+export default AddCourse;

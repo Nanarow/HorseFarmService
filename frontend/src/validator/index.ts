@@ -4,7 +4,9 @@ export const tourFormSchema = z.object({
   Date: z
     .date({ required_error: "Date is required" })
     .min(new Date(), "Date must be in the future"),
-  Participants: z.number().min(8, "There must be at least 8 participants."),
+  Participants: z
+    .number({ required_error: "Participants is required" })
+    .min(8, "There must be at least 8 participants."),
   Email: z
     .string({ required_error: "Email is required" })
     .email("Invalid email"),
@@ -24,7 +26,7 @@ export const courseFormSchema = z.object({
   LocationID: z.number({ required_error: "Please select a location" }),
 });
 
-export type CourseFormData = z.infer<typeof courseFormSchema>
+export type CourseFormData = z.infer<typeof courseFormSchema>;
 
 export const employeeFormSchema = z.object({
   FirstName: z.string().min(2, "FirstName must be at least 2 characters"),
@@ -41,7 +43,7 @@ export const employeeFormSchema = z.object({
   GenderID: z.number({ required_error: "Please select a gender" }),
 });
 
-export type EmployeeFormData = z.infer<typeof employeeFormSchema>
+export type EmployeeFormData = z.infer<typeof employeeFormSchema>;
 
 export const employeeupdateFormSchema = z.object({
   FirstName: z.string().min(2, "FirstName must be at least 2 characters"),
@@ -54,20 +56,20 @@ export const employeeupdateFormSchema = z.object({
   GenderID: z.number({ required_error: "Please select a gender" }),
 });
 
-export type EmployeeupdateFormData = z.infer<typeof employeeupdateFormSchema>
+export type EmployeeupdateFormData = z.infer<typeof employeeupdateFormSchema>;
 
 export const healthFormSchema = z.object({
   Vital: z.string().min(4, "Vital must be at least 4 characters"),
-    Tooth: z.string().min(4, "Tooth must be at least 4 characters"),
-    Vaccine: z.string().min(4, "Vaccine must be at least 4 characters"),
-    Parasite: z.string().min(4, "Parasite must be at least 4 characters"),
-    Blood: z.string().min(4, "Blood must be at least 4 characters"),
-    Date: z.date().min(new Date(), "Date must be in the future"),
-    HorseID: z.number({ required_error: "Please select a horse" }),
-    EmployeeID: z.number({ required_error: "Please select a employee" }),
+  Tooth: z.string().min(4, "Tooth must be at least 4 characters"),
+  Vaccine: z.string().min(4, "Vaccine must be at least 4 characters"),
+  Parasite: z.string().min(4, "Parasite must be at least 4 characters"),
+  Blood: z.string().min(4, "Blood must be at least 4 characters"),
+  Date: z.date().min(new Date(), "Date must be in the future"),
+  HorseID: z.number({ required_error: "Please select a horse" }),
+  EmployeeID: z.number({ required_error: "Please select a employee" }),
 });
 
-export type HealthFormData = z.infer<typeof healthFormSchema>
+export type HealthFormData = z.infer<typeof healthFormSchema>;
 
 export const userFormSchema = z.object({
   FirstName: z.string().min(1, "FirstName is required"),
@@ -83,4 +85,4 @@ export const userFormSchema = z.object({
   RidingLevelID: z.number(),
 });
 
-export type UserFormData =  z.infer<typeof userFormSchema>
+export type UserFormData = z.infer<typeof userFormSchema>;
