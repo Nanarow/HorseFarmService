@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { Button } from "@shadcn/ui/button";
 import { Position, Precede, Gender, Employee } from "../interfaces";
 import { http } from "../services/httpRequest";
@@ -10,24 +9,10 @@ import EmployeeImage from "./../assets/healthbg.jpg";
 import { ChevronLeftCircle} from 'lucide-react';
 import { Link } from "react-router-dom";
 import { Tooltip } from "@shadcn/simplify/tooltip";
-
+import { EmployeeFormData, employeeFormSchema } from "@src/validator";
 
 const EmployeePage = () => {
   const { toast } = useToast();
-  const formEmployee = z.object({
-    FirstName: z.string().min(2, "FirstName must be at least 2 characters"),
-    LastName: z.string().min(2, "Tooth must be at least 2 characters"),
-    Email: z.string().email("Please enter a valid email"),
-    Phone: z.string().max(10, "Phone must be at least 10 characters"),
-    Password: z
-      .string()
-      .min(2, "Password must be at least 8 characters long")
-      .max(20, "Password must be at most 20 characters long"),
-    DayOfBirth: z.date().max(new Date(), "Date must be in the past"),
-    PositionID: z.number(),
-    PrecedeID: z.number(),
-    GenderID: z.number(),
-  });
 
   const [position, setPosition] = useState<Position[] | undefined>(undefined);
   const [precede, setPrecede] = useState<Precede[] | undefined>(undefined);
@@ -86,7 +71,7 @@ const EmployeePage = () => {
     }));
   }
 
-  async function onValid(formData: z.infer<typeof formEmployee>) {
+  async function onValid(formData: EmployeeFormData) {
     const employeeData: Employee = {
       ...formData,
     };
@@ -138,7 +123,7 @@ const EmployeePage = () => {
    
       <Form
         className="flex justify-items-center gap-2 "
-        validator={formEmployee}
+        validator={employeeFormSchema}
         onValid={onValid}
         onInvalid={console.log}
         fields={({ form }) => (

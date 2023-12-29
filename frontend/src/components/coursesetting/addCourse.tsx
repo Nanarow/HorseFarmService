@@ -1,5 +1,5 @@
 import { Button } from "@shadcn/ui";
-import Form, { ItemList } from "@shadcn/simplify/form";
+import Form from "@shadcn/simplify/form";
 import {
   DialogClose,
   DialogContent,
@@ -9,20 +9,22 @@ import {
   DialogTitle,
 } from "@shadcn/ui/dialog";
 import { useEffect, useState } from "react";
-import { Course, Location } from "@src/interfaces";
+import { Location } from "@src/interfaces";
 import { http } from "@src/services/httpRequest";
 import { toast } from "@shadcn/ui/use-toast";
-import { z } from "zod";
 import { Label } from "@shadcn/ui";
 import { useAuth } from "@src/providers/authProvider";
+import { CourseFormData, courseFormSchema } from "@src/validator";
+import { ToItemList } from "@src/utils";
 
 const AddCourse = () => {
-  const {employee} = useAuth()
-  const [location, setLocation] = useState<Location[] | undefined>(undefined);
+  const { getEmployee } = useAuth();
+  const [locations, setLocations] = useState<Location[]>([]);
   async function fetchLocation() {
     const res = await http.Get<Location[]>("/courses/locations");
+    console.log(res);
     if (res.ok) {
-      setLocation(res.data);
+      setLocations(res.data);
     }
   }
   useEffect(() => {
@@ -31,35 +33,30 @@ const AddCourse = () => {
     };
   }, []);
 
-  function LocationToSelectItems(
-    Location: { ID: number; Name: string }[]
-  ): ItemList[] {
-    return Location.map((Location) => ({
-      value: Location.ID,
-      label: Location.Name,
-    }));
-  }
+  // function LocationToSelectItems(
+  //   Location: { ID: number; Name: string }[]
+  // ): ItemList[] {
+  //   return Location.map((Location) => ({
+  //     value: Location.ID,
+  //     label: Location.Name,
+  //   }));
+  // }
 
-
-  const ValidCourseSetting = z.object({
-    Name: z.string(),
-    Duration: z.number({ required_error: "Duration is required" }),
-    Participants: z.number().max(12, "Participants not more than 12"),
-    Description: z.string().optional(),
-    Experience: z.number({ required_error: "Experience is required" }),
-    LocationID: z.number(),
-  });
-
-  async function onValid(formData: z.infer<typeof ValidCourseSetting>) {
+  async function onValid(formData: CourseFormData) {
     const data = {
       ...formData,
-      EmployeeID: employee?.ID!
-    }
+      EmployeeID: getEmployee().ID,
+    };
 
     const res = await http.Post<string>("/courses", data);
     if (res.ok) {
       toast({
         title: res.data,
+        duration: 1500,
+      });
+    } else {
+      toast({
+        title: res.error,
         duration: 1500,
       });
     }
@@ -68,13 +65,11 @@ const AddCourse = () => {
     <DialogContent className="sm:max-w-[480px]">
       <DialogHeader>
         <DialogTitle>Add Course</DialogTitle>
-        <DialogDescription>
-          Click save when you're done.
-        </DialogDescription>
+        <DialogDescription>Click save when you're done.</DialogDescription>
       </DialogHeader>
       <Form
         className="flex flex-col gap-4"
-        validator={ValidCourseSetting}
+        validator={courseFormSchema}
         onValid={onValid}
         onInvalid={(errorFields) => console.log(errorFields)}
         fields={({ form }) => (
@@ -86,7 +81,7 @@ const AddCourse = () => {
               useForm={form}
               name="Name"
               type="text"
-              placeholder="Course Name"
+              placeholder="Type Course Name"
               className="w-full"
             />
             <Label>
@@ -96,7 +91,7 @@ const AddCourse = () => {
               useForm={form}
               name="Duration"
               type="number"
-              placeholder="Duration"
+              placeholder="Type Duration"
               className="w-full"
             />
             <Label>
@@ -106,17 +101,15 @@ const AddCourse = () => {
               useForm={form}
               name="Participants"
               type="number"
-              placeholder="Participants"
+              placeholder="Type Participants"
               className="w-full"
             />
-            <Label>
-              Description
-            </Label>
+            <Label>Description</Label>
             <Form.Input
               useForm={form}
               name="Description"
               type="text"
-              placeholder="Description"
+              placeholder="Type Description"
               className="w-full"
             />
             <Label>
@@ -126,10 +119,10 @@ const AddCourse = () => {
               useForm={form}
               name="Experience"
               type="number"
-              placeholder="Experience"
+              placeholder="Type Experience"
               className="w-full"
             />
-            {location && (
+            {locations.length > 0 && (
               <>
                 <Label>
                   Location<span className="text-red-500">*</span>
@@ -137,16 +130,16 @@ const AddCourse = () => {
                 <Form.Select
                   valueAsNumber
                   useForm={form}
-                  items={LocationToSelectItems(location)}
+                  items={ToItemList(locations)}
                   name="LocationID"
-                  placeholder="Location"
-                >
-                </Form.Select>
+                  placeholder="Select Location"
+                ></Form.Select>
               </>
             )}
           </>
         )}
-      ><DialogFooter>
+      >
+        <DialogFooter>
           <DialogClose asChild>
             <Button variant="secondary">Close</Button>
           </DialogClose>
@@ -157,4 +150,4 @@ const AddCourse = () => {
   );
 };
 
-export default AddCourse;  
+export default AddCourse;

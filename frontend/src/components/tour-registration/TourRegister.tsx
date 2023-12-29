@@ -1,9 +1,8 @@
 import tourImage from "@src/assets/tourbg-2.jpg";
 import Form from "@shadcn/simplify/form";
-import { useEffect, useState } from "react";
-import { Plan, TourType } from "@src/interfaces";
+import { useState } from "react";
 import { http } from "@src/services/httpRequest";
-import { Checkbox, Label } from "@shadcn/ui";
+import { Button, Checkbox, Label } from "@shadcn/ui";
 import { useToast } from "@shadcn/ui/use-toast";
 import { ArrowRightSquareIcon } from "lucide-react";
 import { ToItemList } from "@src/utils";
@@ -11,38 +10,21 @@ import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { Skeleton } from "@shadcn/ui/skeleton";
 import { TourFormData, tourFormSchema } from "@src/validator";
+import { useRefresh, useTourPlan, useTourType } from "@src/hooks";
 
 const TourRegister = ({ onClick }: { onClick: () => void }) => {
   const { toast } = useToast();
-  const { user } = useAuth();
-  const [tourType, setTourType] = useState<TourType[]>([]);
-  const [plans, setPlans] = useState<Plan[]>([]);
+  const { getUser } = useAuth();
+  const { tourTypes } = useTourType();
+  const { plans } = useTourPlan();
   const [email, setEmail] = useState("");
   const [check, setCheck] = useState(false);
-
-  async function fetchTour() {
-    const res = await http.Get<TourType[]>("/tours/types");
-    if (res.ok) {
-      setTourType(res.data);
-    }
-  }
-  async function fetchPlan() {
-    const res = await http.Get<Plan[]>("/tours/plans");
-    if (res.ok) {
-      setPlans(res.data);
-    }
-  }
-  useEffect(() => {
-    return () => {
-      fetchPlan();
-      fetchTour();
-    };
-  }, []);
+  const { refresh } = useRefresh();
 
   async function onValid(formData: TourFormData) {
     const tour = {
       ...formData,
-      UserID: user?.ID,
+      UserID: getUser().ID,
     };
     const res = await http.Post<string>("/tours", tour);
     if (res.ok) {
@@ -59,7 +41,7 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
     }
   }
   return (
-    <div className="grid md:grid-cols-2 w-full h-full">
+    <div className="grid lg:grid-cols-2 w-full h-full">
       <section className="w-full h-full p-2 relative">
         <img
           src={tourImage}
@@ -70,12 +52,12 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
       <section className="h-full w-full flex justify-center items-center relative">
         <Tooltip content={"My tours registration"} side="left">
           <ArrowRightSquareIcon
-            className="absolute top-4 right-8 text-green-500 hover:scale-105"
+            className="absolute top-2 right-4 text-green-500 hover:scale-105"
             onClick={onClick}
           />
         </Tooltip>
 
-        <div className=" w-full h-full max-w-md flex justify-center flex-col py-12 md:px-0">
+        <div className=" w-full h-full max-w-md flex justify-center flex-col py-12 px-4 lg:px-0">
           <Label className=" text-3xl font-bold text-center">
             Tour Registration
           </Label>
@@ -86,30 +68,23 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
             onInvalid={(data) => console.log(data)}
             fields={({ form, errors }) => (
               <>
-                <Label>
-                  Tour Date<span className="text-red-500">*</span>
-                </Label>
+                <Form.Label>Tour Date</Form.Label>
                 <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
-                {errors.Date && (
-                  <p className="text-sm text-red-500">{errors.Date.message}</p>
-                )}
-                <Label>
-                  Type of tour<span className="text-red-500">*</span>
-                </Label>
-                {tourType.length > 0 ? (
+                <Form.Error field={errors.Date} />
+                <Form.Label>Type of tour</Form.Label>
+                {tourTypes.length > 0 ? (
                   <Form.Select
                     valueAsNumber
                     useForm={form}
-                    items={ToItemList(tourType)}
+                    items={ToItemList(tourTypes)}
                     name="TourTypeID"
                     placeholder="Pick type of tour"
                   />
                 ) : (
                   <Skeleton className=" h-9 w-full" />
                 )}
-                <Label>
-                  Plan<span className="text-red-500">*</span>
-                </Label>
+                <Form.Error field={errors.TourTypeID} />
+                <Form.Label>Plan</Form.Label>
                 {plans.length > 0 ? (
                   <Form.Select
                     valueAsNumber
@@ -121,10 +96,8 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
                 ) : (
                   <Skeleton className=" h-9 w-full" />
                 )}
-
-                <Label>
-                  Email<span className="text-red-500">*</span>
-                </Label>
+                <Form.Error field={errors.PlanID} />
+                <Form.Label>Email</Form.Label>
                 <Form.Input
                   useForm={form}
                   name="Email"
@@ -134,11 +107,13 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
                   onChange={(e) => {
                     setEmail(e.target.value);
                   }}
-                ></Form.Input>
+                />
+                <Form.Error field={errors.Email} />
+
                 <div className="flex gap-2 items-center">
                   <Checkbox
                     onCheckedChange={(s) => {
-                      s && setEmail(user?.Email!);
+                      s && setEmail(getUser().Email);
                       setCheck(s ? true : false);
                     }}
                   ></Checkbox>
@@ -146,20 +121,17 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
                     use account email
                   </p>
                 </div>
-                <Label>
-                  Participants<span className="text-red-500">*</span>
-                </Label>
-                <Form.Input
-                  useForm={form}
-                  name="Participants"
-                  type="number"
-                ></Form.Input>
-                <Label>Tour Name</Label>
-                <Form.Input useForm={form} name="Name" type="text"></Form.Input>
 
-                <Form.SubmitButton useForm={form}>
-                  Registration
-                </Form.SubmitButton>
+                <Form.Label>Participants</Form.Label>
+                <Form.Input useForm={form} name="Participants" type="number" />
+                <Form.Error field={errors.Participants} />
+                <Label>Tour Name</Label>
+                <Form.Input useForm={form} name="Name" type="text" />
+                <Form.Error field={errors.Name} />
+                <Form.SubmitButton useForm={form}>Register</Form.SubmitButton>
+                <Button variant={"outline"} onClick={refresh}>
+                  Clear
+                </Button>
               </>
             )}
           ></Form>

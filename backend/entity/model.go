@@ -64,7 +64,7 @@ type Course struct {
 	Description  string     
 	Experience   float64    `valid:"required~Experience is required"`
 	EmployeeID   uint       `json:",omitempty" valid:"required~Employee is required,refer=employees~Employee does not exist"`
-	Employee     Employee   `gorm:"foreignKey:EmployeeID"`
+	Employee     Employee   `gorm:"foreignKey:EmployeeID" valid:"-"`
 	LocationID   uint       `json:",omitempty" valid:"required~Location is required,refer=locations~Location does not exist"`
 	Location     Location   `gorm:"foreignKey:LocationID"`
 	Schedules    []Schedule `json:",omitempty"`
@@ -84,7 +84,7 @@ type Location struct {
 	BaseModel
 	Name        string
 	Description string
-	Course      []Course `json:"-"`
+	Course      []Course `json:",omitempty"`
 }
 type Horse struct {
 	BaseModel

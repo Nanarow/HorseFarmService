@@ -8,7 +8,8 @@ import (
 const PORT = "8985"
 
 func main() {
-	entity.SetupDatabase()
+	entity.SetupDatabase("HorseFarmDB")
+	entity.SetupData(entity.DB())
 	route := routers.SetUpRouter()
 
 	// init Routes

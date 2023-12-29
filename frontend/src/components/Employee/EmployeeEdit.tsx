@@ -1,12 +1,11 @@
-import { z } from "zod";
 import { Position, Precede, Gender, Employee } from "../../interfaces";
-import {http} from "../../services/httpRequest";
+import { http } from "../../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 import { useEffect, useState } from "react";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { Button, Label } from "@shadcn/ui";
 import { Edit } from "lucide-react";
-
+import { employeeupdateFormSchema, EmployeeupdateFormData } from "@src/validator";
 import {
   Dialog,
   DialogClose,
@@ -19,22 +18,12 @@ import {
 } from "@shadcn/ui/dialog";
 
 interface Props {
-    employees: Employee;
-    onSave(): void;
-  }
+  employees: Employee;
+  onSave(): void;
+}
 
 const EmployeeEdit = ({ employees, onSave }: Props) => {
   const { toast } = useToast();
-  const formEmployee = z.object({
-    FirstName: z.string().min(4, "FirstName must be at least 4 characters"),
-    LastName: z.string().min(4, "Tooth must be at least 4 characters"),
-    Email: z.string().email("Please enter a valid email"),
-    Phone: z.string().max(10, "Phone must be at least 10 characters"),
-    DayOfBirth: z.date().max(new Date(), "Date must be in the past"),
-    PositionID: z.number(),
-    PrecedeID: z.number(),
-    GenderID: z.number(),
-  });
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState<Position[]>([]);
   const [precede, setPrecede] = useState<Precede[]>([]);
@@ -93,26 +82,26 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
     }));
   }
 
-  async function onValid(formData: z.infer<typeof formEmployee>) {
+  async function onValid(formData: EmployeeupdateFormData) {
     const newEmployee = {
       ...formData,
-      
+
     };
 
     const res = await http.Put<string>("/employees", employees.ID!, newEmployee);
-      if (res.ok) {
-        onSave();
-        toast({
-          title: "You submitted the following values:",
-          description: (
-            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">{JSON.stringify(employees, null, 2)}</code>
-            </pre>
-          ),
-          duration: 1500,
-        });
-      }
-    
+    if (res.ok) {
+      onSave();
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(employees, null, 2)}</code>
+          </pre>
+        ),
+        duration: 1500,
+      });
+    }
+
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -129,7 +118,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
         </DialogHeader>
         <Form
           className="grid gap-2 mt-4"
-          validator={formEmployee}
+          validator={employeeupdateFormSchema}
           onValid={onValid}
           onInvalid={(data) => console.log(data)}
           fields={({ form }) => (
@@ -194,7 +183,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
               </div>
               <div className="grid grid-cols-4 items-center">
                 <Label>
-                Day Of Birth<span className="text-red-500">*</span>
+                  Day Of Birth<span className="text-red-500">*</span>
                 </Label>
                 <Form.DatePicker
                   useForm={form}
@@ -221,7 +210,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
                   </>
                 )}
               </div>
-              
+
 
               <div className="grid grid-cols-4 items-center">
                 <Label>
@@ -259,7 +248,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
                   className="col-span-3"
                 ></Form.Input>
               </div> */}
-              
+
 
               {/* <Form.SubmitButton useForm={form}>Employee</Form.SubmitButton> */}
             </>

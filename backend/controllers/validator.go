@@ -10,7 +10,10 @@ import (
 )
 
 func init() {
+	RegisValidators()
+}
 
+func RegisValidators() {
 	govalidator.CustomTypeTagMap.Set("past", func(i interface{}, c interface{}) bool {
 		return i.(time.Time).Before(time.Now())
 	})
@@ -70,7 +73,6 @@ func init() {
 	govalidator.ParamTagRegexMap["gt"] = regexp.MustCompile(`gt=(\d+)`)
 
 	govalidator.ParamTagRegexMap["refer"] = regexp.MustCompile(`refer=(\D+)`)
-
 }
 
 // import (
