@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+//import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { http } from "@src/services/httpRequest";
 import Form from "@shadcn/simplify/form";
@@ -18,7 +18,7 @@ const StablePage = () => {
     Description: z.string(),
   });
 
-  const [stables, setStables] = useState<Stable[] | undefined>(undefined);
+  /*const [stables, setStables] = useState<Stable[] | undefined>(undefined);
 
   async function fetchStables() {
     const res = await http.Get<Stable[]>("/stables");
@@ -32,7 +32,7 @@ const StablePage = () => {
       fetchStables();
       
     }
-  })
+  })*/
 
   async function onValid(formData: z.infer<typeof formStable>) {    
     console.log(formData)

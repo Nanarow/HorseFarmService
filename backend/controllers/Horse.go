@@ -10,6 +10,15 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+type HorseUpdate struct {
+	Name       string
+	Age        int  `valid:"required~Age is required,gte=0~Age must be at least 0 "`
+	EmployeeID uint `valid:"required~Employee is required,refer=employees~Employee does not exist"`
+	BleedID    uint `valid:"required~Bleed is required,refer=bleeds~Bleed does not exist"`
+	SexID      uint `valid:"required~Sex is required,refer=sexs~Sex does not exist"`
+	StableID   uint `valid:"required~Stable is required,refer=stables~Position does not exist"`
+}
+
 // GET /horses
 func GetAllHorse(c *gin.Context) {
 	// create variable for store data as type of Horse array
@@ -83,11 +92,11 @@ func UpdateHorse(c *gin.Context) {
 		return
 	}
 
-	// validate struct
-	// if _, err := govalidator.ValidateStruct(horse); err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	// 	return
-	// }
+	//validate struct
+	if _, err := govalidator.ValidateStruct(horse); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	// create data in database and check error
 	idUint, err := strconv.Atoi(id)
@@ -98,7 +107,7 @@ func UpdateHorse(c *gin.Context) {
 	horse.ID = uint(idUint)
 
 	// update data in database and check error
-	if err := entity.DB().Save(&horse).Error; err != nil {
+	if err := entity.DB().Table("horses").Where("id = ?", id).Updates(horse).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
