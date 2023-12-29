@@ -8,7 +8,7 @@ import (
 	jwt "github.com/golang-jwt/jwt/v5"
 )
 
-var secretKey = []byte("secret8985")
+var SECRET_KEY = []byte(GetConfig().SECRET_KEY)
 
 func ValidateJWT(token_name string, c *gin.Context) (*jwt.Token, jwt.MapClaims, error) {
 	tokenCookie, err := c.Cookie(token_name)
@@ -20,7 +20,7 @@ func ValidateJWT(token_name string, c *gin.Context) (*jwt.Token, jwt.MapClaims, 
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return secretKey, nil
+		return SECRET_KEY, nil
 	})
 
 	if err != nil {
@@ -41,16 +41,32 @@ func ValidateJWT(token_name string, c *gin.Context) (*jwt.Token, jwt.MapClaims, 
 
 func GenerateJWT(token_name string, c *gin.Context, email string, hour int) error {
 	expiration := time.Now().Add(time.Hour * time.Duration(hour)).Unix()
-	claims := jwt.MapClaims{
+	// token to identify user
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"email": email,
 		"exp":   expiration,
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	tokenString, err := token.SignedString(secretKey)
+	})
+	fmt.Println(SECRET_KEY)
+	token_string, err := token.SignedString(SECRET_KEY)
 	if err != nil {
 		return err
 	}
-	c.SetCookie(token_name, tokenString, 3600*hour, "", "", true, true)
+
+	c.SetCookie(token_name, token_string, 3600*hour, "", "", true, true)
+	return nil
+}
+
+func SetActiveJWT(c *gin.Context, token_name string, hour int) error {
+	expiration := time.Now().Add(time.Hour * time.Duration(hour)).Unix()
+	// token to identify active user
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"active_token": token_name,
+		"exp":          expiration,
+	})
+	token_string, err := token.SignedString(SECRET_KEY)
+	if err != nil {
+		return err
+	}
+	c.SetCookie("token", token_string, 3600*hour, "", "", true, true)
 	return nil
 }

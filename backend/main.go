@@ -3,9 +3,8 @@ package main
 import (
 	"github.com/sut66/team16/backend/entity"
 	"github.com/sut66/team16/backend/routers"
+	"github.com/sut66/team16/backend/utils"
 )
-
-const PORT = "8985"
 
 func main() {
 	entity.SetupDatabase("HorseFarmDB")
@@ -16,5 +15,5 @@ func main() {
 	routers.InitRouter(route)
 
 	// Run the server
-	route.Run("localhost:" + PORT)
+	route.Run(":" + utils.GetConfig().PORT)
 }
