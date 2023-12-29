@@ -21,7 +21,10 @@ const Tour = () => {
         >
           <TourRegister onClick={() => setTabs("list")} />
         </TabsContent>
-        <TabsContent value="list" className="w-full h-full mt-0 slide-in-left">
+        <TabsContent
+          value="list"
+          className="w-full h-full mt-0 animate-slide-in-left overflow-hidden"
+        >
           <div className="w-full h-full flex">
             <TourList onClick={() => setTabs("register")} />
           </div>
