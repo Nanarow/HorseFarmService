@@ -83,10 +83,10 @@ type Location struct {
 }
 type Horse struct {
 	BaseModel
-	Name  string    `gorm:"default:Horse" `
+	Name  string    `gorm:"default:Horse"`
 	Age   int       `valid:"required~Age is required,gte=0~Age must be at least 0 "`
 	Date  time.Time `valid:"required~Date is required,future~Date must be in the future"`
-	Image string    `gorm:"default:Horse" `
+	Image string    `gorm:"default:Horse"`
 
 	EmployeeID uint     `json:",omitempty"`
 	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`

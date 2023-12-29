@@ -1,8 +1,8 @@
 //import React from "react";
 import { z } from "zod";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@shadcn/ui/table"
-import { Button }from "@shadcn/ui/button"
+import { Card, CardContent,CardDescription,CardHeader,CardTitle, } from "@shadcn/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose} from "@shadcn/ui/dialog"
+import { Button }from "@shadcn/ui/button"
 import { Label } from "@shadcn/ui/label"
 import Form from "@shadcn/simplify/form";
 import { useEffect, useState} from "react";
@@ -13,12 +13,13 @@ import { ToItemList } from "@src/utils";
 import HorseEdit from "@src/components/Horse/HorseEdit";
 import HorseAlert from "@src/components/Horse/HorseAlert";
 import { Trash2, LogOutIcon} from 'lucide-react';
+import { useAuth } from "@src/providers/authProvider";
+import { Tooltip } from "@shadcn/simplify/tooltip";
 
 const HorsePage = () => {
   const { toast } = useToast();
-
   const formHorse = z.object({
-    Name: z.string().min(1, "Name is required"),
+    Name: z.string(),
     Age: z.number({ required_error: "Age is required" }),
     Date: z.date().min(new Date(), "Date must be in the future"),
     Image: z.string(),
@@ -35,6 +36,7 @@ const HorsePage = () => {
 
   const [horses, setHorses] = useState<Horse[]>([]);
   const [open, setOpen] = useState(false);
+  const { logout } = useAuth();
 
   async function fetchEmployees() {
     const res = await http.Get<Employee[]>("/employees");
@@ -84,22 +86,20 @@ const HorsePage = () => {
   async function onValid(formData: z.infer<typeof formHorse>) {  
     console.log(formData)
 
-    const res = await http.Post<Horse>("/horses", formData);
+    const res = await http.Post<string>("/horses", formData);
     if (res.ok) {
       setOpen(false);
       toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(res.data, null, 2)}
-            </code>
-          </pre>
-        ),
+        title: res.data,
+        duration: 1500,
+        });
+    }else{
+      toast({
+        title: res.error,
         duration: 1500,
       });
-      fetchHorses()
     }
+    fetchHorses()
   }
 
   function StableTolist() {
@@ -118,22 +118,20 @@ const HorsePage = () => {
 
   return (
     <div className="w-full h-screen flex flex-col item-center justify-item">
-      <div className="flex flex-row-reverse mt-4 mr-4">
-        <LogOutIcon 
-          className="text-red-500"
-
-        ></LogOutIcon>
+      <div className="flex flex-row-reverse mt-4 mr-4 text-red-500 ">
+        <Tooltip content={("Logout")}>
+          <LogOutIcon onClick={logout}/>
+        </Tooltip>
       </div>
-      <h1 className="text-center text-2xl font-sans mt-10 ml-20">จัดการข้อมูลม้า</h1>        
-      <div className="ml-10 mt-1 mr-10 flex flex-row-reverse">
+      <h1 className="text-left text-2xl font-blod ml-5 uppercase"></h1>        
+      <div className="ml-5 mt-5 flex flex-row">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            {/* <FilePlus2 className="text-blue-500"></FilePlus2> */}
-            <Button variant="outline" className="bg-blue-400">เพิ่มข้อมูล</Button>
+            <Button variant="outline" className="bg-green-500">ADD+</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>เพิ่มข้อมูลม้า</DialogTitle>              
+              <DialogTitle>Add Horse Information</DialogTitle>              
             </DialogHeader>
             <Form
               className="grid gap-5"
@@ -143,7 +141,7 @@ const HorsePage = () => {
               fields={({ form }) => (
                 <>
                   <div className="grid grid-cols-5 items-center gap-4 ">
-                    <Label className="text-right">ชื่อ</Label>
+                    <Label className="text-right">Name</Label>
                     <Form.Input
                       useForm={form}
                       name="Name"
@@ -155,7 +153,7 @@ const HorsePage = () => {
                   <div className="grid grid-cols-5 items-center gap-4">
                     {sexs.length > 0  && (
                       <>
-                        <Label className="text-right">เพศ</Label>
+                        <Label className="text-right">Sex</Label>
                         <Form.Select
                           valueAsNumber
                           useForm={form}
@@ -168,7 +166,7 @@ const HorsePage = () => {
                     )}
                   </div>
                   <div className="grid grid-cols-5 items-center gap-4">
-                    <Label  className="text-right">อายุ</Label>
+                    <Label  className="text-right">Age</Label>
                     <Form.Input
                       useForm={form}
                       type="number"
@@ -180,7 +178,7 @@ const HorsePage = () => {
                   <div className="grid grid-cols-5 items-center gap-4">
                     {bleeds.length > 0 && (
                       <>                      
-                        <Label className="text-right">สายพันธุ์</Label>
+                        <Label className="text-right">Bleed</Label>
                         <Form.Select
                           valueAsNumber
                           useForm={form}
@@ -193,7 +191,7 @@ const HorsePage = () => {
                     )}
                   </div>
                   <div className="grid grid-cols-5 items-center gap-4">
-                    <Label className="text-right">คอกม้า</Label>
+                    <Label className="text-right">Stable</Label>
                       <Form.Select
                       items={ToItemList(StableTolist())}
                         valueAsNumber
@@ -206,7 +204,7 @@ const HorsePage = () => {
                   <div className="grid grid-cols-5 items-center gap-4">
                     {employees.length > 0 && (
                       <>
-                        <Label className="text-right">ผู้ดูแล</Label>
+                        <Label className="text-right">Employee</Label>
                         <Form.Select
                           valueAsNumber
                           useForm={form}
@@ -219,7 +217,7 @@ const HorsePage = () => {
                     )}
                   </div>
                   <div className="grid grid-cols-5 items-center gap-4">
-                    <Label className="text-right">วันที่เข้ามา</Label>
+                    <Label className="text-right">Date</Label>
                     <Form.DatePicker 
                       className="col-span-3 font-extralight" 
                       useForm={form} 
@@ -227,7 +225,7 @@ const HorsePage = () => {
                     </Form.DatePicker>
                   </div>
                   <div className="grid grid-cols-5 items-center gap-4">
-                    <Label className="text-right">รูป</Label>
+                    <Label className="text-right">Image</Label>
                     <Form.Input
                       useForm={form}
                       type="file"
@@ -240,9 +238,9 @@ const HorsePage = () => {
                   <DialogFooter className="items-center grid grid-row-reverse justify-between" >
                     <div className="space-x-4" >
                       <DialogClose asChild>
-                        <Button variant="destructive" type="reset" >ยกเลิก</Button>
+                        <Button variant="destructive" type="reset" >Cancle</Button>
                       </DialogClose>
-                        <Button variant="outline" type="submit" className=" bg-green-500">บันทึกข้อมูล</Button>
+                        <Button variant="outline" type="submit" className=" bg-green-500">Save</Button>
                     </div>           
                   </DialogFooter>
                 </>
@@ -250,62 +248,45 @@ const HorsePage = () => {
             </Form>
           </DialogContent>
         </Dialog>
-      </div> 
-      {/*ตาราง*/}
-      <div>
-        <Table className="border mt-6 items-center ">
-          <TableCaption className="text-center" >ข้อมูลม้า</TableCaption>
-            <TableHeader>
-              <TableRow className="font-medium">              
-                <TableHead className="w-[10%] text-center">รูป</TableHead>
-                <TableHead className="w-[9%] text-center">ชื่อ</TableHead>
-                <TableHead className="w-[10%] text-center">เพศ</TableHead>
-                <TableHead className="w-[9%] text-center">อายุ</TableHead>
-                <TableHead className="w-[9%] text-center">สายพันธุ์</TableHead>
-                <TableHead className="w-[9%] text-center">คอกม้า</TableHead>
-                <TableHead className="w-[9%] text-center">ผู้ดูแล</TableHead>
-                <TableHead className="w-[9%] text-center">แก้ไข</TableHead>
-                <TableHead className="w-[9%] text-center">ลบ</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {horses.length > 0 && horses.map((horse) => (
-                <TableRow key={horse.ID} className="">
-                  <TableCell className=" text-center ">
-                    <img 
-                      src={horse.Image} 
-                      alt={horse.Name}
-                      className="h-36 w-36"
-                    />
-                  </TableCell>
-                  <TableCell className=" text-center ">{horse.Name}</TableCell>
-                  <TableCell className=" text-center ">{horse.Sex.Name}</TableCell>
-                  <TableCell className=" text-center ">{horse.Age}</TableCell>
-                  <TableCell className=" text-center ">{horse.Bleed.Name}</TableCell>
-                  <TableCell className=" text-center ">{horse.Stable.ID}</TableCell>
-                  <TableCell className=" text-center ">{horse.Employee.FirstName}</TableCell>
-                  <TableCell className=" text-center p-8">   
-                    <Dialog >
-                      <HorseEdit
-                        horse={horse} 
-                        onSave={fetchHorses}
-                      ></HorseEdit>
-                    </Dialog>
-                  </TableCell>
-                  <TableCell className="text-center p-9">
-                    <Dialog>
-                      <DialogTrigger asChild><Trash2 className="text-red-500 text-center" /></DialogTrigger>
-                      <HorseAlert 
-                        horseID={horse.ID}
-                        onDelete={fetchHorses}
-                      ></HorseAlert>
-                    </Dialog>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-        </Table>
       </div>
+      {horses.length > 0 && horses.map((horse) => (
+        <Card className="place-items-center">
+          <p className="col-span-3 font-extralight">
+            <img 
+            src={horse.Image} 
+            alt={horse.Name}
+            className="h-36 w-32 m-5 rounded-lg"
+            />
+          </p>
+          <p>
+            <Label>Name:</Label> {horse.Name}
+          </p>
+          <p>Age: {horse.Age}</p>
+          <p>Bleed: {horse.Bleed.Name}</p>
+          <p>Stable: {horse.Stable.ID}</p>
+          <p>Employee: {horse.Employee.FirstName}</p>
+          <p>
+            <Dialog >
+              <HorseEdit
+                horse={horse} 
+                onSave={fetchHorses} 
+              ></HorseEdit>
+            </Dialog>
+          </p>
+          <p>
+            <Dialog>
+              <DialogTrigger asChild className="text-red-500 text-center m-12">
+                <Trash2 />
+              </DialogTrigger>
+                <HorseAlert 
+                  horseID={horse.ID}
+                  onDelete={fetchHorses}
+                ></HorseAlert>
+            </Dialog>
+          </p>
+        </Card>  
+      ))}
+      
     </div>
   );
 };
