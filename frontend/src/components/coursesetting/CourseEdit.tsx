@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { http } from "../../services/httpRequest";
-import { z } from "zod";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { toast } from "@shadcn/ui/use-toast";
 import { Course, Location } from "@src/interfaces";

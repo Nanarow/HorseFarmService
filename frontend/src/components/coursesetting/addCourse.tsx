@@ -1,5 +1,5 @@
 import { Button } from "@shadcn/ui";
-import Form, { ItemList } from "@shadcn/simplify/form";
+import Form from "@shadcn/simplify/form";
 import {
   DialogClose,
   DialogContent,
@@ -33,15 +33,6 @@ const AddCourse = () => {
       fetchLocation();
     };
   }, []);
-
-  // function LocationToSelectItems(
-  //   Location: { ID: number; Name: string }[]
-  // ): ItemList[] {
-  //   return Location.map((Location) => ({
-  //     value: Location.ID,
-  //     label: Location.Name,
-  //   }));
-  // }
 
   async function onValid(formData: CourseFormData) {
     const data = {
