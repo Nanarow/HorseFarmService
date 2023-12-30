@@ -120,7 +120,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>แก้ไขข้อมูลม้า</DialogTitle>              
+            <DialogTitle>Edit Horse Information</DialogTitle>              
           </DialogHeader>
           <Form
             className="grid gap-5"
@@ -130,7 +130,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
             fields={({ form }) => (
               <>
                 <div className="grid grid-cols-5 items-center gap-4">
-                  <Label className="text-right">ชื่อ</Label>
+                  <Label className="text-right">Name</Label>
                   <Form.Input
                     defaultValue={horse.Name} 
                     useForm={form}
@@ -143,7 +143,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                 <div className="grid grid-cols-5 items-center gap-4">
                   {sexs.length > 0  && (
                     <>
-                      <Label className="text-right">เพศ</Label>
+                      <Label className="text-right">Sex</Label>
                       <Form.Select
                         defaultValue={String(horse.Sex.ID)}
                         valueAsNumber
@@ -157,7 +157,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                   )}
                   </div>
                   <div className="grid grid-cols-5 items-center gap-4">
-                    <Label  className="text-right">อายุ</Label>
+                    <Label  className="text-right">Age</Label>
                     <Form.Input
                       defaultValue={horse.Age}
                       useForm={form}
@@ -170,7 +170,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                   <div className="grid grid-cols-5 items-center gap-4">
                     {bleeds.length > 0 && (
                       <>                      
-                        <Label className="text-right">สายพันธุ์</Label>
+                        <Label className="text-right">Bleed</Label>
                           <Form.Select
                             defaultValue={String(horse.Bleed.ID)}
                             valueAsNumber
@@ -184,7 +184,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                     )}
                   </div>
                   <div className="grid grid-cols-5 items-center gap-4">
-                    <Label className="text-right">คอกม้า</Label>
+                    <Label className="text-right">Stable</Label>
                     <Form.Select
                       defaultValue={horse.Stable.ID}
                       items={ToItemList(StableTolist())}
@@ -198,7 +198,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                   <div className="grid grid-cols-5 items-center gap-4">
                     {employees.length > 0 && (
                       <>
-                        <Label className="text-right">ผู้ดูแล</Label>
+                        <Label className="text-right">Employee</Label>
                         <Form.Select
                           defaultValue={String(horse.Employee.ID)}
                           valueAsNumber
@@ -212,7 +212,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                     )}
                   </div>
                   <div className="grid grid-cols-5 items-center gap-4">
-                    <Label className="text-right">วันที่เข้ามา</Label>
+                    <Label className="text-right">Date</Label>
                       <Form.DatePicker 
                         defaultValue={new Date(horse.Date)}
                         className="col-span-3 font-extralight" 
@@ -221,7 +221,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                       </Form.DatePicker>
                   </div>
                   <div className="grid grid-cols-5 items-center gap-4 ">
-                    <Label className="text-right">รูป</Label>
+                    <Label className="text-right">Image</Label>
                       <Form.Input
                         useForm={form}
                         type="file"
@@ -235,9 +235,9 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                   <DialogFooter className="items-center grid grid-row-reverse justify-between">
                     <div className="space-x-4">
                     <DialogClose asChild>
-                      <Button variant="secondary" className=" bg-red-500" type="reset" >ยกเลิก</Button>
+                      <Button variant="secondary" className=" bg-red-500" type="reset" >Cancle</Button>
                     </DialogClose>                               
-                      <Button variant="outline" type="submit" className=" bg-green-500">บันทึกข้อมูล</Button>                               
+                      <Button variant="outline" type="submit" className=" bg-green-500">Save</Button>                               
                     </div>           
                   </DialogFooter>
                 </>

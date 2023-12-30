@@ -12,6 +12,7 @@ import {
   useForm,
   Path,
   PathValue,
+  FieldError,
 } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -38,6 +39,7 @@ import {
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { FileToBase64 } from "@src/utils";
 import { cn } from "@cn/utils";
+import { AlertCircleIcon } from "lucide-react";
 
 interface Options {
   shouldValidate: boolean;
@@ -72,6 +74,8 @@ const Form: FormType & {
   Checkbox: typeof FormCheckbox;
   Switch: typeof FormSwitch;
   RadioGroup: typeof FormRadioGroup;
+  Label: typeof FormLabel;
+  Error: typeof FormError;
 } = <T extends FieldValues>({
   children,
   validator,
@@ -144,7 +148,7 @@ const FormInput = <T extends FieldValues>({
     if (defaultValue) {
       setValue(name, defaultValue as PathValue<T, Path<T>>);
     }
-  }, [value, defaultValue]);
+  }, [value]);
 
   return (
     <Input
@@ -198,7 +202,7 @@ const FormTextArea = <T extends FieldValues>({
     if (defaultValue) {
       setNewValue(defaultValue);
     }
-  }, [value, defaultValue]);
+  }, [value]);
 
   return (
     <Textarea
@@ -262,7 +266,7 @@ const FormSelect = <T extends FieldValues>({
     if (defaultValue) {
       setNewValue(defaultValue);
     }
-  }, [defaultValue]);
+  }, []);
   return (
     <Select
       onValueChange={handleChange}
@@ -329,7 +333,7 @@ const FormDatePicker = <T extends FieldValues>({
     if (defaultValue) {
       setNewValue(defaultValue);
     }
-  }, [defaultValue]);
+  }, []);
   return (
     <DatePicker
       defaultValue={defaultValue}
@@ -395,7 +399,7 @@ const FormCheckbox = <T extends FieldValues>({
     if (defaultValue) {
       setNewValue(defaultValue);
     }
-  }, [defaultValue]);
+  }, []);
 
   return (
     <div className="flex gap-2 items-center">
@@ -442,7 +446,7 @@ const FormSwitch = <T extends FieldValues>({
     if (defaultValue) {
       setNewValue(defaultValue);
     }
-  }, [defaultValue]);
+  }, []);
 
   return (
     <div className="flex gap-2 items-center">
@@ -496,7 +500,7 @@ const FormRadioGroup = <T extends FieldValues>({
     if (defaultValue) {
       setNewValue(defaultValue);
     }
-  }, [defaultValue]);
+  }, []);
   return (
     <RadioGroup
       className={className}
@@ -522,6 +526,37 @@ const FormRadioGroup = <T extends FieldValues>({
   );
 };
 
+const FormLabel = ({
+  children,
+  className,
+}: PropsWithChildren<{ className?: string }>) => {
+  return (
+    <Label className={className}>
+      {children}
+      <span className="text-red-500"> * </span>
+    </Label>
+  );
+};
+const FormError = ({
+  field,
+  className,
+}: {
+  field: FieldError | undefined;
+  className?: string;
+}) => {
+  if (!field) {
+    return;
+  }
+  return (
+    <div className={cn("text-red-500 flex items-center ", className)}>
+      <AlertCircleIcon className="w-4 h-4 mr-2"></AlertCircleIcon>
+      <p className="text-sm text-end">{field.message}</p>
+    </div>
+  );
+};
+
+Form.Error = FormError;
+Form.Label = FormLabel;
 Form.RadioGroup = FormRadioGroup;
 Form.Switch = FormSwitch;
 Form.Checkbox = FormCheckbox;

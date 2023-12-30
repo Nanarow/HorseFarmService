@@ -1,12 +1,9 @@
-import { http } from "../services/httpRequest";
 import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/ui/card";
 import Form from "@shadcn/simplify/form";
 import { z } from "zod";
-import { useLocation, useNavigate } from "react-router-dom";
 import { Badge } from "@shadcn/ui/badge";
 import { useEffect } from "react";
 import { useAuth } from "@src/providers/authProvider";
-import { Employee, User } from "@src/interfaces";
 import { Label } from "@shadcn/ui";
 
 interface LoginProps {
@@ -21,34 +18,10 @@ const validLogin = z.object({
 });
 type TLogin = z.infer<typeof validLogin>;
 const Login = ({ role }: LoginProps) => {
-  const { setUser, setEmployee } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from || "/home";
+  const { handleLogin } = useAuth();
 
   async function onLogin(data?: TLogin) {
-    if (role === "user") {
-      const res = await http.Post<User>("/login", data || {});
-      if (res.ok) {
-        setUser(res.data);
-        navigate(from, { replace: true });
-      }
-    } else if (role === "employee") {
-      const res = await http.Post<Employee>(
-        "/login/employee",
-        data ? data : {}
-      );
-      if (res.ok) {
-        setEmployee(res.data);
-        navigate(from, { replace: true });
-      }
-    } else if (role === "admin") {
-      const res = await http.Post<User>("/login/admin", data || {});
-      if (res.ok) {
-        setUser(res.data);
-        navigate(from, { replace: true });
-      }
-    }
+    await handleLogin(role, data);
   }
 
   useEffect(() => {

@@ -11,6 +11,8 @@ import Support from "./support";
 import User from "./user";
 import CourseSetting from "./courseSetting";
 import Home from "./home";
+import NoPage from "./noPage";
+import Loading from "./loading";
 export {
   Home,
   Course,
@@ -25,4 +27,6 @@ export {
   CourseSetting,
   Support,
   User,
+  NoPage,
+  Loading,
 };

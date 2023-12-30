@@ -13,7 +13,7 @@ import (
 
 func CORS() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", utils.GetConfig().ORIGIN)
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT ,PATCH ,DELETE")
@@ -26,64 +26,58 @@ func CORS() gin.HandlerFunc {
 	}
 }
 
-func Authorization() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		_, payload, err := utils.ValidateJWT("token", c)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-			return
-		}
-
-		var user entity.User
-		err = entity.DB().Where("email = ?", payload["email"].(string)).First(&user).Error
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-			return
-		}
-
-		access := Roles[""]
-		if !VerifyAccessRights(access, c) {
-			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Access Denied"})
-			return
-		}
-		c.Next()
-	}
-}
-
 func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, _, err1 := utils.ValidateJWT("token", c)
-		_, _, err2 := utils.ValidateJWT("a_token", c)
-		_, _, err3 := utils.ValidateJWT("e_token", c)
-		if err1 != nil && err2 != nil && err3 != nil {
+		if _, payload, err := utils.ValidateJWT("token", c); err == nil {
+			token_name, _ := payload["active_token"].(string)
+			if _, data, err := utils.ValidateJWT(token_name, c); err == nil {
+				c.Set("email", data["email"].(string))
+				c.Set("active_token", token_name)
+				c.Set("authenticated", true)
+				c.Next()
+				return
+			}
+		}
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+	}
+}
+
+// Authorization / Role based access control
+func Authorization(role_ids ...uint) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if !c.GetBool("authenticated") {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			return
 		}
-		c.Next()
+
+		if len(role_ids) == 0 {
+			c.Next()
+			return
+		}
+
+		role := map[string]uint{
+			"atk": 100,
+			"utk": 101,
+		}
+		active_token := c.GetString("active_token")
+		email := c.GetString("email")
+
+		if active_token != "etk" {
+			if slices.Contains(role_ids, role[active_token]) {
+				c.Next()
+				return
+			}
+		} else {
+			var emp struct {
+				PositionID uint
+			}
+			if err := entity.DB().Where("email = ?", email).First(&emp).Error; err == nil {
+				if slices.Contains(role_ids, emp.PositionID) {
+					c.Next()
+					return
+				}
+			}
+		}
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Access Denied"})
 	}
-}
-
-func VerifyAccessRights(access AccessControl, c *gin.Context) bool {
-	if access.Deny {
-		if access.AllMethod || contains(access.Methods, c.Request.Method) {
-			return false
-		}
-
-		if access.AllPath || contains(access.Paths, c.FullPath()) {
-			return false
-		}
-	} else {
-		if !access.AllMethod && !contains(access.Methods, c.Request.Method) {
-			return false
-		}
-
-		if !access.AllPath && !contains(access.Paths, c.FullPath()) {
-			return false
-		}
-	}
-	return true
-}
-
-func contains(slice []string, str string) bool {
-	return slices.Contains[[]string](slice, str)
 }

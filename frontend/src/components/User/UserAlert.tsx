@@ -12,12 +12,12 @@ import {
 import { http } from "@src/services/httpRequest";
 import { AlertTriangleIcon, XSquare } from "lucide-react";
 interface Props {
-  tourID: number;
+  userID: number;
   onCancel(): void;
 }
-const TourAlert = ({ tourID, onCancel }: Props) => {
+const UserAlert = ({ userID, onCancel }: Props) => {
   async function handleCancel() {
-    const res = await http.Delete("/tours", tourID);
+    const res = await http.Delete("/users", userID);
     if (res.ok) {
       onCancel();
     }
@@ -31,7 +31,7 @@ const TourAlert = ({ tourID, onCancel }: Props) => {
       <DialogContent className=" sm:max-w-[320px]">
         <DialogHeader className=" items-center sm:text-center">
           <AlertTriangleIcon className="text-red-500 h-16 w-16" />
-          <DialogTitle>Are you sure absolutely sure?</DialogTitle>
+          <DialogTitle>Are you sure?</DialogTitle>
           <DialogDescription>
             This action cannot be undone. This will cancel your registration
           </DialogDescription>
@@ -55,4 +55,4 @@ const TourAlert = ({ tourID, onCancel }: Props) => {
   );
 };
 
-export default TourAlert;
+export default UserAlert;

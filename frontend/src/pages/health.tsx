@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { Button } from "@shadcn/ui/button";
 import { Health, Horse, Employee } from "../interfaces";
 import { http } from "../services/httpRequest";
@@ -10,22 +9,11 @@ import HealthImage from "./../assets/health3.jpg";
 import { LogOut } from "lucide-react";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { useAuth } from "@src/providers/authProvider";
-
+import { HealthFormData,healthFormSchema } from "@src/validator";
 
 const HealthPage = () => {
   const { logout } = useAuth();
   const { toast } = useToast();
-  const formHealth = z.object({
-    Vital: z.string().min(4, "Vital must be at least 4 characters"),
-    Tooth: z.string().min(4, "Tooth must be at least 4 characters"),
-    Vaccine: z.string().min(4, "Vaccine must be at least 4 characters"),
-    Parasite: z.string().min(4, "Parasite must be at least 4 characters"),
-    Blood: z.string().min(4, "Blood must be at least 4 characters"),
-    Date: z.date().min(new Date(), "Date must be in the future"),
-    HorseID: z.number(),
-    EmployeeID: z.number(),
-  });
-
   const [horses, setHorses] = useState<Horse[] | undefined>(undefined);
   const [employee, setEmployees] = useState<Employee[] | undefined>(undefined);
 
@@ -66,7 +54,7 @@ const HealthPage = () => {
     }));
   }
 
-  async function onValid(formData: z.infer<typeof formHealth>) {
+  async function onValid(formData: HealthFormData) {
     
     const res = await http.Post<Health, Health>("/healths", formData);
     if (res.ok) {
@@ -96,7 +84,7 @@ const HealthPage = () => {
 
       <Form
         className="flex justify-end mt-7"
-        validator={formHealth}
+        validator={healthFormSchema}
         onValid={onValid}
         onInvalid={console.log}
         fields={({ form }) => (

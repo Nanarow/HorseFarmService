@@ -17,10 +17,10 @@ const HorseAlert = ({ horseID, onDelete }: Props) => {
       }
 
     return(
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] ">
             <DialogHeader>
                 <DialogTitle>Are you sure?</DialogTitle>
-                <DialogDescription>คุณแน่ใจที่จะลบข้อมูลใช่หรือไม่</DialogDescription>
+                <DialogDescription>Are you sure you want to delete the data?</DialogDescription>
             </DialogHeader>
                 <DialogFooter className="items-center grid-row-reverse justify-between flex">
                     <DialogClose asChild>
