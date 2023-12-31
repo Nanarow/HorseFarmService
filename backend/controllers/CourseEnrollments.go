@@ -19,7 +19,7 @@ func GetAllEnrollmentsOfUser(c *gin.Context) {
 	id := c.Param("id")
 
 	// get data form database and check error
-	if err := entity.DB().Where("user_id = ?", id).Find(&enrollments).Error; err != nil {
+	if err := entity.DB().Joins("Schedule").Where("user_id = ?", id).Omit("schedule_id").Find(&enrollments).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

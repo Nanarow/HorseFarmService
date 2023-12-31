@@ -25,9 +25,7 @@ export interface TourType {
 export interface Enrollment {
   ID: number;
   UserID: number;
-  CourseID: number;
-  Date: Date;
-  Remark: string;
+  Schedule: Schedule;
 }
 export interface Horse {
   ID: number;
@@ -35,12 +33,12 @@ export interface Horse {
   Age: number;
   Date: Date;
   Image: string;
-  Employee:Employee
-  Bleed:Bleed
-  Sex:Sex
-  Stable:Stable
+  Employee: Employee;
+  Bleed: Bleed;
+  Sex: Sex;
+  Stable: Stable;
   // EmployeeID: number;
-  
+
   // BleedID: number;
   // SexID: number;
   // StableID: number;

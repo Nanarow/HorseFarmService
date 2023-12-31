@@ -54,7 +54,15 @@ const EnrollmentList = ({
           {enrollments.map((enroll, index) => {
             return (
               <TableRow key={index}>
-                <TableCell>{getCourse(enroll.CourseID)?.Name}</TableCell>
+                <TableCell>
+                  {getCourse(enroll.Schedule.CourseID)?.Name}
+                </TableCell>
+                <TableCell>
+                  {new Date(enroll.Schedule.Date).toDateString()}
+                </TableCell>
+                <TableCell>
+                  {new Date(enroll.Schedule.Date).toTimeString().slice(0, 8)}
+                </TableCell>
               </TableRow>
             );
           })}

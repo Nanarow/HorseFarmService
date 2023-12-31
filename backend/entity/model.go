@@ -164,6 +164,7 @@ type Enrollment struct {
 	BaseModel
 	UserID     uint
 	ScheduleID uint
+	Schedule   Schedule `gorm:"foreignKey:ScheduleID"`
 }
 
 type Employee struct {
