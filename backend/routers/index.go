@@ -104,8 +104,6 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	route.DELETE("/schedules/:id", controllers.DeleteSchedule)
 
 	route.POST("/foods", controllers.CreateFood)
-	route.PUT("/foods/:id", controllers.UpdateFood)
-	route.DELETE("/foods/:id", controllers.DeleteFood)
 
 	// stable management system
 	// route.POST("/stables", controllers.CreateHorse)
