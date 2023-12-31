@@ -11,19 +11,19 @@ const Tour = () => {
     <main className="w-full h-screen">
       <NavBar></NavBar>
       <Tabs
-        className="  w-full h-[calc(100%-58px)]"
+        className="  w-full h-[calc(100%-58px)] overflow-x-hidden"
         onValueChange={setTabs}
         value={tabs}
       >
         <TabsContent
           value="register"
-          className="w-full h-full mt-0 slide-in-right "
+          className="w-full h-full mt-0 slide-in-right"
         >
           <TourRegister onClick={() => setTabs("list")} />
         </TabsContent>
         <TabsContent
           value="list"
-          className="w-full h-full mt-0 animate-slide-in-left overflow-hidden"
+          className="w-full h-full mt-0 animate-slide-in-left "
         >
           <div className="w-full h-full flex">
             <TourList onClick={() => setTabs("register")} />
