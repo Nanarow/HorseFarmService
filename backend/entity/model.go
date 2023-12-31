@@ -24,9 +24,9 @@ type User struct {
 	RidingLevelID uint
 	RidingLevel   RidingLevel `gorm:"foreignKey:RidingLevelID"`
 
-	Supports          []Support          `json:"-"`
-	TourRegistrations []TourRegistration `gorm:"foreignKey:UserID"`
-	Enrollments       []Enrollment       `json:"-"`
+	Supports          []Support          `json:",omitempty"`
+	TourRegistrations []TourRegistration `json:",omitempty"`
+	Enrollments       []Enrollment       `json:",omitempty"`
 }
 
 type Role struct {
@@ -73,6 +73,7 @@ type Schedule struct {
 	Description string
 	CourseID    uint
 	Course      Course `gorm:"foreignKey:CourseID"`
+	Enrollments []Enrollment
 }
 
 type Location struct {
@@ -111,20 +112,20 @@ type Stable struct {
 	Temperature int
 	Humidity    int
 	Description string  `valid:"required~Description is required,minstringlength(4)~Description must be at least 4"`
-	Horses      []Horse `json:"-"`
+	Horses      []Horse `json:",omitempty"`
 }
 
 type Bleed struct {
 	BaseModel
 	Name        string  `gorm:"default:Bleed" `
 	Description string  `json:",omitempty"`
-	Horses      []Horse `json:"-"`
+	Horses      []Horse `json:",omitempty"`
 }
 
 type Sex struct {
 	BaseModel
 	Name   string  `gorm:"default:Sex" `
-	Horses []Horse `json:"-"`
+	Horses []Horse `json:",omitempty"`
 }
 
 type TourType struct {
@@ -161,10 +162,9 @@ type Plan struct {
 
 type Enrollment struct {
 	BaseModel
-	UserID   uint
-	CourseID uint
-	Date     time.Time
-	Remark   string
+	UserID     uint
+	ScheduleID uint
+	Schedule   Schedule `gorm:"foreignKey:ScheduleID"`
 }
 
 type Employee struct {
