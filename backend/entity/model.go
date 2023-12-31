@@ -229,13 +229,13 @@ type Health struct {
 
 type Food struct {
 	BaseModel
-	Fat          string		`valid:require~Fat is required`
-	Carbohydrate string		`valid:require~Carbohydrate is required`
-	Protein      string		`valid:require~Protein is required`
-	Vitamin      string		`valid:require~Vitamin is required`
-	Mineral      string		`valid:require~Mineral is required`
-	Forage       string		`valid:require~Forage is required`
+	Fat          string		`valid:"required~Fat is required"`
+	Carbohydrate string		`valid:"required~Carbohydrate is required"`
+	Protein      string		`valid:"required~Protein is required"`
+	Vitamin      string		`valid:"required~Vitamin is required"`
+	Mineral      string		`valid:"required~Mineral is required"`
+	Forage       string		`valid:"required~Forage is required"`
 	Date         time.Time	`valid:"required~Date is required,future~Date must be in the future"`
-	EmployeeID   uint
+	EmployeeID   uint		`json:",omitempty" valid:"required~Employee is required,refer=employees~Employee does not exist"`
 	Employee     Employee	`gorm:"foreignKey:EmployeeID" valid:"-"`
 }
