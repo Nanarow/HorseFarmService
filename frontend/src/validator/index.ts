@@ -100,6 +100,7 @@ export const userUpdateFormSchema = z.object({
 
 export type UserUpdateFormData = z.infer<typeof userUpdateFormSchema>;
 
+
 export const horseFormSchema = z.object({
   Name: z.string().min(1, "Name is required"),
   Age: z.number({ required_error: "Age is required" }),
@@ -125,3 +126,16 @@ export const horseUpdateFormSchema = z.object({
 });
 
 export type HorseUpdateFormData = z.infer<typeof horseUpdateFormSchema>;
+
+export const foodFormSchema = z.object({
+  Fat: z.string({ required_error: "Fat is required"}),
+	Carbohydrate: z.string({ required_error: "Carbohydrate is required"}),
+	Protein: z.string({ required_error: "Protein is required"}),
+	Vitamin: z.string({ required_error: "Vitamin is required"}),
+	Mineral: z.string({ required_error: "Mineral is required"}),
+	Forage: z.string({ required_error: "Forage is required"}),
+	Date: z.date().min(new Date(), "Date must be in the future"),
+});
+
+export type FoodFormData = z.infer<typeof foodFormSchema>;
+

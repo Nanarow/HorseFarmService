@@ -57,9 +57,9 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	route.GET("/tours/types", mw.Authorization(101), controllers.GetAllTourTypes)
 	route.GET("/tours/plans", mw.Authorization(101), controllers.GetAllPlans)
 
-	// prepare for enrollment system
-	// route.GET("/enrollments/user/:id", controllers.GetAllEnrollmentsOfUser)
-	// route.POST("/enrollments", controllers.CreateEnrollment)
+	// enrollment system
+	route.GET("/enrollments/user/:id", mw.Authorization(101), controllers.GetAllEnrollmentsOfUser)
+	route.POST("/enrollments", mw.Authorization(101), controllers.CreateEnrollment)
 
 	// User account management
 	route.GET("/users", controllers.GetAllUser)
@@ -104,8 +104,6 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	route.DELETE("/schedules/:id", controllers.DeleteSchedule)
 
 	route.POST("/foods", controllers.CreateFood)
-	route.PUT("/foods/:id", controllers.UpdateFood)
-	route.DELETE("/foods/:id", controllers.DeleteFood)
 
 	// stable management system
 	// route.POST("/stables", controllers.CreateHorse)

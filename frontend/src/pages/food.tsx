@@ -1,27 +1,46 @@
 import { http } from "../services/httpRequest";
-import { useEffect, useState } from "react";
 import { useAuth } from "@src/providers/authProvider";
 import { useToast } from "@shadcn/ui/use-toast";
-import Form, { ItemList } from "@shadcn/simplify/form";
+import Form from "@shadcn/simplify/form";
 import { LogOut } from "lucide-react";
-import { Label } from "@radix-ui/react-select";
-import { Button } from "react-day-picker";
+import { Label } from "@shadcn/ui";
+import { Button } from "@shadcn/ui/button";
 import { Tooltip } from "@shadcn/simplify/tooltip";
+import { FoodFormData, foodFormSchema } from "@src/validator";
 
 const Food = () => {
   const { logout } = useAuth();
   const { toast } = useToast();
-  const {employee} = useAuth()
+  const { getEmployee } = useAuth();
+  async function onValid(formData: FoodFormData) {
+    const data = {
+      ...formData,
+      EmployeeID: getEmployee().ID,
+    };
+
+    const res = await http.Post<string>("/foods", data);
+    if (res.ok) {
+      toast({
+        title: res.data,
+        duration: 1500,
+      });
+    } else {
+      toast({
+        title: res.error,
+        duration: 1500,
+      });
+    }
+  }
   return (
     <div className="relative">
       <section className="w-2/5 h-full bg-center absolute">
         <img>
         </img>
       </section>
-      {/* <Form
+      <Form
         className="flex justify-end mt-7"
-        validator={}
-        onValid={}
+        validator={foodFormSchema}
+        onValid={onValid}
         onInvalid={console.log}
         fields={({ form }) => (
           <div className="flex flex-col relative">
@@ -84,7 +103,7 @@ const Food = () => {
           </div>
         )}
       >
-      </Form> */}
+      </Form>
     </div>
   );
 };

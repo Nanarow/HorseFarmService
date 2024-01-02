@@ -78,8 +78,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const handleLogin = async (role: Role, data?: TLogin) => {
     if (role === "user" || role === "admin") {
-      const org = role === "user" ? "/login" : "/login/admin";
-      const res = await http.Post<User>(org, data || {});
+      const res = await http.Post<User>("/login/" + role, data || {});
       if (res.ok) {
         setUser(res.data);
         navigate(from, { replace: true });

@@ -24,9 +24,9 @@ type User struct {
 	RidingLevelID uint
 	RidingLevel   RidingLevel `gorm:"foreignKey:RidingLevelID"`
 
-	Supports          []Support          `json:"-"`
-	TourRegistrations []TourRegistration `gorm:"foreignKey:UserID"`
-	Enrollments       []Enrollment       `json:"-"`
+	Supports          []Support          `json:",omitempty"`
+	TourRegistrations []TourRegistration `json:",omitempty"`
+	Enrollments       []Enrollment       `json:",omitempty"`
 }
 
 type Role struct {
@@ -73,6 +73,7 @@ type Schedule struct {
 	Description string
 	CourseID    uint
 	Course      Course `gorm:"foreignKey:CourseID"`
+	Enrollments []Enrollment
 }
 
 type Location struct {
@@ -161,10 +162,9 @@ type Plan struct {
 
 type Enrollment struct {
 	BaseModel
-	UserID   uint
-	CourseID uint
-	Date     time.Time
-	Remark   string
+	UserID     uint
+	ScheduleID uint
+	Schedule   Schedule `gorm:"foreignKey:ScheduleID"`
 }
 
 type Employee struct {
@@ -229,13 +229,13 @@ type Health struct {
 
 type Food struct {
 	BaseModel
-	Fat          string
-	Carbohydrate string
-	Protein      string
-	Vitamin      string
-	Mineral      string
-	Forage       string
-	Date         time.Time
-	EmployeeID   uint
-	Employee     Employee `gorm:"foreignKey:EmployeeID"`
+	Fat          string		`valid:"required~Fat is required"`
+	Carbohydrate string		`valid:"required~Carbohydrate is required"`
+	Protein      string		`valid:"required~Protein is required"`
+	Vitamin      string		`valid:"required~Vitamin is required"`
+	Mineral      string		`valid:"required~Mineral is required"`
+	Forage       string		`valid:"required~Forage is required"`
+	Date         time.Time	`valid:"required~Date is required,future~Date must be in the future"`
+	EmployeeID   uint		`json:",omitempty" valid:"required~Employee is required,refer=employees~Employee does not exist"`
+	Employee     Employee	`gorm:"foreignKey:EmployeeID" valid:"-"`
 }
