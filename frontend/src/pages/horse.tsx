@@ -1,6 +1,5 @@
-//import React from "react";
 import { z } from "zod";
-import { Card, CardContent,CardDescription,CardHeader,CardTitle, } from "@shadcn/ui/card";
+import { Card } from "@shadcn/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose} from "@shadcn/ui/dialog"
 import { Button }from "@shadcn/ui/button"
 import { Label } from "@shadcn/ui/label"
@@ -15,20 +14,10 @@ import HorseAlert from "@src/components/Horse/HorseAlert";
 import { Trash2, LogOutIcon} from 'lucide-react';
 import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
+import { horseFormSchema } from "@src/validator";
 
 const HorsePage = () => {
-  const { toast } = useToast();
-  const formHorse = z.object({
-    Name: z.string(),
-    Age: z.number({ required_error: "Age is required" }),
-    Date: z.date().min(new Date(), "Date must be in the future"),
-    Image: z.string(),
-    EmployeeID: z.number(),
-    BleedID: z.number(),
-    SexID: z.number(),
-    StableID: z.number(),
-  });
-  
+  const {toast} = useToast();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [bleeds, setBleeds] = useState<Bleed[]>([]);
   const [sexs, setSexs] = useState<Sex[]>([]);
@@ -83,7 +72,7 @@ const HorsePage = () => {
     }
   },[])
   
-  async function onValid(formData: z.infer<typeof formHorse>) {  
+  async function onValid(formData: z.infer<typeof horseFormSchema>) {  
     console.log(formData)
 
     const res = await http.Post<string>("/horses", formData);
@@ -117,14 +106,14 @@ const HorsePage = () => {
   }
 
   return (
-    <div className="w-full h-screen flex flex-col item-center justify-item">
+    <div className="w-full h-screen flex flex-col gap-4">
       <div className="flex flex-row-reverse mt-4 mr-4 text-red-500 ">
         <Tooltip content={("Logout")}>
           <LogOutIcon onClick={logout}/>
         </Tooltip>
       </div>
       <h1 className="text-left text-2xl font-blod ml-5 uppercase"></h1>        
-      <div className="ml-5 mt-5 flex flex-row">
+      <div className="ml-5 -mt-2 flex flex-row ">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button variant="outline" className="bg-green-500">ADD+</Button>
@@ -135,7 +124,7 @@ const HorsePage = () => {
             </DialogHeader>
             <Form
               className="grid gap-5"
-              validator={formHorse}
+              validator={horseFormSchema}
               onValid={onValid}
               onInvalid={(data) => console.log(data)}
               fields={({ form }) => (
@@ -249,44 +238,46 @@ const HorsePage = () => {
           </DialogContent>
         </Dialog>
       </div>
-      {horses.length > 0 && horses.map((horse) => (
-        <Card className="place-items-center">
-          <p className="col-span-3 font-extralight">
-            <img 
-            src={horse.Image} 
-            alt={horse.Name}
-            className="h-36 w-32 m-5 rounded-lg"
-            />
-          </p>
-          <p>
-            <Label>Name:</Label> {horse.Name}
-          </p>
-          <p>Age: {horse.Age}</p>
-          <p>Bleed: {horse.Bleed.Name}</p>
-          <p>Stable: {horse.Stable.ID}</p>
-          <p>Employee: {horse.Employee.FirstName}</p>
-          <p>
-            <Dialog >
-              <HorseEdit
-                horse={horse} 
-                onSave={fetchHorses} 
-              ></HorseEdit>
-            </Dialog>
-          </p>
-          <p>
-            <Dialog>
-              <DialogTrigger asChild className="text-red-500 text-center m-12">
-                <Trash2 />
-              </DialogTrigger>
-                <HorseAlert 
-                  horseID={horse.ID}
-                  onDelete={fetchHorses}
-                ></HorseAlert>
-            </Dialog>
-          </p>
-        </Card>  
-      ))}
-      
+      <div className="h-56 grid grid-cols-3 gap-4 content-start ml-5 mr-5">
+        {horses.length > 0 && horses.map((horse) => (
+          <Card 
+            key={horse.ID}
+            className="place-items-center object-center p-4">
+            <div className="col-span-3 font-extralight float-left">
+              <img 
+              src={horse.Image} 
+              alt={horse.Name}
+              className=" h-40 w-28 m-5 rounded-lg"
+              />
+            </div>
+            <div className="mt-5">
+              <Label>Name: </Label>{horse.Name}
+            </div>
+            <div>Stable: {horse.Stable.ID}</div>
+            <div>Age: {horse.Age}</div>
+            <div>Bleed: {horse.Bleed.Name}</div>
+            <div className="absolute -m-28 ml-96" >
+              <Dialog>
+                <HorseEdit
+                  horse={horse} 
+                  onSave={fetchHorses} 
+                ></HorseEdit>
+              </Dialog>
+            </div>
+            <div>
+              <Dialog>
+                <DialogTrigger asChild className="text-red-500 mt-10 -m-6">
+                  <Trash2 />
+                </DialogTrigger>
+                  <HorseAlert 
+                    horseID={horse.ID}
+                    onDelete={fetchHorses}
+                  ></HorseAlert>
+              </Dialog>
+            </div>
+          </Card>  
+        ))}
+      </div> 
     </div>
   );
 };
