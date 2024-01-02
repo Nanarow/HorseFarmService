@@ -111,20 +111,20 @@ type Stable struct {
 	Temperature int
 	Humidity    int
 	Description string  `valid:"required~Description is required,minstringlength(4)~Description must be at least 4"`
-	Horses      []Horse `json:"-"`
+	Horses      []Horse `json:",omitempty"`
 }
 
 type Bleed struct {
 	BaseModel
 	Name        string  `gorm:"default:Bleed" `
 	Description string  `json:",omitempty"`
-	Horses      []Horse `json:"-"`
+	Horses      []Horse `json:",omitempty"`
 }
 
 type Sex struct {
 	BaseModel
 	Name   string  `gorm:"default:Sex" `
-	Horses []Horse `json:"-"`
+	Horses []Horse `json:",omitempty"`
 }
 
 type TourType struct {

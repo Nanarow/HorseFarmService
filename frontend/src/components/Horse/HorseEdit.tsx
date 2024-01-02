@@ -1,8 +1,5 @@
-//import React from "react";
-import { z } from "zod";
-//import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@shadcn/ui/table"
-import { Button }from "@shadcn/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose, DialogDescription} from "@shadcn/ui/dialog"
+import { z } from "zod";import { Button }from "@shadcn/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose} from "@shadcn/ui/dialog"
 import { Label } from "@shadcn/ui/label"
 import Form from "@shadcn/simplify/form";
 import { useEffect, useState} from "react";
@@ -11,6 +8,7 @@ import { http } from "../../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 import { ToItemList } from "@src/utils";
 import { Edit } from "lucide-react";
+import { horseUpdateFormSchema } from "@src/validator";
 
 interface Props {
   horse: Horse;
@@ -19,22 +17,11 @@ interface Props {
 
 const HorseEdit = ({ horse, onSave }: Props) => {
   const { toast } = useToast();
-
-  const formHorse = z.object({
-    Name: z.string().min(1, "Name is required"),
-    Age: z.number({ required_error: "Age is required" }),
-    Date: z.date(),
-    Image: z.string(),
-    EmployeeID: z.number(),
-    BleedID: z.number(),
-    SexID: z.number(),
-    StableID: z.number(),
-  });
-  
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [bleeds, setBleeds] = useState<Bleed[]>([]);
   const [sexs, setSexs] = useState<Sex[]>([]);
   const [stables, setStables] = useState<Stable[]>([]);
+
   const [open, setOpen] = useState(false);
 
   async function fetchEmployees() {
@@ -89,7 +76,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
     return res
   }
 
-  async function onEditValid(formData: z.infer<typeof formHorse>, ID: number) {
+  async function onEditValid(formData: z.infer<typeof horseUpdateFormSchema>, ID: number) {
     const newHorse ={
       ...formData,
 
@@ -102,9 +89,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
         title: "You submitted the following values:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(res.data, null, 2)}
-            </code>
+            <code className="text-white">{JSON.stringify(res.data, null, 2)}</code>
           </pre>
         ),
         duration: 1500,
@@ -124,7 +109,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
           </DialogHeader>
           <Form
             className="grid gap-5"
-            validator={formHorse}
+            validator={horseUpdateFormSchema}
             onValid={(data)=>onEditValid(data,horse.ID)}
             onInvalid={(data) => console.log(data)}
             fields={({ form }) => (
@@ -219,7 +204,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                         useForm={form} 
                         name="Date">
                       </Form.DatePicker>
-                  </div>
+                  </div>  
                   <div className="grid grid-cols-5 items-center gap-4 ">
                     <Label className="text-right">Image</Label>
                       <Form.Input
@@ -234,9 +219,9 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                   </div>
                   <DialogFooter className="items-center grid grid-row-reverse justify-between">
                     <div className="space-x-4">
-                    <DialogClose asChild>
-                      <Button variant="secondary" className=" bg-red-500" type="reset" >Cancle</Button>
-                    </DialogClose>                               
+                      <DialogClose asChild>
+                        <Button variant="secondary" className=" bg-red-500" type="reset" >Cancle</Button>
+                      </DialogClose>                               
                       <Button variant="outline" type="submit" className=" bg-green-500">Save</Button>                               
                     </div>           
                   </DialogFooter>
