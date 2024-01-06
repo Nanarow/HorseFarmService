@@ -5,6 +5,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut66/team16/backend/entity"
 )
@@ -37,6 +38,12 @@ func CreateEnrollment(c *gin.Context) {
 		return
 	}
 
+	// validate struct
+	if _, err := govalidator.ValidateStruct(enrollment); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	// create data in database and check error
 	if err := entity.DB().Create(&enrollment).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -44,5 +51,5 @@ func CreateEnrollment(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": "enrollment successfully"})
+	c.JSON(http.StatusCreated, gin.H{"data": "enrollment successfully"})
 }

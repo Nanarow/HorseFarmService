@@ -11,6 +11,7 @@ import { useAuth } from "@src/providers/authProvider";
 import { HomeIcon, LogInIcon, LogOutIcon, MenuIcon, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Menus } from "./menu";
+import { cn } from "@cn/utils";
 
 const NavBar = () => {
   const { logout, getRole, isLoggedIn, getEmployee, getUser } = useAuth();
@@ -19,9 +20,9 @@ const NavBar = () => {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center w-full px-4">
         <div className="flex w-full">
-          <Link className="mr-6  items-center space-x-2 hidden sm:flex" to="/">
+          <Link className="mr-6  items-center space-x-2 flex" to="/">
             <HomeIcon />
-            <span className="hidden font-bold sm:inline-block">Horse Farm</span>
+            <span className="font-bold ">Horse Farm</span>
           </Link>
           {
             <nav className="hidden sm:flex items-center space-x-6">
@@ -63,7 +64,10 @@ const NavBar = () => {
                 <DropdownMenuSeparator /> */}
                 <DropdownMenuItem
                   onClick={logout}
-                  className="text-red-500 cursor-pointer"
+                  className={cn(
+                    "text-red-500 cursor-pointer ",
+                    "focus:bg-red-500 focus:text-white"
+                  )}
                 >
                   <LogOutIcon className="mr-2" />
                   Log out
@@ -94,9 +98,10 @@ const NavBar = () => {
                 <DropdownMenuItem key={index}>
                   <Link
                     to={menu.to}
-                    className={` transition-colors hover:text-foreground/80 ${
+                    className={cn(
+                      "transition-colors hover:text-foreground/80",
                       location.pathname === menu.to ? "" : "text-foreground/60"
-                    }`}
+                    )}
                   >
                     {menu.label}
                   </Link>
@@ -106,7 +111,10 @@ const NavBar = () => {
               {isLoggedIn() ? (
                 <DropdownMenuItem
                   onClick={logout}
-                  className="text-red-500 cursor-pointer"
+                  className={cn(
+                    "text-red-500 cursor-pointer ",
+                    "focus:bg-red-500 focus:text-white"
+                  )}
                 >
                   <LogOutIcon className="mr-2" />
                   Log out

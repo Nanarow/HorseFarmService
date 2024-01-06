@@ -17,13 +17,13 @@ const Tour = () => {
       >
         <TabsContent
           value="register"
-          className="w-full h-full mt-0 slide-in-right"
+          className="w-full h-full mt-0 animate-slide-in-left"
         >
           <TourRegister onClick={() => setTabs("list")} />
         </TabsContent>
         <TabsContent
           value="list"
-          className="w-full h-full mt-0 animate-slide-in-left "
+          className="w-full h-full mt-0 animate-slide-in-right "
         >
           <div className="w-full h-full flex">
             <TourList onClick={() => setTabs("register")} />

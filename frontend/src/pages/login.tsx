@@ -5,6 +5,7 @@ import { Badge } from "@shadcn/ui/badge";
 import { useEffect } from "react";
 import { useAuth } from "@src/providers/authProvider";
 import { Label } from "@shadcn/ui";
+import { cn } from "@cn/utils";
 
 interface LoginProps {
   role: "user" | "employee" | "admin";
@@ -32,7 +33,7 @@ const Login = ({ role }: LoginProps) => {
 
   return (
     <div className="w-full h-screen bg-secondary flex flex-col justify-center items-center gap-2">
-      <h1 className="text-3xl font-black text-primary mb-4 tracking-in-expand">
+      <h1 className="text-3xl font-black text-primary mb-4 animate-tracking-in-expand">
         Horse Farm
       </h1>
       <Card className="flex flex-col w-3/4 max-w-sm relative">
@@ -44,11 +45,12 @@ const Login = ({ role }: LoginProps) => {
         <CardContent>
           {role !== "user" && (
             <Badge
-              className={` absolute top-2 right-2 rounded-full ${
+              className={cn(
+                "absolute top-2 right-2 rounded-full",
                 role === "admin"
                   ? "bg-sky-500 hover:bg-sky-500/80"
                   : "bg-amber-500 hover:bg-amber-500/80"
-              }`}
+              )}
             >
               {role}
             </Badge>
@@ -58,7 +60,7 @@ const Login = ({ role }: LoginProps) => {
             validator={validLogin}
             onValid={onLogin}
             onInvalid={(errorFields) => console.log(errorFields)}
-            fields={({ form }) => (
+            fields={({ form, errors }) => (
               <>
                 <Label>Email</Label>
                 <Form.Input
@@ -67,13 +69,15 @@ const Login = ({ role }: LoginProps) => {
                   type="email"
                   placeholder="example@mail.com"
                 />
+                <Form.Error field={errors.Email} />
                 <Label>Password</Label>
                 <Form.Input
                   useForm={form}
                   name="Password"
                   type="password"
-                  placeholder="A-Z,0-9,@"
+                  placeholder="********"
                 />
+                <Form.Error field={errors.Password} />
                 <Form.SubmitButton useForm={form}>Log in</Form.SubmitButton>
               </>
             )}
