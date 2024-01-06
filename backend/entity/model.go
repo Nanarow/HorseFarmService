@@ -169,7 +169,7 @@ type Enrollment struct {
 
 type Employee struct {
 	BaseModel
-	PositionID uint     `json:",omitempty"`
+	PositionID uint     `json:",omitempty" valid:"required~Position is required,refer=positions~Position does not exist"`
 	Position   Position `gorm:"foreignKey:PositionID"`
 
 	GenderID uint   `json:",omitempty"`
