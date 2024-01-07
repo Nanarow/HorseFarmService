@@ -8,9 +8,9 @@ type User struct {
 	BaseModel
 	FirstName       string
 	LastName        string
-	Email           string
-	Password        string
-	Phone           string
+	Email           string `valid:"required~Email is required,email~Invalid email address"`
+	Password        string `valid:"required~Password is required,minstringlength(8)~Password must be at 8 characters"`
+	Phone           string `valid:"required~Phone is required,stringlength(10|10)~Phone must be at 10 characters"`
 	Profile         string
 	Age             int
 	ExperiencePoint int
