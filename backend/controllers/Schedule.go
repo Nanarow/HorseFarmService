@@ -6,13 +6,12 @@ import (
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut66/team16/backend/entity"
-	"gorm.io/gorm/clause"
 )
 
 func GetAllSchedules(c *gin.Context) {
 	var schedules []entity.Schedule
 
-	if err := entity.DB().Preload(clause.Associations).Find(&schedules).Error; err != nil {
+	if err := entity.DB().Joins("Course").Find(&schedules).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -24,7 +23,7 @@ func GetSchedule(c *gin.Context) {
 	var schedule entity.Schedule
 	id := c.Param("id")
 
-	if err := entity.DB().Preload(clause.Associations).First(&schedule, id).Error; err != nil {
+	if err := entity.DB().Joins("Course").First(&schedule, id).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

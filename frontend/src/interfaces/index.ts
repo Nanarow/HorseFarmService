@@ -159,8 +159,9 @@ export interface Course {
 }
 
 export interface Schedule {
-  ID?: number;
+  ID: number;
   CourseID: number;
+  Course: Course;
   Date: Date;
   StartTime: Date;
   Description: string;

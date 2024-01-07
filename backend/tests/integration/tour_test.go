@@ -3,6 +3,7 @@ package tests
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -14,12 +15,17 @@ import (
 	"github.com/sut66/team16/backend/routers"
 )
 
-func TestCreateTour(t *testing.T) {
-	entity.SetupDatabase("TestDB")
-	t.Run(`created tour success`, func(t *testing.T) {
-		router := routers.SetUpRouter()
-		router.POST("/tours", controllers.CreateTour)
+type resp struct {
+	Error string `json:"error"`
+}
 
+func TestCreateTour(t *testing.T) {
+
+	entity.SetupDatabase("TestDB")
+	router := routers.SetUpRouter()
+	router.POST("/tours", controllers.CreateTour)
+
+	t.Run(`created tour success`, func(t *testing.T) {
 		tour := entity.TourRegistration{
 			Date:         time.Now().Add(time.Duration(1) * time.Hour),
 			Email:        "u1@u.com",
@@ -42,9 +48,6 @@ func TestCreateTour(t *testing.T) {
 		// add additional assertions to check if the tour registration is created successfully
 	})
 	t.Run(`create tour fail`, func(t *testing.T) {
-		router := routers.SetUpRouter()
-		router.POST("/tours", controllers.CreateTour)
-
 		tour := entity.TourRegistration{
 			Email: "u1@u.com",
 			Name:  "my tour",
@@ -55,7 +58,13 @@ func TestCreateTour(t *testing.T) {
 
 		response := httptest.NewRecorder()
 		router.ServeHTTP(response, request)
+		body := response.Result().Body
+		data, _ := io.ReadAll(body)
 
+		var respJson resp
+		json.Unmarshal(data, &respJson)
 		assert.Equal(t, http.StatusBadRequest, response.Code)
+		assert.Equal(t, "Date is required;Participants is required;Plan is required", respJson.Error)
+
 	})
 }

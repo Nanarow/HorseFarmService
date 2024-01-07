@@ -2,7 +2,7 @@ import tourImage from "@src/assets/tourbg-2.jpg";
 import Form from "@shadcn/simplify/form";
 import { useState } from "react";
 import { http } from "@src/services/httpRequest";
-import { Button, Checkbox, Label } from "@shadcn/ui";
+import { Checkbox, Label } from "@shadcn/ui";
 import { useToast } from "@shadcn/ui/use-toast";
 import { ArrowRightSquareIcon } from "lucide-react";
 import { ToItemList } from "@src/utils";
@@ -10,7 +10,7 @@ import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { Skeleton } from "@shadcn/ui/skeleton";
 import { TourFormData, tourFormSchema } from "@src/validator";
-import { useRefresh, useTourPlan, useTourType } from "@src/hooks";
+import { useTourPlan, useTourType } from "@src/hooks";
 
 const TourRegister = ({ onClick }: { onClick: () => void }) => {
   const { toast } = useToast();
@@ -19,7 +19,7 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
   const { plans } = useTourPlan();
   const [email, setEmail] = useState("");
   const [check, setCheck] = useState(false);
-  const { refresh } = useRefresh();
+  // const { refresh } = useRefresh();
 
   async function onValid(formData: TourFormData) {
     const tour = {
@@ -32,6 +32,7 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
         title: res.data,
         duration: 1500,
       });
+      onClick();
     } else {
       toast({
         title: res.error,
@@ -42,14 +43,7 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
   }
   return (
     <div className="grid lg:grid-cols-2 w-full h-full">
-      <section className="w-full h-full p-2 relative">
-        <img
-          src={tourImage}
-          className="w-full h-full object-cover rounded "
-          alt="Tour"
-        />
-      </section>
-      <section className="h-full w-full flex justify-center items-center relative">
+      <section className="h-full w-full flex justify-center items-center relative lg:order-2">
         <Tooltip content={"My tours registration"} side="left">
           <ArrowRightSquareIcon
             className="absolute top-2 right-4 text-green-500 hover:scale-105"
@@ -129,13 +123,20 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
                 <Form.Input useForm={form} name="Name" type="text" />
                 <Form.Error field={errors.Name} />
                 <Form.SubmitButton useForm={form}>Register</Form.SubmitButton>
-                <Button variant={"outline"} onClick={refresh}>
+                {/* <Button variant={"outline"} onClick={refresh}>
                   Clear
-                </Button>
+                </Button> */}
               </>
             )}
           ></Form>
         </div>
+      </section>
+      <section className="w-full h-full p-2 relative order-[-1] lg:order-1">
+        <img
+          src={tourImage}
+          className="w-full h-full object-cover rounded "
+          alt="Tour"
+        />
       </section>
     </div>
   );

@@ -7,8 +7,11 @@ import { Label } from "@shadcn/ui";
 import { Button } from "@shadcn/ui/button";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { FoodFormData, foodFormSchema } from "@src/validator";
+import { useRefresh } from "@src/hooks";
+import FoodImage from "../assets/food1.jpg";
 
 const Food = () => {
+  const { refresh } = useRefresh();
   const { logout } = useAuth();
   const { toast } = useToast();
   const { getEmployee } = useAuth();
@@ -31,79 +34,65 @@ const Food = () => {
       });
     }
   }
+
   return (
-    <div className="relative">
-      <section className="w-2/5 h-full bg-center absolute">
-        <img>
-        </img>
+    <div className="grid lg:grid-cols-2 w-full h-full">
+      <section className="w-full h-full p-2 relative">
+      {/* <img
+          src={FoodImage}
+          className="w-full h-full object-cover rounded "
+          alt="Food"
+        /> */}
       </section>
-      <Form
-        className="flex justify-end mt-7"
-        validator={foodFormSchema}
-        onValid={onValid}
-        onInvalid={console.log}
-        fields={({ form }) => (
-          <div className="flex flex-col relative">
-            <h1 className="text-4xl font-black text-primary mb-2 mt-8 text-center">
-              Food
-            </h1>
-            <div className="flex">
-              <Label className="text-2xl text-primary mx-64 flex mt-16">
-                Date
-                <span className="text-red-500">*</span>
-                <div className="px-14">
-                  <Form.DatePicker
-                    className="w-96 h-14"
-                    useForm={form}
-                    name="Date"
-                  />
-                </div>
-              </Label>
-            </div>
-            <div className="flex flex-col relative">
-              <Label className="flex text-primary text-2xl mx-64 mt-6">
-                Fat:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-2 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Fat" type="text"></Form.Input>
-              </Label>
-              <Label className="flex text-primary text-2xl mx-64 mt-6">
-                Carbohydrate:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-2 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Carbohydrate" type="text"></Form.Input>
-              </Label>
-              <Label className="flex text-primary text-2xl mx-64 mt-6">
-                Protein:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-2 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Protein" type="text"></Form.Input>
-              </Label>
-              <Label className="flex text-primary text-2xl mx-64 mt-6">
-                Vitamin:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-2 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vitamin" type="text"></Form.Input>
-              </Label>
-              <Label className="flex text-primary text-2xl mx-64 mt-6">
-                Mineral:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-2 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Mineral" type="text"></Form.Input>
-              </Label>
-              <Label className="flex text-primary text-2xl mx-64 mt-6">
-                Forage:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-2 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Forage" type="text"></Form.Input>
-              </Label>
-              <Button
-                type="submit"
-                className="w-48 h-12 text-2xl text-center rounded-md mt-7 mx-auto text-primary"
-              >Save
-              </Button>
-            </div>
+      <div className="w-full h-full max-w-md flex justify-center flex-col py-12 px-4 lg:px-0">
+        <Label className="text-3xl font-bold text-center">
+          Food
+        </Label>
+        <Form
+          className="flex flex-col gap-2 mt-4"
+          validator={foodFormSchema}
+          onValid={onValid}
+          onInvalid={(data) => console.log(data)}
+          fields={({ form, errors }) => (
+            <>
+            <Form.Label>Date</Form.Label>
+            <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
+            <Form.Error field={errors.Date}/>
+            <Form.Label>Fat</Form.Label>
+            <Form.Input useForm={form} name="Fat" type="text"/>
+            <Form.Error field={errors.Fat}/>
+            <Form.Label>Carbohydrate</Form.Label>
+            <Form.Input useForm={form} name="Carbohydrate" type="text"/>
+            <Form.Error field={errors.Carbohydrate}/>
+            <Form.Label>Protein</Form.Label>
+            <Form.Input useForm={form} name="Protein" type="text"/>
+            <Form.Error field={errors.Protein}/>
+            <Form.Label>Vitamin</Form.Label>
+            <Form.Input useForm={form} name="Vitamin" type="text"/>
+            <Form.Error field={errors.Vitamin}/>
+            <Form.Label>Mineral</Form.Label>
+            <Form.Input useForm={form} name="Mineral" type="text"/>
+            <Form.Error field={errors.Mineral}/>
+            <Form.Label>Forage</Form.Label>
+            <Form.Input useForm={form} name="Forage" type="text"/>
+            <Form.Error field={errors.Forage}/>
+            <Form.SubmitButton useForm={form}>Save</Form.SubmitButton>
+            <Button variant={"outline"} onClick={refresh}>Cancle</Button>
+            <div>
               <Tooltip content={"Log Out"}>
-              <LogOut
-                onClick={() => {
-                  console.log("logout");
-                  logout();
-                }}
-                className="fixed bottom-9 right-16 w-10 h-10 cursor-pointer text-red-500"
-              />
+                <LogOut
+                  onClick={() => {
+                    console.log("logout");
+                    logout();
+                  }}
+                  className="fixed bottom-9 right-16 w-8 h-8  cursor-pointer  text-red-500"
+                  />
               </Tooltip>
-          </div>
-        )}
-      >
-      </Form>
+            </div>
+            </>
+          )}
+        ></Form>
+      </div>
     </div>
   );
 };

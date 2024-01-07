@@ -6,20 +6,19 @@ import { useEffect, useState } from "react";
 const useEnrollment = () => {
   const { getUser } = useAuth();
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  useEffect(() => {
-    async function fetchUserEnrollments() {
-      const res = await http.Get<Enrollment[]>(
-        "/enrollments/user/" + getUser().ID
-      );
-      if (res.ok) {
-        setEnrollments(res.data);
-      }
+  async function fetchUserEnrollments() {
+    const res = await http.Get<Enrollment[]>(
+      "/enrollments/user/" + getUser().ID
+    );
+    if (res.ok) {
+      setEnrollments(res.data);
     }
-
+  }
+  useEffect(() => {
     fetchUserEnrollments();
   }, []);
 
-  return { enrollments };
+  return { enrollments, fetchUserEnrollments };
 };
 
 export default useEnrollment;

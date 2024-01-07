@@ -1,4 +1,4 @@
-import { Button } from "@shadcn/ui";
+import { Button, Label, Textarea } from "@shadcn/ui";
 import {
   Dialog,
   DialogClose,
@@ -11,16 +11,41 @@ import {
 import { useAuth } from "@src/providers/authProvider";
 import { http } from "@src/services/httpRequest";
 import { AlertCircleIcon } from "lucide-react";
+import { useState } from "react";
 
-const EnrollmentAlert = ({ ScheduleID }: { ScheduleID: number }) => {
+const EnrollmentAlert = ({
+  ScheduleID,
+  onEnrolled,
+}: {
+  ScheduleID: number;
+  onEnrolled: () => void;
+}) => {
   const { getUser } = useAuth();
+  const [description, setDescription] = useState<string>();
   async function handleClick() {
-    const res = await http.Post("/enrollments", {
-      ScheduleID,
-      UserID: getUser().ID,
-    });
+    const data = description
+      ? {
+          ScheduleID,
+          UserID: getUser().ID,
+          Description: description,
+        }
+      : {
+          ScheduleID,
+          UserID: getUser().ID,
+        };
+    console.log(data);
+    const res = await http.Post("/enrollments", data);
     if (res.ok) {
       // TODO: show success message
+      onEnrolled();
+    }
+  }
+  function handle(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    const value = e.target.value;
+    if (value.trim() != "") {
+      setDescription(value);
+    } else {
+      setDescription(undefined);
     }
   }
   return (
@@ -32,6 +57,8 @@ const EnrollmentAlert = ({ ScheduleID }: { ScheduleID: number }) => {
         <DialogHeader className=" items-center sm:text-center">
           <AlertCircleIcon className="text-green-500 h-16 w-16" />
           <DialogTitle>Are you sure absolutely sure?</DialogTitle>
+          <Label className=" mt-4">Description</Label>
+          <Textarea value={description} onChange={(e) => handle(e)}></Textarea>
           {/* <DialogDescription>
             This action cannot be undone. This will cancel your registration
           </DialogDescription> */}
