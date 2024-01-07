@@ -20,10 +20,10 @@ import {
 } from "@shadcn/ui/dialog";
 
 interface Props {
-  users: User
+  user: User
   onSave(): void;
 }
-const UserEdit = ({ users, onSave }: Props) => {
+const UserEdit = ({ user, onSave }: Props) => {
   // const [users, setUser] = useState<User[] | undefined>(undefined);
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
@@ -51,9 +51,10 @@ const UserEdit = ({ users, onSave }: Props) => {
 
   async function onValid(formData: UserUpdateFormData) {
     const newUser = {
-      ...formData
-    }
-    const res = await http.Put<string>("/users", users.ID!, newUser);
+      ...formData,
+    };
+    
+    const res = await http.Put<string>("/users", user.ID!, newUser);
     if (res.ok) {
       onSave();
       toast({
@@ -166,7 +167,7 @@ const UserEdit = ({ users, onSave }: Props) => {
                 accept="image/*"
                 placeholder="Name"
               />
-              <Form.SubmitButton useForm={form}>Create</Form.SubmitButton>
+              {/* <Form.SubmitButton useForm={form}>Create</Form.SubmitButton> */}
             </>
           )}
         >

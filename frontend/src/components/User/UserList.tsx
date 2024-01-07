@@ -11,7 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@shadcn/ui/table";
-// import UserEdit from "./UserEdit";
 import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import { format } from "date-fns";
 import UserAlert from "./UserAlert";
@@ -19,10 +18,6 @@ import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import UserEdit from "./UserEdit";
 
-interface Props {
-  user: User;
-  onSave(): void;
-}
 // { setTabs }: Props
 const UserList = () => {
   const [users, setUser] = useState<User[]>([]);
@@ -99,9 +94,9 @@ const UserList = () => {
               <TableCell className=" w-[10%] text-center">
                 {user.RidingLevel?.Name}
               </TableCell>
-              {/* <TableCell className=" relative">
+              <TableCell className=" relative">
                 <UserEdit user={user} onSave={fetchUsers}></UserEdit>
-              </TableCell> */}
+              </TableCell>
               <TableCell className=" relative">
                 <Dialog>
                   <DialogTrigger asChild>
