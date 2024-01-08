@@ -15,11 +15,6 @@ import (
 	"github.com/sut66/team16/backend/routers"
 )
 
-type resp struct {
-	Error string `json:"error"`
-}
-
-
 func TestCreateEmployee(t *testing.T) {
 	entity.SetupDatabase("TestDB")
 	router := routers.SetUpRouter()
@@ -27,15 +22,15 @@ func TestCreateEmployee(t *testing.T) {
 	t.Run(`Create Employee Successfully`, func(t *testing.T) {
 
 		employee := entity.Employee{
-			FirstName:    "employee",
-			LastName:     "emp",
-			Email:        "emp@emp.com", 
-			Password: 	  "12345678",
-			DayOfBirth:   time.Now().Add(-time.Duration(1) * time.Hour),
-			Phone: 	  	  "0924506272",
-			PrecedeID:     1,
-			PositionID:    201,
-			GenderID:      1,
+			FirstName:  "employee",
+			LastName:   "emp",
+			Email:      "emp@emp.com",
+			Password:   "12345678",
+			DayOfBirth: time.Now().Add(-time.Duration(1) * time.Hour),
+			Phone:      "0924506272",
+			PrecedeID:  1,
+			PositionID: 201,
+			GenderID:   1,
 		}
 		employeeJSON, _ := json.Marshal(employee)
 		request, _ := http.NewRequest("POST", "/employees", bytes.NewBuffer(employeeJSON))
@@ -52,8 +47,8 @@ func TestCreateEmployee(t *testing.T) {
 	t.Run(`create employee fail`, func(t *testing.T) {
 
 		employee := entity.Employee{
-			FirstName:  "employee",
-			Email: "emp@emp.com",
+			FirstName: "employee",
+			Email:     "emp@emp.com",
 		}
 		employeeJSON, _ := json.Marshal(employee)
 		request, _ := http.NewRequest("POST", "/employees", bytes.NewBuffer(employeeJSON))
@@ -67,6 +62,6 @@ func TestCreateEmployee(t *testing.T) {
 		var respJson resp
 		json.Unmarshal(data, &respJson)
 		assert.Equal(t, http.StatusBadRequest, response.Code)
-		assert.Equal(t, "DayOfBirth is required;FirstName is required;Position is required;Phone is required;LastName is required", respJson.Error)
+		assert.Equal(t, "DayOfBirth is required;Password is required;Phone is required;Position is required", respJson.Error)
 	})
 }
