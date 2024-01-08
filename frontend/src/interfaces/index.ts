@@ -11,7 +11,7 @@ export interface TourRegistration {
 export interface Plan {
   ID: number;
   Name: string;
-  Description: string;
+  Description?: string;
 }
 
 export interface TourType {
@@ -19,7 +19,7 @@ export interface TourType {
   Name: string;
   MinParticipant: number;
   MaxParticipant: number;
-  Description: string;
+  Description?: string;
 }
 
 export interface Enrollment {
@@ -164,13 +164,13 @@ export interface Schedule {
   Course: Course;
   Date: Date;
   StartTime: Date;
-  Description: string;
+  Description?: string;
 }
 
 export interface Location {
   ID: number;
   Name: string;
-  Description: string;
+  Description?: string;
 }
 
 export interface Food {

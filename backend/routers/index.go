@@ -44,7 +44,7 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	// InitBasicApi[*entity.Bleed](route, "/bleeds") complete
 	// InitBasicApi[*entity.Sex](route, "/sexes") complete
 	// InitBasicApi[*entity.Location](route, "/locations")
-	InitBasicApi[*entity.Stable](route, "/stables")
+	//InitBasicApi[*entity.Stable](route, "/stables")
 	// InitBasicApi[*entity.Employee](route, "/employees") complete
 	// InitBasicApi[*entity.Precede](route, "/precedes") complete
 
@@ -106,6 +106,7 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	route.POST("/foods", controllers.CreateFood)
 
 	// stable management system
-	// route.POST("/stables", controllers.CreateHorse)
-	// route.PUT("/stables/:id", controllers.UpdateHorse)
+	route.GET("/stables", controllers.GetAllStable)
+	route.POST("/stables", controllers.CreateStable)
+	route.PUT("/stables/:id", controllers.UpdateStable)
 }
