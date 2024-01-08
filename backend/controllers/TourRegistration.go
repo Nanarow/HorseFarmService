@@ -44,7 +44,7 @@ func GetAllToursOfUser(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": tours})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(tours)})
 }
 
 // unused
@@ -160,7 +160,7 @@ func GetAllTourTypes(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": tourTypes})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(tourTypes)})
 }
 
 // GET /tours/plans
@@ -175,5 +175,5 @@ func GetAllPlans(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": plans})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(plans)})
 }

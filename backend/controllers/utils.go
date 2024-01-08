@@ -39,19 +39,24 @@ func addQuery(c *gin.Context, db *gorm.DB) *gorm.DB {
 	return db
 }
 
-func OmitEmpty(obj interface{}) map[string]interface{} {
-	// Convert the object to a JSON string
+func OmitEmpty(obj interface{}) interface{} {
+	v := reflect.ValueOf(obj)
 	data, _ := json.Marshal(obj)
 
-	// Convert the JSON string to a map
-	var jsonMap map[string]interface{}
-	json.Unmarshal(data, &jsonMap)
-
-	// Create a new map to store non-empty values
-	omitEmptyMap := Parse(jsonMap).(map[string]interface{})
-	return omitEmptyMap
+	switch v.Kind() {
+	case reflect.Struct:
+		var jsonMap map[string]interface{}
+		json.Unmarshal(data, &jsonMap)
+		return parseMap(jsonMap)
+	case reflect.Array, reflect.Slice:
+		var jsonArray []interface{}
+		json.Unmarshal(data, &jsonArray)
+		return parseSlice(jsonArray)
+	default:
+		return obj
+	}
 }
-func Parse(input interface{}) interface{} {
+func parse(input interface{}) interface{} {
 	switch value := input.(type) {
 	case map[string]interface{}:
 		return parseMap(value)
@@ -65,7 +70,7 @@ func Parse(input interface{}) interface{} {
 func parseMap(input map[string]interface{}) map[string]interface{} {
 	result := make(map[string]interface{})
 	for key, value := range input {
-		parsedValue := Parse(value)
+		parsedValue := parse(value)
 		if !isEmpty(parsedValue) {
 			result[key] = parsedValue
 		}
@@ -76,38 +81,13 @@ func parseMap(input map[string]interface{}) map[string]interface{} {
 func parseSlice(input []interface{}) []interface{} {
 	result := make([]interface{}, 0)
 	for _, value := range input {
-		parsedValue := Parse(value)
+		parsedValue := parse(value)
 		if !isEmpty(parsedValue) {
 			result = append(result, parsedValue)
 		}
 	}
 	return result
 }
-
-// func parse2(input interface{}) interface{} {
-// 	switch in := input.(type) {
-// 	case map[string]interface{}:
-// 		result := make(map[string]interface{})
-// 		for key, value := range in {
-// 			parsedValue := parse(value)
-// 			if !isEmpty(parsedValue) {
-// 				result[key] = parsedValue
-// 			}
-// 		}
-// 		return result
-// 	case []interface{}:
-// 		result := make([]interface{}, 0)
-// 		for _, value := range in {
-// 			parsedValue := parse(value)
-// 			if !isEmpty(parsedValue) {
-// 				result = append(result, parsedValue)
-// 			}
-// 		}
-// 		return result
-// 	default:
-// 		return input
-// 	}
-// }
 
 func isEmpty(value interface{}) bool {
 	v := reflect.ValueOf(value)

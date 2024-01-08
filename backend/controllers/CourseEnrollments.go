@@ -25,7 +25,7 @@ func GetAllEnrollmentsOfUser(c *gin.Context) {
 		return
 	}
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": enrollments})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(enrollments)})
 }
 
 func CreateEnrollment(c *gin.Context) {

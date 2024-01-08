@@ -133,19 +133,19 @@ type TourType struct {
 	Name              string
 	MinParticipant    int
 	MaxParticipant    int
-	Description       string             `json:",omitempty"`
-	TourRegistrations []TourRegistration `json:",omitempty"`
+	Description       string
+	TourRegistrations []TourRegistration
 }
 
 type TourRegistration struct {
 	BaseModel
-	UserID uint `json:",omitempty"`
+	UserID uint
 
-	TourTypeID uint      `json:",omitempty"`
-	TourType   *TourType `json:",omitempty"`
+	TourTypeID uint
+	TourType   *TourType
 
-	PlanID uint  `json:",omitempty" valid:"required~Plan is required,refer=plans~Plan does not exist"`
-	Plan   *Plan `json:",omitempty"`
+	PlanID uint `valid:"required~Plan is required,refer=plans~Plan does not exist"`
+	Plan   *Plan
 
 	Email        string    `valid:"required~Email is required,email~Invalid email"`
 	Participants int       `valid:"required~Participants is required,gte=8~Participants must be at least 8 "`
@@ -156,15 +156,15 @@ type TourRegistration struct {
 type Plan struct {
 	BaseModel
 	Name              string
-	Description       string             `json:",omitempty"`
-	TourRegistrations []TourRegistration `json:",omitempty"`
+	Description       string
+	TourRegistrations []TourRegistration
 }
 
 type Enrollment struct {
 	BaseModel
-	UserID     uint      `json:",omitempty"`
-	ScheduleID uint      `json:",omitempty" valid:"required~ScheduleID is required,refer=schedules~Schedule does not exist"`
-	Schedule   *Schedule `json:",omitempty"`
+	UserID     uint
+	ScheduleID uint `valid:"required~ScheduleID is required,refer=schedules~Schedule does not exist"`
+	Schedule   *Schedule
 }
 
 type Employee struct {
