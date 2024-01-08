@@ -20,6 +20,8 @@ import ValidateForm from "./examples/form-with-validation";
 import DragDropTable from "./examples/drag-drop-table";
 import EmployeeList from "./components/Employee/EmployeeList";
 import UserList from "./components/User/UserList";
+import StableList from "./components/Stable/StableList";
+import StablePage from "./pages/stable";
 
 function App() {
   return (
@@ -50,6 +52,8 @@ function App() {
         <Route path="/food" element={<Food />}></Route>
         <Route path="/health" element={<Health />}></Route>
         <Route path="/stable" element={<Stable />}></Route>
+        <Route path="/stable/list" element={<StableList />}></Route>
+        <Route path="/stable" element={<StablePage />}></Route>
         <Route path="/horse" element={<Horse />}></Route>
       </Route>
     </Routes>

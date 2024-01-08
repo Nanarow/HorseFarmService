@@ -2,7 +2,8 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
+	"time"
+	//"strconv"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
@@ -12,10 +13,11 @@ import (
 
 type HorseUpdate struct {
 	Name       string
+	Date       time.Time 
 	Age        int  `valid:"required~Age is required,gte=0~Age must be at least 0 "`
 	EmployeeID uint `valid:"required~Employee is required,refer=employees~Employee does not exist"`
 	BleedID    uint `valid:"required~Bleed is required,refer=bleeds~Bleed does not exist"`
-	SexID      uint `valid:"required~Sex is required,refer=sexs~Sex does not exist"`
+	SexID      uint 
 	StableID   uint `valid:"required~Stable is required,refer=stables~Position does not exist"`
 }
 
@@ -82,7 +84,7 @@ func CreateHorse(c *gin.Context) {
 
 func UpdateHorse(c *gin.Context) {
 	// create variable for store data as type of horse
-	var horse entity.Horse
+	var horse HorseUpdate
 	//get id from url
 	id := c.Param("id")
 
@@ -97,14 +99,6 @@ func UpdateHorse(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	// create data in database and check error
-	idUint, err := strconv.Atoi(id)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	horse.ID = uint(idUint)
 
 	// update data in database and check error
 	if err := entity.DB().Table("horses").Where("id = ?", id).Updates(horse).Error; err != nil {
@@ -133,7 +127,7 @@ func DeleteHorse(c *gin.Context) {
 	}
 
 	// response deleted data
-	c.JSON(http.StatusOK, gin.H{"data": "cancel your horse successfully"})
+	c.JSON(http.StatusOK, gin.H{"data": "delete your horse successfully"})
 
 }
 

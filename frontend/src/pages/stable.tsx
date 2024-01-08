@@ -1,28 +1,29 @@
-//import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { http } from "@src/services/httpRequest";
 import Form from "@shadcn/simplify/form";
-import { Label } from "@radix-ui/react-select";
-import { Stable,  } from "../interfaces";
+import { Stable } from "../interfaces";
 import { useToast } from "@shadcn/ui/use-toast";
-
+import { useEffect, useState} from "react";
+import StableImage from "./../assets/stable4.jpg"
+import { Label } from "@shadcn/ui/label";
+import { Button } from "@shadcn/ui/button";
+import { useAuth } from "@src/providers/authProvider";
+import { Tooltip } from "@shadcn/simplify/tooltip";
+import { LogOutIcon} from 'lucide-react';
+import { stableFormSchema } from "@src/validator";
+import { ChevronRightCircle } from 'lucide-react';
+import { Link } from "react-router-dom";
+//import { Dialog } from "@radix-ui/react-dialog";
+//import StableList from "@src/components/Stable/StableList";
 
 const StablePage = () => {
   const { toast } = useToast();
-
-  const formStable = z.object({
-    Maintenance: z.date().min(new Date()),
-    Cleaning: z.date().min(new Date()),
-    Temperature: z.number(),
-    Humidity: z.number(),
-    Description: z.string(),
-  });
-
-  /*const [stables, setStables] = useState<Stable[] | undefined>(undefined);
+  const { logout } = useAuth();
+  const [stables, setStables] = useState<Stable[]>([]);
 
   async function fetchStables() {
     const res = await http.Get<Stable[]>("/stables");
-    if(res.ok){
+    if (res.ok) {
       setStables(res.data);
     }
   }
@@ -30,100 +31,110 @@ const StablePage = () => {
   useEffect(() => {
     return () => {
       fetchStables();
-      
     }
-  })*/
+  },[])
 
-  async function onValid(formData: z.infer<typeof formStable>) {    
+  async function onValid(formData: z.infer<typeof stableFormSchema>) {    
     console.log(formData)
 
-    const res = await http.Post<Stable>("/stables", formData);
+    const res = await http.Post<string>("/stables", formData);
     if (res.ok) {
+      //setOpen(false);
       toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(formData, null, 2)}
-            </code>
-          </pre>
-        ),
+        title: res.data,
+        duration: 1500,
+        });
+    }else{
+      toast({
+        title: res.error,
         duration: 1500,
       });
     }
+    fetchStables()
   }
 
   return (
-    <div className="w-full h-screen flex flex-col item-center justify-item">
-      <h1 className="text-center text-2xl font-sans mt-10 ml-20">ตรวจสอบข้อมูลม้า</h1>
-      <div className="ml-10 mt-1 mr-10 flex flex-row-reverse">
+    <div className="w-full h-screen flex flex-col">
+      <section className="w-2/5 h-screen  bg-cover bg-center absolute">
+        <img 
+          className="w-full h-full object-cover rounded" 
+          src={StableImage}
+          alt="Stable"
+        /> 
+      </section>
+      <div className="flex flex-row-reverse mt-4 mr-4 text-red-500">
+        <Tooltip content={("Logout")}>
+          <LogOutIcon onClick={logout}/>
+        </Tooltip>
+      </div>
+      <h1 className="flex flex-row-reverse text-2xl font-black text-center mr-72">Stable Inspection Record</h1>
+      <h3 className="flex flex-row-reverse text-lg font-black text-center mr-80">บันทึกการตรวจสอบคอกม้า</h3>
+      <div className="flex flex-row-reverse mr-48">
         <Form
-          className="flex justify-end mt-7"
-          validator={formStable}
+          className="flex flex-col justify-center mt-7 gap-4"
+          validator={stableFormSchema}
           onValid={onValid}
           onInvalid={(data) => console.log(data)}
           fields={({ form }) => ( 
             <>
-              <div className="flex flex-col">
-                <h1 className="text-2xl font-black text-primary mb-2 mt-8 text-center">บันทึกการตรวจสอบคอกม้า</h1>
-                <div className="flex">
-                  <Label className=" text-2xl text-primary mx-64 flex mt-16">วันที่ซ่อมบำรุง:</Label>
-                  <div className=" px-14 ">
-                    <Form.DatePicker
-                      className="w-96 h-14"
-                      useForm={form}
-                      name="Maintenance"
-                    ></Form.DatePicker>
-                  </div>
-                </div>
-                <div className="flex">
-                  <Label className=" text-2xl text-primary mx-64 flex mt-16">วันที่ทำความสะอาด:</Label>
-                    <div className=" px-14 ">
-                    <Form.DatePicker
-                      className="w-96 h-14"
-                      useForm={form}
-                      name="Cleaning"
-                    ></Form.DatePicker>
-                  </div>
-                </div>  
-                <div className="flex">
-                  <Label className=" text-2xl text-primary mx-64 flex mt-16">อุณหภูมิ:</Label>
-                  <div className=" px-14 ">
-                    <Form.Input
-                      className="w-96 h-14"
-                      useForm={form}
-                      name="Temperature"
-                      type="number"
-                    ></Form.Input>
-                  </div>
-                </div>
-                <div className="flex">
-                  <Label className=" text-2xl text-primary mx-64 flex mt-16">ความชื้น:</Label>
-                  <div>
-                    <Form.Input
-                      className="w-96 h-14"
-                      useForm={form}
-                      name="Humidity"
-                      type="number"
-                    ></Form.Input>
-                  </div>
-                </div>
-                <div className="flex">
-                  <Label className=" text-2xl text-primary mx-64 flex mt-16">หมายเหตุ:</Label>
-                  <div>
-                    <Form.Input
-                      className="w-96 h-14"
-                      useForm={form}
-                      name="Description"
-                      type="text"
-                    ></Form.Input>
-                  </div>  
-                </div>
+              <div className="grid grid-cols-3 gap-4 mt-5">
+                <Label className="text-xl text-primary">Date of Maintenance: </Label> 
+                  <Form.DatePicker
+                    className="col-span-3 font-extralight"
+                    useForm={form}
+                    name="Maintenance"
+                  />
               </div>
+              <div className="grid grid-cols-3 gap-4">
+                <Label className="text-xl text-primary">Date of Cleaning: </Label>
+                  <Form.DatePicker
+                    className="col-span-3 font-extralight"
+                    useForm={form}
+                    name="Cleaning"
+                  />
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <Label className="text-xl text-primary">Temperature: </Label>
+                  <Form.Input
+                    className="col-span-3 font-extralight"
+                    useForm={form}
+                    name="Temperature"
+                    type="number"
+                  ></Form.Input>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <Label className="text-xl text-primary">Humidity: </Label>
+                  <Form.Input
+                    className="col-span-3 font-extralight"
+                    useForm={form}
+                    name="Humidity"
+                    type="number"
+                  ></Form.Input>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <Label className="text-xl text-primary">Description: </Label>
+                  <Form.Input
+                    className="col-span-3 font-extralight"
+                    useForm={form}
+                    name="Description"
+                    type="text"
+                  ></Form.Input>
+              </div>
+              <Button 
+                variant="outline" 
+                type="submit" 
+                className=" bg-green-500 text-center text-primary text-white ml-auto mt-5 w-24"
+                >Save
+              </Button>   
+              <Link to="/stable/list">
+                <Tooltip content={"Stable List"}>
+                  <ChevronRightCircle className=" text-red-500 fixed bottom-4 right-10 w-7 h-7"></ChevronRightCircle>
+                </Tooltip>
+              </Link>           
             </>
           )}>
-        </Form> 
-      </div> 
+        </Form>
+      </div>
     </div>
   );
 };
