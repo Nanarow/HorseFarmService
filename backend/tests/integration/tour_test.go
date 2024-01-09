@@ -12,21 +12,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/sut66/team16/backend/controllers"
 	"github.com/sut66/team16/backend/entity"
-	"github.com/sut66/team16/backend/routers"
 )
 
-type resp struct {
-	Error string `json:"error"`
-}
-type respSuccess struct {
-	Data string `json:"data"`
-}
-
 func TestCreateTour(t *testing.T) {
-
-	entity.SetupDatabase("TestDB")
-	entity.SetupData(entity.DB())
-	router := routers.SetUpRouter()
+	router := GetTestRouter()
 	router.POST("/tours", controllers.CreateTour)
 
 	t.Run(`created tour success`, func(t *testing.T) {
@@ -52,7 +41,7 @@ func TestCreateTour(t *testing.T) {
 		// Assert
 		assert.Equal(t, http.StatusCreated, response.Code)
 		// add additional assertions to check if the tour registration is created successfully
-		var respJson resp
+		var respJson Response
 		json.Unmarshal(data, &respJson)
 		assert.Equal(t, "", respJson.Error)
 	})
@@ -73,7 +62,7 @@ func TestCreateTour(t *testing.T) {
 
 		assert.Equal(t, http.StatusBadRequest, response.Code)
 
-		var respJson resp
+		var respJson Response
 		json.Unmarshal(data, &respJson)
 		assert.Equal(t, "Date is required;Participants is required;Plan is required", respJson.Error)
 
