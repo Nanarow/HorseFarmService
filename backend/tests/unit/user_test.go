@@ -9,7 +9,7 @@ import (
 	"github.com/sut66/team16/backend/entity"
 )
 
-func TestuserValidation(t *testing.T) {
+func TestUserValidation(t *testing.T) {
 	entity.SetupDatabase("TestDB")
 	entity.SetupData(entity.DB())
 	controllers.RegisValidators()
@@ -31,6 +31,6 @@ func TestuserValidation(t *testing.T) {
 
 		g.Expect(ok).NotTo(gomega.BeTrue())
 		g.Expect(err).NotTo(gomega.BeNil())
-		g.Expect(err.Error()).To(gomega.Equal("Invalid email address"))
+		g.Expect(err.Error()).To(gomega.Equal("Invalid email address;Password must be at 8 characters"))
 	})
 }
