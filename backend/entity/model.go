@@ -9,11 +9,10 @@ type User struct {
 	FirstName       string `gorm:"default:UserFirstName"`
 	LastName        string `gorm:"default:UserLastName"`
 	Email           string `valid:"required~Email is required,email~Invalid email address"`
-	Password        string 
-	// `valid:"required~Password is required,minstringlength(8)~Password must be at 8 characters"`
-	Phone           string `valid:"required~Phone is required,stringlength(10|10)~Phone must be at 10 characters"`
+	Password        string `valid:"required~Password is required,minstringlength(8)~Password must be at least 8 characters"`
+	Phone           string `valid:"required~Phone number is required,stringlength(10|10)~Phone must be at 10 characters"`
 	Profile         string
-	Age             int `valid:"required~Age is required,gte=0~Age must be at least 12 "`
+	Age             int `valid:"required~Age is required,gte=12~Age must be at least 12 "`
 	ExperiencePoint int `valid:"required~ExperiencePoint is required,gte=0~Experience Point must be at least 0 "`
 
 	RoleID uint `gorm:"default:101"`
