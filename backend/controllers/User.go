@@ -14,7 +14,7 @@ import (
 type UserForUpdate struct {
 	// RoleID          uint `gorm:"default:101"`
 	GenderID        uint ` valid:"required~Gender is required,refer=genders~Gender does not exist"`
-	RidingLevelID   uint ` valid:"required~RidingLevel is required,refer=ridingLevels~RidingLevel does not exist"`
+	RidingLevelID   uint ` valid:"required~RidingLevel is required,refer=riding_levels~RidingLevel does not exist"`
 	FirstName       string
 	LastName        string
 	Age             int
