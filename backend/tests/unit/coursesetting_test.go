@@ -102,39 +102,4 @@ func TestCourseSettingValidation(t *testing.T) {
 
 		g.Expect(err.Error()).To(gomega.Equal("Duration is required"))
 	})
-
-	t.Run(`course success`, func(t *testing.T) {
-		course := entity.Course{ //ครบ
-			Name:			"Level 1",
-			Duration:		1,
-			Participants:	10, 
-			Description:	"",
-			Experience:		1,
-			EmployeeID:		1,
-			LocationID:		1, 
-		}
-
-		ok, err := govalidator.ValidateStruct(course)
-
-		g.Expect(ok).To(gomega.BeTrue())
-		g.Expect(err).To(gomega.BeNil())
-	})
-
-	t.Run(`course unsuccess`, func(t *testing.T) {
-		course := entity.Course{ //ไม่ครบ
-			Name:			"Level 1", 
-			Participants:	10, 
-			Description:	"",
-			Experience:		1,
-			EmployeeID:		1,
-			LocationID:		1, 
-		}
-
-		ok, err := govalidator.ValidateStruct(course)
-
-		g.Expect(ok).NotTo(gomega.BeTrue())
-		g.Expect(err).NotTo(gomega.BeNil())
-
-		g.Expect(err.Error()).To(gomega.Equal("Duration is required"))
-	})
 }
