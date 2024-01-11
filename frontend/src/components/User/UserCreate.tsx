@@ -52,6 +52,13 @@ const UserPage = () => {
         duration: 1500,
       });
     }
+    else {
+      toast({
+        title: res.error,
+        duration: 1500,
+        variant: "destructive",
+      });
+    }
   }
 
   return (
