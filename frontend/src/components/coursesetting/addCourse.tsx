@@ -63,7 +63,7 @@ const AddCourse = () => {
         validator={courseFormSchema}
         onValid={onValid}
         onInvalid={(errorFields) => console.log(errorFields)}
-        fields={({ form }) => (
+        fields={({ form, errors }) => (
           <>
             <Label>
               Course Name<span className="text-red-500">*</span>
@@ -75,6 +75,7 @@ const AddCourse = () => {
               placeholder="Type Course Name"
               className="w-full"
             />
+            <Form.Error field={errors.Name}/>
             <Label>
               Duration<span className="text-red-500">*</span>
             </Label>
@@ -85,6 +86,7 @@ const AddCourse = () => {
               placeholder="Type Duration"
               className="w-full"
             />
+            <Form.Error field={errors.Duration}/>
             <Label>
               Participants<span className="text-red-500">*</span>
             </Label>
@@ -95,6 +97,7 @@ const AddCourse = () => {
               placeholder="Type Participants"
               className="w-full"
             />
+            <Form.Error field={errors.Participants}/>
             <Label>Description</Label>
             <Form.Input
               useForm={form}
@@ -113,6 +116,7 @@ const AddCourse = () => {
               placeholder="Type Experience"
               className="w-full"
             />
+            <Form.Error field={errors.Experience}/>
             {locations.length > 0 && (
               <>
                 <Label>
@@ -125,6 +129,7 @@ const AddCourse = () => {
                   name="LocationID"
                   placeholder="Select Location"
                 ></Form.Select>
+                <Form.Error field={errors.LocationID}/>
               </>
             )}
           </>
