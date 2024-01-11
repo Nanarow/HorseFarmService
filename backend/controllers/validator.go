@@ -15,19 +15,19 @@ func init() {
 
 func RegisValidators() {
 	govalidator.CustomTypeTagMap.Set("past", func(i interface{}, c interface{}) bool {
-		return i.(time.Time).Day() < time.Now().Day()
+		return i.(time.Time).Truncate(time.Hour * 24).Before(time.Now().Truncate(time.Hour * 24))
 	})
 
 	govalidator.CustomTypeTagMap.Set("future", func(i interface{}, c interface{}) bool {
-		return i.(time.Time).Day() > time.Now().Day()
+		return i.(time.Time).Truncate(time.Hour * 24).After(time.Now().Truncate(time.Hour * 24))
 	})
 
 	govalidator.CustomTypeTagMap.Set("before_tomorrow", func(i interface{}, c interface{}) bool {
-		return i.(time.Time).Day() <= time.Now().Day()
+		return i.(time.Time).Truncate(time.Hour * 24).Before(time.Now().AddDate(0, 0, 1).Truncate(time.Hour * 24))
 	})
 
 	govalidator.CustomTypeTagMap.Set("after_yesterday", func(i interface{}, c interface{}) bool {
-		return i.(time.Time).Day() >= time.Now().Day()
+		return i.(time.Time).Truncate(time.Hour * 24).After(time.Now().AddDate(0, 0, -1).Truncate(time.Hour * 24))
 	})
 
 	govalidator.ParamTagMap["eq"] = func(str string, params ...string) bool {
