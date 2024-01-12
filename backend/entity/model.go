@@ -6,10 +6,10 @@ import (
 
 type User struct {
 	BaseModel
-	FirstName       string `gorm:"default:UserFirstName"`
-	LastName        string `gorm:"default:UserLastName"`
-	Email           string `valid:"required~Email is required,email~Invalid email address"`
-	Password        string 
+	FirstName string `gorm:"default:UserFirstName"`
+	LastName  string `gorm:"default:UserLastName"`
+	Email     string `valid:"required~Email is required,email~Invalid email address"`
+	Password  string
 	// `valid:"required~Password is required,minstringlength(8)~Password must be at 8 characters"`
 	Phone           string `valid:"required~Phone is required,stringlength(10|10)~Phone must be at 10 characters"`
 	Profile         string
@@ -87,9 +87,9 @@ type Location struct {
 type Horse struct {
 	BaseModel
 	Name  string    `gorm:"default:Horse"`
-	Age   int       `valid:"required~Age is required,gte=0~Age must be at least 0 "`
+	Age   int       `valid:"required~Age is required,gte=1~Age must be at least 1"`
 	Date  time.Time `valid:"required~Date is required,future~Date must be in the future"`
-	Image string    `gorm:"default:Horse"`
+	Image string
 
 	EmployeeID uint     `json:",omitempty"`
 	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
@@ -109,11 +109,11 @@ type Horse struct {
 
 type Stable struct {
 	BaseModel
-	Maintenance time.Time `valid:"required~Date is required,future~Date must be in the future"`
-	Cleaning    time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Maintenance time.Time `valid:"required~Date is required,past~Date must be in the past"`
+	Cleaning    time.Time `valid:"required~Date is required,past~Date must be in the past"`
 	Temperature int
 	Humidity    int
-	Description string  `valid:"required~Description is required,minstringlength(4)~Description must be at least 4"`
+	Description string  `valid:"required~Description is required"`
 	Horses      []Horse `json:",omitempty"`
 }
 

@@ -105,10 +105,10 @@ export const horseFormSchema = z.object({
   Age: z.number({ required_error: "Age is required" }),
   Date: z.date().min(new Date(), "Date must be in the future"),
   Image: z.string(),
-  EmployeeID: z.number(),
-  BleedID: z.number(),
-  SexID: z.number(),
-  StableID: z.number(),
+  EmployeeID: z.number({ required_error: "Please select a employee" }),
+  BleedID: z.number({ required_error: "Please select a bleed" }),
+  SexID: z.number({ required_error: "Please select a sex" }),
+  StableID: z.number({ required_error: "Please select a stable" }),
 });
 
 export type HorseFormData = z.infer<typeof horseFormSchema>;
@@ -118,10 +118,10 @@ export const horseUpdateFormSchema = z.object({
   Age: z.number({ required_error: "Age is required" }),
   Date: z.date(),
   Image: z.string(),
-  EmployeeID: z.number(),
-  BleedID: z.number(),
-  SexID: z.number(),
-  StableID: z.number(),
+  EmployeeID: z.number({ required_error: "Please select a employee" }),
+  BleedID: z.number({ required_error: "Please select a bleed" }),
+  SexID: z.number({ required_error: "Please select a sex" }),
+  StableID: z.number({ required_error: "Please select a stable" }),
 });
 
 export type HorseUpdateFormData = z.infer<typeof horseUpdateFormSchema>;
@@ -139,23 +139,12 @@ export const foodFormSchema = z.object({
 export type FoodFormData = z.infer<typeof foodFormSchema>;
 
 export const stableFormSchema = z.object({
-  Maintenance: z.date().min(new Date(), "Date must be in the future"),
-  Cleaning: z.date().min(new Date(), "Date must be in the future"),
+  Maintenance: z.date().max(new Date(), "Date must be in the past"),
+  Cleaning: z.date().max(new Date(), "Date must be in the past"),
   Temperature: z.number(),
   Humidity: z.number(),
-  Description: z.string().min(4, "Description must be at least 4 characters"),
+  Description: z.string({ required_error: "Description is required"}),
 
 });
 
 export type StaableFormData = z.infer<typeof stableFormSchema>;
-
-export const stableUpdateFormSchema = z.object({
-  Maintenance: z.date(),
-  Cleaning: z.date(),
-  Temperature: z.number(),
-  Humidity: z.number(),
-  Description: z.string().min(4, "Description must be at least 4 characters"),
-
-});
-
-export type StaableUpdateFormData = z.infer<typeof stableUpdateFormSchema>;

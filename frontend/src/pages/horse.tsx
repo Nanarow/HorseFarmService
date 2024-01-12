@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Card } from "@shadcn/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose} from "@shadcn/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose, DialogDescription} from "@shadcn/ui/dialog"
 import { Button }from "@shadcn/ui/button"
 import { Label } from "@shadcn/ui/label"
 import Form from "@shadcn/simplify/form";
@@ -120,29 +120,36 @@ const HorsePage = () => {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Add Horse Information</DialogTitle>              
+              <DialogTitle>Add Horse Data</DialogTitle>
+              <DialogDescription>
+                Make add to your horse here. Click save when you're done.
+              </DialogDescription>              
             </DialogHeader>
             <Form
-              className="grid gap-5"
+              className="grid gap-2 mt-1"
               validator={horseFormSchema}
               onValid={onValid}
               onInvalid={(data) => console.log(data)}
-              fields={({ form }) => (
+              fields={({ form, errors }) => (
                 <>
-                  <div className="grid grid-cols-5 items-center gap-4 ">
-                    <Label className="text-right">Name</Label>
+                  <div className="grid grid-cols-4 items-center">
+                    <Label>Name<span className="text-red-500">*</span></Label>
                     <Form.Input
                       useForm={form}
                       name="Name"
                       type="text"
                       className="col-span-3 font-extralight"  
                       placeholder="enter your name"
-                    />   
+                    /> 
+                    <Form.Error
+                      field={errors.Name}
+                      className="col-span-2 col-start-2 text-sm"
+                    ></Form.Error>  
                   </div>
-                  <div className="grid grid-cols-5 items-center gap-4">
+                  <div className="grid grid-cols-4 items-center gap-1">
                     {sexs.length > 0  && (
                       <>
-                        <Label className="text-right">Sex</Label>
+                        <Label>Sex<span className="text-red-500">*</span></Label>
                         <Form.Select
                           valueAsNumber
                           useForm={form}
@@ -151,11 +158,15 @@ const HorsePage = () => {
                           className="col-span-3 font-extralight"  
                           placeholder="Sex"
                         ></Form.Select> 
+                        <Form.Error
+                          field={errors.SexID}
+                          className="col-span-3 col-start-2"
+                        ></Form.Error>  
                       </>
                     )}
                   </div>
-                  <div className="grid grid-cols-5 items-center gap-4">
-                    <Label  className="text-right">Age</Label>
+                  <div className="grid grid-cols-4 items-center gap-1">
+                    <Label>Age<span className="text-red-500">*</span></Label>
                     <Form.Input
                       useForm={form}
                       type="number"
@@ -163,11 +174,15 @@ const HorsePage = () => {
                       className="col-span-3 font-extralight"  
                       placeholder="Age"
                     /> 
+                    <Form.Error
+                      field={errors.Age}
+                      className="col-span-3 col-start-2"
+                    ></Form.Error>  
                   </div>
-                  <div className="grid grid-cols-5 items-center gap-4">
+                  <div className="grid grid-cols-4 items-center gap-1">
                     {bleeds.length > 0 && (
                       <>                      
-                        <Label className="text-right">Bleed</Label>
+                        <Label>Bleed<span className="text-red-500">*</span></Label>
                         <Form.Select
                           valueAsNumber
                           useForm={form}
@@ -175,12 +190,16 @@ const HorsePage = () => {
                           name="BleedID"
                           className="col-span-3 font-extralight"  
                           placeholder="Bleed"
-                        ></Form.Select>                          
+                        ></Form.Select>
+                        <Form.Error
+                          field={errors.BleedID}
+                          className="col-span-3 col-start-2 "
+                        ></Form.Error>                            
                       </>
                     )}
                   </div>
-                  <div className="grid grid-cols-5 items-center gap-4">
-                    <Label className="text-right">Stable</Label>
+                  <div className="grid grid-cols-4 items-center gap-1">
+                    <Label>Stable<span className="text-red-500">*</span></Label>
                       <Form.Select
                       items={ToItemList(StableTolist())}
                         valueAsNumber
@@ -188,12 +207,16 @@ const HorsePage = () => {
                         name="StableID"
                         className="col-span-3 font-extralight"  
                         placeholder="Stable"
-                     ></Form.Select>                                
+                      ></Form.Select> 
+                      <Form.Error
+                        field={errors.StableID}
+                        className="col-span-3 col-start-2"
+                      ></Form.Error>                                 
                   </div>
-                  <div className="grid grid-cols-5 items-center gap-4">
+                  <div className="grid grid-cols-4 items-center gap-1">
                     {employees.length > 0 && (
                       <>
-                        <Label className="text-right">Employee</Label>
+                        <Label>Employee<span className="text-red-500">*</span></Label>
                         <Form.Select
                           valueAsNumber
                           useForm={form}
@@ -201,20 +224,28 @@ const HorsePage = () => {
                           name="EmployeeID"
                           className="col-span-3 font-extralight"  
                           placeholder="Employee"
-                    ></Form.Select>
+                        ></Form.Select>
+                        <Form.Error
+                          field={errors.EmployeeID}
+                          className="col-span-3 col-start-2"
+                        ></Form.Error>  
                       </>
                     )}
                   </div>
-                  <div className="grid grid-cols-5 items-center gap-4">
-                    <Label className="text-right">Date</Label>
+                  <div className="grid grid-cols-4 items-center gap-1">
+                    <Label>Date<span className="text-red-500">*</span></Label>
                     <Form.DatePicker 
                       className="col-span-3 font-extralight" 
                       useForm={form} 
                       name="Date">
                     </Form.DatePicker>
+                    <Form.Error
+                      field={errors.Date}
+                      className="col-span-3 col-start-2"
+                    ></Form.Error>  
                   </div>
-                  <div className="grid grid-cols-5 items-center gap-4">
-                    <Label className="text-right">Image</Label>
+                  <div className="grid grid-cols-4 items-center gap-1">
+                    <Label>Image<span className="text-red-500">*</span></Label>
                     <Form.Input
                       useForm={form}
                       type="file"
@@ -223,8 +254,12 @@ const HorsePage = () => {
                       className="col-span-3 font-extralight"  
                       placeholder="image"                     
                     />
+                    <Form.Error
+                      field={errors.Image}
+                      className="col-span-3 col-start-2"
+                    ></Form.Error>  
                   </div>
-                  <DialogFooter className="items-center grid grid-row-reverse justify-between" >
+                  <DialogFooter>
                     <div className="space-x-4" >
                       <DialogClose asChild>
                         <Button variant="destructive" type="reset" >Cancle</Button>

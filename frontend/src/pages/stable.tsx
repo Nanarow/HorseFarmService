@@ -19,20 +19,20 @@ import { Link } from "react-router-dom";
 const StablePage = () => {
   const { toast } = useToast();
   const { logout } = useAuth();
-  const [stables, setStables] = useState<Stable[]>([]);
+  // const [ stables, setStables] = useState<Stable[]>([]);
 
-  async function fetchStables() {
-    const res = await http.Get<Stable[]>("/stables");
-    if (res.ok) {
-      setStables(res.data);
-    }
-  }
+  // async function fetchStables() {
+  //   const res = await http.Get<Stable[]>("/stables");
+  //   if (res.ok) {
+  //     setStables(res.data);
+  //   }
+  // }
 
-  useEffect(() => {
-    return () => {
-      fetchStables();
-    }
-  },[])
+  // useEffect(() => {
+  //   return () => {
+  //     fetchStables();
+  //   }
+  // },[])
 
   async function onValid(formData: z.infer<typeof stableFormSchema>) {    
     console.log(formData)
@@ -50,7 +50,7 @@ const StablePage = () => {
         duration: 1500,
       });
     }
-    fetchStables()
+    //fetchStables()
   }
 
   return (
@@ -78,7 +78,7 @@ const StablePage = () => {
           fields={({ form }) => ( 
             <>
               <div className="grid grid-cols-3 gap-4 mt-5">
-                <Label className="text-xl text-primary">Date of Maintenance: </Label> 
+                <Label className="text-xl text-primary">Date of Maintenance<span className="text-red-500">*</span></Label> 
                   <Form.DatePicker
                     className="col-span-3 font-extralight"
                     useForm={form}
@@ -86,7 +86,7 @@ const StablePage = () => {
                   />
               </div>
               <div className="grid grid-cols-3 gap-4">
-                <Label className="text-xl text-primary">Date of Cleaning: </Label>
+                <Label className="text-xl text-primary">Date of Cleaning<span className="text-red-500">*</span></Label>
                   <Form.DatePicker
                     className="col-span-3 font-extralight"
                     useForm={form}
@@ -94,7 +94,7 @@ const StablePage = () => {
                   />
               </div>
               <div className="grid grid-cols-3 gap-4">
-                <Label className="text-xl text-primary">Temperature: </Label>
+                <Label className="text-xl text-primary">Temperature<span className="text-red-500">*</span></Label>
                   <Form.Input
                     className="col-span-3 font-extralight"
                     useForm={form}
@@ -103,7 +103,7 @@ const StablePage = () => {
                   ></Form.Input>
               </div>
               <div className="grid grid-cols-3 gap-4">
-                <Label className="text-xl text-primary">Humidity: </Label>
+                <Label className="text-xl text-primary">Humidity<span className="text-red-500">*</span></Label>
                   <Form.Input
                     className="col-span-3 font-extralight"
                     useForm={form}
@@ -112,7 +112,7 @@ const StablePage = () => {
                   ></Form.Input>
               </div>
               <div className="grid grid-cols-3 gap-4">
-                <Label className="text-xl text-primary">Description: </Label>
+                <Label className="text-xl text-primary">Description<span className="text-red-500">*</span></Label>
                   <Form.Input
                     className="col-span-3 font-extralight"
                     useForm={form}
