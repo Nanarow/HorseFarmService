@@ -3,8 +3,7 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sut66/team16/backend/controllers"
-	"github.com/sut66/team16/backend/entity"
-	mw "github.com/sut66/team16/backend/middlewares"
+	"github.com/sut66/team16/backend/middlewares"
 )
 
 func SetUpRouter() *gin.Engine {
@@ -13,7 +12,7 @@ func SetUpRouter() *gin.Engine {
 
 func InitRouter(route *gin.Engine) {
 
-	route.Use(mw.CORS())
+	route.Use(middlewares.CORS())
 
 	route.POST("/logout/:role", controllers.Logout)
 	route.POST("/login/:role", controllers.Login)
@@ -23,43 +22,24 @@ func InitRouter(route *gin.Engine) {
 
 }
 func initRequiredAuthRouter(route *gin.RouterGroup) {
-	route.Use(mw.Authentication())
-	// route.Use(Authorization())
+	route.Use(middlewares.Authentication())
+	user := middlewares.Authorization(101)
 
-	// InitBasicApi[*entity.Food](route, "/foods") complete
-	// InitBasicApi[*entity.User](route, "/users") complete
-	// InitBasicApi[*entity.Role](route, "/roles") unused
-	// InitBasicApi[*entity.RidingLevel](route, "/riding/levels") complete
-	// InitBasicApi[*entity.Course](route, "/courses") complete
-	// InitBasicApi[*entity.Schedule](route, "/schedules") complete
-	// InitBasicApi[*entity.Health](route, "/healths") complete
-	// InitBasicApi[*entity.Horse](route, "/horses") complete
-	// InitBasicApi[*entity.Gender](route, "/gender") complete
-	// InitBasicApi[*entity.Position](route, "/positions") complete
-	// InitBasicApi[*entity.Plan](route, "/plans") complete
-	// InitBasicApi[*entity.TourType](route, "/tour/types") complete
-	// InitBasicApi[*entity.TourRegistration](route, "/tours") complete
-	// InitBasicApi[*entity.Enrollment](route, "/enrollments") complete
-	InitBasicApi[*entity.Support](route, "/supports")
-	// InitBasicApi[*entity.Bleed](route, "/bleeds") complete
-	// InitBasicApi[*entity.Sex](route, "/sexes") complete
-	// InitBasicApi[*entity.Location](route, "/locations")
-	//InitBasicApi[*entity.Stable](route, "/stables")
-	// InitBasicApi[*entity.Employee](route, "/employees") complete
-	// InitBasicApi[*entity.Precede](route, "/precedes") complete
+	// user_admin := middlewares.Authorization(101, 100)
+	// employee := middlewares.Authorization(200)
 
 	// tour registration system
-	route.GET("/tours/user/:id", mw.Authorization(101), controllers.GetAllToursOfUser)
-	route.POST("/tours", mw.Authorization(101), controllers.CreateTour)
-	route.PUT("/tours/:id", mw.Authorization(101), controllers.UpdateTour)
-	route.DELETE("/tours/:id", mw.Authorization(101), controllers.DeleteTour)
+	route.GET("/tours/user/:id", user, controllers.GetAllToursOfUser)
+	route.POST("/tours", user, controllers.CreateTour)
+	route.PUT("/tours/:id", user, controllers.UpdateTour)
+	route.DELETE("/tours/:id", user, controllers.DeleteTour)
 
-	route.GET("/tours/types", mw.Authorization(101), controllers.GetAllTourTypes)
-	route.GET("/tours/plans", mw.Authorization(101), controllers.GetAllPlans)
+	route.GET("/tours/types", user, controllers.GetAllTourTypes)
+	route.GET("/tours/plans", user, controllers.GetAllPlans)
 
 	// enrollment system
-	route.GET("/enrollments/user/:id", mw.Authorization(101), controllers.GetAllEnrollmentsOfUser)
-	route.POST("/enrollments", mw.Authorization(101), controllers.CreateEnrollment)
+	route.GET("/enrollments/user/:id", user, controllers.GetAllEnrollmentsOfUser)
+	route.POST("/enrollments", user, controllers.CreateEnrollment)
 
 	// User account management
 	route.GET("/users", controllers.GetAllUser)

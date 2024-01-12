@@ -15,19 +15,19 @@ func init() {
 
 func RegisValidators() {
 	govalidator.CustomTypeTagMap.Set("past", func(i interface{}, c interface{}) bool {
-		return i.(time.Time).Truncate(time.Hour * 24).Before(time.Now().Truncate(time.Hour * 24))
+		return truncateToDay(i.(time.Time).Local()).Before(today())
 	})
 
 	govalidator.CustomTypeTagMap.Set("future", func(i interface{}, c interface{}) bool {
-		return i.(time.Time).Truncate(time.Hour * 24).After(time.Now().Truncate(time.Hour * 24))
+		return truncateToDay(i.(time.Time).Local()).After(today())
 	})
 
 	govalidator.CustomTypeTagMap.Set("before_tomorrow", func(i interface{}, c interface{}) bool {
-		return i.(time.Time).Truncate(time.Hour * 24).Before(time.Now().AddDate(0, 0, 1).Truncate(time.Hour * 24))
+		return truncateToDay(i.(time.Time).Local()).Before(today().AddDate(0, 0, 1))
 	})
 
 	govalidator.CustomTypeTagMap.Set("after_yesterday", func(i interface{}, c interface{}) bool {
-		return i.(time.Time).Truncate(time.Hour * 24).After(time.Now().AddDate(0, 0, -1).Truncate(time.Hour * 24))
+		return truncateToDay(i.(time.Time).Local()).After(today().AddDate(0, 0, -1))
 	})
 
 	govalidator.ParamTagMap["eq"] = func(str string, params ...string) bool {
@@ -81,4 +81,12 @@ func RegisValidators() {
 	govalidator.ParamTagRegexMap["gt"] = regexp.MustCompile(`gt=(\d+)`)
 
 	govalidator.ParamTagRegexMap["refer"] = regexp.MustCompile(`refer=(\D+)`)
+}
+
+func truncateToDay(t time.Time) time.Time {
+	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
+}
+
+func today() time.Time {
+	return truncateToDay(time.Now())
 }
