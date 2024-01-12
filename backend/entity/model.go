@@ -20,7 +20,7 @@ type User struct {
 	Email           string    `valid:"required~Email is required,email~Invalid email address"`
 	Password        string    `valid:"required~Password is required,minstringlength(8)~Password must be at least 8 characters"`
 	Phone           string    `valid:"required~Phone number is required,stringlength(10|10)~Phone must be at 10 characters"`
-	DateofBirth     time.Time `valid:"required~DateOfBirth is required,past~DateofBirth must be in the past"`
+	DateOfBirth     time.Time `valid:"required~DateOfBirth is required,past~DateOfBirth must be in the past"`
 	ExperiencePoint int       `valid:"required~Experience point is required,range(0|150)~Experience point must me in range 0-150"`
 	Profile         string    `gorm:"type:longtext"`
 	// gte=0~Experience point must be at least 0,lte=10~Experience point must less than or equal to 10
@@ -122,13 +122,13 @@ type Stable struct {
 	BaseModel
 	EmployeeID uint     `json:",omitempty"`
 	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
-	
+
 	Maintenance time.Time `valid:"required~Date is required,past~Date must be in the past"`
 	Cleaning    time.Time `valid:"required~Date is required,past~Date must be in the past"`
 	Temperature int
 	Humidity    int
 	Description string
-	Horses []Horse `json:",omitempty"`
+	Horses      []Horse `json:",omitempty"`
 }
 
 type Bleed struct {
