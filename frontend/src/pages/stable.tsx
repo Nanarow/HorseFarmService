@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { http } from "@src/services/httpRequest";
 import Form from "@shadcn/simplify/form";
-//import { Stable } from "../interfaces";
+import { Employee } from "../interfaces";
 import { useToast } from "@shadcn/ui/use-toast";
-//import { useEffect, useState} from "react";
+import { useEffect, useState} from "react";
 import StableImage from "./../assets/stable4.jpg"
 import { Label } from "@shadcn/ui/label";
 import { Button } from "@shadcn/ui/button";
@@ -13,26 +13,25 @@ import { LogOutIcon} from 'lucide-react';
 import { stableFormSchema } from "@src/validator";
 import { ChevronRightCircle } from 'lucide-react';
 import { Link } from "react-router-dom";
-//import { Dialog } from "@radix-ui/react-dialog";
-//import StableList from "@src/components/Stable/StableList";
+import { ToItemList } from "@src/utils";
 
 const StablePage = () => {
   const { toast } = useToast();
   const { logout } = useAuth();
-  // const [ stables, setStables] = useState<Stable[]>([]);
+  const [ employees, setEmployees] = useState<Employee[]>([]);
 
-  // async function fetchStables() {
-  //   const res = await http.Get<Stable[]>("/stables");
-  //   if (res.ok) {
-  //     setStables(res.data);
-  //   }
-  // }
+  async function fetchEmployees() {
+    const res = await http.Get<Employee[]>("/employees");
+    if (res.ok) {
+      setEmployees(res.data);
+    }
+  }
 
-  // useEffect(() => {
-  //   return () => {
-  //     fetchStables();
-  //   }
-  // },[])
+  useEffect(() => {
+    return () => {
+      fetchEmployees();
+    }
+  },[])
 
   async function onValid(formData: z.infer<typeof stableFormSchema>) {    
     console.log(formData)
@@ -50,7 +49,14 @@ const StablePage = () => {
         duration: 1500,
       });
     }
-    //fetchStables()
+    fetchEmployees()
+  }
+
+  function empTolist() {
+    const res = employees.map((emp) => {
+      return {ID:emp.ID!,Name:emp.FirstName + " " + emp.LastName}
+    })
+    return res
   }
 
   return (
@@ -77,7 +83,22 @@ const StablePage = () => {
           onInvalid={(data) => console.log(data)}
           fields={({ form }) => ( 
             <>
-              <div className="grid grid-cols-3 gap-4 mt-5">
+              <div className="grid grid-cols-3 gap-2">
+                {employees.length > 0 && (
+                  <>
+                    <Label className="text-xl text-primary">Employee<span className="text-red-500">*</span></Label>
+                    <Form.Select
+                      valueAsNumber
+                      useForm={form}
+                      items={ToItemList(empTolist())}
+                      name="EmployeeID"
+                      className="col-span-3 font-extralight"  
+                      placeholder="Employee"
+                    ></Form.Select> 
+                  </>
+                )}
+              </div>
+              <div className="grid grid-cols-3 gap-2">
                 <Label className="text-xl text-primary">Date of Maintenance<span className="text-red-500">*</span></Label> 
                   <Form.DatePicker
                     className="col-span-3 font-extralight"
@@ -85,7 +106,7 @@ const StablePage = () => {
                     name="Maintenance"
                   />
               </div>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-2">
                 <Label className="text-xl text-primary">Date of Cleaning<span className="text-red-500">*</span></Label>
                   <Form.DatePicker
                     className="col-span-3 font-extralight"
@@ -93,7 +114,7 @@ const StablePage = () => {
                     name="Cleaning"
                   />
               </div>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-2">
                 <Label className="text-xl text-primary">Temperature<span className="text-red-500">*</span></Label>
                   <Form.Input
                     className="col-span-3 font-extralight"
@@ -102,7 +123,7 @@ const StablePage = () => {
                     type="number"
                   ></Form.Input>
               </div>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-2">
                 <Label className="text-xl text-primary">Humidity<span className="text-red-500">*</span></Label>
                   <Form.Input
                     className="col-span-3 font-extralight"
@@ -111,7 +132,7 @@ const StablePage = () => {
                     type="number"
                   ></Form.Input>
               </div>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-2">
                 <Label className="text-xl text-primary">Description<span className="text-red-500">*</span></Label>
                   <Form.Input
                     className="col-span-3 font-extralight"

@@ -1,3 +1,4 @@
+import { Employee } from "@src/pages";
 import { z } from "zod";
 
 export const tourFormSchema = z.object({
@@ -143,7 +144,8 @@ export const stableFormSchema = z.object({
   Cleaning: z.date().max(new Date(), "Date must be in the past"),
   Temperature: z.number(),
   Humidity: z.number(),
-  Description: z.string({ required_error: "Description is required"}),
+  EmployeeID: z.number({ required_error: "Please select a employee" }),
+  Description: z.string(),
 
 });
 

@@ -15,7 +15,8 @@ type StableUpdate struct {
 	Cleaning    time.Time 
 	Temperature int
 	Humidity    int
-	Description string  `valid:"required~Description is required,minstringlength(4)~Description must be at least 4"`
+	Description string
+	EmployeeID  uint
 }
 
 // GET /stables
@@ -24,7 +25,7 @@ func GetAllStable(c *gin.Context) {
 	var stables []entity.Stable
 
 	// get data form database and check error
-	if err := entity.DB().Find(&stables).Error; err != nil {
+	if err := entity.DB().Joins("Employee").Omit("EmployeeID").Find(&stables).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
