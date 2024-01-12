@@ -1,4 +1,4 @@
-import { ArrowLeftSquareIcon, XSquare } from "lucide-react";
+import { ArrowLeftSquareIcon, ChevronLeftSquare, XSquare } from "lucide-react";
 import { User } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ import UserAlert from "./UserAlert";
 import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import UserEdit from "./UserEdit";
+import { Link } from "react-router-dom";
 
 // { setTabs }: Props
 const UserList = () => {
@@ -50,6 +51,7 @@ const UserList = () => {
             {/* <TableHead className="w-[10%] text-center">CreateDate</TableHead> */}
             <TableHead className="w-[12%] text-center">FirstName</TableHead>
             <TableHead className="w-[12%] text-center">LastName</TableHead>
+            <TableHead className="w-[8%] text-center">Date of Birth</TableHead>
             <TableHead className="w-[5%] text-center">Gender</TableHead>
             <TableHead className="w-[18%] text-center hidden md:table-cell">
               Email
@@ -78,6 +80,9 @@ const UserList = () => {
               </TableCell>
               <TableCell className=" w-[12%] font-medium text-center">
                 {user.LastName ? user.LastName : "user " + user.ID}
+              </TableCell>
+              <TableCell className=" w-[8%] text-center">
+                {format(new Date(user.DateofBirth), "PPP")}
               </TableCell>
               <TableCell className=" w-[5%] text-center">
                 {user.Gender?.Name}
@@ -112,6 +117,12 @@ const UserList = () => {
           ))}
         </TableBody>
       </Table>
+
+      <Link to="/user">
+        <Tooltip content={"User List"}>
+          <ChevronLeftSquare className="fixed bottom-4 right-16 w-10 h-10 text-black-500 cursor-pointer" />
+        </Tooltip>
+      </Link>
     </div>
   );
 };

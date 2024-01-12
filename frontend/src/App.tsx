@@ -38,6 +38,7 @@ function App() {
       <Route element={<PrivateRoute role={101} path="/login" />}>
         <Route path="/course" element={<Course />}></Route>
         <Route path="/tour" element={<Tour />}></Route>
+        {/* <Route path="/support" element={<Support />}></Route> */}
       </Route>
 
       <Route element={<PrivateRoute role={100} path="/login/admin" />}>

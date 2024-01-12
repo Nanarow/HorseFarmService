@@ -71,6 +71,7 @@ export interface User {
   Email: string;
   Password: string;
   Phone: string;
+  DateofBirth: Date;
   Profile: string;
   RoleID: number;
   Role: Role;

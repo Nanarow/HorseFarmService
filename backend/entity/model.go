@@ -6,14 +6,16 @@ import (
 
 type User struct {
 	BaseModel
-	FirstName       string  `gorm:"default:UserFirstName"`
-	LastName        string  `gorm:"default:UserLastName"`
-	Email           string  `valid:"required~Email is required,email~Invalid email address"`
-	Password        string  `valid:"required~Password is required,minstringlength(8)~Password must be at least 8 characters"`
-	Phone           string  `valid:"required~Phone number is required,stringlength(10|10)~Phone must be at 10 characters"`
-	Profile         string  `gorm:"type:longtext"`
-	Age             int     `valid:"required~Age is required,gte=12~Age must be at least 12 "`
-	ExperiencePoint float32 `valid:"required~Experience points is required"`
+	FirstName       string    `gorm:"default:UserFirstName"`
+	LastName        string    `gorm:"default:UserLastName"`
+	Email           string    `valid:"required~Email is required,email~Invalid email address"`
+	Password        string    `valid:"required~Password is required,minstringlength(8)~Password must be at least 8 characters"`
+	Phone           string    `valid:"required~Phone number is required,stringlength(10|10)~Phone must be at 10 characters"`
+	DateofBirth     time.Time `valid:"required~DateOfBirth is required,past~DateofBirth must be in the past"`
+	ExperiencePoint int       `valid:"required~Experience point is required,range(0|150)~Experience point must me in range 0-150"`
+	Profile         string    `gorm:"type:longtext"`
+	// gte=0~Experience point must be at least 0,lte=10~Experience point must less than or equal to 10
+	// Age             int     `valid:"required~Age is required,gte=12~Age must be at least 12 "`
 	// `valid:"required~ExperiencePoint is required,gte=0~Experience Point must be at least 0 "`
 
 	RoleID uint `gorm:"default:101"`

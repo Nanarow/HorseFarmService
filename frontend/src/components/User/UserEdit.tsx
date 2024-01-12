@@ -71,15 +71,9 @@ const UserEdit = ({ user, onSave }: Props) => {
     }
     else {
       toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <div className="text-white">
-              fail to update user
-            </div>
-          </pre>
-        ),
+        title: res.error,
         duration: 1500,
+        variant: "destructive",
       });
     }
   }
@@ -116,12 +110,13 @@ const UserEdit = ({ user, onSave }: Props) => {
                 type="text"
                 placeholder="LastName"
               />
-              <Form.Input
+              <Form.DatePicker useForm={form} name="DateofBirth"></Form.DatePicker>
+              {/* <Form.Input
                 useForm={form}
                 name="Age"
                 type="number"
                 placeholder="Age"
-              />
+              /> */}
               <Form.Input
                 useForm={form}
                 name="Phone"

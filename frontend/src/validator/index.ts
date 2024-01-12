@@ -74,8 +74,9 @@ export type HealthFormData = z.infer<typeof healthFormSchema>;
 export const userFormSchema = z.object({
   FirstName: z.string().min(1, "FirstName is required"),
   LastName: z.string().min(1, "LastName is required"),
-  Age: z.number({ required_error: "Age is required" }),
-  ExperiencePoint: z.number().nonnegative(),
+  DateofBirth: z.date().max(new Date(), "Date must be in the past"),
+  // Age: z.number({ required_error: "Age is required" }),
+  ExperiencePoint: z.number({ required_error: "Age is required" }).nonnegative(),
   Email: z.string().email({ message: "Invalid email address" }),
   Password: z.string().min(8, "Password must be at least 8 characters"),
   Phone: z.string().length(10, "Phone number must be 10 characters"),
@@ -89,8 +90,9 @@ export type UserFormData = z.infer<typeof userFormSchema>;
 export const userUpdateFormSchema = z.object({
   FirstName: z.string().min(1, "FirstName is required"),
   LastName: z.string().min(1, "LastName is required"),
-  Age: z.number({ required_error: "Age is required" }),
-  ExperiencePoint: z.number().nonnegative(),
+  DateofBirth: z.date().max(new Date(), "Date must be in the past"),
+  // Age: z.number({ required_error: "Age is required" }),
+  ExperiencePoint: z.number({ required_error: "Age is required" }).nonnegative(),
   Email: z.string().email({ message: "Invalid email address" }),
   Phone: z.string().length(10, "Phone number must be 10 characters"),
   Profile: z.string(),
