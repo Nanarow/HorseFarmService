@@ -15,11 +15,19 @@ func init() {
 
 func RegisValidators() {
 	govalidator.CustomTypeTagMap.Set("past", func(i interface{}, c interface{}) bool {
-		return i.(time.Time).Before(time.Now())
+		return i.(time.Time).Truncate(time.Hour * 24).Before(time.Now().Truncate(time.Hour * 24))
 	})
 
 	govalidator.CustomTypeTagMap.Set("future", func(i interface{}, c interface{}) bool {
-		return i.(time.Time).After(time.Now())
+		return i.(time.Time).Truncate(time.Hour * 24).After(time.Now().Truncate(time.Hour * 24))
+	})
+
+	govalidator.CustomTypeTagMap.Set("before_tomorrow", func(i interface{}, c interface{}) bool {
+		return i.(time.Time).Truncate(time.Hour * 24).Before(time.Now().AddDate(0, 0, 1).Truncate(time.Hour * 24))
+	})
+
+	govalidator.CustomTypeTagMap.Set("after_yesterday", func(i interface{}, c interface{}) bool {
+		return i.(time.Time).Truncate(time.Hour * 24).After(time.Now().AddDate(0, 0, -1).Truncate(time.Hour * 24))
 	})
 
 	govalidator.ParamTagMap["eq"] = func(str string, params ...string) bool {
@@ -74,45 +82,3 @@ func RegisValidators() {
 
 	govalidator.ParamTagRegexMap["refer"] = regexp.MustCompile(`refer=(\D+)`)
 }
-
-// import (
-// 	"encoding/base64"
-// 	"time"
-
-// 	"github.com/golodash/galidator"
-// )
-
-// func DefaultMessages() galidator.Messages {
-// 	return galidator.Messages{
-// 		"required": "$field is required",
-// 		"email":    "invalid email",
-// 		"future":   "$value must be in the future",
-// 		"base64":   "$value must be base64 encoded",
-// 		"range":    "$value is not in range",
-// 		"min":      "$value must be at least $min",
-// 		"max":      "$value must be at most $max",
-// 		"minLen":   "$value must be at least $minLen characters",
-// 		"maxLen":   "$value must be at most $maxLen characters",
-// 	}
-// }
-// func cus(param interface{}) func(value interface{}) bool {
-// 	return func(value interface{}) bool {
-// 		// Implement your custom validation logic with the parameter here
-// 		// For example, check if the value is greater than the parameter
-// 		return value.(int) > param.(int)
-// 	}
-// }
-// func DefaultValidator() galidator.Validators {
-// 	return galidator.Validators{
-// 		"future": func(i interface{}) bool {
-// 			return i.(time.Time).After(time.Now())
-// 		},
-// 		"base64": func(i interface{}) bool {
-// 			_, err := base64.StdEncoding.DecodeString(i.(string))
-// 			return err == nil
-// 		},
-// 		"gte": cus(10),
-// 	}
-// }
-
-// var g = galidator.New().CustomMessages(DefaultMessages()).CustomValidators(DefaultValidator())

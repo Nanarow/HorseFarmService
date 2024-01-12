@@ -15,6 +15,7 @@ import { Tooltip } from "@shadcn/simplify/tooltip";
 import { Badge } from "@shadcn/ui/badge";
 import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import { useTours } from "@src/hooks";
+import Each from "../each";
 
 const TourList = ({ onClick }: { onClick: () => void }) => {
   const { tours, fetchTours } = useTours();
@@ -46,50 +47,53 @@ const TourList = ({ onClick }: { onClick: () => void }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tours.map((tour) => (
-            <TableRow key={tour.ID}>
-              <TableCell className="font-medium text-center">
-                {tour.Name ? tour.Name : "tour " + tour.ID}
-              </TableCell>
-              <TableCell className=" text-center">
-                {format(new Date(tour.Date), "PPP")}
-              </TableCell>
-              <TableCell className=" text-center hidden md:table-cell">
-                {tour.Email}
-              </TableCell>
-              <TableCell className=" text-center">
-                {tour.TourType?.Name}
-              </TableCell>
-              <TableCell className=" text-center">{tour.Plan?.Name}</TableCell>
-              <TableCell className=" text-center hidden md:table-cell">
-                {tour.Participants}
-              </TableCell>
-              <TableCell className=" relative">
-                {new Date(tour.Date).getTime() > new Date().getTime() ? (
-                  <TourEdit tour={tour} onSave={fetchTours}></TourEdit>
-                ) : (
-                  <Badge className=" rounded-full bg-green-500 hover:bg-green-500/80">
-                    complete
-                  </Badge>
-                )}
-              </TableCell>
-              <TableCell className=" relative">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    {new Date(tour.Date).getTime() > new Date().getTime() ? (
-                      <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
-                    ) : (
-                      <TrashIcon className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
-                    )}
-                  </DialogTrigger>
-                  <TourAlert
-                    tourID={tour.ID!}
-                    onCancel={fetchTours}
-                  ></TourAlert>
-                </Dialog>
-              </TableCell>
-            </TableRow>
-          ))}
+          <Each
+            of={tours}
+            render={(tour) => (
+              <TableRow>
+                <TableCell className="font-medium text-center">
+                  {tour.Name}
+                </TableCell>
+                <TableCell className=" text-center">
+                  {format(new Date(tour.Date), "PPP")}
+                </TableCell>
+                <TableCell className=" text-center hidden md:table-cell">
+                  {tour.Email}
+                </TableCell>
+                <TableCell className=" text-center">
+                  {tour.TourType.Name}
+                </TableCell>
+                <TableCell className=" text-center">{tour.Plan.Name}</TableCell>
+                <TableCell className=" text-center hidden md:table-cell">
+                  {tour.Participants}
+                </TableCell>
+                <TableCell className=" relative">
+                  {new Date(tour.Date).getTime() > new Date().getTime() ? (
+                    <TourEdit tour={tour} onSave={fetchTours}></TourEdit>
+                  ) : (
+                    <Badge className=" rounded-full bg-green-500 hover:bg-green-500/80">
+                      complete
+                    </Badge>
+                  )}
+                </TableCell>
+                <TableCell className=" relative">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      {new Date(tour.Date).getTime() > new Date().getTime() ? (
+                        <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
+                      ) : (
+                        <TrashIcon className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
+                      )}
+                    </DialogTrigger>
+                    <TourAlert
+                      tourID={tour.ID!}
+                      onCancel={fetchTours}
+                    ></TourAlert>
+                  </Dialog>
+                </TableCell>
+              </TableRow>
+            )}
+          />
         </TableBody>
       </Table>
     </div>

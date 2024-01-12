@@ -20,7 +20,7 @@ func TestCreateTour(t *testing.T) {
 
 	t.Run(`created tour success`, func(t *testing.T) {
 		tour := entity.TourRegistration{
-			Date:         time.Now().Add(time.Duration(1) * time.Hour),
+			Date:         time.Now().AddDate(0, 0, 1),
 			Email:        "u1@u.com",
 			Name:         "my tour",
 			Participants: 10,
