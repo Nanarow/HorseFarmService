@@ -89,12 +89,12 @@ type Horse struct {
 	Name  string    `gorm:"default:Horse"`
 	Age   int       `valid:"required~Age is required,gte=1~Age must be at least 1"`
 	Date  time.Time `valid:"required~Date is required,future~Date must be in the future"`
-	Image string
+	Image string    `gorm:"type:longtext"`
 
 	EmployeeID uint     `json:",omitempty"`
 	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
 
-	BleedID uint  `json:",omitempty"`
+	BleedID uint  `json:",omitempty" valid:"required~Bleed is required,refer=bleeds~Bleed does not exist"`
 	Bleed   Bleed `gorm:"foreignKey:BleedID" valid:"-"`
 
 	SexID uint `json:",omitempty"`

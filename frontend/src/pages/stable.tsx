@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { http } from "@src/services/httpRequest";
 import Form from "@shadcn/simplify/form";
-import { Stable } from "../interfaces";
+//import { Stable } from "../interfaces";
 import { useToast } from "@shadcn/ui/use-toast";
-import { useEffect, useState} from "react";
+//import { useEffect, useState} from "react";
 import StableImage from "./../assets/stable4.jpg"
 import { Label } from "@shadcn/ui/label";
 import { Button } from "@shadcn/ui/button";
