@@ -8,7 +8,7 @@ import { http } from "../../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 import { Edit } from "lucide-react";
 import { Stable } from "@src/interfaces";
-import { stableUpdateFormSchema } from "@src/validator";
+import { stableFormSchema } from "@src/validator";
 
 interface Props {
     stable: Stable;
@@ -19,7 +19,7 @@ const StableEdit = ({ stable, onSave }: Props) => {
     const { toast } = useToast();
     const [open, setOpen] = useState(false);
 
-    async function onEditValid(formData: z.infer<typeof stableUpdateFormSchema>, ID: number) {
+    async function onEditValid(formData: z.infer<typeof stableFormSchema>, ID: number) {
         const newStable ={
           ...formData,
     
@@ -52,7 +52,7 @@ const StableEdit = ({ stable, onSave }: Props) => {
                 </DialogHeader> 
                 <Form
                     className="grid gap-5"
-                    validator={stableUpdateFormSchema}
+                    validator={stableFormSchema}
                     onValid={(data)=>onEditValid(data,stable.ID)}
                     onInvalid={(data) => console.log(data)}
                     fields={({ form }) => (

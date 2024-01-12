@@ -2,7 +2,16 @@ package entity
 
 import (
 	"time"
+
+	"gorm.io/gorm"
 )
+
+type BaseModel struct {
+	ID        uint           `gorm:"primarykey"`
+	CreatedAt time.Time      `json:"-"`
+	UpdatedAt time.Time      `json:"-"`
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
+}
 
 type User struct {
 	BaseModel
@@ -89,14 +98,14 @@ type Location struct {
 type Horse struct {
 	BaseModel
 	Name  string    `gorm:"default:Horse"`
-	Age   int       `valid:"required~Age is required,gte=0~Age must be at least 0 "`
+	Age   int       `valid:"required~Age is required,gte=1~Age must be at least 1"`
 	Date  time.Time `valid:"required~Date is required,future~Date must be in the future"`
-	Image string    `gorm:"default:Horse"`
+	Image string    `gorm:"type:longtext"`
 
 	EmployeeID uint     `json:",omitempty"`
 	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
 
-	BleedID uint  `json:",omitempty"`
+	BleedID uint  `json:",omitempty" valid:"required~Bleed is required,refer=bleeds~Bleed does not exist"`
 	Bleed   Bleed `gorm:"foreignKey:BleedID" valid:"-"`
 
 	SexID uint `json:",omitempty"`
@@ -111,12 +120,15 @@ type Horse struct {
 
 type Stable struct {
 	BaseModel
-	Maintenance time.Time `valid:"required~Date is required,future~Date must be in the future"`
-	Cleaning    time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	EmployeeID uint     `json:",omitempty"`
+	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
+	
+	Maintenance time.Time `valid:"required~Date is required,past~Date must be in the past"`
+	Cleaning    time.Time `valid:"required~Date is required,past~Date must be in the past"`
 	Temperature int
 	Humidity    int
-	Description string  `valid:"required~Description is required,minstringlength(4)~Description must be at least 4"`
-	Horses      []Horse `json:",omitempty"`
+	Description string
+	Horses []Horse `json:",omitempty"`
 }
 
 type Bleed struct {
