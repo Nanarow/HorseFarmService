@@ -147,7 +147,7 @@ const courseSetting = () => {
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[20%] border">Day</TableHead>
+              <TableHead className="w-[20%] border text-center">Day</TableHead>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => {
                 const start_time = addHours(
                   new Date().setHours(0, 0, 0, 0),
