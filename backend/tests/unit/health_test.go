@@ -14,14 +14,14 @@ func TestHealthValidation(t *testing.T) {
 
 	t.Run(`health success`, func(t *testing.T) {
 		health := entity.Health{ //ครบ
-			Date: time.Now().Add(time.Duration(1) * time.Hour),
-			HorseID: "1",
-			EmployeeID: "1", 
-			Vital: "Pass",      
-			Tooth: "Pass",
-			Vaccine: "Pass",
-			Parasite: "Pass",       
-			Blood: "Pass",   
+			Date:       time.Now().AddDate(0, 0, 1),
+			HorseID:    1,
+			EmployeeID: 1,
+			Vital:      "Pass",
+			Tooth:      "Pass",
+			Vaccine:    "Pass",
+			Parasite:   "Pass",
+			Blood:      "Pass",
 		}
 
 		ok, err := govalidator.ValidateStruct(health)
@@ -32,14 +32,14 @@ func TestHealthValidation(t *testing.T) {
 
 	t.Run(`health unsuccess`, func(t *testing.T) {
 		health := entity.Health{ //ไม่ครบ
-			Date: time.Now().Add(time.Duration(1) * time.Hour),
-			HorseID: "1",
-			EmployeeID: "1", 
-			Vital: "Pass",      
-			Tooth: "Pass",
-			Vaccine: "Pass",
-			Parasite: "Pass",       
-			Blood: "", //ผิดตรงนี้
+			Date:       time.Now().AddDate(0, 0, 1),
+			HorseID:    1,
+			EmployeeID: 1,
+			Vital:      "Pass",
+			Tooth:      "Pass",
+			Vaccine:    "Pass",
+			Parasite:   "Pass",
+			Blood:      "", //ผิดตรงนี้
 		}
 
 		ok, err := govalidator.ValidateStruct(health)
