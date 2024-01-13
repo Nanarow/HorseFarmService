@@ -86,7 +86,6 @@ const Food = () => {
                     console.log("logout");
                     logout();
                   }}
-                  
                   />
               </Tooltip>
             </div>
