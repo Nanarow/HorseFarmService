@@ -133,7 +133,7 @@ export const foodFormSchema = z.object({
 	Vitamin: z.string({ required_error: "Vitamin is required"}),
 	Mineral: z.string({ required_error: "Mineral is required"}),
 	Forage: z.string({ required_error: "Forage is required"}),
-	Date: z.date().min(new Date(), "Date must be in the future"),
+	Date: z.date().min(new Date(), "Date must be current"),
 });
 
 export type FoodFormData = z.infer<typeof foodFormSchema>;

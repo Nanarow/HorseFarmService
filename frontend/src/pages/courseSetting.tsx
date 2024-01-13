@@ -18,6 +18,7 @@ import { http } from "@src/services/httpRequest";
 import CourseEdit from "@src/components/coursesetting/CourseEdit";
 import { XSquare } from "lucide-react";
 import { addDays, addHours } from "date-fns";
+import { Label } from "@shadcn/ui";
 
 const courseSetting = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -103,12 +104,17 @@ const courseSetting = () => {
 
   return (
     <main className="w-full h-screen p-16">
+      <div className="flex items-center justify-between space-x-2">
+        <Label className="text-3xl font-bold text-center">
+          Course Setting
+        </Label>
       <Dialog>
         <DialogTrigger asChild>
           <Button className="hover:scale-110">Add Course</Button>
         </DialogTrigger>
         <AddCourse></AddCourse>
       </Dialog>
+      </div>
       <DragDrop>
         <section className=" w-full flex gap-2 my-4">
           {courses.length > 0 &&
@@ -116,11 +122,15 @@ const courseSetting = () => {
               <DraggableCard
                 key={index}
                 value={course.ID.toString()}
-                className="h-10 "
+                className="h-10 flex items-center justify-between px-4"
               >
+                <div>
                 {course.Name}
                 <span>--</span>
                 {course.Description}
+                </div>
+
+                <div className="flex items-center space-x-2">
                 <CourseEdit course={course} onSave={fetchCourses}></CourseEdit>
                 <Dialog>
                   <DialogTrigger asChild>
@@ -131,6 +141,7 @@ const courseSetting = () => {
                     onCancel={fetchCourses}
                   ></CourseAlert>
                 </Dialog>
+                </div>
               </DraggableCard>
             ))}
         </section>

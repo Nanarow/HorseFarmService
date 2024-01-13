@@ -237,7 +237,7 @@ type Food struct {
 	Vitamin      string    `valid:"required~Vitamin is required"`
 	Mineral      string    `valid:"required~Mineral is required"`
 	Forage       string    `valid:"required~Forage is required"`
-	Date         time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Date         time.Time `valid:"required~Date is required,CheckDateCurent~Date must be current"`
 	EmployeeID   uint      `json:",omitempty" valid:"required~Employee is required,refer=employees~Employee does not exist"`
 	Employee     Employee  `gorm:"foreignKey:EmployeeID" valid:"-"`
 }
