@@ -45,7 +45,7 @@ func TestStableValidation(t *testing.T) {
 		g.Expect(ok).NotTo(gomega.BeTrue())
 		g.Expect(err).NotTo(gomega.BeNil())
 
-		g.Expect(err.Error()).To(gomega.Equal("Date must be in the past"))
+		g.Expect(err.Error()).To(gomega.Equal("Cleaning must be in the past"))
 	})
 
 	

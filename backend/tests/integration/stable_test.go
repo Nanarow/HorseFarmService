@@ -61,6 +61,6 @@ func TestCreateStable(t *testing.T) {
 		var respJson Response
 		json.Unmarshal(data, &respJson)
 		assert.Equal(t, http.StatusBadRequest, response.Code)
-		assert.Equal(t, "Date is required;Huminity is required", respJson.Error)
+		assert.Equal(t, "Huminity is required;Maintenance is required", respJson.Error)
 	})
 }

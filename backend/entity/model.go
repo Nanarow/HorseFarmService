@@ -124,8 +124,8 @@ type Stable struct {
 	BaseModel
 	EmployeeID  uint      `json:",omitempty"`
 	Employee    Employee  `gorm:"foreignKey:EmployeeID" valid:"-"`
-	Maintenance time.Time `valid:"required~Date is required,past~Date must be in the past"`
-	Cleaning    time.Time `valid:"required~Date is required,past~Date must be in the past"`
+	Maintenance time.Time `valid:"required~Maintenance is required,past~Maintenance must be in the past"`
+	Cleaning    time.Time `valid:"required~Cleaning is required,past~Cleaning must be in the past"`
 	Temperature float64   `valid:"required~Temperature is required"`
 	Humidity    float64   `valid:"required~Huminity is required"`
 	Description string
