@@ -105,8 +105,10 @@ const HealthPage = () => {
                 </div>
               </Label>
             </div>
-
-            
+            <Form.Error
+                      field={errors.Date}
+                      className="mx-96"
+                    />  
           <div className=" items-center justify-center"> 
             {horses && (
               <>
@@ -122,10 +124,10 @@ const HealthPage = () => {
                     name="HorseID"
                     placeholder="Choose horse name"
                     />
-                </div>
+                </div> 
                 <Form.Error
                       field={errors.HorseID}
-                      className=" flex "
+                      className="mx-96"
                     />
               </>
             )}             
@@ -143,36 +145,55 @@ const HealthPage = () => {
                     name="EmployeeID"
                     placeholder="Choose employee name"
                   />
-                </div>
+                </div>  
                 <Form.Error
                       field={errors.EmployeeID}
-                      className="col-span-3 col-start-2 mt-2"
-                    />
+                      className=" mx-96"
+                    />            
               </>
-            )}
-
-             
+              
+            )}             
             <div className="flex flex-col  relative " >
               <Label className="flex text-primary text-xl mx-64 mt-6 ">
                 สัญญาณชีพ:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-10 px-2 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vital" type="text"></Form.Input>
               </Label>
+              <Form.Error
+                      field={errors.Vital}
+                      className="mx-96"
+                    />
               <Label className="flex text-xl mt-6 text-primary mx-64 ">
                 สุขภาพฟัน:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-10  ml-16 border  rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Tooth" type="text"></Form.Input>
               </Label >
+              <Form.Error
+                      field={errors.Tooth}
+                      className="mx-96"
+                    />
               <Label className="flex text-primary text-xl mt-6 mx-64 ">
                 วัคซีนป้องกัน:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-10  ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vaccine" type="text"></Form.Input>
               </Label>
+              <Form.Error
+                      field={errors.Vaccine}
+                      className="mx-96"
+                    />
               <Label className="flex text-primary text-xl mt-6 mx-64 gap-1">
                 ถ่ายพยาธิ:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-10 ml-16  border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Parasite" type="text"></Form.Input>
               </Label>
+              <Form.Error
+                      field={errors.Parasite}
+                      className=" mx-96"
+                    />
               <Label className="flex text-primary text-xl mt-6 mx-64 ">
                 ตรวจเลือด:<span className="text-red-500">*</span>
                 <Form.Input className="w-3/4 h-10 ml-16 border gap-5 rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
               </Label>
+              <Form.Error
+                      field={errors.Blood}
+                      className="mx-96"
+                    />
                 <Button
                   type="submit"
                   className="w-32 h-10 text-2sm  text-center bg-green-600 rounded-md	mt-7 mx-auto	text-primary text-white	 	"
