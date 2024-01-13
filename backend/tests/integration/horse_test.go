@@ -23,8 +23,8 @@ func TestCreateHorse(t *testing.T) {
 		horse := entity.Horse{
 			Name:       "gigi",
 			Age:        2,
-			Date:       time.Now().AddDate(0, 0, 1), 
-			Image:      "", 
+			Date:       time.Now().AddDate(0, 0, 1),
+			Image:      "",
 			EmployeeID: 1,
 			BleedID:    5,
 			SexID:      2,
@@ -40,16 +40,16 @@ func TestCreateHorse(t *testing.T) {
 
 		// Assert
 		assert.Equal(t, http.StatusCreated, response.Code)
-		
+
 		// add additional assertions to check if the employee is created successfully
-		
+
 	})
 
 	t.Run(`create horse fail`, func(t *testing.T) {
 
 		horse := entity.Horse{
-			Name:       "gigi",
-			Date:       time.Now().AddDate(0, 0, 1), 
+			Name: "gigi",
+			Date: time.Now().AddDate(0, 0, 1),
 		}
 		horseJSON, _ := json.Marshal(horse)
 		request, _ := http.NewRequest("POST", "/horses", bytes.NewBuffer(horseJSON))
@@ -63,6 +63,6 @@ func TestCreateHorse(t *testing.T) {
 		var respJson Response
 		json.Unmarshal(data, &respJson)
 		assert.Equal(t, http.StatusBadRequest, response.Code)
-		assert.Equal(t,"Age is required;Bleed is required", respJson.Error)
+		assert.Equal(t, "Age is required;Bleed is required", respJson.Error)
 	})
 }
