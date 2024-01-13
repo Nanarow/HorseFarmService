@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"net/http"
+	"time"
+
 	// "strconv"
 
 	"github.com/asaskevich/govalidator"
@@ -17,10 +19,10 @@ type UserForUpdate struct {
 	RidingLevelID   uint ` valid:"required~RidingLevel is required,refer=riding_levels~RidingLevel does not exist"`
 	FirstName       string
 	LastName        string
-	Age             int
-	Email           string `valid:"required~Email is required,email~Invalid email"`
-	Phone           string `valid:"required~Phone is required,stringlength(10|10)~Phone must be at 10 characters"`
-	Profile         string
+	DateOfBirth     time.Time `valid:"required~DateOfBirth is required,past~DateOfBirth must be in the past"`
+	Email           string    `valid:"required~Email is required,email~Invalid email"`
+	Phone           string    `valid:"required~Phone is required,stringlength(10|10)~Phone must be at 10 characters"`
+	Profile         string    `gorm:"type:longtext"`
 	ExperiencePoint int
 }
 
@@ -111,7 +113,7 @@ func UpdateUser(c *gin.Context) {
 	// user.ID = uint(idUint)
 
 	// update data in database and check error
-	if err := entity.DB().Table("users").Where("id = ?", id).Updates(user).Error; err != nil {
+	if err := entity.DB().Table("users").Where("id = ?", id).Updates(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

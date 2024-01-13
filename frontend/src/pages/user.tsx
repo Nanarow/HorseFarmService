@@ -1,8 +1,8 @@
 import UserCreate from "../components/User/UserCreate";
-import UserList from "@src/components/User/UserList";
 import { Link } from "react-router-dom";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { ChevronRightCircle } from "lucide-react";
+
 const User = () => {
   return (
     <main className="w-full h-screen">

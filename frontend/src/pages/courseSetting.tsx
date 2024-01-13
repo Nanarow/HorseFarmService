@@ -126,8 +126,6 @@ const courseSetting = () => {
               >
                 <div>
                 {course.Name}
-                <span>--</span>
-                {course.Description}
                 </div>
 
                 <div className="flex items-center space-x-2">

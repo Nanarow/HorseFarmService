@@ -38,6 +38,10 @@ export const Menus: TMenus = {
       label: "Tour Registration",
       to: "/tour",
     },
+    {
+      label: "Support Our Farm",
+      to: "/support",
+    },
   ],
   admin: [
     {
