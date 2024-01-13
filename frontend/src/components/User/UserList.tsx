@@ -1,4 +1,4 @@
-import { ArrowLeftSquareIcon, ChevronLeftSquare, XSquare } from "lucide-react";
+import { ChevronLeftSquare, XSquare } from "lucide-react";
 import { User } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
@@ -82,7 +82,7 @@ const UserList = () => {
                 {user.LastName ? user.LastName : "user " + user.ID}
               </TableCell>
               <TableCell className=" w-[8%] text-center">
-                {format(new Date(user.DateofBirth), "PPP")}
+                {format(new Date(user.DateOfBirth), "PPP")}
               </TableCell>
               <TableCell className=" w-[5%] text-center">
                 {user.Gender?.Name}

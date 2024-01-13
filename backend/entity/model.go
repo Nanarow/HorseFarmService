@@ -57,13 +57,13 @@ type RidingLevel struct {
 
 type Support struct {
 	BaseModel
-	UserID      uint
-	User        User `gorm:"foreignKey:GenderID"`
-	
+	UserID uint
+	User   User `gorm:"foreignKey:UserID" valid:"-"`
+
 	Corporate   string
 	Description string
 	Date        time.Time
-	Image       string
+	Bill        string
 }
 
 type Course struct {

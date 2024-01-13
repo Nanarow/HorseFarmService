@@ -15,7 +15,7 @@ func GetAllSupport(c *gin.Context) {
 	var supports []entity.Support
 
 	// get data form database and check error
-	if err := entity.DB().Joins("supports").Find(&supports).Error; err != nil {
+	if err := entity.DB().Joins("User").Find(&supports).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
