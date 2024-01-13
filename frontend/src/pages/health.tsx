@@ -87,7 +87,7 @@ const HealthPage = () => {
         validator={healthFormSchema}
         onValid={onValid}
         onInvalid={console.log}
-        fields={({ form }) => (
+        fields={({ form,errors }) => (
           <div className="flex flex-col relative ">
             <h1 className="text-3xl font-bold text-black text-primary mb-2 mt-14 mx-64">
               บันทึกการตรวจสุขภาพม้า
@@ -123,10 +123,12 @@ const HealthPage = () => {
                     placeholder="Choose horse name"
                     />
                 </div>
-
+                <Form.Error
+                      field={errors.HorseID}
+                      className=" flex "
+                    />
               </>
-            )}
-             
+            )}             
             {employee && (
               <>
                 <div className=" flex gap-6 mx-64 mt-6">
@@ -142,6 +144,10 @@ const HealthPage = () => {
                     placeholder="Choose employee name"
                   />
                 </div>
+                <Form.Error
+                      field={errors.EmployeeID}
+                      className="col-span-3 col-start-2 mt-2"
+                    />
               </>
             )}
 
