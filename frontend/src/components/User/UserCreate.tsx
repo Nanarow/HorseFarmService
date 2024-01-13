@@ -87,7 +87,7 @@ const UserPage = () => {
                   type="text"
                   placeholder="LastName"
                 />
-                <Form.DatePicker useForm={form} name="DateofBirth"></Form.DatePicker>
+                <Form.DatePicker useForm={form} name="DateOfBirth"></Form.DatePicker>
                 {/* <Form.Input
                   useForm={form}
                   name="Age"

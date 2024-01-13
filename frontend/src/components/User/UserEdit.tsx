@@ -100,17 +100,20 @@ const UserEdit = ({ user, onSave }: Props) => {
             <>
               <Form.Input
                 useForm={form}
+                defaultValue={String(user.FirstName)}
                 name="FirstName"
                 type="text"
                 placeholder="FirstName"
               />
               <Form.Input
                 useForm={form}
+                defaultValue={String(user.LastName)}
                 name="LastName"
                 type="text"
                 placeholder="LastName"
               />
-              <Form.DatePicker useForm={form} name="DateofBirth"></Form.DatePicker>
+              <Form.DatePicker useForm={form} defaultValue={new Date(user.DateOfBirth)} name="DateOfBirth"/>
+              
               {/* <Form.Input
                 useForm={form}
                 name="Age"
@@ -119,12 +122,14 @@ const UserEdit = ({ user, onSave }: Props) => {
               /> */}
               <Form.Input
                 useForm={form}
+                defaultValue={String(user.Phone)}
                 name="Phone"
                 type="text"
                 placeholder="Phone"
               />
               <Form.Input
                 useForm={form}
+                defaultValue={String(user.Email)}
                 name="Email"
                 type="text"
                 placeholder="Email"
@@ -134,6 +139,7 @@ const UserEdit = ({ user, onSave }: Props) => {
                   valueAsNumber
                   className="w-[90px]"
                   useForm={form}
+                  defaultValue={String(user.Gender?.ID)}
                   name="GenderID"
                   placeholder="Gender"
                   items={ToItemList(genders)}
@@ -141,6 +147,7 @@ const UserEdit = ({ user, onSave }: Props) => {
 
               <Form.Input
                 useForm={form}
+                defaultValue={Number(user.ExperiencePoint)}
                 name="ExperiencePoint"
                 type="number"
                 placeholder="Experience Point"
@@ -150,6 +157,7 @@ const UserEdit = ({ user, onSave }: Props) => {
                   valueAsNumber
                   className="w-[130px]"
                   useForm={form}
+                  defaultValue={String(user.RidingLevelID)}
                   name="RidingLevelID"
                   placeholder="Riding Level"
                   items={ToItemList(ridingLevels)}
@@ -157,6 +165,7 @@ const UserEdit = ({ user, onSave }: Props) => {
 
               <Form.Input
                 useForm={form}
+                defaultValue={String(user.Profile)}
                 name="Profile"
                 type="file"
                 accept="image/*"

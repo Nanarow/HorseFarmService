@@ -75,7 +75,7 @@ export type HealthFormData = z.infer<typeof healthFormSchema>;
 export const userFormSchema = z.object({
   FirstName: z.string().min(1, "FirstName is required"),
   LastName: z.string().min(1, "LastName is required"),
-  DateofBirth: z.date().max(new Date(), "Date must be in the past"),
+  DateOfBirth: z.date().max(new Date(), "Date must be in the past"),
   // Age: z.number({ required_error: "Age is required" }),
   ExperiencePoint: z.number({ required_error: "Age is required" }).nonnegative(),
   Email: z.string().email({ message: "Invalid email address" }),
@@ -91,7 +91,7 @@ export type UserFormData = z.infer<typeof userFormSchema>;
 export const userUpdateFormSchema = z.object({
   FirstName: z.string().min(1, "FirstName is required"),
   LastName: z.string().min(1, "LastName is required"),
-  DateofBirth: z.date().max(new Date(), "Date must be in the past"),
+  DateOfBirth: z.date().max(new Date(), "Date must be in the past"),
   // Age: z.number({ required_error: "Age is required" }),
   ExperiencePoint: z.number({ required_error: "Age is required" }).nonnegative(),
   Email: z.string().email({ message: "Invalid email address" }),
@@ -104,11 +104,10 @@ export const userUpdateFormSchema = z.object({
 export type UserUpdateFormData = z.infer<typeof userUpdateFormSchema>;
 
 export const supportFormSchema = z.object({
-  UserID: z.number(),
   Corporate: z.string(),
   Description: z.string(),
   Date: z.date(),
-  Image: z.string(),
+  Bill: z.string(),
 });
 
 export type SupportFormData = z.infer<typeof supportFormSchema>;

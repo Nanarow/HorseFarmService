@@ -50,6 +50,10 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	route.GET("/users/genders", controllers.GetAllGenders)
 	route.GET("/riding/levels", controllers.GetAllRidingLevels)
 
+	// Support 
+	route.GET("/supports", controllers.GetAllSupport)
+	route.POST("/supports", controllers.CreateSupport)
+
 	// horse info management system
 	route.GET("/horses", controllers.GetAllHorse)
 	route.POST("/horses", controllers.CreateHorse)
