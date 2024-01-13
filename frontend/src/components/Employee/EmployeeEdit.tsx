@@ -95,7 +95,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
         title: "You submitted the following values:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(employees, null, 2)}</code>
+            <code className="text-white">{JSON.stringify(res.data, null, 2)}</code>
           </pre>
         ),
         duration: 1500,
@@ -154,7 +154,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
                 ></Form.Input>
               </div>
               <div className=" grid grid-cols-4 items-center">
-                <Label>LastName</Label>
+                <Label>LastName<span className="text-red-500">*</span></Label>
                 <Form.Input
                   useForm={form}
                   name="LastName"

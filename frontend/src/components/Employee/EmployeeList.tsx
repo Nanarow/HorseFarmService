@@ -3,10 +3,10 @@ import { http } from "../../services/httpRequest";
 import { useEffect, useState } from "react";
 import EmployeeAlert from "../Employee/EmployeeAlert";
 import { LogOut } from 'lucide-react';
-import { UserPlus } from 'lucide-react';
 import {  XSquare } from "lucide-react";
 import { format } from "date-fns";
 import {  useNavigate } from "react-router-dom";
+import EmployeePage from "@src/pages/employee";
 import {
   Table,
   TableBody,
@@ -20,6 +20,7 @@ import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import EmployeeEdit from "./EmployeeEdit";
 import { useAuth } from "@src/providers/authProvider";
+
 
 
 function EmployeeList() {
@@ -38,20 +39,21 @@ function EmployeeList() {
         };
     }, []);
 
-    const handleClick = () => {
-        // Use navigate to redirect to "/employee"
-        navigate('/employee');
-      };
+    // const handleClick = () => {
+    //     // Use navigate to redirect to "/employee"
+    //     navigate('/employee');
+    //   };
 
     
     
     return (
         <div className="w-full h-full relative p-14">
-            <Tooltip content={"เพิ่มข้อมูลพนักงาน"} side="right">
+            {/* <Tooltip content={"เพิ่มข้อมูลพนักงาน"} side="right">
                 <UserPlus 
                     onClick={handleClick}
                     className="absolute top-4 left-8 text-blue-500 h-8 w-6" />
-            </Tooltip>
+            </Tooltip> */}
+            <EmployeePage/>
 
             <Tooltip content={"Log out"}>
                 <LogOut onClick={() => {
