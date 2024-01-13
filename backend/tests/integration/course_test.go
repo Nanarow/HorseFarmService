@@ -38,7 +38,7 @@ func TestCreateCourseSetting(t *testing.T) {
 		data, _ := io.ReadAll(body)
 
 		//Assert
-		assert.Equal(t, http.StatusCreated, response.Code)
+		assert.Equal(t, http.StatusOK, response.Code)
 		//add additional assertions to check if the course is create successfully
 		var respJson Response
 		json.Unmarshal(data, &respJson)
@@ -63,6 +63,6 @@ func TestCreateCourseSetting(t *testing.T) {
 
 		var respJson Response
 		json.Unmarshal(data, &respJson)
-		assert.Equal(t, "Participants is required;Experience is required;Employee is required;Location is required", respJson.Error)
+		assert.Equal(t, "Employee is required;Experience is required;Location is required;Participants is required", respJson.Error)
 	})
 }

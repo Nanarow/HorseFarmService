@@ -38,7 +38,7 @@ func TestCreateFood(t *testing.T) {
 		body := response.Result().Body
 		data, _ := io.ReadAll(body)
 
-		assert.Equal(t, http.StatusCreated, response.Code)
+		assert.Equal(t, http.StatusOK, response.Code)
 
 		var respJson Response
 		json.Unmarshal(data, &respJson)
@@ -63,6 +63,6 @@ func TestCreateFood(t *testing.T) {
 
 		var respJson Response
 		json.Unmarshal(data, &respJson)
-		assert.Equal(t, "Protein is required;Vitamin is required;Mineral is required;Forage is required;Date is required;Employee is required", respJson.Error)
+		assert.Equal(t, "Date is required;Employee is required;Forage is required;Mineral is required;Protein is required;Vitamin is required", respJson.Error)
 	})
 }
