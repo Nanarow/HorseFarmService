@@ -18,7 +18,7 @@ func TestEmployeeValidation(t *testing.T) {
 			LastName:   "emp",
 			Email:      "emp-emp.com", //ผิดตรงนี้
 			Password:   "12345678",
-			DayOfBirth: time.Now().Add(-time.Duration(1) * time.Hour),
+			DayOfBirth: time.Now().AddDate(-1, 0, 0),
 			Phone:      "0924506272",
 			PrecedeID:  1,
 			PositionID: 201,
@@ -60,7 +60,7 @@ func TestEmployeeValidation(t *testing.T) {
 			LastName:   "emp",
 			Email:      "emp@emp.com",
 			Password:   "12345678",
-			DayOfBirth: time.Now().Add(-time.Duration(1) * time.Hour),
+			DayOfBirth: time.Now().AddDate(-1, 0, 0),
 			Phone:      "0924506272",
 			PrecedeID:  1,
 			PositionID: 209, //ผิดตรงนี้

@@ -40,6 +40,7 @@ import { CheckedState } from "@radix-ui/react-checkbox";
 import { FileToBase64 } from "@src/utils";
 import { cn } from "@cn/utils";
 import { AlertCircleIcon } from "lucide-react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 interface Options {
   shouldValidate: boolean;
@@ -86,8 +87,10 @@ const Form: FormType & {
 }: FormProps<T>) => {
   const form = useForm<T>({ resolver: zodResolver(validator) });
   const errors = form.formState.errors;
+  const [parent] = useAutoAnimate();
   return (
     <form
+      ref={parent}
       onSubmit={form.handleSubmit(onValid, onInvalid)}
       className={className}
     >

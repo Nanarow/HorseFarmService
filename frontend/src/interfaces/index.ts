@@ -71,6 +71,7 @@ export interface User {
   Email: string;
   Password: string;
   Phone: string;
+  DateofBirth: Date;
   Profile: string;
   RoleID: number;
   Role: Role;
@@ -84,6 +85,7 @@ export interface User {
 export interface Support {
   ID: number;
   UserID: number;
+  User: User;
   Corporate: string;
   Description: string;
   Date: Date;
