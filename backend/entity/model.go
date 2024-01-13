@@ -100,7 +100,7 @@ type Location struct {
 type Horse struct {
 	BaseModel
 	Name  string    `gorm:"default:Horse"`
-	Age   int       `valid:"required~Age is required,gte=1~Age must be at least 1"`
+	Age   int       `valid:"required~Age is required,gte=0~Age must be at least 0"`
 	Date  time.Time `valid:"required~Date is required,future~Date must be in the future"`
 	Image string    `gorm:"type:longtext"`
 
@@ -126,8 +126,8 @@ type Stable struct {
 	Employee    Employee  `gorm:"foreignKey:EmployeeID" valid:"-"`
 	Maintenance time.Time `valid:"required~Date is required,past~Date must be in the past"`
 	Cleaning    time.Time `valid:"required~Date is required,past~Date must be in the past"`
-	Temperature int
-	Humidity    int
+	Temperature float64   `valid:"required~Temperature is required"`
+	Humidity    float64   `valid:"required~Huminity is required"`
 	Description string
 	Horses      []Horse `json:",omitempty"`
 }

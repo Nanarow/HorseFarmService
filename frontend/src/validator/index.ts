@@ -1,4 +1,3 @@
-import { Employee } from "@src/pages";
 import { z } from "zod";
 
 export const tourFormSchema = z.object({
@@ -153,10 +152,10 @@ export type FoodFormData = z.infer<typeof foodFormSchema>;
 export const stableFormSchema = z.object({
   Maintenance: z.date().max(new Date(), "Date must be in the past"),
   Cleaning: z.date().max(new Date(), "Date must be in the past"),
-  Temperature: z.number(),
-  Humidity: z.number(),
+  Temperature: z.number({ required_error: "Temperature is required" }),
+  Humidity: z.number({ required_error: "Huminity is required" }),
   EmployeeID: z.number({ required_error: "Please select a employee" }),
-  Description: z.string(),
+  Description: z.string().optional(),
 
 });
 
