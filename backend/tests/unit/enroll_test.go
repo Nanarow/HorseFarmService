@@ -5,14 +5,10 @@ import (
 
 	"github.com/asaskevich/govalidator"
 	"github.com/onsi/gomega"
-	"github.com/sut66/team16/backend/controllers"
 	"github.com/sut66/team16/backend/entity"
 )
 
 func TestEnrollValidation(t *testing.T) {
-	entity.SetupDatabase("TestDB")
-	entity.SetupData(entity.DB())
-	controllers.RegisValidators()
 	g := gomega.NewGomegaWithT(t)
 
 	t.Run(`test schedule_id is required`, func(t *testing.T) {

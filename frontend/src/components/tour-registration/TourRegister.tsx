@@ -19,7 +19,6 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
   const { plans } = useTourPlan();
   const [email, setEmail] = useState("");
   const [check, setCheck] = useState(false);
-  // const { refresh } = useRefresh();
 
   async function onValid(formData: TourFormData) {
     const tour = {

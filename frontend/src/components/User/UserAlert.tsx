@@ -33,7 +33,7 @@ const UserAlert = ({ userID, onCancel }: Props) => {
           <AlertTriangleIcon className="text-red-500 h-16 w-16" />
           <DialogTitle>Are you sure?</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will cancel your registration
+            This action cannot be undone. This will delete user data
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:justify-between">

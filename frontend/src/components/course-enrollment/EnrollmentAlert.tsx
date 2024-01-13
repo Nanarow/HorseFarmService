@@ -23,16 +23,16 @@ const EnrollmentAlert = ({
   const { getUser } = useAuth();
   const [description, setDescription] = useState<string>();
   async function handleClick() {
-    const data = description
+    const des = description
       ? {
-          ScheduleID,
-          UserID: getUser().ID,
           Description: description,
         }
-      : {
-          ScheduleID,
-          UserID: getUser().ID,
-        };
+      : {};
+    const data = {
+      ScheduleID,
+      UserID: getUser().ID,
+      ...des,
+    };
     console.log(data);
     const res = await http.Post("/enrollments", data);
     if (res.ok) {
@@ -58,7 +58,7 @@ const EnrollmentAlert = ({
           <AlertCircleIcon className="text-green-500 h-16 w-16" />
           <DialogTitle>Are you sure absolutely sure?</DialogTitle>
           <Label className=" mt-4">Description</Label>
-          <Textarea value={description} onChange={(e) => handle(e)}></Textarea>
+          <Textarea value={description} onChange={handle}></Textarea>
           {/* <DialogDescription>
             This action cannot be undone. This will cancel your registration
           </DialogDescription> */}

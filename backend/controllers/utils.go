@@ -2,56 +2,27 @@ package controllers
 
 import (
 	"encoding/json"
-	"net/http"
 	"reflect"
-	"strings"
-
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
-func responseOK(data interface{}, c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"data": data,
-	})
-}
-
-func isError(err error, c *gin.Context, message ...string) bool {
-	if err != nil {
-		msg := err.Error()
-		if len(message) > 0 {
-			msg = strings.Join(message, "")
-		}
-		c.JSON(http.StatusBadRequest, gin.H{"error": msg})
-		return true
-	}
-	return false
-}
-
-func addQuery(c *gin.Context, db *gorm.DB) *gorm.DB {
-	for k, v := range c.Request.URL.Query() {
-		if len(v) > 1 {
-			db = db.Where(k+" IN ?", v)
-		} else {
-			db = db.Where(k+" = ?", v[0])
-		}
-	}
-	return db
-}
-
-func OmitEmpty(obj interface{}) map[string]interface{} {
-	// Convert the object to a JSON string
+func OmitEmpty(obj interface{}) interface{} {
+	v := reflect.ValueOf(obj)
 	data, _ := json.Marshal(obj)
 
-	// Convert the JSON string to a map
-	var jsonMap map[string]interface{}
-	json.Unmarshal(data, &jsonMap)
-
-	// Create a new map to store non-empty values
-	omitEmptyMap := Parse(jsonMap).(map[string]interface{})
-	return omitEmptyMap
+	switch v.Kind() {
+	case reflect.Struct:
+		var jsonMap map[string]interface{}
+		json.Unmarshal(data, &jsonMap)
+		return parseMap(jsonMap)
+	case reflect.Array, reflect.Slice:
+		var jsonArray []interface{}
+		json.Unmarshal(data, &jsonArray)
+		return parseSlice(jsonArray)
+	default:
+		return obj
+	}
 }
-func Parse(input interface{}) interface{} {
+func parse(input interface{}) interface{} {
 	switch value := input.(type) {
 	case map[string]interface{}:
 		return parseMap(value)
@@ -65,7 +36,7 @@ func Parse(input interface{}) interface{} {
 func parseMap(input map[string]interface{}) map[string]interface{} {
 	result := make(map[string]interface{})
 	for key, value := range input {
-		parsedValue := Parse(value)
+		parsedValue := parse(value)
 		if !isEmpty(parsedValue) {
 			result[key] = parsedValue
 		}
@@ -76,38 +47,13 @@ func parseMap(input map[string]interface{}) map[string]interface{} {
 func parseSlice(input []interface{}) []interface{} {
 	result := make([]interface{}, 0)
 	for _, value := range input {
-		parsedValue := Parse(value)
+		parsedValue := parse(value)
 		if !isEmpty(parsedValue) {
 			result = append(result, parsedValue)
 		}
 	}
 	return result
 }
-
-// func parse2(input interface{}) interface{} {
-// 	switch in := input.(type) {
-// 	case map[string]interface{}:
-// 		result := make(map[string]interface{})
-// 		for key, value := range in {
-// 			parsedValue := parse(value)
-// 			if !isEmpty(parsedValue) {
-// 				result[key] = parsedValue
-// 			}
-// 		}
-// 		return result
-// 	case []interface{}:
-// 		result := make([]interface{}, 0)
-// 		for _, value := range in {
-// 			parsedValue := parse(value)
-// 			if !isEmpty(parsedValue) {
-// 				result = append(result, parsedValue)
-// 			}
-// 		}
-// 		return result
-// 	default:
-// 		return input
-// 	}
-// }
 
 func isEmpty(value interface{}) bool {
 	v := reflect.ValueOf(value)

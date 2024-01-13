@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
+	// "strconv"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
@@ -10,13 +10,27 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+// this is User update controller
+type UserForUpdate struct {
+	// RoleID          uint `gorm:"default:101"`
+	GenderID        uint ` valid:"required~Gender is required,refer=genders~Gender does not exist"`
+	RidingLevelID   uint ` valid:"required~RidingLevel is required,refer=riding_levels~RidingLevel does not exist"`
+	FirstName       string
+	LastName        string
+	Age             int
+	Email           string `valid:"required~Email is required,email~Invalid email"`
+	Phone           string `valid:"required~Phone is required,stringlength(10|10)~Phone must be at 10 characters"`
+	Profile         string
+	ExperiencePoint int
+}
+
 // GET /user
 func GetAllUser(c *gin.Context) {
 	// create variable for store data as type of User array
 	var users []entity.User
 
 	// get data form database and check error
-	if err := entity.DB().Where("role_id = ?",101).Joins("Gender").Joins("RidingLevel").Omit("Password").Find(&users).Error; err != nil {
+	if err := entity.DB().Where("role_id = ?", 101).Joins("Gender").Joins("RidingLevel").Omit("Password").Find(&users).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -69,10 +83,10 @@ func CreateUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"data": "create account successfully"})
 }
 
-// PUT /tours/:id
+// PUT /users/:id
 func UpdateUser(c *gin.Context) {
 	// create variable for store data as type of User
-	var user entity.User
+	var user UserForUpdate
 	// get id from url
 	id := c.Param("id")
 
@@ -89,24 +103,24 @@ func UpdateUser(c *gin.Context) {
 	}
 
 	// convert id to uint and check error
-	idUint, err := strconv.Atoi(id)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	user.ID = uint(idUint)
+	// idUint, err := strconv.Atoi(id)
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	// user.ID = uint(idUint)
 
 	// update data in database and check error
-	if err := entity.DB().Save(&user).Error; err != nil {
+	if err := entity.DB().Table("users").Where("id = ?", id).Updates(user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	// response updated data
-	c.JSON(http.StatusOK, gin.H{"data": "updated your tour registration successfully"})
+	c.JSON(http.StatusOK, gin.H{"data": "updated your user successfully"})
 }
 
-// DELETE /tours/:id
+// DELETE /users/:id
 func DeleteUser(c *gin.Context) {
 	// create variable for store data as type of User
 	var user entity.User

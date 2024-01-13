@@ -6,19 +6,15 @@ import (
 
 	"github.com/asaskevich/govalidator"
 	"github.com/onsi/gomega"
-	"github.com/sut66/team16/backend/controllers"
 	"github.com/sut66/team16/backend/entity"
 )
 
 func TestTourValidation(t *testing.T) {
-	entity.SetupDatabase("TestDB")
-	entity.SetupData(entity.DB())
-	controllers.RegisValidators()
 	g := gomega.NewGomegaWithT(t)
 
 	t.Run(`test invalid email`, func(t *testing.T) {
 		tour := entity.TourRegistration{
-			Date:         time.Now().Add(time.Duration(1) * time.Hour),
+			Date:         time.Now().AddDate(0, 0, 1),
 			Email:        "u1-u.com",
 			Name:         "my tour",
 			Participants: 10,
@@ -56,7 +52,7 @@ func TestTourValidation(t *testing.T) {
 
 	t.Run(`test plan not exist`, func(t *testing.T) {
 		tour := entity.TourRegistration{
-			Date:         time.Now().Add(time.Duration(1) * time.Hour),
+			Date:         time.Now().AddDate(0, 0, 1),
 			Email:        "u1@u.com",
 			Name:         "my tour",
 			Participants: 10,

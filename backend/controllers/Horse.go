@@ -18,7 +18,7 @@ type HorseUpdate struct {
 	EmployeeID uint `valid:"required~Employee is required,refer=employees~Employee does not exist"`
 	BleedID    uint `valid:"required~Bleed is required,refer=bleeds~Bleed does not exist"`
 	SexID      uint 
-	StableID   uint `valid:"required~Stable is required,refer=stables~Position does not exist"`
+	StableID   uint `valid:"required~Stable is required,refer=stables~Stable does not exist"`
 }
 
 // GET /horses

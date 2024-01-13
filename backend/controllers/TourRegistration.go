@@ -12,23 +12,6 @@ import (
 
 // this is tour registration controller
 
-// unused
-
-// func GetAllTours(c *gin.Context) {
-// 	// create variable for store data as type of TourRegistration array
-// 	var tours []entity.TourRegistration
-
-// 	// get data form database and check error
-// 	if err := entity.DB().Joins("Plan").Joins("TourType").Find(&tours).Error; err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-//		// response data
-//		c.JSON(http.StatusOK, gin.H{"data": tours})
-//	}
-//
-
 // GET /tours/user/:id
 func GetAllToursOfUser(c *gin.Context) {
 	// create variable for store data as type of TourRegistration array
@@ -44,26 +27,8 @@ func GetAllToursOfUser(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": tours})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(tours)})
 }
-
-// unused
-// GET /tours/:id
-// func GetTour(c *gin.Context) {
-// 	// create variable for store data as type of TourRegistration
-// 	var tour entity.TourRegistration
-// 	// get id from url
-// 	id := c.Param("id")
-
-// 	// get data form database and check error
-// 	if err := entity.DB().Preload(clause.Associations).First(&tour, id).Error; err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	// response data
-// 	c.JSON(http.StatusOK, gin.H{"data": tour})
-// }
 
 // POST /tours
 func CreateTour(c *gin.Context) {
@@ -75,7 +40,6 @@ func CreateTour(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	// validate struct
 	if _, err := govalidator.ValidateStruct(tour); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -160,7 +124,7 @@ func GetAllTourTypes(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": tourTypes})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(tourTypes)})
 }
 
 // GET /tours/plans
@@ -175,5 +139,5 @@ func GetAllPlans(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": plans})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(plans)})
 }

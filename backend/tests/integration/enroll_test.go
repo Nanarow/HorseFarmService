@@ -11,13 +11,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/sut66/team16/backend/controllers"
 	"github.com/sut66/team16/backend/entity"
-	"github.com/sut66/team16/backend/routers"
 )
 
 func TestCreateEnrollment(t *testing.T) {
-
-	entity.SetupDatabase("TestDB")
-	router := routers.SetUpRouter()
+	router := GetTestRouter()
 	router.POST("/enrollments", controllers.CreateEnrollment)
 	entity.DB().Create(&entity.Schedule{
 		BaseModel: entity.BaseModel{ID: 2},
@@ -54,7 +51,7 @@ func TestCreateEnrollment(t *testing.T) {
 		body := response.Result().Body
 		data, _ := io.ReadAll(body)
 
-		var respJson resp
+		var respJson Response
 		json.Unmarshal(data, &respJson)
 		// Assert
 		assert.Equal(t, http.StatusBadRequest, response.Code)

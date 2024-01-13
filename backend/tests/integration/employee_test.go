@@ -12,13 +12,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/sut66/team16/backend/controllers"
 	"github.com/sut66/team16/backend/entity"
-	"github.com/sut66/team16/backend/routers"
 )
 
 func TestCreateEmployee(t *testing.T) {
-	entity.SetupDatabase("TestDB")
-	router := routers.SetUpRouter()
+	router := GetTestRouter()
 	router.POST("/employees", controllers.CreateEmployee)
+
 	t.Run(`Create Employee Successfully`, func(t *testing.T) {
 
 		employee := entity.Employee{
@@ -26,7 +25,7 @@ func TestCreateEmployee(t *testing.T) {
 			LastName:   "emp",
 			Email:      "emp@emp.com",
 			Password:   "12345678",
-			DayOfBirth: time.Now().Add(-time.Duration(1) * time.Hour),
+			DayOfBirth: time.Now().AddDate(-1, 0, 0),
 			Phone:      "0924506272",
 			PrecedeID:  1,
 			PositionID: 201,
@@ -59,7 +58,7 @@ func TestCreateEmployee(t *testing.T) {
 		body := response.Result().Body
 		data, _ := io.ReadAll(body)
 
-		var respJson resp
+		var respJson Response
 		json.Unmarshal(data, &respJson)
 		assert.Equal(t, http.StatusBadRequest, response.Code)
 		assert.Equal(t, "DayOfBirth is required;Password is required;Phone is required;Position is required", respJson.Error)

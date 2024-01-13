@@ -52,6 +52,13 @@ const UserPage = () => {
         duration: 1500,
       });
     }
+    else {
+      toast({
+        title: res.error,
+        duration: 1500,
+        variant: "destructive",
+      });
+    }
   }
 
   return (
@@ -66,7 +73,7 @@ const UserPage = () => {
             validator={userFormSchema}
             onValid={onValid}
             onInvalid={(errorFields) => console.log(errorFields)}
-            fields={({ form }) => (
+            fields={({ form, errors }) => (
               <>
                 <Form.Input
                   useForm={form}
@@ -80,12 +87,13 @@ const UserPage = () => {
                   type="text"
                   placeholder="LastName"
                 />
-                <Form.Input
+                <Form.DatePicker useForm={form} name="DateofBirth"></Form.DatePicker>
+                {/* <Form.Input
                   useForm={form}
                   name="Age"
                   type="number"
                   placeholder="Age"
-                />
+                /> */}
                 <Form.Input
                   useForm={form}
                   name="Phone"
