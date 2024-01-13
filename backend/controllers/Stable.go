@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	//"time"
 	"strconv"
 
 	"github.com/asaskevich/govalidator"
@@ -10,7 +9,7 @@ import (
 	"github.com/sut66/team16/backend/entity"
 )
 
-// GET /stables
+// GET/stables
 func GetAllStable(c *gin.Context) {
 	// create variable for store data as type of Horse array
 	var stables []entity.Stable
@@ -25,7 +24,7 @@ func GetAllStable(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": stables})
 }
 
-// POST /horses
+// POST/horses
 func CreateStable(c *gin.Context) {
 	// create variable for store data as type of horse
 	var stable entity.Stable
@@ -52,7 +51,7 @@ func CreateStable(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"data": "stable successfully"})
 }
 
-// PUT /stables/:id
+// PUT/stables/:id
 func UpdateStable(c *gin.Context) {
 	// create variable for store data as type of TourRegistration
 	var stable entity.Stable
