@@ -82,7 +82,7 @@ const StableEdit = ({ stable, onSave }: Props) => {
                     validator={stableFormSchema}
                     onValid={(data)=>onEditValid(data,stable.ID)}
                     onInvalid={(data) => console.log(data)}
-                    fields={({ form }) => (
+                    fields={({ form, errors }) => (
                         <>
                             <div className="grid grid-cols-5 gap-3">
                                 {employees.length > 0 && (
@@ -124,8 +124,12 @@ const StableEdit = ({ stable, onSave }: Props) => {
                                         useForm={form}
                                         name="Temperature"
                                         type="number"
-                                        
+                                        step="0.01"          
                                     ></Form.Input>
+                                    <Form.Error
+                                        field={errors.Temperature}
+                                        className="col-span-3 col-start-2 mt-2"
+                                    />
                             </div>
                             <div className="grid grid-cols-5 gap-3">
                                 <Label>Humidity<span className="text-red-500">*</span></Label>
@@ -135,8 +139,12 @@ const StableEdit = ({ stable, onSave }: Props) => {
                                         useForm={form}
                                         name="Humidity"
                                         type="number"
-                                        
+                                        step="0.01"                                 
                                     ></Form.Input>
+                                    <Form.Error
+                                        field={errors.Humidity}
+                                        className="col-span-3 col-start-2 mt-2"
+                                    />
                             </div>
                             <div className="grid grid-cols-5 gap-3">
                                 <Label>Description<span className="text-red-500">*</span></Label>
@@ -145,8 +153,7 @@ const StableEdit = ({ stable, onSave }: Props) => {
                                         defaultValue={stable.Description}
                                         useForm={form}
                                         name="Description"
-                                        type="text"
-                                        
+                                        type="text"                                   
                                     />
                             </div>
                             <Button 

@@ -2,22 +2,13 @@ package controllers
 
 import (
 	"net/http"
-	"time"
-	//"strconv"
+	//"time"
+	"strconv"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut66/team16/backend/entity"
 )
-
-type StableUpdate struct {
-	Maintenance time.Time 
-	Cleaning    time.Time 
-	Temperature int
-	Humidity    int
-	Description string
-	EmployeeID  uint
-}
 
 // GET /stables
 func GetAllStable(c *gin.Context) {
@@ -64,7 +55,7 @@ func CreateStable(c *gin.Context) {
 // PUT /stables/:id
 func UpdateStable(c *gin.Context) {
 	// create variable for store data as type of TourRegistration
-	var stable StableUpdate
+	var stable entity.Stable
 	// get id from url
 	id := c.Param("id")
 
@@ -80,16 +71,16 @@ func UpdateStable(c *gin.Context) {
 		return
 	}
 
-	// convert id to uint and check error
-	// idUint, err := strconv.Atoi(id)
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	// 	return
-	// }
-	// stable.ID = uint(idUint)
+	//convert id to uint and check error
+	idUint, err := strconv.Atoi(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	stable.ID = uint(idUint)
 
 	// update data in database and check error
-	if err := entity.DB().Table("stables").Where("id = ?", id).Updates(stable).Error; err != nil {
+	if err := entity.DB().Save(&stable).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

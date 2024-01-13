@@ -10,7 +10,7 @@ import (
 	"github.com/sut66/team16/backend/entity"
 )
 
-func TestHorseDate(t *testing.T) {
+func TestHorseValidation(t *testing.T) {
 	g := gomega.NewGomegaWithT(t)
 
 	t.Run(`test Date must be in the future`, func(t *testing.T) {

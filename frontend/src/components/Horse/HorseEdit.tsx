@@ -7,7 +7,7 @@ import { Bleed , Employee, Sex, Horse, Stable} from "@src/interfaces";
 import { http } from "../../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 import { ToItemList } from "@src/utils";
-import { Edit } from "lucide-react";
+import { Edit} from "lucide-react";
 import { horseUpdateFormSchema } from "@src/validator";
 
 interface Props {
@@ -115,7 +115,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
             validator={horseUpdateFormSchema}
             onValid={(data)=>onEditValid(data,horse.ID)}
             onInvalid={(data) => console.log(data)}
-            fields={({ form }) => (
+            fields={({ form, errors }) => (
               <>
                 <div className="grid grid-cols-4 items-center gap-1">
                   <Label>Name<span className="text-red-500">*</span></Label>
@@ -126,7 +126,11 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                     type="text"
                     className="col-span-3 font-extralight"  
                     placeholder="enter your name"
-                  />                   
+                  />  
+                  <Form.Error
+                    field={errors.Name}
+                    className="col-span-3 col-start-2"
+                  />                 
                 </div>
                 <div className="grid grid-cols-4 items-center gap-1">
                   {sexs.length > 0  && (
@@ -140,7 +144,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                         items={ToItemList(sexs)}
                         className="col-span-3 font-extralight"  
                         placeholder="Sex"
-                      ></Form.Select> 
+                      ></Form.Select>   
                     </>
                   )}
                   </div>
@@ -154,6 +158,10 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                       className="col-span-3 font-extralight"  
                       placeholder="Age"
                     />   
+                    <Form.Error
+                      field={errors.Age}
+                      className="col-span-3 col-start-2"
+                    />  
                   </div>
                   <div className="grid grid-cols-4 items-center gap-1">
                     {bleeds.length > 0 && (
@@ -167,7 +175,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                             name="BleedID"
                             className="col-span-3 font-extralight"  
                             placeholder="Bleed"
-                          ></Form.Select>                          
+                          ></Form.Select>                            
                       </>
                     )}
                   </div>
@@ -181,7 +189,11 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                       name="StableID"
                       className="col-span-3 font-extralight"  
                       placeholder="Stable"
-                    ></Form.Select>                                
+                    ></Form.Select> 
+                    <Form.Error
+                      field={errors.StableID}
+                      className="col-span-3 col-start-2"
+                    />                                 
                   </div>
                   <div className="grid grid-cols-4 items-center gap-1">
                     {employees.length > 0 && (
@@ -206,7 +218,7 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                         className="col-span-3 font-extralight" 
                         useForm={form} 
                         name="Date">
-                      </Form.DatePicker>
+                      </Form.DatePicker>  
                   </div>  
                   <div className="grid grid-cols-4 items-center gap-1 ">
                     <Label>Image<span className="text-red-500">*</span></Label>

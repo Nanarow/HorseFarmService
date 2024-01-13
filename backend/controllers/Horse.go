@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"time"
+
 	//"strconv"
 
 	"github.com/asaskevich/govalidator"
@@ -12,13 +13,14 @@ import (
 )
 
 type HorseUpdate struct {
-	Name       string
+	Name       string	
 	Date       time.Time
-	Age        int  `valid:"required~Age is required,gte=0~Age must be at least 0 "`
-	EmployeeID uint `valid:"required~Employee is required,refer=employees~Employee does not exist"`
-	BleedID    uint `valid:"required~Bleed is required,refer=bleeds~Bleed does not exist"`
-	SexID      uint 
-	StableID   uint `valid:"required~Stable is required,refer=stables~Stable does not exist"`
+	Image      string 	`gorm:"type:longtext"`
+	Age        int    	`valid:"required~Age is required,gte=0~Age must be at least 0"`
+	EmployeeID uint   	`valid:"required~Employee is required,refer=employees~Employee does not exist"`
+	BleedID    uint   	`valid:"required~Bleed is required,refer=bleeds~Bleed does not exist"`
+	SexID      uint
+	StableID   uint 	`valid:"required~Stable is required,refer=stables~Stable does not exist"`
 }
 
 // GET /horses
