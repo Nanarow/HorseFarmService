@@ -122,9 +122,8 @@ type Horse struct {
 
 type Stable struct {
 	BaseModel
-	EmployeeID uint     `json:",omitempty"`
-	Employee   Employee `gorm:"foreignKey:EmployeeID" valid:"-"`
-
+	EmployeeID  uint      `json:",omitempty"`
+	Employee    Employee  `gorm:"foreignKey:EmployeeID" valid:"-"`
 	Maintenance time.Time `valid:"required~Date is required,past~Date must be in the past"`
 	Cleaning    time.Time `valid:"required~Date is required,past~Date must be in the past"`
 	Temperature int
