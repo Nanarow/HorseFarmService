@@ -44,13 +44,12 @@ const Food = () => {
           alt="Food"
         />
       </section>
-      <div className="w-full h-full max-w-md flex justify-end items-center py-12 px-12 lg:px-0">
-      <div className="w-full max-w-md flex flex-col">
+      <div className="w-auto justify-center items-center py-2 px-2 relative flex flex-col">
         <Label className="text-3xl font-bold text-center">
           Food
         </Label>
         <Form
-          className="flex flex-col justify-center gap-2 mt-4"
+          className="flex flex-col w-full px-36 justify-center gap-2 mt-4"
           validator={foodFormSchema}
           onValid={onValid}
           onInvalid={(data) => console.log(data)}
@@ -79,7 +78,7 @@ const Food = () => {
             <Form.Error field={errors.Forage}/>
             <Form.SubmitButton useForm={form}>Save</Form.SubmitButton>
             <Button variant={"outline"} onClick={refresh}>Cancle</Button>
-            <div className="fixed bottom-9 right-16 w-8 h-8  cursor-pointer  text-red-500">
+            <div className="fixed bottom-9 right-16 w-8 h-8  cursor-pointer">
               <Tooltip content={"Log Out"}>
                 <LogOut
                   onClick={() => {
@@ -92,7 +91,6 @@ const Food = () => {
             </>
           )}
         ></Form>
-      </div>
       </div>
     </div>
   );
