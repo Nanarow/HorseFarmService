@@ -93,7 +93,7 @@ const StablePage = () => {
                       items={ToItemList(empTolist())}
                       name="EmployeeID"
                       className="col-span-3 font-extralight"  
-                      placeholder="Employee"
+                      placeholder="Select your Employee"
                     ></Form.Select> 
                   </>
                 )}
@@ -121,6 +121,7 @@ const StablePage = () => {
                     useForm={form}
                     name="Temperature"
                     type="number"
+                    placeholder="Input your Temperature"
                   ></Form.Input>
               </div>
               <div className="grid grid-cols-3 gap-2">
@@ -130,6 +131,7 @@ const StablePage = () => {
                     useForm={form}
                     name="Humidity"
                     type="number"
+                    placeholder="Input your Huminity"
                   ></Form.Input>
               </div>
               <div className="grid grid-cols-3 gap-2">
@@ -139,6 +141,7 @@ const StablePage = () => {
                     useForm={form}
                     name="Description"
                     type="text"
+                    placeholder="Input your Description"
                   ></Form.Input>
               </div>
               <Button 

@@ -38,18 +38,18 @@ const Food = () => {
   return (
     <div className="grid lg:grid-cols-2 w-full h-full">
       <section className="w-full h-full p-2 relative">
-      {/* <img
+      <img
           src={FoodImage}
           className="w-full h-full object-cover rounded "
           alt="Food"
-        /> */}
+        />
       </section>
-      <div className="w-full h-full max-w-md flex justify-center flex-col py-12 px-4 lg:px-0">
+      <div className="w-full h-full max-w-md flex item-center justify-center flex-col py-12 px-12 lg:px-0">
         <Label className="text-3xl font-bold text-center">
           Food
         </Label>
         <Form
-          className="flex flex-col gap-2 mt-4"
+          className="flex flex-col gap-2 justify-end mt-7"
           validator={foodFormSchema}
           onValid={onValid}
           onInvalid={(data) => console.log(data)}
@@ -78,7 +78,10 @@ const Food = () => {
             <Form.Error field={errors.Forage}/>
             <Form.SubmitButton useForm={form}>Save</Form.SubmitButton>
             <Button variant={"outline"} onClick={refresh}>Cancle</Button>
-            <div>
+            </>
+          )}
+        ></Form>
+        <div>
               <Tooltip content={"Log Out"}>
                 <LogOut
                   onClick={() => {
@@ -89,9 +92,6 @@ const Food = () => {
                   />
               </Tooltip>
             </div>
-            </>
-          )}
-        ></Form>
       </div>
     </div>
   );

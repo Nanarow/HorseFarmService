@@ -74,31 +74,31 @@ const HealthPage = () => {
 
   return (
     <div className="relative">
-      <section className="w-2/5 h-full  bg-cover bg-center absolute   	">
+      <section className="w-full h-screen  bg-cover bg-center absolute ">
         <img
           src={HealthImage}
-          className="w-full h-full object-cover rounded "
+          className="w-full h-screen object-cover rounded mx-auto  shadow-sm blur-sm"
           alt="Health"
         />
       </section>
 
       <Form
-        className="flex justify-end mt-7"
+        className="flex justify-center  "
         validator={healthFormSchema}
         onValid={onValid}
         onInvalid={console.log}
-        fields={({ form }) => (
-          <div className="flex flex-col relative">
-            <h1 className="text-4xl font-black text-primary mb-2 mt-8 text-center">
+        fields={({ form,errors }) => (
+          <div className="flex flex-col relative ">
+            <h1 className="text-3xl font-bold text-black text-primary mb-2 mt-14 mx-64">
               บันทึกการตรวจสุขภาพม้า
             </h1>
-            <div className="flex">
-              <Label className=" text-2xl text-primary mx-64 flex mt-16">
+            <div className="flex ">
+              <Label className=" text-xl text-primary mx-64 flex mt-6">
                 วันที่ทำการตรวจสุขภาพม้า:
                 <span className="text-red-500 ">*</span>
                 <div className=" px-14 ">
                   <Form.DatePicker
-                    className="w-96 h-14"
+                    className="w-96 h-10 border rounded-md focus:outline-none bg-white focus:border-black"
                     useForm={form}
                     name="Date"
                   />
@@ -110,69 +110,72 @@ const HealthPage = () => {
           <div className=" items-center justify-center"> 
             {horses && (
               <>
-                <div className="flex gap-14 mx-64 mt-6"> 
-                  <Label className="text-2xl text-primary w-48 ">
+                <div className="flex gap-6 mx-64 mt-6"> 
+                  <Label className="text-xl text-primary w-48 ">
                     ชื่อม้า:<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
                     valueAsNumber
-                    className="h-14 px-16 text-xl text-primary"
+                    className="h-10 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                     useForm={form}
                     items={HorseToSelectItems(horses)}
                     name="HorseID"
                     placeholder="Choose horse name"
                     />
                 </div>
-
+                <Form.Error
+                      field={errors.HorseID}
+                      className=" flex "
+                    />
               </>
-            )}
-             
+            )}             
             {employee && (
               <>
-                <div className=" flex gap-14 mx-64 mt-6">
-                  <Label className="text-2xl text-primary w-48">
+                <div className=" flex gap-6 mx-64 mt-6">
+                  <Label className="text-xl text-primary w-48">
                     ผู้ตรวจ:<span className="text-red-500">*</span>
                   </Label>
                   <Form.Select
                     valueAsNumber
-                    className="h-14 px-24 text-xl text-primary"
+                    className="h-10 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                     useForm={form}
                     items={EmployeeToSelectItems(employee)}
                     name="EmployeeID"
                     placeholder="Choose employee name"
                   />
                 </div>
+                <Form.Error
+                      field={errors.EmployeeID}
+                      className="col-span-3 col-start-2 mt-2"
+                    />
               </>
             )}
 
              
             <div className="flex flex-col  relative " >
-              <Label className="flex text-primary text-2xl mx-64 mt-6 ">
+              <Label className="flex text-primary text-xl mx-64 mt-6 ">
                 สัญญาณชีพ:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-2 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vital" type="text"></Form.Input>
+                <Form.Input className="w-3/4 h-10 px-2 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vital" type="text"></Form.Input>
               </Label>
-              <Label className="flex text-2xl mt-6 text-primary mx-64 ">
+              <Label className="flex text-xl mt-6 text-primary mx-64 ">
                 สุขภาพฟัน:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14  ml-16 border  rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Tooth" type="text"></Form.Input>
+                <Form.Input className="w-3/4 h-10  ml-16 border  rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Tooth" type="text"></Form.Input>
               </Label >
-              <Label className="flex text-primary text-2xl mt-6 mx-64 ">
+              <Label className="flex text-primary text-xl mt-6 mx-64 ">
                 วัคซีนป้องกัน:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vaccine" type="text"></Form.Input>
+                <Form.Input className="w-3/4 h-10  ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Vaccine" type="text"></Form.Input>
               </Label>
-              <Label className="flex text-primary text-2xl mt-6 mx-64 gap-4">
+              <Label className="flex text-primary text-xl mt-6 mx-64 gap-1">
                 ถ่ายพยาธิ:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 px-4 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Parasite" type="text"></Form.Input>
+                <Form.Input className="w-3/4 h-10 ml-16  border rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Parasite" type="text"></Form.Input>
               </Label>
-              <Label className="flex text-primary text-2xl mt-6 mx-64 ">
+              <Label className="flex text-primary text-xl mt-6 mx-64 ">
                 ตรวจเลือด:<span className="text-red-500">*</span>
-                <Form.Input className="w-3/4 h-14 ml-16 border gap-5 rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
+                <Form.Input className="w-3/4 h-10 ml-16 border gap-5 rounded-md text-1xl focus:outline-none bg-white focus:border-black" useForm={form} name="Blood" type="text"></Form.Input>
               </Label>
-            
-
-
                 <Button
                   type="submit"
-                  className="w-48 h-12 text-2xl  text-center bg-green-600 rounded-md	mt-7 mx-auto	text-primary text-white	 	"
+                  className="w-32 h-10 text-2sm  text-center bg-green-600 rounded-md	mt-7 mx-auto	text-primary text-white	 	"
                 >
                   บันทึกข้อมูล
                 </Button>
@@ -183,7 +186,7 @@ const HealthPage = () => {
                   console.log("logout");
                   logout();
                 }}
-                className=" fixed bottom-9 right-16 w-10 h-10  cursor-pointer  text-red-500" />
+                className=" fixed bottom-12 right-16 w-8 h-8  cursor-pointer  text-red-500" />
                 </Tooltip>
             </div>
           </div>

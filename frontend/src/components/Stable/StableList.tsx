@@ -9,16 +9,18 @@ import { ChevronLeftCircle } from 'lucide-react';
 
 const StableList = () => {
     const [stables, setStables] = useState<Stable[]>([]);
-
+    
     async function fetchStables() {
         const res = await http.Get<Stable[]>("/stables");
         if (res.ok) {
             setStables(res.data);
         }
     }
+
     useEffect(() => {
         return () => {
             fetchStables();
+            
         };
     }, []);
 
@@ -29,29 +31,30 @@ const StableList = () => {
                 <TableCaption>A list of Stable.</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[17%] text-center">Maintenance</TableHead>
-                        <TableHead className="w-[17%] text-center">Cleaning</TableHead>
-                        <TableHead className="w-[17%] text-center">Temperature</TableHead>
-                        <TableHead className="w-[17%] text-center">Huminity</TableHead>
+                        <TableHead className="w-[13%] text-center">Employee</TableHead>
+                        <TableHead className="w-[13%] text-center">Maintenance</TableHead>
+                        <TableHead className="w-[13%] text-center">Cleaning</TableHead>
+                        <TableHead className="w-[13%] text-center">Temperature</TableHead>
+                        <TableHead className="w-[13%] text-center">Huminity</TableHead>
                         <TableHead className="w-[22%] text-center">Description</TableHead>
-                        <TableHead className="w-[10%] text-center">Edit</TableHead>
+                        <TableHead className="w-[11%] text-center">Edit</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody className="text-center">
                     {stables.map((stable) => (
                         <TableRow key={stable.ID}>
-                            <TableCell>{`${stable.Maintenance}`}</TableCell>
-                            <TableCell>{`${stable.Cleaning}`}</TableCell>
+                            <TableCell>{stable.Employee.ID}</TableCell>
+                            <TableCell>{new Date(stable.Maintenance).toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(stable.Cleaning).toLocaleDateString()}</TableCell>
                             <TableCell>{stable.Temperature}</TableCell>
                             <TableCell>{stable.Humidity}</TableCell>
                             <TableCell>{stable.Description}</TableCell>
-                            
-                                <TableCell className="p-2">
-                                    <StableEdit
-                                        stable={stable}
-                                        onSave={fetchStables}
-                                    ></StableEdit>
-                                </TableCell>
+                            <TableCell className="p-2">
+                                <StableEdit
+                                    stable={stable}
+                                    onSave={fetchStables}
+                                ></StableEdit>
+                            </TableCell>
                             
                         </TableRow>
                     ))}

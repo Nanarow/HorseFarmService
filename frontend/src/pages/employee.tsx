@@ -5,18 +5,24 @@ import { useToast } from "@shadcn/ui/use-toast";
 import { useEffect, useState } from "react";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { Label } from "@shadcn/ui";
-import EmployeeImage from "./../assets/healthbg.jpg";
-import { ChevronLeftCircle} from 'lucide-react';
-import { Link } from "react-router-dom";
-import { Tooltip } from "@shadcn/simplify/tooltip";
+import { UserPlus} from 'lucide-react';
 import { EmployeeFormData, employeeFormSchema } from "@src/validator";
-
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@shadcn/ui/dialog";
 const EmployeePage = () => {
   const { toast } = useToast();
-
-  const [position, setPosition] = useState<Position[] | undefined>(undefined);
-  const [precede, setPrecede] = useState<Precede[] | undefined>(undefined);
-  const [gender, setGender] = useState<Gender[] | undefined>(undefined);
+  const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState<Position[]>([]);
+  const [precede, setPrecede] = useState<Precede[]>([]);
+  const [gender, setGender] = useState<Gender[]>([]);
   // const [formData, setFormData] = useState<Employee>
   useEffect(() => {
     async function fetchPosition() {
@@ -108,171 +114,189 @@ const EmployeePage = () => {
     
   }
   return (
-    <div className="relative ">
-      <section className="w-2/5 h-full  bg-cover bg-center absolute  	">
-        <img
-          src={EmployeeImage}
-          className="w-full h-full object-cover rounded "
-          alt="Health"
-        />
-      </section>
-      
-    <div className="flex justify-end mt-8">
-      
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <UserPlus className="text-yellow-500 absolute top-8 left-8 hover:scale-110 cursor-pointer" />
+      </DialogTrigger>
 
-   
-      <Form
-        className="flex justify-items-center gap-2 "
-        validator={employeeFormSchema}
-        onValid={onValid}
-        onInvalid={console.log}
-        fields={({ form }) => (
-
-          <div className="flex flex-col ">
-
-            <h1 className="text-2xl font-black text-primary  mt-2 mx-64 text-center">
-            เพิ่มข้อมูลพนักงาน
-            </h1>
-            {precede && (
-              <>
-                <div className="flex gap-32 mx-72 mt-6 "> 
-                  <Label className="text-xl text-primary w-32 ">
-                    คำนำหน้า:<span className="text-red-500">*</span>
-                  </Label>
-                  <Form.Select
-                    valueAsNumber
-                    className="h-9  text-primary border rounded-md focus:outline-none bg-white focus:border-black"
-                    useForm={form}
-                    items={PrecedeToSelectItems(precede)}
-                    name="PrecedeID"
-                    placeholder="Choose your precede"
+      <DialogContent className="sm:max-w-[480px]">
+        <DialogHeader>
+          <DialogTitle>Create Employee Data</DialogTitle>
+          <DialogDescription>
+            Make changes to your Employee here. Click save when you're done.
+          </DialogDescription>
+        </DialogHeader>
+        <Form
+          className="grid gap-2 mt-4"
+          validator={employeeFormSchema}
+          onValid={onValid}
+          onInvalid={(data) => console.log(data)}
+          fields={({ form, errors }) => (
+            <>
+              <div className="grid grid-cols-4 items-center">
+                {precede.length > 0 && (
+                  <>
+                    <Label>
+                      Precede<span className="text-red-500">*</span>
+                    </Label>
+                    <Form.Select
+                      valueAsNumber
+                      useForm={form}
+                      items={PrecedeToSelectItems(precede)}
+                      name="PrecedeID"
+                      placeholder="Pick type of tour"
+                      className="col-span-3"
+                    ></Form.Select>
+                    <Form.Error
+                      field={errors.PrecedeID}
+                      className="col-span-3 col-start-2 mt-2 "
                     />
-                  </div>
-                </>
-              )}
-
-              <Label className="flex text-primary text-xl mx-72 gap-32 mt-5 ">
-                ชื่อ:<span className="text-red-500">*</span>
+                  </>
+                  
+                )}
+                
+              </div>
+              <div className="grid grid-cols-4 items-center">
+                <Label>
+                  FirstName<span className="text-red-500">*</span>
+                </Label>
                 <Form.Input
-                  className=" h-9  border rounded-md  focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="FirstName"
                   type="text"
+                  className="col-span-3"
                 ></Form.Input>
-              </Label>
-              <Label className="flex text-xl mt-6 text-primary mx-64 ">
-                นามสกุล:<span className="text-red-500">*</span>
+                <Form.Error
+                      field={errors.FirstName}
+                      className="col-span-3 col-start-2 mt-2"
+                    />
+              </div>
+              <div className=" grid grid-cols-4 items-center">
+                <Label>LastName<span className="text-red-500">*</span></Label>
                 <Form.Input
-                  className="w-3/4 h-14 ml-14 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="LastName"
                   type="text"
+                  className="col-span-3"
                 ></Form.Input>
-              </Label>
-
-              {gender && (
-                <>
-                  <div className="flex gap-32 mx-72 text-xl mt-6">
-                    <Label className="text-xl text-primary flex">
-                      เพศ: <span className="text-red-500">*</span>
+                <Form.Error
+                      field={errors.LastName}
+                      className="col-span-3 col-start-2 mt-2"
+                    />
+              </div>
+              <div className="grid grid-cols-4 items-center">
+                {gender.length > 0 && (
+                  <>
+                    <Label>
+                      Gender<span className="text-red-500">*</span>
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-9 border rounded-md focus:outline-none bg-white focus:border-black"
                       useForm={form}
                       items={GenderToSelectItems(gender)}
                       name="GenderID"
-                      placeholder="Choose your gender"
+                      placeholder="Pick Gender"
+                      className="col-span-3"
+                    ></Form.Select>
+                    <Form.Error
+                      field={errors.GenderID}
+                      className="col-span-3 col-start-2 mt-2"
                     />
-                  </div>
-                </>
-              )}
-
-              <div className="flex">
-                <Label className=" text-xl text-primary mx-64 flex mt-6">
-                  วันเกิด:<span className="text-red-500 ">*</span>
-                  <div className=" px-16 ml-4">
-                    <Form.DatePicker
-                      className="w-96 h-14  text-xl "
-                      useForm={form}
-                      name="DayOfBirth"
-                    />
-                  </div>
-                </Label>
+                  </>
+                )}
               </div>
-
-              {position && (
-                <>
-                  <div className="flex gap-32 mx-72 mt-6">
-                    <Label className="text-xl text-primary flex">
-                      ตำแหน่ง: <span className="text-red-500">*</span>
+              <div className="grid grid-cols-4 items-center">
+                <Label>
+                  Day Of Birth<span className="text-red-500">*</span>
+                </Label>
+                <Form.DatePicker
+                  useForm={form}
+                  name="DayOfBirth"
+                  className="col-span-3"
+                ></Form.DatePicker>
+                <Form.Error
+                      field={errors.DayOfBirth}
+                      className="col-span-3 col-start-2 mt-2"
+                    />
+              </div>
+              <div className="grid grid-cols-4 items-center">
+                {position.length > 0 && (
+                  <>
+                    <Label>
+                      Position<span className="text-red-500">*</span>
                     </Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-19 px-14 border rounded-md  focus:outline-none bg-white focus:border-black"
                       useForm={form}
                       items={PositionToSelectItems(position)}
                       name="PositionID"
-                      placeholder="Choose your position"
+                      placeholder="Pick Position"
+                      className="col-span-3"
+                    ></Form.Select>
+                     <Form.Error
+                      field={errors.PositionID}
+                      className="col-span-3 col-start-2 mt-2"
                     />
-                  </div>
-                </>
-              )}
-
-              <Label className="flex text-primary text-xl mx-64 mt-6 ">
-                เบอร์โทร:<span className="text-red-500">*</span>
+                  </>
+                )}
+              </div>
+              <div className="grid grid-cols-4 items-center">
+                <Label>
+                  Email<span className="text-red-500">*</span>
+                </Label>
                 <Form.Input
-                  className="w-3/4 h-14 px-4 ml-16 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                  useForm={form}
+                  name="Email"
+                  type="email"
+                  className="col-span-3"
+                ></Form.Input>
+                 <Form.Error
+                      field={errors.Email}
+                      className="col-span-3 col-start-2 mt-2"
+                    />
+              </div>
+              <div className="grid grid-cols-4 items-center">
+                <Label>
+                  Phone<span className="text-red-500">*</span>
+                </Label>
+                <Form.Input
                   useForm={form}
                   name="Phone"
                   type="text"
+                  className="col-span-3"
                 ></Form.Input>
-              </Label>
-              <Label className="flex text-xl mt-6 text-primary mx-64  ">
-                อีเมล:<span className="text-red-500">*</span>
+                 <Form.Error
+                      field={errors.Phone}
+                      className="col-span-3 col-start-2 mt-2"
+                    />
+              </div>
+              <div className="grid grid-cols-4 items-center">
+                <Label>
+                  Password<span className="text-red-500">*</span>
+                </Label>
                 <Form.Input
-                  className="w-3/4 h-14 ml-24 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
-                  useForm={form}
-                  name="Email"
-                  type="text"
-                ></Form.Input>
-              </Label>
-              <Label className="flex text-xl mt-6 text-primary mx-64 ">
-                Password:<span className="text-red-500">*</span>
-                <Form.Input
-                  className="w-3/4 h-14 ml-14 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
                   useForm={form}
                   name="Password"
                   type="text"
+                  className="col-span-3"
                 ></Form.Input>
-              </Label>
-              <div className="mx-64 mt-2">
-                <Button
-                  type="submit"
-                  className="w-48 h-12 text-xl  text-center bg-green-600 rounded-md	mt-5 mx-16	text-primary text-white	 	"
-                >
-                  บันทึกข้อมูล
-                </Button>
-
-                <Button
-                  type="reset"
-                  className="w-48 h-12 text-xl  text-center bg-red-600 rounded-md	mt-5 mx-16	text-primary text-white	 	"
-                >
-                  ยกเลิก
-                </Button>
-
-                <Link to="/employee/list">
-                  <Tooltip content={"Back to Employee List"}>
-                  <ChevronLeftCircle  className="fixed bottom-4 right-16 w-10 h-10 text-red-500 cursor-pointer"/>
-                  </Tooltip>
-                </Link>
-
+                <Form.Error
+                      field={errors.Password}
+                      className="col-span-3 col-start-2 mt-2"
+                    />
               </div>
-            </div>
+            </>
           )}
-        />
-      </div>
-    </div>
+        >
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="secondary">Close</Button>
+            </DialogClose>
+            <Button type="submit">Save changes</Button>
+          </DialogFooter>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };
 
