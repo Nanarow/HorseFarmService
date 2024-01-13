@@ -5,10 +5,7 @@ import { useToast } from "@shadcn/ui/use-toast";
 import { useEffect, useState } from "react";
 import Form, { ItemList } from "@shadcn/simplify/form";
 import { Label } from "@shadcn/ui";
-import EmployeeImage from "./../assets/healthbg.jpg";
 import { UserPlus} from 'lucide-react';
-import { Link } from "react-router-dom";
-import { Tooltip } from "@shadcn/simplify/tooltip";
 import { EmployeeFormData, employeeFormSchema } from "@src/validator";
 import {
   Dialog,
