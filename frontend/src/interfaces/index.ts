@@ -51,6 +51,7 @@ export interface Stable {
   Temperature: number;
   Humidity: number;
   Description: string;
+  Employee:Employee
 }
 
 export interface Bleed {

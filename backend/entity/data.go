@@ -262,4 +262,20 @@ func SetupData(db *gorm.DB) {
 
 	db.Create(&ridingLevels)
 
+	horses := []Horse{
+		{
+			BaseModel:   BaseModel{ID: 1},
+			Name:        "PP",
+			
+		},
+		{
+			BaseModel:   BaseModel{ID: 2},
+			Name:        "Common",
+		
+		},
+		
+	}
+
+	db.Create(&horses)
+
 }

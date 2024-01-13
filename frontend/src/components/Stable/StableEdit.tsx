@@ -1,14 +1,16 @@
 import { z } from "zod";
 import { Button }from "@shadcn/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@shadcn/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,DialogDescription} from "@shadcn/ui/dialog"
 import { Label } from "@shadcn/ui/label"
 import Form from "@shadcn/simplify/form";
 import { useState} from "react";
 import { http } from "../../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 import { Edit } from "lucide-react";
-import { Stable } from "@src/interfaces";
+import { Stable, Employee } from "@src/interfaces";
 import { stableFormSchema } from "@src/validator";
+import { ToItemList } from "@src/utils";
+import { useEffect} from "react";
 
 interface Props {
     stable: Stable;
@@ -18,6 +20,21 @@ interface Props {
 const StableEdit = ({ stable, onSave }: Props) => {
     const { toast } = useToast();
     const [open, setOpen] = useState(false);
+    const [ employees, setEmployees] = useState<Employee[]>([]);
+
+    async function fetchEmployees() {
+        const res = await http.Get<Employee[]>("/employees");
+        if (res.ok) {
+          setEmployees(res.data);
+        }
+    }
+
+    useEffect(() => {
+        return () => {
+          fetchEmployees();
+        }
+    },[])
+    
 
     async function onEditValid(formData: z.infer<typeof stableFormSchema>, ID: number) {
         const newStable ={
@@ -39,26 +56,50 @@ const StableEdit = ({ stable, onSave }: Props) => {
           });
         }
     }
+
+    function empTolist() {
+        const res = employees.map((emp) => {
+          return {ID:emp.ID!,Name:emp.FirstName + " " + emp.LastName}
+        })
+        return res
+      }
     
     return (
-        <div className="ml-12">
+        <div className=" ml-14">
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Edit className="text-yellow-500 cursor-pointer " />
             </DialogTrigger>
             <DialogContent className="w-full">
                 <DialogHeader>
-                    <DialogTitle>Edit Stable Information</DialogTitle>              
+                    <DialogTitle>Edit Stable Information</DialogTitle>
+                    <DialogDescription>
+                        Make changes to your stable here. Click save when you're done.
+                    </DialogDescription>                
                 </DialogHeader> 
                 <Form
-                    className="grid gap-5"
+                    className="grid gap-5 mt-2"
                     validator={stableFormSchema}
                     onValid={(data)=>onEditValid(data,stable.ID)}
                     onInvalid={(data) => console.log(data)}
                     fields={({ form }) => (
                         <>
-                            <div className="grid grid-cols-5 items-center gap-4">
-                                <Label className="text-right">Maintenance:</Label> 
+                            <div className="grid grid-cols-5 gap-3">
+                                {employees.length > 0 && (
+                                    <>
+                                        <Label>Employee<span className="text-red-500">*</span></Label>
+                                        <Form.Select
+                                            useForm={form}
+                                            items={ToItemList(empTolist())}
+                                            name="EmployeeID"
+                                            className="col-span-3 font-extralight"
+                                            defaultValue={stable.Employee.ID}
+                                        ></Form.Select> 
+                                    </>
+                                )}
+                            </div>
+                            <div className="grid grid-cols-5 gap-3">
+                                <Label>Maintenance<span className="text-red-500">*</span></Label> 
                                     <Form.DatePicker
                                         className="col-span-3 font-extralight"
                                         defaultValue={new Date(stable.Maintenance)}
@@ -66,8 +107,8 @@ const StableEdit = ({ stable, onSave }: Props) => {
                                         name="Maintenance"
                                     ></Form.DatePicker>
                             </div>
-                            <div className="grid grid-cols-5 items-center gap-4">
-                                <Label className="text-right">Cleaning: </Label>
+                            <div className="grid grid-cols-5 gap-3">
+                                <Label>Cleaning<span className="text-red-500">*</span></Label>
                                     <Form.DatePicker
                                         className="col-span-3 font-extralight"
                                         defaultValue={new Date(stable.Cleaning)}
@@ -75,37 +116,37 @@ const StableEdit = ({ stable, onSave }: Props) => {
                                         name="Cleaning"
                                     ></Form.DatePicker>
                             </div>
-                            <div className="grid grid-cols-5 items-center gap-4">
-                                <Label className="text-right">Temperature: </Label>
+                            <div className="grid grid-cols-5 gap-3">
+                                <Label>Temperature<span className="text-red-500">*</span></Label>
                                     <Form.Input
                                         className="col-span-3 font-extralight"
                                         defaultValue={stable.Temperature}
                                         useForm={form}
                                         name="Temperature"
                                         type="number"
-                                        placeholder="enter your Temperature"
+                                        
                                     ></Form.Input>
                             </div>
-                            <div className="grid grid-cols-5 items-center gap-4">
-                                <Label className="text-right">Humidity: </Label>
+                            <div className="grid grid-cols-5 gap-3">
+                                <Label>Humidity<span className="text-red-500">*</span></Label>
                                     <Form.Input
                                         className="col-span-3 font-extralight"
                                         defaultValue={stable.Humidity}
                                         useForm={form}
                                         name="Humidity"
                                         type="number"
-                                        placeholder="enter your Humidity"
+                                        
                                     ></Form.Input>
                             </div>
-                            <div className="grid grid-cols-5 items-center gap-4">
-                                <Label className="text-right">Description: </Label>
+                            <div className="grid grid-cols-5 gap-3">
+                                <Label>Description<span className="text-red-500">*</span></Label>
                                     <Form.Input
                                         className="col-span-3 font-extralight"
                                         defaultValue={stable.Description}
                                         useForm={form}
                                         name="Description"
                                         type="text"
-                                        placeholder="enter your Description"
+                                        
                                     />
                             </div>
                             <Button 
