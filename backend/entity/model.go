@@ -58,6 +58,8 @@ type RidingLevel struct {
 type Support struct {
 	BaseModel
 	UserID      uint
+	User        User `gorm:"foreignKey:GenderID"`
+	
 	Corporate   string
 	Description string
 	Date        time.Time

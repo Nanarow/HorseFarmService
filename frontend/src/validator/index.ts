@@ -103,6 +103,16 @@ export const userUpdateFormSchema = z.object({
 
 export type UserUpdateFormData = z.infer<typeof userUpdateFormSchema>;
 
+export const supportFormSchema = z.object({
+  UserID: z.number(),
+  Corporate: z.string(),
+  Description: z.string(),
+  Date: z.date(),
+  Image: z.string(),
+});
+
+export type SupportFormData = z.infer<typeof supportFormSchema>;
+
 export const horseFormSchema = z.object({
   Name: z.string().min(1, "Name is required"),
   Age: z.number({ required_error: "Age is required" }),

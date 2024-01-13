@@ -85,6 +85,7 @@ export interface User {
 export interface Support {
   ID: number;
   UserID: number;
+  User: User;
   Corporate: string;
   Description: string;
   Date: Date;
