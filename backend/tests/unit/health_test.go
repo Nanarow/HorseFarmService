@@ -16,7 +16,7 @@ func TestHealthValidation(t *testing.T) {
 		health := entity.Health{ //ครบ
 			Date: time.Now().Add(time.Duration(1) * time.Hour),
 			HorseID: "1",
-			EmployeeID: "14", 
+			EmployeeID: "1", 
 			Vital: "Pass",      
 			Tooth: "Pass",
 			Vaccine: "Pass",
@@ -34,7 +34,7 @@ func TestHealthValidation(t *testing.T) {
 		health := entity.Health{ //ไม่ครบ
 			Date: time.Now().Add(time.Duration(1) * time.Hour),
 			HorseID: "1",
-			EmployeeID: "14", 
+			EmployeeID: "1", 
 			Vital: "Pass",      
 			Tooth: "Pass",
 			Vaccine: "Pass",
