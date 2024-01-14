@@ -41,8 +41,6 @@ func TestCreateHorse(t *testing.T) {
 		// Assert
 		assert.Equal(t, http.StatusCreated, response.Code)
 
-		// add additional assertions to check if the employee is created successfully
-
 	})
 
 	t.Run(`create horse fail`, func(t *testing.T) {

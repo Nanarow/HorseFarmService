@@ -81,7 +81,7 @@ const StablePage = () => {
           validator={stableFormSchema}
           onValid={onValid}
           onInvalid={(data) => console.log(data)}
-          fields={({ form }) => ( 
+          fields={({ form, errors }) => ( 
             <>
               <div className="grid grid-cols-3 gap-2">
                 {employees.length > 0 && (
@@ -94,7 +94,11 @@ const StablePage = () => {
                       name="EmployeeID"
                       className="col-span-3 font-extralight"  
                       placeholder="Select your Employee"
-                    ></Form.Select> 
+                    /> 
+                    <Form.Error
+                      field={errors.EmployeeID}
+                      className="col-span-3 col-start-2 mt-2"
+                    />
                   </>
                 )}
               </div>
@@ -105,6 +109,10 @@ const StablePage = () => {
                     useForm={form}
                     name="Maintenance"
                   />
+                  <Form.Error
+                    field={errors.Maintenance}
+                    className="col-span-3 col-start-2 mt-2"
+                  />
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <Label className="text-xl text-primary">Date of Cleaning<span className="text-red-500">*</span></Label>
@@ -112,6 +120,10 @@ const StablePage = () => {
                     className="col-span-3 font-extralight"
                     useForm={form}
                     name="Cleaning"
+                  />
+                  <Form.Error
+                    field={errors.Cleaning}
+                    className="col-span-3 col-start-2 mt-2"
                   />
               </div>
               <div className="grid grid-cols-3 gap-2">
@@ -121,8 +133,13 @@ const StablePage = () => {
                     useForm={form}
                     name="Temperature"
                     type="number"
+                    step="0.01" 
                     placeholder="Input your Temperature"
-                  ></Form.Input>
+                  />
+                  <Form.Error
+                    field={errors.Temperature}
+                    className="col-span-3 col-start-2 mt-2"
+                  />
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <Label className="text-xl text-primary">Humidity<span className="text-red-500">*</span></Label>
@@ -131,8 +148,13 @@ const StablePage = () => {
                     useForm={form}
                     name="Humidity"
                     type="number"
+                    step="0.01" 
                     placeholder="Input your Huminity"
-                  ></Form.Input>
+                  />
+                  <Form.Error
+                    field={errors.Humidity}
+                    className="col-span-3 col-start-2 mt-2"
+                  />
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <Label className="text-xl text-primary">Description<span className="text-red-500">*</span></Label>
@@ -142,7 +164,7 @@ const StablePage = () => {
                     name="Description"
                     type="text"
                     placeholder="Input your Description"
-                  ></Form.Input>
+                  />
               </div>
               <Button 
                 variant="outline" 

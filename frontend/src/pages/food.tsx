@@ -8,7 +8,7 @@ import { Button } from "@shadcn/ui/button";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { FoodFormData, foodFormSchema } from "@src/validator";
 import { useRefresh } from "@src/hooks";
-import FoodImage from "../assets/food1.jpg";
+import FoodImage from "../assets/foodbg2.jpg";
 
 const Food = () => {
   const { refresh } = useRefresh();
@@ -36,63 +36,66 @@ const Food = () => {
   }
 
   return (
-    <div className="grid lg:grid-cols-2 w-full h-full">
-      <section className="w-full h-full p-2 relative">
+    <div className="w-full h-screen">
+      <section className="w-full h-full absolute" style={{ zIndex: -1}}>
       <img
           src={FoodImage}
-          className="w-full h-full object-cover rounded "
+          className="w-full h-full abs-center object-cover rounded "
           alt="Food"
         />
       </section>
-      <div className="w-full h-full max-w-md flex item-center justify-center flex-col py-12 px-12 lg:px-0">
+      {/* <div className="w-full h-full bg-white border backdrop-blur-none supports-[backdrop-filter]:bg-background/60"> */}
+      <div className="mx-48 backdrop-blur-sm bg-white supports-[backdrop-filter]:bg-background/60">
+      <div className="w-full justify-center items-center py-2 px-32 mt-12 relative flex flex-col">
         <Label className="text-3xl font-bold text-center">
           Food
         </Label>
         <Form
-          className="flex flex-col gap-2 justify-end mt-7"
+          className="flex flex-col w-full px-36 justify-center gap-2 mt-4"
           validator={foodFormSchema}
           onValid={onValid}
           onInvalid={(data) => console.log(data)}
           fields={({ form, errors }) => (
             <>
             <Form.Label>Date</Form.Label>
-            <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
+            <Form.DatePicker useForm={form} name="Date" className="border-gray-600"></Form.DatePicker>
             <Form.Error field={errors.Date}/>
             <Form.Label>Fat</Form.Label>
-            <Form.Input useForm={form} name="Fat" type="text"/>
+            <Form.Input useForm={form} name="Fat" type="text" className="border-gray-600"/>
             <Form.Error field={errors.Fat}/>
             <Form.Label>Carbohydrate</Form.Label>
-            <Form.Input useForm={form} name="Carbohydrate" type="text"/>
+            <Form.Input useForm={form} name="Carbohydrate" type="text" className="border-gray-600"/>
             <Form.Error field={errors.Carbohydrate}/>
             <Form.Label>Protein</Form.Label>
-            <Form.Input useForm={form} name="Protein" type="text"/>
+            <Form.Input useForm={form} name="Protein" type="text" className="border-gray-600"/>
             <Form.Error field={errors.Protein}/>
             <Form.Label>Vitamin</Form.Label>
-            <Form.Input useForm={form} name="Vitamin" type="text"/>
+            <Form.Input useForm={form} name="Vitamin" type="text" className="border-gray-600"/>
             <Form.Error field={errors.Vitamin}/>
             <Form.Label>Mineral</Form.Label>
-            <Form.Input useForm={form} name="Mineral" type="text"/>
+            <Form.Input useForm={form} name="Mineral" type="text" className="border-gray-600"/>
             <Form.Error field={errors.Mineral}/>
             <Form.Label>Forage</Form.Label>
-            <Form.Input useForm={form} name="Forage" type="text"/>
+            <Form.Input useForm={form} name="Forage" type="text" className="border-gray-600"/>
             <Form.Error field={errors.Forage}/>
-            <Form.SubmitButton useForm={form}>Save</Form.SubmitButton>
-            <Button variant={"outline"} onClick={refresh}>Cancle</Button>
-            </>
-          )}
-        ></Form>
-        <div>
+            <Form.SubmitButton useForm={form} className=" hover:bg-black hover:text-white bg-white text-black">Save</Form.SubmitButton>
+            <Button variant={"outline"} onClick={refresh} className=" hover:bg-black hover:text-white hover:border-black bg-white text-black">Cancle</Button>
+            <div className="fixed bottom-9 right-16 w-8 h-8  cursor-pointer">
               <Tooltip content={"Log Out"}>
                 <LogOut
                   onClick={() => {
                     console.log("logout");
                     logout();
                   }}
-                  className="fixed bottom-9 right-16 w-8 h-8  cursor-pointer  text-red-500"
                   />
               </Tooltip>
             </div>
+            </>
+          )}
+        ></Form>
       </div>
+      </div>
+      {/* </div> */}
     </div>
   );
 };
