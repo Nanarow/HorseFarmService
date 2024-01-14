@@ -19,6 +19,7 @@ import CourseEdit from "@src/components/coursesetting/CourseEdit";
 import { XSquare } from "lucide-react";
 import { addDays, addHours } from "date-fns";
 import { Label } from "@shadcn/ui";
+import ScheduleImage from "../assets/schedulebg.jpg";
 
 const courseSetting = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -103,20 +104,28 @@ const courseSetting = () => {
   }
 
   return (
-    <main className="w-full h-screen p-16">
-      <div className="flex items-center justify-between space-x-2">
+    <main className="w-full h-screen">
+      <section className="w-full h-full absolute" style={{ zIndex: -1 }}>
+        <img
+          src={ScheduleImage}
+          className="w-full h-full abs-center object-cover rounded"
+          alt="Schedule"
+        />
+      </section>
+      <div className="w-full h-full bg-white border backdrop-blur-none supports-[backdrop-filter]:bg-background/60">
+      <div className="flex items-center justify-between space-x-2 mt-12 px-8" style={{ zIndex: 1 }}>
         <Label className="text-3xl font-bold text-center">
           Course Setting
         </Label>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="hover:scale-110">Add Course</Button>
+          <Button className="hover:scale-110 hover:bg-black hover:text-white bg-white text-black">Add Course</Button>
         </DialogTrigger>
         <AddCourse></AddCourse>
       </Dialog>
       </div>
       <DragDrop>
-        <section className=" w-full flex gap-2 my-4">
+        <section className=" w-full flex gap-2 my-4 px-8">
           {courses.length > 0 &&
             courses.map((course, index) => (
               <DraggableCard
@@ -126,8 +135,6 @@ const courseSetting = () => {
               >
                 <div>
                 {course.Name}
-                <span>--</span>
-                {course.Description}
                 </div>
 
                 <div className="flex items-center space-x-2">
@@ -145,11 +152,11 @@ const courseSetting = () => {
               </DraggableCard>
             ))}
         </section>
-        <Table className=" border">
+        <Table className="border">
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[20%] border">Day</TableHead>
+              <TableHead className="w-[20%] border text-center text-black">Day</TableHead>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => {
                 const start_time = addHours(
                   new Date().setHours(0, 0, 0, 0),
@@ -164,7 +171,7 @@ const courseSetting = () => {
                 // console.log(test_time.getTime(), start_time.getTime());
                 // console.log(test_time.getTime() == start_time.getTime());
                 return (
-                  <TableHead key={index} className="border text-center w-[10%]">
+                  <TableHead key={index} className="border text-center w-[10%] text-black">
                     {start_time.toTimeString().slice(0, 8)}
                   </TableHead>
                 );
@@ -208,6 +215,7 @@ const courseSetting = () => {
           </TableBody>
         </Table>
       </DragDrop>
+      </div>
     </main>
   );
 };

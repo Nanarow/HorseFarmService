@@ -46,7 +46,6 @@ function App() {
       </Route>
 
       <Route element={<PrivateRoute role={100} path="/login/admin" />}>
-        <Route path="/employee" element={<Employee />} />
         <Route path="/employee/list" element={<EmployeeList />} />
         <Route path="/user" element={<User />} />
         <Route path="/user/list" element={<UserList />} />
