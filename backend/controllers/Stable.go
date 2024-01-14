@@ -21,7 +21,7 @@ func GetAllStable(c *gin.Context) {
 	}
 
 	//response data
-	c.JSON(http.StatusOK, gin.H{"data": stables})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(stables)})
 }
 
 // POST/horses

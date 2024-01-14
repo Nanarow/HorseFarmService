@@ -30,6 +30,10 @@ func RegisValidators() {
 		return truncateToDay(i.(time.Time).Local()).After(today().AddDate(0, 0, -1))
 	})
 
+	govalidator.CustomTypeTagMap.Set("today", func(i interface{}, c interface{}) bool {
+		return truncateToDay(i.(time.Time).Local()).Equal(today())
+	})
+
 	govalidator.ParamTagMap["eq"] = func(str string, params ...string) bool {
 		int_param, _ := strconv.Atoi(params[0])
 		int_input, _ := strconv.Atoi(str)

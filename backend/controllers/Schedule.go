@@ -16,7 +16,7 @@ func GetAllSchedules(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": schedules})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(schedules)})
 }
 
 func GetSchedule(c *gin.Context) {

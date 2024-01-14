@@ -71,7 +71,7 @@ func Authorization(role_ids ...uint) gin.HandlerFunc {
 			var emp struct {
 				PositionID uint
 			}
-			if err := entity.DB().Where("email = ?", email).First(&emp).Error; err == nil {
+			if err := entity.DB().Table("employees").Where("email = ?", email).First(&emp).Error; err == nil {
 				if slices.Contains(role_ids, emp.PositionID) {
 					c.Next()
 					return

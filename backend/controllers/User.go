@@ -38,7 +38,7 @@ func GetAllUser(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": users})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(users)})
 }
 
 // GET /users/:id
@@ -153,7 +153,7 @@ func GetAllGenders(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": genders})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(genders)})
 }
 
 func GetAllRidingLevels(c *gin.Context) {
@@ -167,7 +167,7 @@ func GetAllRidingLevels(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": ridingLevels})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(ridingLevels)})
 }
 
 // // GET tours/types

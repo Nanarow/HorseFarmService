@@ -18,7 +18,7 @@ func GetAllCourses(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": courses})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(courses)})
 }
 
 func GetCourse(c *gin.Context) {
@@ -40,7 +40,7 @@ func CreateCourse(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	
+
 	if _, err := govalidator.ValidateStruct(course); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

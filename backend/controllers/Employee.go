@@ -34,7 +34,7 @@ func GetAllEmployee(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": employees})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(employees)})
 }
 
 func GetEmployee(c *gin.Context) {
@@ -137,7 +137,7 @@ func GetAllPosition(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": positions})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(positions)})
 }
 
 // GET /employee/gender
@@ -152,7 +152,7 @@ func GetAllGender(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": genders})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(genders)})
 }
 
 // GET /employee/precede
@@ -167,7 +167,7 @@ func GetAllPrecede(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": precedes})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(precedes)})
 }
 
 // commit from 131b04201fd0b2d21363d877a0ebc0f06192ba27

@@ -21,7 +21,7 @@ func GetAllSupport(c *gin.Context) {
 	}
 
 	// response data
-	c.JSON(http.StatusOK, gin.H{"data": supports})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(supports)})
 }
 
 func GetSupport(c *gin.Context) {
