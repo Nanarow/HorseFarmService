@@ -60,10 +60,10 @@ type Support struct {
 	UserID uint
 	User   User `gorm:"foreignKey:UserID" valid:"-"`
 
-	Corporate   string
-	Description string
-	Date        time.Time
-	Bill        string
+	Corporate   string    `valid:"required~Corporate is required"`
+	Description string    `valid:"required~Description is required"`
+	Date        time.Time `valid:"required~Date is required,before_tomorrow~Date must before tomorrow"`
+	Bill        string    `gorm:"type:longtext"`
 }
 
 type Course struct {

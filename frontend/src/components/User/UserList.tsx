@@ -19,7 +19,6 @@ import { Tooltip } from "@shadcn/simplify/tooltip";
 import UserEdit from "./UserEdit";
 import { Link } from "react-router-dom";
 
-// { setTabs }: Props
 const UserList = () => {
   const [users, setUser] = useState<User[]>([]);
   async function fetchUsers() {

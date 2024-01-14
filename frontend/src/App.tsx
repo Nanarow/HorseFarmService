@@ -22,6 +22,7 @@ import UserList from "./components/User/UserList";
 import StableList from "./components/Stable/StableList";
 import StablePage from "./pages/stable";
 import Support from "./pages/support";
+import SupportList from "./components/Support/SupportList";
 
 function App() {
   return (
@@ -40,6 +41,8 @@ function App() {
         <Route path="/course" element={<Course />} />
         <Route path="/tour" element={<Tour />} />
         <Route path="/support" element={<Support />} />
+        <Route path="/support/list" element={<SupportList />} />
+
       </Route>
 
       <Route element={<PrivateRoute role={100} path="/login/admin" />}>

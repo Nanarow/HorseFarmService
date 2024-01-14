@@ -82,8 +82,8 @@ export const userFormSchema = z.object({
   Password: z.string().min(8, "Password must be at least 8 characters"),
   Phone: z.string().length(10, "Phone number must be 10 characters"),
   Profile: z.string(),
-  GenderID: z.number(),
-  RidingLevelID: z.number(),
+  GenderID: z.number({ required_error: "Please select gender" }),
+  RidingLevelID: z.number({ required_error: "Please select riding level" }),
 });
 
 export type UserFormData = z.infer<typeof userFormSchema>;
@@ -93,20 +93,20 @@ export const userUpdateFormSchema = z.object({
   LastName: z.string().min(1, "LastName is required"),
   DateOfBirth: z.date().max(new Date(), "Date must be in the past"),
   // Age: z.number({ required_error: "Age is required" }),
-  ExperiencePoint: z.number({ required_error: "Age is required" }).nonnegative(),
+  ExperiencePoint: z.number({ required_error: "Experience point is required" }).nonnegative(),
   Email: z.string().email({ message: "Invalid email address" }),
   Phone: z.string().length(10, "Phone number must be 10 characters"),
   Profile: z.string(),
-  GenderID: z.number(),
-  RidingLevelID: z.number(),
+  GenderID: z.number({ required_error: "Please select gender" }),
+  RidingLevelID: z.number({ required_error: "Please select riding level" }),
 });
 
 export type UserUpdateFormData = z.infer<typeof userUpdateFormSchema>;
 
 export const supportFormSchema = z.object({
-  Corporate: z.string(),
-  Description: z.string(),
-  Date: z.date(),
+  Corporate: z.string().min(1, "Corporate is required"),
+  Description: z.string().min(1, "Description is required"),
+  Date: z.date().max(new Date(), "Date must be in the past"),
   Bill: z.string(),
 });
 
