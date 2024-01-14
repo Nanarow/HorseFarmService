@@ -9,7 +9,7 @@ import (
 
 func init() {
 	os.Remove("TestDB.db")
-	entity.SetupDatabase("TestDB")
+	entity.SetupTestDatabase()
 	entity.SetupData(entity.DB())
 	controllers.RegisValidators()
 }

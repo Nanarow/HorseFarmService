@@ -20,8 +20,8 @@ func TestCreateSupport(t *testing.T) {
 
 	t.Run(`created support success`, func(t *testing.T) {
 		support := entity.Support{
-			Date:     time.Now().Add(time.Duration(1) * time.Hour),
-			Corporate: "popo",
+			Date:        time.Now(),
+			Corporate:   "popo",
 			Description: "my sup",
 		}
 		userJSON, _ := json.Marshal(support)
@@ -44,7 +44,7 @@ func TestCreateSupport(t *testing.T) {
 
 	t.Run(`create support fail`, func(t *testing.T) {
 		support := entity.Support{
-			Date:     time.Now().Add(time.Duration(1) * time.Hour),
+			Date: time.Now(),
 		}
 		userJSON, _ := json.Marshal(support)
 		request, _ := http.NewRequest("POST", "/supports", bytes.NewBuffer(userJSON))

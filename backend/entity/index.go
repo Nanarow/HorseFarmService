@@ -3,6 +3,7 @@ package entity
 import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var db *gorm.DB
@@ -16,7 +17,23 @@ func SetupDatabase(dbName string) {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	// Migrate the schema
+	autoMigrate(database)
+	db = database
+}
+
+func SetupTestDatabase() {
+	database, err := gorm.Open(sqlite.Open("TestDB.db"), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
+	if err != nil {
+		panic("failed to connect database")
+	}
+	autoMigrate(database)
+	db = database
+}
+
+// Migrate the schema
+func autoMigrate(database *gorm.DB) {
 	database.AutoMigrate(
 		&User{},
 		&Role{},
@@ -40,5 +57,4 @@ func SetupDatabase(dbName string) {
 		&Health{},
 		&Plan{},
 	)
-	db = database
 }

@@ -21,12 +21,12 @@ func TestCreateStable(t *testing.T) {
 	t.Run(`Create stable Success`, func(t *testing.T) {
 
 		stable := entity.Stable{
-			Maintenance:       	time.Now().AddDate(0, 0, -1),
-			Cleaning:           time.Now().AddDate(0, 0, -1), 
-			Temperature:        26,
-			Humidity:       	36,
-			Description:      	"", 
-			EmployeeID: 		1,
+			Maintenance: time.Now().AddDate(0, 0, -1),
+			Cleaning:    time.Now().AddDate(0, 0, -1),
+			Temperature: 26,
+			Humidity:    36,
+			Description: "",
+			EmployeeID:  1,
 		}
 		stableJSON, _ := json.Marshal(stable)
 		request, _ := http.NewRequest("POST", "/stables", bytes.NewBuffer(stableJSON))
@@ -46,8 +46,8 @@ func TestCreateStable(t *testing.T) {
 	t.Run(`create stable Fail`, func(t *testing.T) {
 
 		stable := entity.Stable{
-			Cleaning:           time.Now().AddDate(0, 0, -1), 
-			Temperature:        26,
+			Cleaning:    time.Now().AddDate(0, 0, -1),
+			Temperature: 26,
 		}
 		stableJSON, _ := json.Marshal(stable)
 		request, _ := http.NewRequest("POST", "/stables", bytes.NewBuffer(stableJSON))
@@ -61,6 +61,6 @@ func TestCreateStable(t *testing.T) {
 		var respJson Response
 		json.Unmarshal(data, &respJson)
 		assert.Equal(t, http.StatusBadRequest, response.Code)
-		assert.Equal(t, "Huminity is required;Maintenance is required", respJson.Error)
+		assert.Equal(t, "Humidity is required;Maintenance is required", respJson.Error)
 	})
 }

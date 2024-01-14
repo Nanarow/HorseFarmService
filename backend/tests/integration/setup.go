@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sut66/team16/backend/entity"
-	"github.com/sut66/team16/backend/routers"
 )
 
 type Response struct {
@@ -13,9 +12,15 @@ type Response struct {
 	Error string      `json:"error"`
 }
 
+var router *gin.Engine
+
 func GetTestRouter() *gin.Engine {
+	return router
+}
+func init() {
 	os.Remove("TestDB.db")
-	entity.SetupDatabase("TestDB")
+	entity.SetupTestDatabase()
 	entity.SetupData(entity.DB())
-	return routers.SetupRouter()
+	gin.SetMode(gin.TestMode)
+	router = gin.New()
 }
