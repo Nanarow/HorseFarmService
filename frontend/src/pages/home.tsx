@@ -12,7 +12,7 @@ const Home = () => {
           loop
           muted
           src={horseVideo}
-        ></video>
+        />
       </section>
     </main>
   );

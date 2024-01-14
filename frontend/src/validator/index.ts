@@ -76,7 +76,9 @@ export const userFormSchema = z.object({
   LastName: z.string().min(1, "LastName is required"),
   DateOfBirth: z.date().max(new Date(), "Date must be in the past"),
   // Age: z.number({ required_error: "Age is required" }),
-  ExperiencePoint: z.number({ required_error: "Age is required" }).nonnegative(),
+  ExperiencePoint: z
+    .number({ required_error: "Age is required" })
+    .nonnegative(),
   Email: z.string().email({ message: "Invalid email address" }),
   Password: z.string().min(8, "Password must be at least 8 characters"),
   Phone: z.string().length(10, "Phone number must be 10 characters"),
@@ -92,7 +94,9 @@ export const userUpdateFormSchema = z.object({
   LastName: z.string().min(1, "LastName is required"),
   DateOfBirth: z.date().max(new Date(), "Date must be in the past"),
   // Age: z.number({ required_error: "Age is required" }),
-  ExperiencePoint: z.number({ required_error: "Experience point is required" }).nonnegative(),
+  ExperiencePoint: z
+    .number({ required_error: "Experience point is required" })
+    .nonnegative(),
   Email: z.string().email({ message: "Invalid email address" }),
   Phone: z.string().length(10, "Phone number must be 10 characters"),
   Profile: z.string(),
@@ -106,7 +110,7 @@ export const supportFormSchema = z.object({
   Corporate: z.string().min(1, "Corporate is required"),
   Description: z.string().min(1, "Description is required"),
   Date: z.date().max(new Date(), "Date must be in the past"),
-  Bill: z.string(),
+  Image: z.string(),
 });
 
 export type SupportFormData = z.infer<typeof supportFormSchema>;
@@ -138,13 +142,13 @@ export const horseUpdateFormSchema = z.object({
 export type HorseUpdateFormData = z.infer<typeof horseUpdateFormSchema>;
 
 export const foodFormSchema = z.object({
-  Fat: z.string({ required_error: "Fat is required"}),
-	Carbohydrate: z.string({ required_error: "Carbohydrate is required"}),
-	Protein: z.string({ required_error: "Protein is required"}),
-	Vitamin: z.string({ required_error: "Vitamin is required"}),
-	Mineral: z.string({ required_error: "Mineral is required"}),
-	Forage: z.string({ required_error: "Forage is required"}),
-	Date: z.date().max(new Date(), "Date must be until today"),
+  Fat: z.string({ required_error: "Fat is required" }),
+  Carbohydrate: z.string({ required_error: "Carbohydrate is required" }),
+  Protein: z.string({ required_error: "Protein is required" }),
+  Vitamin: z.string({ required_error: "Vitamin is required" }),
+  Mineral: z.string({ required_error: "Mineral is required" }),
+  Forage: z.string({ required_error: "Forage is required" }),
+  Date: z.date().max(new Date(), "Date must be until today"),
 });
 
 export type FoodFormData = z.infer<typeof foodFormSchema>;
@@ -153,10 +157,9 @@ export const stableFormSchema = z.object({
   Maintenance: z.date().max(new Date(), "Maintenance must be in the past"),
   Cleaning: z.date().max(new Date(), "Cleaning must be in the past"),
   Temperature: z.number({ required_error: "Temperature is required" }),
-  Humidity: z.number({ required_error: "Huminity is required" }),
+  Humidity: z.number({ required_error: "Humidity is required" }),
   EmployeeID: z.number({ required_error: "Please select a employee" }),
   Description: z.string().optional(),
-
 });
 
-export type StaableFormData = z.infer<typeof stableFormSchema>;
+export type StableFormData = z.infer<typeof stableFormSchema>;

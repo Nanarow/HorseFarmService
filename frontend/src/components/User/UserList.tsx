@@ -13,11 +13,10 @@ import {
 } from "@shadcn/ui/table";
 import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import { format } from "date-fns";
-import UserAlert from "./UserAlert";
-import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
-import UserEdit from "./UserEdit";
 import { Link } from "react-router-dom";
+import UserAlert from "./UserAlert";
+import UserEdit from "./UserEdit";
 
 const UserList = () => {
   const [users, setUser] = useState<User[]>([]);
@@ -36,13 +35,6 @@ const UserList = () => {
 
   return (
     <div className="w-full h-full relative p-8">
-      {/* <Tooltip content={() => <span>Back to User Create</span>} side="right">
-        <ArrowLeftSquareIcon
-          onClick={() => setTabs("register")}
-          className="absolute top-4 left-8 text-blue-500"
-        />
-      </Tooltip> */}
-
       <Table className="border mt-6">
         <TableCaption>A list of user account.</TableCaption>
         <TableHeader>
@@ -56,14 +48,10 @@ const UserList = () => {
               Email
             </TableHead>
             <TableHead className="w-[10%] text-center">Phone</TableHead>
-            {/* <TableHead className="w-[5%] text-center">Profile</TableHead> */}
-            <TableHead className="w-[10%] text-center">Experience Point</TableHead>
+            <TableHead className="w-[10%] text-center">
+              Experience Point
+            </TableHead>
             <TableHead className="w-[10%] text-center">Riding Level</TableHead>
-            {/* <TableHead className="w-[12%] text-center">Type</TableHead>
-            <TableHead className="w-[12%] text-center">Plan</TableHead>
-            <TableHead className="w-[12%] text-center hidden md:table-cell">
-              Participants
-            </TableHead> */}
             <TableHead className="w-[4%] text-center">Edit</TableHead>
             <TableHead className="w-[4%] text-center">Delete</TableHead>
           </TableRow>
@@ -71,9 +59,6 @@ const UserList = () => {
         <TableBody>
           {users.map((user) => (
             <TableRow key={user.ID}>
-              {/* <TableCell className="font-medium text-center">
-                {user.CreatedAt ? user.FirstName : "user " + user.ID}
-              </TableCell> */}
               <TableCell className=" w-[12%] font-medium text-center">
                 {user.FirstName ? user.FirstName : "user " + user.ID}
               </TableCell>

@@ -1,26 +1,35 @@
 import { z } from "zod";
 import { Card } from "@shadcn/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose, DialogDescription} from "@shadcn/ui/dialog"
-import { Button }from "@shadcn/ui/button"
-import { Label } from "@shadcn/ui/label"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+  DialogDescription,
+} from "@shadcn/ui/dialog";
+import { Button } from "@shadcn/ui/button";
+import { Label } from "@shadcn/ui/label";
 import Form from "@shadcn/simplify/form";
-import { useEffect, useState} from "react";
-import { Bleed , Employee, Sex, Horse, Stable} from "@src/interfaces";
+import { useEffect, useState } from "react";
+import { Bleed, Employee, Sex, Horse, Stable } from "@src/interfaces";
 import { http } from "../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 import { ToItemList } from "@src/utils";
-import HorseEdit from "@src/components/Horse/HorseEdit";
-import HorseAlert from "@src/components/Horse/HorseAlert";
-import { Trash2, LogOutIcon} from 'lucide-react';
+import HorseEdit from "@src/components/horse/HorseEdit";
+import HorseAlert from "@src/components/horse/HorseAlert";
+import { Trash2, LogOutIcon } from "lucide-react";
 import { useAuth } from "@src/providers/authProvider";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { horseFormSchema } from "@src/validator";
 
 const HorsePage = () => {
-  const {toast} = useToast();
+  const { toast } = useToast();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [bleeds, setBleeds] = useState<Bleed[]>([]);
-  const [sexs, setSexs] = useState<Sex[]>([]);
+  const [sexes, setSexes] = useState<Sex[]>([]);
   const [stables, setStables] = useState<Stable[]>([]);
 
   const [horses, setHorses] = useState<Horse[]>([]);
@@ -40,11 +49,11 @@ const HorsePage = () => {
       setBleeds(res.data);
     }
   }
-  
+
   async function fetchSexs() {
     const res = await http.Get<Sex[]>("/horses/sexes");
     if (res.ok) {
-      setSexs(res.data);
+      setSexes(res.data);
     }
   }
 
@@ -69,11 +78,11 @@ const HorsePage = () => {
       fetchSexs();
       fetchStables();
       fetchHorses();
-    }
-  },[])
-  
-  async function onValid(formData: z.infer<typeof horseFormSchema>) {  
-    console.log(formData)
+    };
+  }, []);
+
+  async function onValid(formData: z.infer<typeof horseFormSchema>) {
+    console.log(formData);
 
     const res = await http.Post<string>("/horses", formData);
     if (res.ok) {
@@ -81,49 +90,51 @@ const HorsePage = () => {
       toast({
         title: res.data,
         duration: 1500,
-        });
-    }else{
+      });
+    } else {
       toast({
         title: res.error,
         duration: 1500,
       });
     }
-    fetchHorses()
+    fetchHorses();
   }
 
-  function StableTolist() {
+  function StableToList() {
     const res = stables.map((stable) => {
-      return {ID:stable.ID,Name:String(stable.ID)}
-    })
-    return res
+      return { ID: stable.ID, Name: String(stable.ID) };
+    });
+    return res;
   }
-  
-  function empTolist() {
+
+  function empToList() {
     const res = employees.map((emp) => {
-      return {ID:emp.ID!,Name:emp.FirstName + " " + emp.LastName}
-    })
-    return res
+      return { ID: emp.ID!, Name: emp.FirstName + " " + emp.LastName };
+    });
+    return res;
   }
 
   return (
     <div className="w-full h-screen flex flex-col gap-4">
       <div className="flex flex-row-reverse mt-4 mr-4 text-red-500 ">
-        <Tooltip content={("Logout")}>
-          <LogOutIcon onClick={logout}/>
+        <Tooltip content={"Logout"}>
+          <LogOutIcon onClick={logout} />
         </Tooltip>
       </div>
-      <h1 className="text-left text-2xl font-blod ml-5 uppercase"></h1>        
+      <h1 className="text-left text-2xl font-blod ml-5 uppercase"></h1>
       <div className="ml-5 -mt-2 flex flex-row ">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline" className="bg-green-500">ADD+</Button>
+            <Button variant="outline" className="bg-green-500">
+              ADD+
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add Horse Data</DialogTitle>
               <DialogDescription>
                 Make add to your horse here. Click save when you're done.
-              </DialogDescription>              
+              </DialogDescription>
             </DialogHeader>
             <Form
               className="grid gap-2 mt-1"
@@ -133,186 +144,210 @@ const HorsePage = () => {
               fields={({ form, errors }) => (
                 <>
                   <div className="grid grid-cols-4 items-center">
-                    <Label>Name<span className="text-red-500">*</span></Label>
+                    <Label>
+                      Name<span className="text-red-500">*</span>
+                    </Label>
                     <Form.Input
                       useForm={form}
                       name="Name"
                       type="text"
-                      className="col-span-3 font-extralight"  
+                      className="col-span-3 font-extralight"
                       placeholder="enter your name"
-                    /> 
+                    />
                     <Form.Error
                       field={errors.Name}
                       className="col-span-2 col-start-2 text-sm"
-                    ></Form.Error>  
+                    ></Form.Error>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-1">
-                    {sexs.length > 0  && (
+                    {sexes.length > 0 && (
                       <>
-                        <Label>Sex<span className="text-red-500">*</span></Label>
+                        <Label>
+                          Sex<span className="text-red-500">*</span>
+                        </Label>
                         <Form.Select
                           valueAsNumber
                           useForm={form}
                           name="SexID"
-                          items={ToItemList(sexs)}
-                          className="col-span-3 font-extralight"  
+                          items={ToItemList(sexes)}
+                          className="col-span-3 font-extralight"
                           placeholder="Sex"
-                        ></Form.Select> 
+                        ></Form.Select>
                         <Form.Error
                           field={errors.SexID}
                           className="col-span-3 col-start-2"
-                        ></Form.Error>  
+                        ></Form.Error>
                       </>
                     )}
                   </div>
                   <div className="grid grid-cols-4 items-center gap-1">
-                    <Label>Age<span className="text-red-500">*</span></Label>
+                    <Label>
+                      Age<span className="text-red-500">*</span>
+                    </Label>
                     <Form.Input
                       useForm={form}
                       type="number"
                       name="Age"
-                      className="col-span-3 font-extralight"  
+                      className="col-span-3 font-extralight"
                       placeholder="Age"
-                    /> 
+                    />
                     <Form.Error
                       field={errors.Age}
                       className="col-span-3 col-start-2"
-                    ></Form.Error>  
+                    ></Form.Error>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-1">
                     {bleeds.length > 0 && (
-                      <>                      
-                        <Label>Bleed<span className="text-red-500">*</span></Label>
+                      <>
+                        <Label>
+                          Bleed<span className="text-red-500">*</span>
+                        </Label>
                         <Form.Select
                           valueAsNumber
                           useForm={form}
                           items={ToItemList(bleeds)}
                           name="BleedID"
-                          className="col-span-3 font-extralight"  
+                          className="col-span-3 font-extralight"
                           placeholder="Bleed"
                         ></Form.Select>
                         <Form.Error
                           field={errors.BleedID}
                           className="col-span-3 col-start-2 "
-                        ></Form.Error>                            
+                        ></Form.Error>
                       </>
                     )}
                   </div>
                   <div className="grid grid-cols-4 items-center gap-1">
-                    <Label>Stable<span className="text-red-500">*</span></Label>
-                      <Form.Select
-                      items={ToItemList(StableTolist())}
-                        valueAsNumber
-                        useForm={form}
-                        name="StableID"
-                        className="col-span-3 font-extralight"  
-                        placeholder="Stable"
-                      ></Form.Select> 
-                      <Form.Error
-                        field={errors.StableID}
-                        className="col-span-3 col-start-2"
-                      ></Form.Error>                                 
+                    <Label>
+                      Stable<span className="text-red-500">*</span>
+                    </Label>
+                    <Form.Select
+                      items={ToItemList(StableToList())}
+                      valueAsNumber
+                      useForm={form}
+                      name="StableID"
+                      className="col-span-3 font-extralight"
+                      placeholder="Stable"
+                    ></Form.Select>
+                    <Form.Error
+                      field={errors.StableID}
+                      className="col-span-3 col-start-2"
+                    ></Form.Error>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-1">
                     {employees.length > 0 && (
                       <>
-                        <Label>Employee<span className="text-red-500">*</span></Label>
+                        <Label>
+                          Employee<span className="text-red-500">*</span>
+                        </Label>
                         <Form.Select
                           valueAsNumber
                           useForm={form}
-                          items={ToItemList(empTolist())}
+                          items={ToItemList(empToList())}
                           name="EmployeeID"
-                          className="col-span-3 font-extralight"  
+                          className="col-span-3 font-extralight"
                           placeholder="Employee"
                         ></Form.Select>
                         <Form.Error
                           field={errors.EmployeeID}
                           className="col-span-3 col-start-2"
-                        ></Form.Error>  
+                        ></Form.Error>
                       </>
                     )}
                   </div>
                   <div className="grid grid-cols-4 items-center gap-1">
-                    <Label>Date<span className="text-red-500">*</span></Label>
-                    <Form.DatePicker 
-                      className="col-span-3 font-extralight" 
-                      useForm={form} 
-                      name="Date">
-                    </Form.DatePicker>
+                    <Label>
+                      Date<span className="text-red-500">*</span>
+                    </Label>
+                    <Form.DatePicker
+                      className="col-span-3 font-extralight"
+                      useForm={form}
+                      name="Date"
+                    ></Form.DatePicker>
                     <Form.Error
                       field={errors.Date}
                       className="col-span-3 col-start-2"
-                    ></Form.Error>  
+                    ></Form.Error>
                   </div>
                   <div className="grid grid-cols-4 items-center gap-1">
-                    <Label>Image<span className="text-red-500">*</span></Label>
+                    <Label>
+                      Image<span className="text-red-500">*</span>
+                    </Label>
                     <Form.Input
                       useForm={form}
                       type="file"
                       name="Image"
-                      accept="image/*"      
-                      className="col-span-3 font-extralight"  
-                      placeholder="image"                     
+                      accept="image/*"
+                      className="col-span-3 font-extralight"
+                      placeholder="image"
                     />
                     <Form.Error
                       field={errors.Image}
                       className="col-span-3 col-start-2"
-                    ></Form.Error>  
+                    ></Form.Error>
                   </div>
                   <DialogFooter>
-                    <div className="space-x-4" >
+                    <div className="space-x-4">
                       <DialogClose asChild>
-                        <Button variant="destructive" type="reset" >Cancle</Button>
+                        <Button variant="destructive" type="reset">
+                          Cancel
+                        </Button>
                       </DialogClose>
-                        <Button variant="outline" type="submit" className=" bg-green-500">Save</Button>
-                    </div>           
+                      <Button
+                        variant="outline"
+                        type="submit"
+                        className=" bg-green-500"
+                      >
+                        Save
+                      </Button>
+                    </div>
                   </DialogFooter>
                 </>
-              )}>
-            </Form>
+              )}
+            ></Form>
           </DialogContent>
         </Dialog>
       </div>
       <div className="h-56 grid grid-cols-3 gap-4 content-start ml-5 mr-5">
-        {horses.length > 0 && horses.map((horse) => (
-          <Card 
-            key={horse.ID}
-            className="place-items-center object-center p-4">
-            <div className="col-span-3 font-extralight float-left">
-              <img 
-              src={horse.Image} 
-              alt={horse.Name}
-              className=" h-40 w-28 m-5 rounded-lg"
-              />
-            </div>
-            <div className="mt-5">
-              <Label>Name: </Label>{horse.Name}
-            </div>
-            <div>Stable: {horse.Stable.ID}</div>
-            <div>Age: {horse.Age}</div>
-            <div>Bleed: {horse.Bleed.Name}</div>
-            <div className="absolute -m-28 ml-96" >
-              <Dialog>
-                <HorseEdit
-                  horse={horse} 
-                  onSave={fetchHorses} 
-                ></HorseEdit>
-              </Dialog>
-            </div>
-            <div>
-              <Dialog>
-                <DialogTrigger asChild className="text-red-500 mt-10 -m-6">
-                  <Trash2 />
-                </DialogTrigger>
-                  <HorseAlert 
+        {horses.length > 0 &&
+          horses.map((horse) => (
+            <Card
+              key={horse.ID}
+              className="place-items-center object-center p-4"
+            >
+              <div className="col-span-3 font-extralight float-left">
+                <img
+                  src={horse.Image}
+                  alt={horse.Name}
+                  className=" h-40 w-28 m-5 rounded-lg"
+                />
+              </div>
+              <div className="mt-5">
+                <Label>Name: </Label>
+                {horse.Name}
+              </div>
+              <div>Stable: {horse.Stable.ID}</div>
+              <div>Age: {horse.Age}</div>
+              <div>Bleed: {horse.Bleed.Name}</div>
+              <div className="absolute -m-28 ml-96">
+                <Dialog>
+                  <HorseEdit horse={horse} onSave={fetchHorses}></HorseEdit>
+                </Dialog>
+              </div>
+              <div>
+                <Dialog>
+                  <DialogTrigger asChild className="text-red-500 mt-10 -m-6">
+                    <Trash2 />
+                  </DialogTrigger>
+                  <HorseAlert
                     horseID={horse.ID}
                     onDelete={fetchHorses}
                   ></HorseAlert>
-              </Dialog>
-            </div>
-          </Card>  
-        ))}
-      </div> 
+                </Dialog>
+              </div>
+            </Card>
+          ))}
+      </div>
     </div>
   );
 };

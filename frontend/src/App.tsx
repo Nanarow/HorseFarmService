@@ -11,18 +11,16 @@ import {
   Login,
   NoPage,
   Stable,
+  Support,
   Tour,
   User,
 } from "./pages";
 import PrivateRoute from "./components/privateRoute";
 import ValidateForm from "./examples/form-with-validation";
 import DragDropTable from "./examples/drag-drop-table";
-import EmployeeList from "./components/Employee/EmployeeList";
-import UserList from "./components/User/UserList";
-import StableList from "./components/Stable/StableList";
-import StablePage from "./pages/stable";
-import Support from "./pages/support";
-import SupportList from "./components/Support/SupportList";
+import UserList from "./components/user/UserList";
+import StableList from "./components/stable/StableList";
+import SupportList from "./components/support/SupportList";
 
 function App() {
   return (
@@ -30,6 +28,7 @@ function App() {
       <Route path="/*" element={<NoPage />} />
       <Route path="/" element={<Home />} />
       <Route path="/loading/:page" element={<Loading />} />
+
       <Route path="/login/admin" element={<Login role="admin" />} />
       <Route path="/login/employee" element={<Login role="employee" />} />
       <Route path="/login" element={<Login role="user" />} />
@@ -42,11 +41,10 @@ function App() {
         <Route path="/tour" element={<Tour />} />
         <Route path="/support" element={<Support />} />
         <Route path="/support/list" element={<SupportList />} />
-
       </Route>
 
       <Route element={<PrivateRoute role={100} path="/login/admin" />}>
-        <Route path="/employee/list" element={<EmployeeList />} />
+        <Route path="/employee/list" element={<Employee />} />
         <Route path="/user" element={<User />} />
         <Route path="/user/list" element={<UserList />} />
       </Route>
@@ -57,7 +55,7 @@ function App() {
         <Route path="/health" element={<Health />} />
         <Route path="/stable" element={<Stable />} />
         <Route path="/stable/list" element={<StableList />} />
-        <Route path="/stable" element={<StablePage />} />
+        <Route path="/stable" element={<Stable />} />
         <Route path="/horse" element={<Horse />} />
       </Route>
     </Routes>

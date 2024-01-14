@@ -1,7 +1,3 @@
-// import { Tabs, TabsContent } from "@radix-ui/react-tabs";
-// import Enrollment from "@src/components/course-enrollment/Enrollment";
-// import EnrollmentList from "@src/components/course-enrollment/EnrollmentList";
-// import { useState } from "react";
 import NavBar from "@src/components/navbar/navBar";
 import {
   Table,
@@ -41,9 +37,6 @@ const Course = () => {
           className="w-full h-full abs-center object-cover rounded "
           alt="Tour"
         />
-        {/* <Card className="w-full h-full mt-4">
-        
-      </Card> */}
         <Table className=" border rounded ">
           <TableHeader className="bg-white rounded border">
             <TableRow>
@@ -88,21 +81,6 @@ const Course = () => {
           </TableBody>
         </Table>
       </section>
-      {/* <Tabs
-        className="w-full h-[calc(100%-58px)] overflow-x-hidden"
-        onValueChange={setTab}
-        value={tab}
-      >
-        <TabsContent value="enroll" className="w-full h-full slide-in-right ">
-          <Enrollment onClickChangeTab={() => setTab("enrollments")} />
-        </TabsContent>
-        <TabsContent
-          value="enrollments"
-          className="w-full h-full animate-slide-in-left"
-        >
-          <EnrollmentList onClickChangeTab={() => setTab("enroll")} />
-        </TabsContent>
-      </Tabs> */}
     </main>
   );
 };

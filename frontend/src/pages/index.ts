@@ -13,6 +13,7 @@ import CourseSetting from "./courseSetting";
 import Home from "./home";
 import NoPage from "./noPage";
 import Loading from "./loading";
+
 export {
   Home,
   Course,
