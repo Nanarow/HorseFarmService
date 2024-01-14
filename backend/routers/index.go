@@ -6,7 +6,7 @@ import (
 	"github.com/sut66/team16/backend/middlewares"
 )
 
-func SetUpRouter() *gin.Engine {
+func SetupRouter() *gin.Engine {
 	return gin.Default()
 }
 
@@ -23,8 +23,8 @@ func InitRouter(route *gin.Engine) {
 }
 func initRequiredAuthRouter(route *gin.RouterGroup) {
 	route.Use(middlewares.Authentication())
-	user := middlewares.Authorization(101)
 
+	user := middlewares.Authorization(101)
 	// user_admin := middlewares.Authorization(101, 100)
 	// employee := middlewares.Authorization(200)
 
@@ -50,7 +50,7 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	route.GET("/users/genders", controllers.GetAllGenders)
 	route.GET("/riding/levels", controllers.GetAllRidingLevels)
 
-	// Support 
+	// Support system
 	route.GET("/supports", controllers.GetAllSupport)
 	route.POST("/supports", controllers.CreateSupport)
 
@@ -77,6 +77,7 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	// health system
 	route.POST("/healths", controllers.CreateHealth)
 
+	// course management system
 	route.GET("/courses", controllers.GetAllCourses)
 	route.POST("/courses", controllers.CreateCourse)
 	route.PUT("/courses/:id", controllers.UpdateCourse)
@@ -87,6 +88,7 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	route.POST("/schedules", controllers.CreateSchedule)
 	route.DELETE("/schedules/:id", controllers.DeleteSchedule)
 
+	// food quantity system
 	route.POST("/foods", controllers.CreateFood)
 
 	// stable management system

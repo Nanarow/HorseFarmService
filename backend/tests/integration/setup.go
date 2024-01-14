@@ -17,5 +17,5 @@ func GetTestRouter() *gin.Engine {
 	os.Remove("TestDB.db")
 	entity.SetupDatabase("TestDB")
 	entity.SetupData(entity.DB())
-	return routers.SetUpRouter()
+	return routers.SetupRouter()
 }

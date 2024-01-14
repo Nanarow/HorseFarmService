@@ -9,7 +9,7 @@ import (
 func main() {
 	entity.SetupDatabase("HorseFarmDB")
 	entity.SetupData(entity.DB())
-	route := routers.SetUpRouter()
+	route := routers.SetupRouter()
 
 	// init Routes
 	routers.InitRouter(route)
