@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { http } from "../../services/httpRequest";
-import Form, { ItemList } from "@shadcn/simplify/form";
+import Form from "@shadcn/simplify/form";
 import { toast } from "@shadcn/ui/use-toast";
 import { Course, Location } from "@src/interfaces";
 import { Label } from "@shadcn/ui";
@@ -15,8 +15,9 @@ import {
   DialogTrigger,
 } from "@shadcn/ui/dialog";
 import { Button } from "@shadcn/ui";
-import { Edit } from "lucide-react";
+import { PencilIcon } from "lucide-react";
 import { CourseFormData, courseFormSchema } from "@src/validator";
+import { ToItemList } from "@src/utils";
 interface Props {
   course: Course;
   onSave(): void;
@@ -36,15 +37,6 @@ const CourseEdit = ({ course }: Props) => {
       fetchLocation();
     };
   }, []);
-
-  function LocationToSelectItems(
-    Location: { ID: number; Name: string }[]
-  ): ItemList[] {
-    return Location.map((Location) => ({
-      value: Location.ID,
-      label: Location.Name,
-    }));
-  }
 
   async function onValid(formData: CourseFormData) {
     console.log(formData);
@@ -67,7 +59,7 @@ const CourseEdit = ({ course }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Edit className="text-yellow-500 hover:scale-110 cursor-pointer" />
+        <PencilIcon className="text-yellow-500 hover:scale-110 cursor-pointer" />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
@@ -114,9 +106,7 @@ const CourseEdit = ({ course }: Props) => {
                 placeholder="Type Participants"
                 className="w-full"
               />
-              <Label>
-                Description
-              </Label>
+              <Label>Description</Label>
               <Form.Input
                 defaultValue={course.Description}
                 useForm={form}
@@ -145,7 +135,7 @@ const CourseEdit = ({ course }: Props) => {
                     defaultValue={course.LocationID}
                     valueAsNumber
                     useForm={form}
-                    items={LocationToSelectItems(locations)}
+                    items={ToItemList(locations)}
                     name="LocationID"
                     placeholder="Select Location"
                   ></Form.Select>

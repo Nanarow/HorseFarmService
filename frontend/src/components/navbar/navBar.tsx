@@ -22,7 +22,7 @@ const NavBar = () => {
         <div className="flex w-full">
           <Link className="mr-6  items-center space-x-2 flex" to="/">
             <HomeIcon />
-            <span className="font-bold ">Horse Farm</span>
+            <span className="font-bold ">KhunMa Farm</span>
           </Link>
           {
             <nav className="hidden sm:flex items-center space-x-6">
@@ -59,9 +59,6 @@ const NavBar = () => {
                     : getUser().FirstName) || "Name"}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {/* <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuSeparator /> */}
                 <DropdownMenuItem
                   onClick={logout}
                   className={cn(

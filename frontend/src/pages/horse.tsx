@@ -50,7 +50,7 @@ const HorsePage = () => {
     }
   }
 
-  async function fetchSexs() {
+  async function fetchSexes() {
     const res = await http.Get<Sex[]>("/horses/sexes");
     if (res.ok) {
       setSexes(res.data);
@@ -72,13 +72,11 @@ const HorsePage = () => {
   }
 
   useEffect(() => {
-    return () => {
-      fetchEmployees();
-      fetchBleeds();
-      fetchSexs();
-      fetchStables();
-      fetchHorses();
-    };
+    fetchEmployees();
+    fetchBleeds();
+    fetchSexes();
+    fetchStables();
+    fetchHorses();
   }, []);
 
   async function onValid(formData: z.infer<typeof horseFormSchema>) {
@@ -95,220 +93,209 @@ const HorsePage = () => {
       toast({
         title: res.error,
         duration: 1500,
+        variant: "destructive",
       });
     }
     fetchHorses();
   }
 
-  function StableToList() {
-    const res = stables.map((stable) => {
-      return { ID: stable.ID, Name: String(stable.ID) };
-    });
-    return res;
-  }
-
-  function empToList() {
-    const res = employees.map((emp) => {
-      return { ID: emp.ID!, Name: emp.FirstName + " " + emp.LastName };
-    });
-    return res;
-  }
-
   return (
     <div className="w-full h-screen flex flex-col gap-4">
-      <div className="flex flex-row-reverse mt-4 mr-4 text-red-500 ">
+      <div className="flex flex-row justify-between p-4">
+        <h1 className="text-left text-2xl font-bold uppercase">
+          Horse Management
+        </h1>
         <Tooltip content={"Logout"}>
-          <LogOutIcon onClick={logout} />
+          <Button variant={"danger"} size={"icon"}>
+            <LogOutIcon onClick={logout} />
+          </Button>
         </Tooltip>
       </div>
-      <h1 className="text-left text-2xl font-blod ml-5 uppercase"></h1>
-      <div className="ml-5 -mt-2 flex flex-row ">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline" className="bg-green-500">
-              ADD+
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add Horse Data</DialogTitle>
-              <DialogDescription>
-                Make add to your horse here. Click save when you're done.
-              </DialogDescription>
-            </DialogHeader>
-            <Form
-              className="grid gap-2 mt-1"
-              validator={horseFormSchema}
-              onValid={onValid}
-              onInvalid={(data) => console.log(data)}
-              fields={({ form, errors }) => (
-                <>
-                  <div className="grid grid-cols-4 items-center">
-                    <Label>
-                      Name<span className="text-red-500">*</span>
-                    </Label>
-                    <Form.Input
-                      useForm={form}
-                      name="Name"
-                      type="text"
-                      className="col-span-3 font-extralight"
-                      placeholder="enter your name"
-                    />
-                    <Form.Error
-                      field={errors.Name}
-                      className="col-span-2 col-start-2 text-sm"
-                    ></Form.Error>
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-1">
-                    {sexes.length > 0 && (
-                      <>
-                        <Label>
-                          Sex<span className="text-red-500">*</span>
-                        </Label>
-                        <Form.Select
-                          valueAsNumber
-                          useForm={form}
-                          name="SexID"
-                          items={ToItemList(sexes)}
-                          className="col-span-3 font-extralight"
-                          placeholder="Sex"
-                        ></Form.Select>
-                        <Form.Error
-                          field={errors.SexID}
-                          className="col-span-3 col-start-2"
-                        ></Form.Error>
-                      </>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-1">
-                    <Label>
-                      Age<span className="text-red-500">*</span>
-                    </Label>
-                    <Form.Input
-                      useForm={form}
-                      type="number"
-                      name="Age"
-                      className="col-span-3 font-extralight"
-                      placeholder="Age"
-                    />
-                    <Form.Error
-                      field={errors.Age}
-                      className="col-span-3 col-start-2"
-                    ></Form.Error>
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-1">
-                    {bleeds.length > 0 && (
-                      <>
-                        <Label>
-                          Bleed<span className="text-red-500">*</span>
-                        </Label>
-                        <Form.Select
-                          valueAsNumber
-                          useForm={form}
-                          items={ToItemList(bleeds)}
-                          name="BleedID"
-                          className="col-span-3 font-extralight"
-                          placeholder="Bleed"
-                        ></Form.Select>
-                        <Form.Error
-                          field={errors.BleedID}
-                          className="col-span-3 col-start-2 "
-                        ></Form.Error>
-                      </>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-1">
-                    <Label>
-                      Stable<span className="text-red-500">*</span>
-                    </Label>
-                    <Form.Select
-                      items={ToItemList(StableToList())}
-                      valueAsNumber
-                      useForm={form}
-                      name="StableID"
-                      className="col-span-3 font-extralight"
-                      placeholder="Stable"
-                    ></Form.Select>
-                    <Form.Error
-                      field={errors.StableID}
-                      className="col-span-3 col-start-2"
-                    ></Form.Error>
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-1">
-                    {employees.length > 0 && (
-                      <>
-                        <Label>
-                          Employee<span className="text-red-500">*</span>
-                        </Label>
-                        <Form.Select
-                          valueAsNumber
-                          useForm={form}
-                          items={ToItemList(empToList())}
-                          name="EmployeeID"
-                          className="col-span-3 font-extralight"
-                          placeholder="Employee"
-                        ></Form.Select>
-                        <Form.Error
-                          field={errors.EmployeeID}
-                          className="col-span-3 col-start-2"
-                        ></Form.Error>
-                      </>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-1">
-                    <Label>
-                      Date<span className="text-red-500">*</span>
-                    </Label>
-                    <Form.DatePicker
-                      className="col-span-3 font-extralight"
-                      useForm={form}
-                      name="Date"
-                    ></Form.DatePicker>
-                    <Form.Error
-                      field={errors.Date}
-                      className="col-span-3 col-start-2"
-                    ></Form.Error>
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-1">
-                    <Label>
-                      Image<span className="text-red-500">*</span>
-                    </Label>
-                    <Form.Input
-                      useForm={form}
-                      type="file"
-                      name="Image"
-                      accept="image/*"
-                      className="col-span-3 font-extralight"
-                      placeholder="image"
-                    />
-                    <Form.Error
-                      field={errors.Image}
-                      className="col-span-3 col-start-2"
-                    ></Form.Error>
-                  </div>
-                  <DialogFooter>
-                    <div className="space-x-4">
-                      <DialogClose asChild>
-                        <Button variant="destructive" type="reset">
-                          Cancel
-                        </Button>
-                      </DialogClose>
-                      <Button
-                        variant="outline"
-                        type="submit"
-                        className=" bg-green-500"
-                      >
-                        Save
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button variant={"success"} className="w-36 ml-4 -mt-4">
+            ADD+
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Horse Data</DialogTitle>
+            <DialogDescription>
+              Make add to your horse here. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
+          <Form
+            className="grid gap-2 mt-1"
+            validator={horseFormSchema}
+            onValid={onValid}
+            onInvalid={(data) => console.log(data)}
+            fields={({ form, errors }) => (
+              <>
+                <div className="grid grid-cols-4 items-center">
+                  <Label>
+                    Name<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Input
+                    useForm={form}
+                    name="Name"
+                    type="text"
+                    className="col-span-3 font-extralight"
+                    placeholder="enter your name"
+                  />
+                  <Form.Error
+                    field={errors.Name}
+                    className="col-span-2 col-start-2 text-sm"
+                  ></Form.Error>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  {sexes.length > 0 && (
+                    <>
+                      <Label>
+                        Sex<span className="text-red-500">*</span>
+                      </Label>
+                      <Form.Select
+                        valueAsNumber
+                        useForm={form}
+                        name="SexID"
+                        items={ToItemList(sexes)}
+                        className="col-span-3 font-extralight"
+                        placeholder="Sex"
+                      ></Form.Select>
+                      <Form.Error
+                        field={errors.SexID}
+                        className="col-span-3 col-start-2"
+                      ></Form.Error>
+                    </>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  <Label>
+                    Age<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Input
+                    useForm={form}
+                    type="number"
+                    name="Age"
+                    className="col-span-3 font-extralight"
+                    placeholder="Age"
+                  />
+                  <Form.Error
+                    field={errors.Age}
+                    className="col-span-3 col-start-2"
+                  ></Form.Error>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  {bleeds.length > 0 && (
+                    <>
+                      <Label>
+                        Bleed<span className="text-red-500">*</span>
+                      </Label>
+                      <Form.Select
+                        valueAsNumber
+                        useForm={form}
+                        items={ToItemList(bleeds)}
+                        name="BleedID"
+                        className="col-span-3 font-extralight"
+                        placeholder="Bleed"
+                      ></Form.Select>
+                      <Form.Error
+                        field={errors.BleedID}
+                        className="col-span-3 col-start-2 "
+                      ></Form.Error>
+                    </>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  <Label>
+                    Stable<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Select
+                    items={ToItemList(stables, (s) => "Stable " + s.ID)}
+                    valueAsNumber
+                    useForm={form}
+                    name="StableID"
+                    className="col-span-3 font-extralight"
+                    placeholder="Stable"
+                  ></Form.Select>
+                  <Form.Error
+                    field={errors.StableID}
+                    className="col-span-3 col-start-2"
+                  ></Form.Error>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  {employees.length > 0 && (
+                    <>
+                      <Label>
+                        Employee<span className="text-red-500">*</span>
+                      </Label>
+                      <Form.Select
+                        valueAsNumber
+                        useForm={form}
+                        items={ToItemList(
+                          employees,
+                          (emp) => emp.FirstName + " " + emp.LastName
+                        )}
+                        name="EmployeeID"
+                        className="col-span-3 font-extralight"
+                        placeholder="Employee"
+                      ></Form.Select>
+                      <Form.Error
+                        field={errors.EmployeeID}
+                        className="col-span-3 col-start-2"
+                      ></Form.Error>
+                    </>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  <Label>
+                    Date<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.DatePicker
+                    className="col-span-3 font-extralight"
+                    useForm={form}
+                    name="Date"
+                  ></Form.DatePicker>
+                  <Form.Error
+                    field={errors.Date}
+                    className="col-span-3 col-start-2"
+                  ></Form.Error>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  <Label>
+                    Image<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Input
+                    useForm={form}
+                    type="file"
+                    name="Image"
+                    accept="image/*"
+                    className="col-span-3 font-extralight"
+                    placeholder="image"
+                  />
+                  <Form.Error
+                    field={errors.Image}
+                    className="col-span-3 col-start-2"
+                  ></Form.Error>
+                </div>
+                <DialogFooter>
+                  <div className="space-x-4">
+                    <DialogClose asChild>
+                      <Button variant="destructive" type="reset">
+                        Cancel
                       </Button>
-                    </div>
-                  </DialogFooter>
-                </>
-              )}
-            ></Form>
-          </DialogContent>
-        </Dialog>
-      </div>
-      <div className="h-56 grid grid-cols-3 gap-4 content-start ml-5 mr-5">
+                    </DialogClose>
+                    <Button variant={"success"} type="submit">
+                      Save
+                    </Button>
+                  </div>
+                </DialogFooter>
+              </>
+            )}
+          ></Form>
+        </DialogContent>
+      </Dialog>
+      <div className="h-56 grid grid-cols-3 gap-4 content-start px-4">
         {horses.length > 0 &&
           horses.map((horse) => (
             <Card

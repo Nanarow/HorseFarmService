@@ -26,9 +26,7 @@ const StableList = () => {
   }
 
   useEffect(() => {
-    return () => {
-      fetchStables();
-    };
+    fetchStables();
   }, []);
 
   return (

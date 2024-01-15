@@ -28,9 +28,7 @@ const StablePage = () => {
   }
 
   useEffect(() => {
-    return () => {
-      fetchEmployees();
-    };
+    fetchEmployees();
   }, []);
 
   async function onValid(formData: z.infer<typeof stableFormSchema>) {

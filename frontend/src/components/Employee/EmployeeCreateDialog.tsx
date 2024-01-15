@@ -1,10 +1,9 @@
 import { Button } from "@shadcn/ui/button";
-import { Position, Precede, Gender, Employee } from "../../interfaces";
+import { Position, Precede, Gender } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 import { useEffect, useState } from "react";
-import Form, { ItemList } from "@shadcn/simplify/form";
-import { Label } from "@shadcn/ui";
+import Form from "@shadcn/simplify/form";
 import { UserPlus } from "lucide-react";
 import { EmployeeFormData, employeeFormSchema } from "@src/validator";
 import {
@@ -17,12 +16,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@shadcn/ui/dialog";
-const EmployeePage = () => {
+import { ToItemList } from "@src/utils";
+const EmployeeCreateDialog = ({ onCreated }: { onCreated: () => void }) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState<Position[]>([]);
   const [precede, setPrecede] = useState<Precede[]>([]);
   const [gender, setGender] = useState<Gender[]>([]);
+
   useEffect(() => {
     async function fetchPosition() {
       const res = await http.Get<Position[]>("/employees/positions");
@@ -49,53 +50,24 @@ const EmployeePage = () => {
     fetchPosition();
   }, []);
 
-  function PrecedeToSelectItems(
-    Precede: { ID: number; Name: string }[]
-  ): ItemList[] {
-    return Precede.map((Precede) => ({
-      value: Precede.ID,
-      label: Precede.Name,
-    }));
-  }
-
-  function GenderToSelectItems(
-    Gender: { ID: number; Name: string }[]
-  ): ItemList[] {
-    return Gender.map((Gender) => ({
-      value: Gender.ID,
-      label: Gender.Name,
-    }));
-  }
-
-  function PositionToSelectItems(
-    Position: { ID: number; Name: string }[]
-  ): ItemList[] {
-    return Position.map((Position) => ({
-      value: Position.ID,
-      label: Position.Name,
-    }));
-  }
-
   async function onValid(formData: EmployeeFormData) {
-    const employeeData: Employee = {
-      ...formData,
-    };
-
-    const res = await http.Post<string>("/employees", employeeData);
+    const res = await http.Post<string>("/employees", formData);
     if (res.ok) {
       toast({
         title: res.data,
         duration: 1500,
       });
+      onCreated();
+      setOpen(false);
     }
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <UserPlus className="text-yellow-500 absolute top-8 left-8 hover:scale-110 cursor-pointer" />
+        <UserPlus className="text-green-500 absolute top-4 left-12 hover:scale-110 cursor-pointer" />
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[480px]">
+      <DialogContent className="sm:max-w-[480px] h-[80%] overflow-auto">
         <DialogHeader>
           <DialogTitle>Create Employee Data</DialogTitle>
           <DialogDescription>
@@ -112,13 +84,11 @@ const EmployeePage = () => {
               <div className="grid grid-cols-4 items-center">
                 {precede.length > 0 && (
                   <>
-                    <Label>
-                      Precede<span className="text-red-500">*</span>
-                    </Label>
+                    <Form.Label>Precede</Form.Label>
                     <Form.Select
                       valueAsNumber
                       useForm={form}
-                      items={PrecedeToSelectItems(precede)}
+                      items={ToItemList(precede)}
                       name="PrecedeID"
                       placeholder="Pick type of tour"
                       className="col-span-3"
@@ -131,9 +101,7 @@ const EmployeePage = () => {
                 )}
               </div>
               <div className="grid grid-cols-4 items-center">
-                <Label>
-                  FirstName<span className="text-red-500">*</span>
-                </Label>
+                <Form.Label>FirstName</Form.Label>
                 <Form.Input
                   useForm={form}
                   name="FirstName"
@@ -146,9 +114,7 @@ const EmployeePage = () => {
                 />
               </div>
               <div className=" grid grid-cols-4 items-center">
-                <Label>
-                  LastName<span className="text-red-500">*</span>
-                </Label>
+                <Form.Label>LastName</Form.Label>
                 <Form.Input
                   useForm={form}
                   name="LastName"
@@ -163,13 +129,11 @@ const EmployeePage = () => {
               <div className="grid grid-cols-4 items-center">
                 {gender.length > 0 && (
                   <>
-                    <Label>
-                      Gender<span className="text-red-500">*</span>
-                    </Label>
+                    <Form.Label>Gender</Form.Label>
                     <Form.Select
                       valueAsNumber
                       useForm={form}
-                      items={GenderToSelectItems(gender)}
+                      items={ToItemList(gender)}
                       name="GenderID"
                       placeholder="Pick Gender"
                       className="col-span-3"
@@ -182,9 +146,7 @@ const EmployeePage = () => {
                 )}
               </div>
               <div className="grid grid-cols-4 items-center">
-                <Label>
-                  Day Of Birth<span className="text-red-500">*</span>
-                </Label>
+                <Form.Label>Day Of Birth</Form.Label>
                 <Form.DatePicker
                   useForm={form}
                   name="DayOfBirth"
@@ -198,13 +160,11 @@ const EmployeePage = () => {
               <div className="grid grid-cols-4 items-center">
                 {position.length > 0 && (
                   <>
-                    <Label>
-                      Position<span className="text-red-500">*</span>
-                    </Label>
+                    <Form.Label>Position</Form.Label>
                     <Form.Select
                       valueAsNumber
                       useForm={form}
-                      items={PositionToSelectItems(position)}
+                      items={ToItemList(position)}
                       name="PositionID"
                       placeholder="Pick Position"
                       className="col-span-3"
@@ -217,9 +177,7 @@ const EmployeePage = () => {
                 )}
               </div>
               <div className="grid grid-cols-4 items-center">
-                <Label>
-                  Email<span className="text-red-500">*</span>
-                </Label>
+                <Form.Label>Email</Form.Label>
                 <Form.Input
                   useForm={form}
                   name="Email"
@@ -232,9 +190,7 @@ const EmployeePage = () => {
                 />
               </div>
               <div className="grid grid-cols-4 items-center">
-                <Label>
-                  Phone<span className="text-red-500">*</span>
-                </Label>
+                <Form.Label>Phone</Form.Label>
                 <Form.Input
                   useForm={form}
                   name="Phone"
@@ -247,9 +203,7 @@ const EmployeePage = () => {
                 />
               </div>
               <div className="grid grid-cols-4 items-center">
-                <Label>
-                  Password<span className="text-red-500">*</span>
-                </Label>
+                <Form.Label>Password</Form.Label>
                 <Form.Input
                   useForm={form}
                   name="Password"
@@ -276,4 +230,4 @@ const EmployeePage = () => {
   );
 };
 
-export default EmployeePage;
+export default EmployeeCreateDialog;

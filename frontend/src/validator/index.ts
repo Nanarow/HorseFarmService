@@ -45,7 +45,7 @@ export const employeeFormSchema = z.object({
 
 export type EmployeeFormData = z.infer<typeof employeeFormSchema>;
 
-export const employeeupdateFormSchema = z.object({
+export const employeeUpdateFormSchema = z.object({
   FirstName: z.string().min(2, "FirstName must be at least 2 characters"),
   LastName: z.string().min(2, "Tooth must be at least 2 characters"),
   Email: z.string().email("Please enter a valid email"),
@@ -56,7 +56,7 @@ export const employeeupdateFormSchema = z.object({
   GenderID: z.number({ required_error: "Please select a gender" }),
 });
 
-export type EmployeeupdateFormData = z.infer<typeof employeeupdateFormSchema>;
+export type EmployeeUpdateFormData = z.infer<typeof employeeUpdateFormSchema>;
 
 export const healthFormSchema = z.object({
   Vital: z.string().min(4, "Vital must be at least 4 characters"),
@@ -75,9 +75,8 @@ export const userFormSchema = z.object({
   FirstName: z.string().min(1, "FirstName is required"),
   LastName: z.string().min(1, "LastName is required"),
   DateOfBirth: z.date().max(new Date(), "Date must be in the past"),
-  // Age: z.number({ required_error: "Age is required" }),
   ExperiencePoint: z
-    .number({ required_error: "Age is required" })
+    .number({ required_error: "Experience point is required" })
     .nonnegative(),
   Email: z.string().email({ message: "Invalid email address" }),
   Password: z.string().min(8, "Password must be at least 8 characters"),
@@ -93,7 +92,6 @@ export const userUpdateFormSchema = z.object({
   FirstName: z.string().min(1, "FirstName is required"),
   LastName: z.string().min(1, "LastName is required"),
   DateOfBirth: z.date().max(new Date(), "Date must be in the past"),
-  // Age: z.number({ required_error: "Age is required" }),
   ExperiencePoint: z
     .number({ required_error: "Experience point is required" })
     .nonnegative(),

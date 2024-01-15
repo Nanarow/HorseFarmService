@@ -46,7 +46,7 @@ const UserAlert = ({ userID, onCancel }: Props) => {
               variant={"destructive"}
               onClick={handleCancel}
             >
-              Yes, Cancel
+              Yes, Delete
             </Button>
           </DialogClose>
         </DialogFooter>

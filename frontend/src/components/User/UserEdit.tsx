@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect, useState } from "react";
 import { Edit } from "lucide-react";
 import { User, Gender, RidingLevel } from "../../interfaces";
@@ -20,7 +19,7 @@ import {
 } from "@shadcn/ui/dialog";
 
 interface Props {
-  user: User
+  user: User;
   onSave(): void;
 }
 const UserEdit = ({ user, onSave }: Props) => {
@@ -31,45 +30,35 @@ const UserEdit = ({ user, onSave }: Props) => {
   const [ridingLevels, setRidingLevel] = useState<RidingLevel[]>([]);
 
   async function fetchGender() {
-    const res = await http.Get<Gender[]>("/users/genders")
+    const res = await http.Get<Gender[]>("/users/genders");
     if (res.ok) {
       setGender(res.data);
     }
   }
   async function fetchRidingLevel() {
-    const res = await http.Get<RidingLevel[]>("/riding/levels")
+    const res = await http.Get<RidingLevel[]>("/riding/levels");
     if (res.ok) {
       setRidingLevel(res.data);
     }
   }
   useEffect(() => {
-    return () => {
-      fetchGender();
-      fetchRidingLevel();
-    };
+    fetchGender();
+    fetchRidingLevel();
   }, []);
 
   async function onValid(formData: UserUpdateFormData) {
     const newUser = {
       ...formData,
     };
-    
+
     const res = await http.Put<string>("/users", user.ID!, newUser);
     if (res.ok) {
       onSave();
       toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(res.data, null, 2)}
-            </code>
-          </pre>
-        ),
+        title: res.data,
         duration: 1500,
       });
-    }
-    else {
+    } else {
       toast({
         title: res.error,
         duration: 1500,
@@ -84,7 +73,7 @@ const UserEdit = ({ user, onSave }: Props) => {
         <Edit className="text-yellow-500 abs-center hover:scale-110 cursor-pointer" />
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[480px]">
+      <DialogContent className=" lg:max-w-6xl h-[80%] lg:h-auto overflow-auto">
         <DialogHeader>
           <DialogTitle>Edit User Data</DialogTitle>
           <DialogDescription>
@@ -92,86 +81,102 @@ const UserEdit = ({ user, onSave }: Props) => {
           </DialogDescription>
         </DialogHeader>
         <Form
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-4 overflow-auto"
           validator={userUpdateFormSchema}
           onValid={onValid}
           onInvalid={(errorFields) => console.log(errorFields)}
-          fields={({ form }) => (
+          fields={({ form, errors }) => (
             <>
-              <Form.Input
-                useForm={form}
-                defaultValue={String(user.FirstName)}
-                name="FirstName"
-                type="text"
-                placeholder="FirstName"
-              />
-              <Form.Input
-                useForm={form}
-                defaultValue={String(user.LastName)}
-                name="LastName"
-                type="text"
-                placeholder="LastName"
-              />
-              <Form.DatePicker useForm={form} defaultValue={new Date(user.DateOfBirth)} name="DateOfBirth"/>
-              
-              {/* <Form.Input
-                useForm={form}
-                name="Age"
-                type="number"
-                placeholder="Age"
-              /> */}
-              <Form.Input
-                useForm={form}
-                defaultValue={String(user.Phone)}
-                name="Phone"
-                type="text"
-                placeholder="Phone"
-              />
-              <Form.Input
-                useForm={form}
-                defaultValue={String(user.Email)}
-                name="Email"
-                type="text"
-                placeholder="Email"
-              />
-              {genders.length > 0 ? (
-                <Form.Select
-                  valueAsNumber
-                  className="w-[90px]"
-                  useForm={form}
-                  defaultValue={String(user.Gender?.ID)}
-                  name="GenderID"
-                  placeholder="Gender"
-                  items={ToItemList(genders)}
-                />) : null}
+              <div className="grid lg:grid-cols-2 gap-y-4  ">
+                <div className="w-full h-full flex flex-col gap-3 max-w-lg justify-self-center">
+                  <Form.Label>First Name</Form.Label>
+                  <Form.Input
+                    useForm={form}
+                    name="FirstName"
+                    type="text"
+                    defaultValue={user.FirstName}
+                  />
+                  <Form.Error field={errors.FirstName}></Form.Error>
+                  <Form.Label>Last Name</Form.Label>
+                  <Form.Input
+                    useForm={form}
+                    name="LastName"
+                    type="text"
+                    defaultValue={user.LastName}
+                  />
+                  <Form.Error field={errors.LastName}></Form.Error>
+                  <Form.Label>Gender</Form.Label>
+                  {genders.length > 0 ? (
+                    <Form.Select
+                      valueAsNumber
+                      useForm={form}
+                      name="GenderID"
+                      placeholder="Gender"
+                      items={ToItemList(genders)}
+                      defaultValue={user.Gender.ID}
+                    />
+                  ) : null}
+                  <Form.Error field={errors.GenderID}></Form.Error>
+                  <Form.Label>Date of Birth</Form.Label>
+                  <Form.DatePicker
+                    useForm={form}
+                    name="DateOfBirth"
+                    defaultValue={new Date(user.DateOfBirth)}
+                  />
+                  <Form.Error field={errors.DateOfBirth}></Form.Error>
 
-              <Form.Input
-                useForm={form}
-                defaultValue={Number(user.ExperiencePoint)}
-                name="ExperiencePoint"
-                type="number"
-                placeholder="Experience Point"
-              />
-              {ridingLevels.length > 0 ? (
-                <Form.Select
-                  valueAsNumber
-                  className="w-[130px]"
-                  useForm={form}
-                  defaultValue={String(user.RidingLevelID)}
-                  name="RidingLevelID"
-                  placeholder="Riding Level"
-                  items={ToItemList(ridingLevels)}
-                />) : null}
+                  <Form.Label>Profile Image</Form.Label>
+                  <Form.Input
+                    useForm={form}
+                    name="Profile"
+                    type="file"
+                    accept="image/*"
+                    defaultValue={user.Profile}
+                  />
+                  <Form.Error field={errors.Profile}></Form.Error>
+                </div>
+                <div className="w-full h-full flex flex-col gap-3 max-w-lg justify-self-center">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Input
+                    useForm={form}
+                    name="Email"
+                    type="text"
+                    defaultValue={user.Email}
+                  />
+                  <Form.Error field={errors.Email}></Form.Error>
+                  <Form.Label>Phone Number</Form.Label>
+                  <Form.Input
+                    useForm={form}
+                    name="Phone"
+                    type="text"
+                    placeholder="0XXXXXXXXX"
+                    defaultValue={user.Phone}
+                  />
+                  <Form.Error field={errors.Phone}></Form.Error>
 
-              <Form.Input
-                useForm={form}
-                defaultValue={String(user.Profile)}
-                name="Profile"
-                type="file"
-                accept="image/*"
-                placeholder="Name"
-              />
-              {/* <Form.SubmitButton useForm={form}>Create</Form.SubmitButton> */}
+                  <Form.Label>Experience Point</Form.Label>
+                  <Form.Input
+                    useForm={form}
+                    name="ExperiencePoint"
+                    type="number"
+                    placeholder="Experience Point"
+                    defaultValue={user.ExperiencePoint}
+                  />
+                  <Form.Error field={errors.ExperiencePoint}></Form.Error>
+                  <Form.Label>Riding Level</Form.Label>
+                  {ridingLevels.length > 0 ? (
+                    <Form.Select
+                      valueAsNumber
+                      useForm={form}
+                      name="RidingLevelID"
+                      placeholder="Riding Level"
+                      items={ToItemList(ridingLevels)}
+                      defaultValue={user.RidingLevel.ID}
+                    />
+                  ) : null}
+                  <Form.Error field={errors.RidingLevelID}></Form.Error>
+                </div>
+              </div>
             </>
           )}
         >

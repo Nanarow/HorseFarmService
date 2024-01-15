@@ -11,7 +11,7 @@ const Support = () => {
       <SupportCreate />
       <Link to="/support/list">
         <Tooltip content={"Support History"}>
-          <ChevronRightCircle className="fixed bottom-4 right-16 w-10 h-10 text-black-500 cursor-pointer" />
+          <ChevronRightCircle className="fixed bottom-4 right-4 w-8 h-8 cursor-pointer" />
         </Tooltip>
       </Link>
     </main>

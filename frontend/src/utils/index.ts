@@ -95,12 +95,18 @@ export function urlToEmbed(url: string) {
   return "https://www.youtube.com/embed/" + id?.split("=").at(-1);
 }
 
-export function ToItemList<T extends { ID: number; Name: string }>(items: T[]) {
+export function ToItemList<T extends { ID: number; Name?: string }>(
+  items: T[],
+  callbackName?: (item: T) => string
+) {
   return items.map((item) => {
     const newItem: ItemList = {
       value: item.ID,
-      label: item.Name,
+      label: item.Name || `label ${item.ID}`,
     };
+    if (callbackName) {
+      newItem.label = callbackName(item);
+    }
     return newItem;
   });
 }

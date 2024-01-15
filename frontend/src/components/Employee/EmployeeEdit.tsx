@@ -2,10 +2,13 @@ import { Position, Precede, Gender, Employee } from "../../interfaces";
 import { http } from "../../services/httpRequest";
 import { useToast } from "@shadcn/ui/use-toast";
 import { useEffect, useState } from "react";
-import Form, { ItemList } from "@shadcn/simplify/form";
-import { Button, Label } from "@shadcn/ui";
+import Form from "@shadcn/simplify/form";
+import { Button } from "@shadcn/ui";
 import { Edit } from "lucide-react";
-import { employeeupdateFormSchema, EmployeeupdateFormData } from "@src/validator";
+import {
+  employeeUpdateFormSchema,
+  EmployeeUpdateFormData,
+} from "@src/validator";
 import {
   Dialog,
   DialogClose,
@@ -16,6 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@shadcn/ui/dialog";
+import { ToItemList } from "@src/utils";
 
 interface Props {
   employees: Employee;
@@ -55,53 +59,15 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
     fetchPosition();
   }, []);
 
-  function PrecedeToSelectItems(
-    Precede: { ID: number; Name: string }[]
-  ): ItemList[] {
-    return Precede.map((Precede) => ({
-      value: Precede.ID,
-      label: Precede.Name,
-    }));
-  }
-
-  function GenderToSelectItems(
-    Gender: { ID: number; Name: string }[]
-  ): ItemList[] {
-    return Gender.map((Gender) => ({
-      value: Gender.ID,
-      label: Gender.Name,
-    }));
-  }
-
-  function PositionToSelectItems(
-    Position: { ID: number; Name: string }[]
-  ): ItemList[] {
-    return Position.map((Position) => ({
-      value: Position.ID,
-      label: Position.Name,
-    }));
-  }
-
-  async function onValid(formData: EmployeeupdateFormData) {
-    const newEmployee = {
-      ...formData,
-
-    };
-
-    const res = await http.Put<string>("/employees", employees.ID!, newEmployee);
+  async function onValid(formData: EmployeeUpdateFormData) {
+    const res = await http.Put<string>("/employees", employees.ID, formData);
     if (res.ok) {
       onSave();
       toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(res.data, null, 2)}</code>
-          </pre>
-        ),
+        title: res.data,
         duration: 1500,
       });
     }
-
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -118,7 +84,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
         </DialogHeader>
         <Form
           className="grid gap-2 mt-4"
-          validator={employeeupdateFormSchema}
+          validator={employeeUpdateFormSchema}
           onValid={onValid}
           onInvalid={(data) => console.log(data)}
           fields={({ form }) => (
@@ -126,14 +92,12 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
               <div className="grid grid-cols-4 items-center">
                 {precede.length > 0 && (
                   <>
-                    <Label>
-                      Precede<span className="text-red-500">*</span>
-                    </Label>
+                    <Form.Label>Precede</Form.Label>
                     <Form.Select
                       valueAsNumber
                       useForm={form}
-                      items={PrecedeToSelectItems(precede)}
-                      defaultValue={String(employees.Precede?.ID)}
+                      items={ToItemList(precede)}
+                      defaultValue={String(employees.Precede.ID)}
                       name="PrecedeID"
                       placeholder="Pick type of tour"
                       className="col-span-3"
@@ -142,9 +106,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
                 )}
               </div>
               <div className="grid grid-cols-4 items-center">
-                <Label>
-                  FirstName<span className="text-red-500">*</span>
-                </Label>
+                <Form.Label>FirstName</Form.Label>
                 <Form.Input
                   useForm={form}
                   name="FirstName"
@@ -154,7 +116,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
                 ></Form.Input>
               </div>
               <div className=" grid grid-cols-4 items-center">
-                <Label>LastName<span className="text-red-500">*</span></Label>
+                <Form.Label>LastName</Form.Label>
                 <Form.Input
                   useForm={form}
                   name="LastName"
@@ -166,14 +128,12 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
               <div className="grid grid-cols-4 items-center">
                 {gender.length > 0 && (
                   <>
-                    <Label>
-                      Gender<span className="text-red-500">*</span>
-                    </Label>
+                    <Form.Label>Gender</Form.Label>
                     <Form.Select
                       valueAsNumber
                       useForm={form}
-                      items={GenderToSelectItems(gender)}
-                      defaultValue={String(employees.Gender?.ID)}
+                      items={ToItemList(gender)}
+                      defaultValue={String(employees.Gender.ID)}
                       name="GenderID"
                       placeholder="Pick Gender"
                       className="col-span-3"
@@ -182,9 +142,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
                 )}
               </div>
               <div className="grid grid-cols-4 items-center">
-                <Label>
-                  Day Of Birth<span className="text-red-500">*</span>
-                </Label>
+                <Form.Label>Day Of Birth</Form.Label>
                 <Form.DatePicker
                   useForm={form}
                   name="DayOfBirth"
@@ -195,13 +153,11 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
               <div className="grid grid-cols-4 items-center">
                 {position.length > 0 && (
                   <>
-                    <Label>
-                      Position<span className="text-red-500">*</span>
-                    </Label>
+                    <Form.Label>Position</Form.Label>
                     <Form.Select
                       valueAsNumber
                       useForm={form}
-                      items={PositionToSelectItems(position)}
+                      items={ToItemList(position)}
                       defaultValue={String(employees.Position?.ID)}
                       name="PositionID"
                       placeholder="Pick Position"
@@ -211,11 +167,8 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
                 )}
               </div>
 
-
               <div className="grid grid-cols-4 items-center">
-                <Label>
-                  Email<span className="text-red-500">*</span>
-                </Label>
+                <Form.Label>Email</Form.Label>
                 <Form.Input
                   useForm={form}
                   name="Email"
@@ -225,9 +178,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
                 ></Form.Input>
               </div>
               <div className="grid grid-cols-4 items-center">
-                <Label>
-                  Phone<span className="text-red-500">*</span>
-                </Label>
+                <Form.Label>Phone</Form.Label>
                 <Form.Input
                   useForm={form}
                   name="Phone"
@@ -236,21 +187,6 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
                   className="col-span-3"
                 ></Form.Input>
               </div>
-              {/* <div className="grid grid-cols-4 items-center">
-                <Label>
-                  Password<span className="text-red-500">*</span>
-                </Label>
-                <Form.Input
-                  useForm={form}
-                  name="Password"
-                  type="text"
-                  defaultValue={employees.Password}
-                  className="col-span-3"
-                ></Form.Input>
-              </div> */}
-
-
-              {/* <Form.SubmitButton useForm={form}>Employee</Form.SubmitButton> */}
             </>
           )}
         >

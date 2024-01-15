@@ -41,6 +41,7 @@ import { FileToBase64 } from "@src/utils";
 import { cn } from "@cn/utils";
 import { AlertCircleIcon } from "lucide-react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { ButtonVariants } from "@shadcn/ui/button";
 
 interface Options {
   shouldValidate: boolean;
@@ -161,8 +162,8 @@ const FormInput = <T extends FieldValues>({
       onChange={onValueChange}
       defaultValue={type === "file" ? undefined : defaultValue}
       className={cn(
-        errors[name] ? " border-red-500 focus-visible:ring-red-500" : "",
-        className
+        className,
+        errors[name] ? " border-red-500 focus-visible:ring-red-500" : ""
       )}
     />
   );
@@ -213,8 +214,8 @@ const FormTextArea = <T extends FieldValues>({
       {...props}
       onChange={(e) => handleChange(e.target.value)}
       className={cn(
-        errors[name] ? " border-red-500 focus-visible:ring-red-500" : "",
-        className
+        className,
+        errors[name] ? " border-red-500 focus-visible:ring-red-500" : ""
       )}
     />
   );
@@ -277,8 +278,8 @@ const FormSelect = <T extends FieldValues>({
     >
       <SelectTrigger
         className={cn(
-          errors[name] ? " border-red-500 focus:ring-red-500" : "",
-          className
+          className,
+          errors[name] ? " border-red-500 focus:ring-red-500" : ""
         )}
       >
         <SelectValue
@@ -342,8 +343,8 @@ const FormDatePicker = <T extends FieldValues>({
       defaultValue={defaultValue}
       onSelect={handleChange}
       className={cn(
-        errors[name] ? " border-red-500 focus-visible:ring-red-500" : "",
-        className
+        className,
+        errors[name] ? " border-red-500 focus-visible:ring-red-500" : ""
       )}
     />
   );
@@ -353,7 +354,8 @@ const FormDatePicker = <T extends FieldValues>({
 
 interface SubmitButtonProps<T extends FieldValues>
   extends PropsWithChildren,
-    ButtonHTMLAttributes<HTMLButtonElement> {
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    ButtonVariants {
   useForm: UseFormReturn<T, any, undefined>;
 }
 const FormSubmitButton = <T extends FieldValues>({

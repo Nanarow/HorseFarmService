@@ -9,7 +9,7 @@ import {
 } from "@shadcn/ui/table";
 import { useSchedule } from "@src/hooks";
 import { addDays, addHours } from "date-fns";
-import tourImage from "@src/assets/tourbg-4.jpg";
+import tourImage from "@src/assets/bg12.jpg";
 import ScheduleItem from "@src/components/course-enrollment/ScheduleItem";
 
 const Course = () => {
@@ -19,28 +19,25 @@ const Course = () => {
     if (!schedules) {
       return;
     }
-    for (let i = 0; i < schedules.length; i++) {
-      const s = schedules[i];
-      const start_time = new Date(s.StartTime);
-      if (time.getTime() === start_time.getTime()) {
-        return s;
-      }
-    }
-    return;
+    return schedules.find(
+      (s) => new Date(s.StartTime).getTime() === time.getTime()
+    );
   }
   return (
     <main className="w-full h-screen">
       <NavBar />
-      <section className="w-full h-[calc(100%-58px)] px-6 py-8 flex flex-col items-end relative">
+      <section className="w-full h-with-nav px-6 py-8 flex flex-col items-end relative">
         <img
           src={tourImage}
           className="w-full h-full abs-center object-cover rounded "
           alt="Tour"
         />
-        <Table className=" border rounded ">
-          <TableHeader className="bg-white rounded border">
+        <Table className=" border rounded-md overflow-hidden">
+          <TableHeader className=" rounded border bg-white">
             <TableRow>
-              <TableHead className=" text-center">Day/Time</TableHead>
+              <TableHead className=" text-center text-primary">
+                Day/Time
+              </TableHead>
               {Array.from({ length: 8 }).map((_, index) => {
                 const day = new Date().setHours(0, 0, 0, 0);
                 const start_time = addHours(day, index + 9);
@@ -48,7 +45,7 @@ const Course = () => {
                 return (
                   <TableHead
                     key={index}
-                    className=" text-center w-[10%] border"
+                    className=" text-center w-[10%] border text-primary"
                   >
                     {start_time.toTimeString().slice(0, 5)} -{" "}
                     {end_time.toTimeString().slice(0, 5)}
@@ -57,7 +54,7 @@ const Course = () => {
               })}
             </TableRow>
           </TableHeader>
-          <TableBody className=" bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded">
+          <TableBody className=" bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/20 rounded">
             {schedules &&
               Array.from({ length: 7 }).map((_, index) => {
                 const day = addDays(new Date().setHours(0, 0, 0, 0), index + 1);

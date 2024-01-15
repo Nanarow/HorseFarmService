@@ -3,12 +3,12 @@ import { useAuth } from "@src/providers/authProvider";
 import { useToast } from "@shadcn/ui/use-toast";
 import Form from "@shadcn/simplify/form";
 import { LogOut } from "lucide-react";
-import { Label } from "@shadcn/ui";
-import { Button } from "@shadcn/ui/button";
+import { Button, Label } from "@shadcn/ui";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { FoodFormData, foodFormSchema } from "@src/validator";
 import { useRefresh } from "@src/hooks";
 import FoodImage from "../assets/foodbg2.jpg";
+import { Card } from "@shadcn/ui/card";
 
 const Food = () => {
   const { refresh } = useRefresh();
@@ -36,8 +36,8 @@ const Food = () => {
   }
 
   return (
-    <div className="w-full h-screen">
-      <section className="w-full h-full absolute" style={{ zIndex: -1 }}>
+    <div className="w-full h-screen relative">
+      <section className="w-full h-full absolute z-[-1]">
         <img
           src={FoodImage}
           className="w-full h-full abs-center object-cover rounded "
@@ -45,11 +45,13 @@ const Food = () => {
         />
       </section>
       {/* <div className="w-full h-full bg-white border backdrop-blur-none supports-[backdrop-filter]:bg-background/60"> */}
-      <div className="mx-48 backdrop-blur-sm bg-white supports-[backdrop-filter]:bg-background/60">
-        <div className="w-full justify-center items-center py-2 px-32 mt-12 relative flex flex-col">
-          <Label className="text-3xl font-bold text-center">Food</Label>
+      <Card className=" backdrop-blur-sm bg-white supports-[backdrop-filter]:bg-background/60 max-w-lg abs-center w-full">
+        <div className="w-full justify-center items-center flex flex-col">
+          <Label className="text-3xl font-bold text-center mt-4">
+            Food Quality
+          </Label>
           <Form
-            className="flex flex-col w-full px-36 justify-center gap-2 mt-4"
+            className="flex flex-col w-full px-8 justify-center gap-2 mt-2 mb-4 pb-2"
             validator={foodFormSchema}
             onValid={onValid}
             onInvalid={(data) => console.log(data)}
@@ -110,33 +112,31 @@ const Food = () => {
                   className="border-gray-600"
                 />
                 <Form.Error field={errors.Forage} />
-                <Form.SubmitButton
-                  useForm={form}
-                  className=" hover:bg-black hover:text-white bg-white text-black"
+                <p
+                  onClick={refresh}
+                  className="cursor-pointer underline text-sm text-primary ml-2"
                 >
+                  reset
+                </p>
+                <Form.SubmitButton useForm={form} variant={"success"}>
                   Save
                 </Form.SubmitButton>
-                <Button
-                  variant={"outline"}
-                  onClick={refresh}
-                  className=" hover:bg-black hover:text-white hover:border-black bg-white text-black"
-                >
-                  Cancel
-                </Button>
-                <div className="fixed bottom-9 right-16 w-8 h-8  cursor-pointer">
-                  <Tooltip content={"Log Out"}>
-                    <LogOut
-                      onClick={() => {
-                        console.log("logout");
-                        logout();
-                      }}
-                    />
-                  </Tooltip>
-                </div>
               </>
             )}
           ></Form>
         </div>
+      </Card>
+      <div className="absolute right-4 bottom-4 w-8 h-8  cursor-pointer">
+        <Tooltip content={"Log Out"} className="bg-white text-primary">
+          <Button
+            variant={"secondary"}
+            onClick={logout}
+            size={"icon"}
+            className=" bg-white/50"
+          >
+            <LogOut />
+          </Button>
+        </Tooltip>
       </div>
       {/* </div> */}
     </div>

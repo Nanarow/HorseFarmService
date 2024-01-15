@@ -17,8 +17,6 @@ export interface Plan {
 export interface TourType {
   ID: number;
   Name: string;
-  MinParticipant: number;
-  MaxParticipant: number;
   Description?: string;
 }
 
@@ -37,11 +35,6 @@ export interface Horse {
   Bleed: Bleed;
   Sex: Sex;
   Stable: Stable;
-  // EmployeeID: number;
-
-  // BleedID: number;
-  // SexID: number;
-  // StableID: number;
 }
 
 export interface Stable {
@@ -51,7 +44,7 @@ export interface Stable {
   Temperature: number;
   Humidity: number;
   Description: string;
-  Employee:Employee
+  Employee: Employee;
 }
 
 export interface Bleed {
@@ -66,16 +59,14 @@ export interface Sex {
 }
 
 export interface User {
-  ID?: number;
+  ID: number;
   FirstName: string;
   LastName: string;
   Email: string;
-  Password: string;
   Phone: string;
   DateOfBirth: Date;
   Profile: string;
   RoleID: number;
-  Role: Role;
   GenderID: number;
   Gender: Gender;
   ExperiencePoint: number;
@@ -110,13 +101,13 @@ export interface Gender {
 }
 
 export interface Employee {
-  ID?: number;
+  ID: number;
   PositionID: number;
-  Position?: Position;
+  Position: Position;
   GenderID: number;
-  Gender?: Gender;
+  Gender: Gender;
   PrecedeID: number;
-  Precede?: Precede;
+  Precede: Precede;
   FirstName: string;
   LastName: string;
   Email: string;
@@ -125,11 +116,11 @@ export interface Employee {
   Phone: string;
 }
 export interface Health {
-  ID?: number;
+  ID: number;
   EmployeeID: number;
-  Employee?: Employee;
+  Employee: Employee;
   HorseID: number;
-  Horse?: Horse;
+  Horse: Horse;
   Vital: string;
   Tooth: string;
   Vaccine: string;

@@ -30,7 +30,7 @@ const SupportCreate = () => {
   }
 
   return (
-    <div className="flex justify-center items-center w-full h-screen">
+    <div className="flex justify-center items-center w-full h-with-nav">
       <img
         src={qrCode}
         className="w-[250px] object-cover rounded mr-20"
@@ -38,7 +38,7 @@ const SupportCreate = () => {
       />
       <Card className=" w-[350px]">
         <CardHeader>
-          <CardTitle>User Account management</CardTitle>
+          <CardTitle>Support Details</CardTitle>
         </CardHeader>
         <CardContent>
           <Form

@@ -108,6 +108,10 @@ module.exports = {
         "tracking-in-expand":
           "tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000)   both",
       },
+      height: {
+        "with-nav": "calc(100% - var(--nav-height))",
+        nav: "var(--nav-height)",
+      },
     },
   },
   plugins: [require("tailwindcss-animate"), require("./tailwind.plugin.js")],

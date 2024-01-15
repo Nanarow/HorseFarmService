@@ -26,15 +26,13 @@ const Login = ({ role }: LoginProps) => {
   }
 
   useEffect(() => {
-    return () => {
-      onLogin();
-    };
+    onLogin();
   }, []);
 
   return (
     <div className="w-full h-screen bg-secondary flex flex-col justify-center items-center gap-2">
       <h1 className="text-3xl font-black text-primary mb-4 animate-tracking-in-expand">
-        Horse Farm
+        KhunMa Farm
       </h1>
       <Card className="flex flex-col w-3/4 max-w-sm relative">
         <CardHeader>

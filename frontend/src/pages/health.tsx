@@ -1,15 +1,16 @@
 import { Button } from "@shadcn/ui/button";
-import { Health, Horse, Employee } from "../interfaces";
+import { Horse, Employee } from "../interfaces";
 import { http } from "../services/httpRequest";
 import { useEffect, useState } from "react";
-import { Label } from "@shadcn/ui";
 import { useToast } from "@shadcn/ui/use-toast";
-import Form, { ItemList } from "@shadcn/simplify/form";
+import Form from "@shadcn/simplify/form";
 import HealthImage from "./../assets/health3.jpg";
 import { LogOut } from "lucide-react";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { useAuth } from "@src/providers/authProvider";
 import { HealthFormData, healthFormSchema } from "@src/validator";
+import { ToItemList } from "@src/utils";
+import { Card } from "@shadcn/ui/card";
 
 const HealthPage = () => {
   const { logout } = useAuth();
@@ -36,183 +37,179 @@ const HealthPage = () => {
     fetchEmployees();
   }, []);
 
-  function HorseToSelectItems(
-    Horse: { ID: number; Name: string }[]
-  ): ItemList[] {
-    return Horse.map((Horse) => ({
-      value: Horse.ID,
-      label: Horse.Name,
-    }));
-  }
-
-  function EmployeeToSelectItems(
-    Employee: { ID?: number; FirstName: string }[]
-  ): ItemList[] {
-    return Employee.map((Employee) => ({
-      value: Employee.ID!,
-      label: Employee.FirstName,
-    }));
-  }
-
   async function onValid(formData: HealthFormData) {
-    const res = await http.Post<Health, Health>("/healths", formData);
+    const res = await http.Post<string>("/healths", formData);
     if (res.ok) {
       toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(res.data, null, 2)}
-            </code>
-          </pre>
-        ),
+        title: res.data,
         duration: 1500,
       });
     }
   }
 
   return (
-    <div className="relative">
-      <section className="w-full h-screen  bg-cover bg-center absolute ">
+    <div className="relative w-full h-screen px-8">
+      <section className="w-full h-screen absolute abs-center object-contain">
         <img
           src={HealthImage}
-          className="w-full h-screen object-cover rounded mx-auto  shadow-sm blur-sm"
+          className="w-full h-screen object-cover rounded mx-auto shadow-sm blur-sm"
           alt="Health"
         />
       </section>
 
-      <Form
-        className="flex justify-center  "
-        validator={healthFormSchema}
-        onValid={onValid}
-        onInvalid={console.log}
-        fields={({ form, errors }) => (
-          <div className="flex flex-col relative ">
-            <h1 className="text-3xl font-bold text-black text-primary mb-2 mt-14 mx-64">
-              บันทึกการตรวจสุขภาพม้า
-            </h1>
-            <div className="flex ">
-              <Label className=" text-xl text-primary mx-64 flex mt-4">
-                วันที่ทำการตรวจสุขภาพม้า:
-                <span className="text-red-500 ">*</span>
-                <div className=" px-14 ">
+      <div className=" abs-center flex flex-col w-full h-full items-center justify-center px-4">
+        <Card className=" bg-zinc-800/50 px-16 py-8 border-none shadow-xl">
+          <p className="text-3xl font-bold  bg-white/50 rounded px-4 py-2 text-center">
+            บันทึกการตรวจสุขภาพม้า
+          </p>
+          <Form
+            className="grid gap-2 mt-4 "
+            validator={healthFormSchema}
+            onValid={onValid}
+            onInvalid={console.log}
+            fields={({ form, errors }) => (
+              <>
+                <div className="grid grid-cols-4 items-center">
+                  <Form.Label className="pr-2">
+                    วันที่ทำการตรวจสุขภาพ
+                  </Form.Label>
                   <Form.DatePicker
-                    className="w-96 h-10 border rounded-md focus:outline-none bg-white focus:border-black"
+                    className="col-span-3  bg-white focus:border-black"
                     useForm={form}
                     name="Date"
                   />
+                  <Form.Error
+                    field={errors.Date}
+                    className="col-span-3 col-start-2 mt-2"
+                  />
                 </div>
-              </Label>
-            </div>
-            <Form.Error field={errors.Date} className="mx-96" />
-            <div className=" items-center justify-center">
-              {horses && (
-                <>
-                  <div className="flex gap-6 mx-64 mt-3">
-                    <Label className="text-xl text-primary w-48 ">
-                      ชื่อม้า:<span className="text-red-500">*</span>
-                    </Label>
+
+                {horses && (
+                  <div className="grid grid-cols-4 items-center">
+                    <Form.Label>ชื่อม้า</Form.Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-10 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                      className="col-span-3 focus:outline-none bg-white focus:border-black"
                       useForm={form}
-                      items={HorseToSelectItems(horses)}
+                      items={ToItemList(horses)}
                       name="HorseID"
                       placeholder="Choose horse name"
                     />
+                    <Form.Error
+                      field={errors.HorseID}
+                      className="col-span-3 col-start-2 mt-2"
+                    />
                   </div>
-                  <Form.Error field={errors.HorseID} className="mx-96" />
-                </>
-              )}
-              {employee && (
-                <>
-                  <div className=" flex gap-6 mx-64 mt-3">
-                    <Label className="text-xl text-primary w-48">
-                      ผู้ตรวจ:<span className="text-red-500">*</span>
-                    </Label>
+                )}
+                {employee && (
+                  <div className="grid grid-cols-4 items-center">
+                    <Form.Label>ผู้ตรวจ</Form.Label>
                     <Form.Select
                       valueAsNumber
-                      className="h-10 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                      className="col-span-3 focus:outline-none bg-white focus:border-black"
                       useForm={form}
-                      items={EmployeeToSelectItems(employee)}
+                      items={ToItemList(
+                        employee,
+                        (emp) => emp.FirstName + " " + emp.LastName
+                      )}
                       name="EmployeeID"
                       placeholder="Choose employee name"
                     />
+                    <Form.Error
+                      field={errors.EmployeeID}
+                      className="col-span-3 col-start-2 mt-2"
+                    />
                   </div>
-                  <Form.Error field={errors.EmployeeID} className=" mx-96" />
-                </>
-              )}
-              <div className="flex flex-col  relative ">
-                <Label className="flex text-primary text-xl mx-64 mt-3 ">
-                  สัญญาณชีพ:<span className="text-red-500">*</span>
+                )}
+                <div className="grid grid-cols-4 items-center">
+                  <Form.Label>สัญญาณชีพ</Form.Label>
                   <Form.Input
-                    className="w-3/4 h-10 px-2 ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                    className="col-span-3 focus:outline-none bg-white focus:border-black"
                     useForm={form}
                     name="Vital"
                     type="text"
-                  ></Form.Input>
-                </Label>
-                <Form.Error field={errors.Vital} className="mx-96" />
-                <Label className="flex text-xl mt-3 text-primary mx-64 ">
-                  สุขภาพฟัน:<span className="text-red-500">*</span>
+                  />
+                  <Form.Error
+                    field={errors.Vital}
+                    className="col-span-3 col-start-2 mt-2"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center">
+                  <Form.Label>สุขภาพฟัน</Form.Label>
                   <Form.Input
-                    className="w-3/4 h-10  ml-16 border  rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                    className="col-span-3 focus:outline-none bg-white focus:border-black"
                     useForm={form}
                     name="Tooth"
                     type="text"
-                  ></Form.Input>
-                </Label>
-                <Form.Error field={errors.Tooth} className="mx-96" />
-                <Label className="flex text-primary text-xl mt-3 mx-64 ">
-                  วัคซีนป้องกัน:<span className="text-red-500">*</span>
+                  />
+                  <Form.Error
+                    field={errors.Tooth}
+                    className="col-span-3 col-start-2 mt-2"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center">
+                  <Form.Label>วัคซีนป้องกัน</Form.Label>
                   <Form.Input
-                    className="w-3/4 h-10  ml-12 border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                    className="col-span-3 focus:outline-none bg-white focus:border-black"
                     useForm={form}
                     name="Vaccine"
                     type="text"
-                  ></Form.Input>
-                </Label>
-                <Form.Error field={errors.Vaccine} className="mx-96" />
-                <Label className="flex text-primary text-xl mt-3 mx-64 gap-1">
-                  ถ่ายพยาธิ:<span className="text-red-500">*</span>
+                  />
+                  <Form.Error
+                    field={errors.Vaccine}
+                    className="col-span-3 col-start-2 mt-2"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center">
+                  <Form.Label>ถ่ายพยาธิ</Form.Label>
                   <Form.Input
-                    className="w-3/4 h-10 ml-16  border rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                    className="col-span-3 focus:outline-none bg-white focus:border-black"
                     useForm={form}
                     name="Parasite"
                     type="text"
-                  ></Form.Input>
-                </Label>
-                <Form.Error field={errors.Parasite} className=" mx-96" />
-                <Label className="flex text-primary text-xl mt-3 mx-64 ">
-                  ตรวจเลือด:<span className="text-red-500">*</span>
+                  />
+                  <Form.Error
+                    field={errors.Parasite}
+                    className="col-span-3 col-start-2 mt-2"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center">
+                  <Form.Label>ตรวจเลือด</Form.Label>
                   <Form.Input
-                    className="w-3/4 h-10 ml-16 border gap-5 rounded-md text-1xl focus:outline-none bg-white focus:border-black"
+                    className="col-span-3 focus:outline-none bg-white focus:border-black"
                     useForm={form}
                     name="Blood"
                     type="text"
-                  ></Form.Input>
-                </Label>
-                <Form.Error field={errors.Blood} className="mx-96" />
-                <Button
-                  type="submit"
-                  className="w-32 h-10 text-2sm  text-center bg-green-600 rounded-md	mt-4 mx-auto	text-primary text-white	 	"
-                >
-                  บันทึกข้อมูล
-                </Button>
-              </div>
-              <Tooltip content={"Log out"}>
-                <LogOut
-                  onClick={() => {
-                    console.log("logout");
-                    logout();
-                  }}
-                  className=" fixed bottom-12 right-16 w-8 h-8  cursor-pointer  text-red-500"
-                />
-              </Tooltip>
-            </div>
-          </div>
-        )}
-      />
+                  />
+                  <Form.Error
+                    field={errors.Blood}
+                    className="col-span-3 col-start-2 mt-2"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center">
+                  <Form.SubmitButton
+                    useForm={form}
+                    variant={"success"}
+                    className="col-start-2 col-span-3"
+                  >
+                    บันทึกข้อมูล
+                  </Form.SubmitButton>
+                </div>
+              </>
+            )}
+          />
+        </Card>
+      </div>
+      <Tooltip content={"Log out"}>
+        <Button
+          size={"icon"}
+          variant={"danger"}
+          className="absolute bottom-12 right-16"
+          onClick={logout}
+        >
+          <LogOut />
+        </Button>
+      </Tooltip>
     </div>
   );
 };

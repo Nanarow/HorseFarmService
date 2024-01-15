@@ -11,7 +11,7 @@ const Tour = () => {
     <main className="w-full h-screen">
       <NavBar></NavBar>
       <Tabs
-        className="  w-full h-[calc(100%-58px)] overflow-x-hidden"
+        className="  w-full h-with-nav overflow-x-hidden"
         onValueChange={setTabs}
         value={tabs}
       >

@@ -16,14 +16,17 @@ import CourseAlert from "@src/components/course-setting/CourseAlert";
 import { useEffect, useState } from "react";
 import { http } from "@src/services/httpRequest";
 import CourseEdit from "@src/components/course-setting/CourseEdit";
-import { XSquare } from "lucide-react";
 import { addDays, addHours } from "date-fns";
 import { Label } from "@shadcn/ui";
 import ScheduleImage from "../assets/schedulebg.jpg";
+import { LogOut, PlusIcon } from "lucide-react";
+import { Tooltip } from "@shadcn/simplify/tooltip";
+import { useAuth } from "@src/providers/authProvider";
 
 const courseSetting = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [schedules, setSchedules] = useState<Schedule[] | undefined>(undefined);
+  const { logout } = useAuth();
 
   async function fetchSchedules() {
     const res = await http.Get<Schedule[]>("/schedules");
@@ -39,14 +42,11 @@ const courseSetting = () => {
   }
 
   useEffect(() => {
-    return () => {
-      fetchSchedules();
-      fetchCourses();
-    };
+    fetchSchedules();
+    fetchCourses();
   }, []);
 
   async function handleChange(time: Date, value: string | undefined) {
-    // console.log(time, value);
     if (!schedules) {
       return;
     }
@@ -56,7 +56,7 @@ const courseSetting = () => {
       // check ว่าเวลาที่เลือกเหมือนกันกับ schedule ใด
       if (time.getTime() === start_time.getTime()) {
         // delete schedule ที่เลือก แล้วเพิ่ม schedule ใหม่
-        await http.Delete("/schedules", s.ID!);
+        await http.Delete("/schedules", s.ID);
         if (value) {
           await http.Post<Schedule>("/schedules", {
             Date: s.Date,
@@ -104,7 +104,17 @@ const courseSetting = () => {
   }
 
   return (
-    <main className="w-full h-screen">
+    <main className="w-full h-screen relative">
+      <Tooltip content={"Log out"}>
+        <Button
+          size={"icon"}
+          variant={"secondary"}
+          className="absolute bottom-8 right-8 z-10"
+          onClick={logout}
+        >
+          <LogOut />
+        </Button>
+      </Tooltip>
       <section className="w-full h-full absolute" style={{ zIndex: -1 }}>
         <img
           src={ScheduleImage}
@@ -112,54 +122,45 @@ const courseSetting = () => {
           alt="Schedule"
         />
       </section>
-      <div className="w-full h-full bg-white border backdrop-blur-none supports-[backdrop-filter]:bg-background/60">
-        <div
-          className="flex items-center justify-between space-x-2 mt-12 px-8"
-          style={{ zIndex: 1 }}
-        >
+      <div className="w-full h-full bg-white border backdrop-blur-none supports-[backdrop-filter]:bg-background/60 px-4">
+        <div className="flex items-center justify-between space-x-2 mt-4 z-[1]">
           <Label className="text-3xl font-bold text-center">
-            Course Setting
+            Course Management
           </Label>
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="hover:scale-110 hover:bg-black hover:text-white bg-white text-black">
+              <Button variant={"secondary"}>
+                <PlusIcon className="mr-2" />
                 Add Course
               </Button>
             </DialogTrigger>
-            <AddCourse></AddCourse>
+            <AddCourse />
           </Dialog>
         </div>
         <DragDrop>
-          <section className=" w-full flex gap-2 my-4 px-8">
+          <section className=" w-full flex gap-2 my-4 flex-wrap">
             {courses.length > 0 &&
               courses.map((course, index) => (
                 <DraggableCard
                   key={index}
                   value={course.ID.toString()}
-                  className="h-10 flex items-center justify-between px-4"
+                  className="h-16 flex items-center justify-between px-4 w-1/6"
                 >
-                  <div>{course.Name}</div>
-
-                  <div className="flex items-center space-x-2">
-                    <CourseEdit
-                      course={course}
-                      onSave={fetchCourses}
-                    ></CourseEdit>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <XSquare className="text-red-500 hover:scale-110 cursor-pointer"></XSquare>
-                      </DialogTrigger>
-                      <CourseAlert
-                        courseID={course.ID!}
-                        onCancel={fetchCourses}
-                      ></CourseAlert>
-                    </Dialog>
+                  <div>
+                    <p className="text-lg font-bold">{course.Name}</p>
+                    <p className="text-sm text-gray-500">
+                      participants: {course.Participants}
+                    </p>
+                  </div>
+                  <div>
+                    <CourseEdit course={course} onSave={fetchCourses} />
+                    <CourseAlert courseID={course.ID} onCancel={fetchCourses} />
                   </div>
                 </DraggableCard>
               ))}
           </section>
           <Table className="border">
-            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableCaption>Drag and Drop to change schedule</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[20%] border text-center text-black">
@@ -198,7 +199,7 @@ const courseSetting = () => {
                         return (
                           <TableCell
                             key={time_index}
-                            className="border h-10 w-[10%]"
+                            className="border h-16 w-[10%]"
                           >
                             <DropZone
                               value={getCourse(start_time)}
