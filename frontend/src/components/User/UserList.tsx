@@ -24,7 +24,6 @@ const UserList = () => {
   async function fetchUsers() {
     const res = await http.Get<User[]>("/users");
     if (res.ok) {
-      console.log(res.data);
       setUser(res.data);
     }
   }

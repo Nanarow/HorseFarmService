@@ -16,13 +16,13 @@ import {
   User,
 } from "./pages";
 import PrivateRoute from "./components/privateRoute";
-import ValidateForm from "./examples/form-with-validation";
-import DragDropTable from "./examples/drag-drop-table";
 import UserList from "./components/user/UserList";
 import StableList from "./components/stable/StableList";
 import SupportList from "./components/support/SupportList";
+import useWindowError from "./hooks/useWindowError";
 
 function App() {
+  useWindowError();
   return (
     <Routes>
       <Route path="/*" element={<NoPage />} />
@@ -33,8 +33,8 @@ function App() {
       <Route path="/login/employee" element={<Login role="employee" />} />
       <Route path="/login" element={<Login role="user" />} />
 
-      <Route path="/example/form" element={<ValidateForm />} />
-      <Route path="/example/table" element={<DragDropTable />} />
+      {/* <Route path="/example/form" element={<ValidateForm />} />
+      <Route path="/example/table" element={<DragDropTable />} /> */}
 
       <Route element={<PrivateRoute role={101} path="/login" />}>
         <Route path="/course" element={<Course />} />
