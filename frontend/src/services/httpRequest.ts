@@ -1,7 +1,8 @@
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 
 class HttpRequest {
-  private readonly base_url: string = "http://localhost:8985";
+  private readonly base_url: string =
+    import.meta.env.API_BASE_URL || "http://localhost:8985";
   private content_type = "application/json";
 
   public async Get<DataType>(resource: string) {

@@ -3,7 +3,7 @@ import { http } from "@src/services/httpRequest";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-type Role = "user" | "employee" | "admin";
+export type Role = "user" | "employee" | "admin";
 type TLogin = {
   Email: string;
   Password: string;
@@ -30,12 +30,11 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User>();
   const [employee, setEmployee] = useState<Employee>();
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from || "/home";
+  const { state } = useLocation();
+  const from = state?.from || "/";
 
   const logout = async () => {
-    const role = getRole();
-    const res = await http.Post("/logout/" + role, {});
+    const res = await http.Post("/logout/" + getRole(), {});
     if (res.ok) {
       setEmployee(undefined);
       setUser(undefined);
@@ -57,10 +56,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   const isLoggedIn = () => {
-    if (user) {
-      return true;
-    }
-    if (employee) {
+    if (employee || user) {
       return true;
     }
     return false;
@@ -83,7 +79,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         setUser(res.data);
         navigate(from, { replace: true });
       }
-    } else if (role === "employee") {
+    } else {
       const res = await http.Post<Employee>("/login/employee", data || {});
       if (res.ok) {
         setEmployee(res.data);

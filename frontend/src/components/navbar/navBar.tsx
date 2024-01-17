@@ -12,9 +12,10 @@ import { HomeIcon, LogInIcon, LogOutIcon, MenuIcon, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Menus } from "./menu";
 import { cn } from "@cn/utils";
+import Each from "../each";
 
 const NavBar = () => {
-  const { logout, getRole, isLoggedIn, getEmployee, getUser } = useAuth();
+  const { getRole } = useAuth();
   const location = useLocation();
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -24,112 +25,28 @@ const NavBar = () => {
             <HomeIcon />
             <span className="font-bold ">KhunMa Farm</span>
           </Link>
+
           {
             <nav className="hidden sm:flex items-center space-x-6">
-              {Menus[getRole()].map((menu, index) => (
-                <Link
-                  key={index}
-                  to={menu.to}
-                  className={` transition-colors hover:text-foreground/80 ${
-                    location.pathname === menu.to ? "" : "text-foreground/60"
-                  }`}
-                >
-                  {menu.label}
-                </Link>
-              ))}
-            </nav>
-          }
-        </div>
-        <div className="flex justify-end w-[10%] items-center">
-          {isLoggedIn() ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  size={"icon"}
-                  variant={"ghost"}
-                  className="hidden sm:flex"
-                >
-                  <User />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 mt-4 mr-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <DropdownMenuLabel>
-                  {(getRole() === "employee"
-                    ? getEmployee().FirstName
-                    : getUser().FirstName) || "Name"}
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={logout}
-                  className={cn(
-                    "text-red-500 cursor-pointer ",
-                    "focus:bg-red-500 focus:text-white"
-                  )}
-                >
-                  <LogOutIcon className="mr-2" />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Link
-              to={"/login"}
-              state={{ from: "/" }}
-              className="hidden sm:flex"
-            >
-              <Button size={"icon"} variant={"ghost"}>
-                <LogInIcon />
-              </Button>
-            </Link>
-          )}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size={"icon"} variant={"ghost"} className="sm:hidden">
-                <MenuIcon />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 mt-4 mr-6 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-              <DropdownMenuLabel>Menu</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {Menus[getRole()].map((menu, index) => (
-                <DropdownMenuItem key={index}>
+              <Each
+                of={Menus[getRole()]}
+                render={(menu) => (
                   <Link
                     to={menu.to}
-                    className={cn(
-                      "transition-colors hover:text-foreground/80",
+                    className={` transition-colors hover:text-foreground/80 ${
                       location.pathname === menu.to ? "" : "text-foreground/60"
-                    )}
+                    }`}
                   >
                     {menu.label}
                   </Link>
-                </DropdownMenuItem>
-              ))}
-              <DropdownMenuSeparator />
-              {isLoggedIn() ? (
-                <DropdownMenuItem
-                  onClick={logout}
-                  className={cn(
-                    "text-red-500 cursor-pointer ",
-                    "focus:bg-red-500 focus:text-white"
-                  )}
-                >
-                  <LogOutIcon className="mr-2" />
-                  Log out
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem className="cursor-pointer">
-                  <Link
-                    to={"/login"}
-                    state={{ from: "/" }}
-                    className="flex items-center"
-                  >
-                    <LogInIcon className="mr-2" />
-                    Log In
-                  </Link>
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                )}
+              />
+            </nav>
+          }
+        </div>
+
+        <div className="flex justify-end w-[10%] items-center">
+          <AccountDropdownWithMenu />
         </div>
       </div>
     </header>
@@ -137,3 +54,72 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
+const AccountDropdownWithMenu = () => {
+  const { logout, getRole, isLoggedIn, getEmployee, getUser } = useAuth();
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size={"icon"} variant={"ghost"}>
+          <MenuIcon className="sm:hidden" />
+          <User className="hidden sm:block" />
+        </Button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent className="w-56 mt-[14px] mr-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ">
+        <DropdownMenuLabel>
+          {isLoggedIn()
+            ? (getRole() === "employee"
+                ? getEmployee().FirstName
+                : getUser().FirstName) || "Name"
+            : "Menu"}
+        </DropdownMenuLabel>
+
+        <DropdownMenuSeparator />
+
+        <Each
+          of={Menus[getRole()]}
+          render={(menu) => (
+            <DropdownMenuItem className="sm:hidden">
+              <Link
+                to={menu.to}
+                className={cn(
+                  "transition-colors hover:text-foreground/80",
+                  location.pathname === menu.to ? "" : "text-foreground/60"
+                )}
+              >
+                {menu.label}
+              </Link>
+            </DropdownMenuItem>
+          )}
+        />
+
+        <DropdownMenuSeparator className="sm:hidden" />
+
+        {isLoggedIn() ? (
+          <DropdownMenuItem
+            onClick={logout}
+            className={cn(
+              "text-red-500 cursor-pointer ",
+              "focus:bg-red-500 focus:text-white"
+            )}
+          >
+            <LogOutIcon className="mr-2" />
+            Log out
+          </DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem className="cursor-pointer">
+            <Link
+              to={"/login"}
+              state={{ from: "/" }}
+              className="flex items-center"
+            >
+              <LogInIcon className="mr-2" />
+              Log In
+            </Link>
+          </DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
