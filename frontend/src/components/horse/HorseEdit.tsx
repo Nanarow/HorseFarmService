@@ -1,0 +1,291 @@
+import { z } from "zod";
+import { Button } from "@shadcn/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+  DialogDescription,
+} from "@shadcn/ui/dialog";
+import { Label } from "@shadcn/ui/label";
+import Form from "@shadcn/simplify/form";
+import { useEffect, useState } from "react";
+import { Bleed, Employee, Sex, Horse, Stable } from "@src/interfaces";
+import { http } from "../../services/httpRequest";
+import { useToast } from "@shadcn/ui/use-toast";
+import { ToItemList } from "@src/utils";
+import { Edit } from "lucide-react";
+import { horseUpdateFormSchema } from "@src/validator";
+
+interface Props {
+  horse: Horse;
+  onSave(): void;
+}
+
+const HorseEdit = ({ horse, onSave }: Props) => {
+  const { toast } = useToast();
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [bleeds, setBleeds] = useState<Bleed[]>([]);
+  const [sexes, setSexes] = useState<Sex[]>([]);
+  const [stables, setStables] = useState<Stable[]>([]);
+
+  const [open, setOpen] = useState(false);
+
+  async function fetchEmployees() {
+    const res = await http.Get<Employee[]>("/employees");
+    if (res.ok) {
+      setEmployees(res.data);
+    }
+  }
+
+  async function fetchBleeds() {
+    const res = await http.Get<Bleed[]>("/horses/bleeds");
+    if (res.ok) {
+      setBleeds(res.data);
+    }
+  }
+
+  async function fetchSexes() {
+    const res = await http.Get<Sex[]>("/horses/sexes");
+    if (res.ok) {
+      setSexes(res.data);
+    }
+  }
+
+  async function fetchStables() {
+    const res = await http.Get<Stable[]>("/stables");
+    if (res.ok) {
+      setStables(res.data);
+    }
+  }
+
+  useEffect(() => {
+    fetchEmployees();
+    fetchBleeds();
+    fetchSexes();
+    fetchStables();
+  }, []);
+
+  function StableToList() {
+    const res = stables.map((stable) => {
+      return { ID: stable.ID, Name: String(stable.ID) };
+    });
+    return res;
+  }
+
+  function empToList() {
+    const res = employees.map((emp) => {
+      return { ID: emp.ID!, Name: emp.FirstName + " " + emp.LastName };
+    });
+    return res;
+  }
+
+  async function onEditValid(
+    formData: z.infer<typeof horseUpdateFormSchema>,
+    ID: number
+  ) {
+    const newHorse = {
+      ...formData,
+    };
+    const res = await http.Put<string>("/horses", ID, newHorse);
+    if (res.ok) {
+      onSave();
+      setOpen(false);
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              {JSON.stringify(res.data, null, 2)}
+            </code>
+          </pre>
+        ),
+        duration: 1500,
+      });
+    }
+  }
+
+  return (
+    <div className="ml-10 mt-1 mr-10 flex flex-row-reverse">
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Edit className="text-yellow-500 cursor-pointer " />
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Horse Data</DialogTitle>
+            <DialogDescription>
+              Make changes to your horse here. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
+          <Form
+            className="grid gap-3 mt-1"
+            validator={horseUpdateFormSchema}
+            onValid={(data) => onEditValid(data, horse.ID)}
+            onInvalid={(data) => console.log(data)}
+            fields={({ form, errors }) => (
+              <>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  <Label>
+                    Name<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Input
+                    defaultValue={horse.Name}
+                    useForm={form}
+                    name="Name"
+                    type="text"
+                    className="col-span-3 font-extralight"
+                    placeholder="enter your name"
+                  />
+                  <Form.Error
+                    field={errors.Name}
+                    className="col-span-3 col-start-2"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  {sexes.length > 0 && (
+                    <>
+                      <Label>
+                        Sex<span className="text-red-500">*</span>
+                      </Label>
+                      <Form.Select
+                        defaultValue={String(horse.Sex.ID)}
+                        valueAsNumber
+                        useForm={form}
+                        name="SexID"
+                        items={ToItemList(sexes)}
+                        className="col-span-3 font-extralight"
+                        placeholder="Sex"
+                      ></Form.Select>
+                    </>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  <Label>
+                    Age<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Input
+                    defaultValue={horse.Age}
+                    useForm={form}
+                    type="number"
+                    name="Age"
+                    className="col-span-3 font-extralight"
+                    placeholder="Age"
+                  />
+                  <Form.Error
+                    field={errors.Age}
+                    className="col-span-3 col-start-2"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  {bleeds.length > 0 && (
+                    <>
+                      <Label>
+                        Bleed<span className="text-red-500">*</span>
+                      </Label>
+                      <Form.Select
+                        defaultValue={String(horse.Bleed.ID)}
+                        valueAsNumber
+                        useForm={form}
+                        items={ToItemList(bleeds)}
+                        name="BleedID"
+                        className="col-span-3 font-extralight"
+                        placeholder="Bleed"
+                      ></Form.Select>
+                    </>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  <Label>
+                    Stable<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Select
+                    defaultValue={horse.Stable.ID}
+                    items={ToItemList(StableToList())}
+                    valueAsNumber
+                    useForm={form}
+                    name="StableID"
+                    className="col-span-3 font-extralight"
+                    placeholder="Stable"
+                  ></Form.Select>
+                  <Form.Error
+                    field={errors.StableID}
+                    className="col-span-3 col-start-2"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  {employees.length > 0 && (
+                    <>
+                      <Label>
+                        Employee<span className="text-red-500">*</span>
+                      </Label>
+                      <Form.Select
+                        defaultValue={String(horse.Employee.ID)}
+                        valueAsNumber
+                        useForm={form}
+                        items={ToItemList(empToList())}
+                        name="EmployeeID"
+                        className="col-span-3 font-extralight"
+                        placeholder="Employee"
+                      ></Form.Select>
+                    </>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1">
+                  <Label>
+                    Date<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.DatePicker
+                    defaultValue={new Date(horse.Date)}
+                    className="col-span-3 font-extralight"
+                    useForm={form}
+                    name="Date"
+                  ></Form.DatePicker>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-1 ">
+                  <Label>
+                    Image<span className="text-red-500">*</span>
+                  </Label>
+                  <Form.Input
+                    useForm={form}
+                    type="file"
+                    name="Image"
+                    accept="image/*"
+                    className="col-span-3 font-extralight "
+                    placeholder="image"
+                    defaultValue={horse.Image}
+                  />
+                </div>
+                <DialogFooter>
+                  <div className="space-x-4">
+                    <DialogClose asChild>
+                      <Button
+                        variant="secondary"
+                        className=" bg-red-500"
+                        type="reset"
+                      >
+                        Cancel
+                      </Button>
+                    </DialogClose>
+                    <Button
+                      variant="outline"
+                      type="submit"
+                      className=" bg-green-500"
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </DialogFooter>
+              </>
+            )}
+          ></Form>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default HorseEdit;
