@@ -1,7 +1,9 @@
 type Method = "GET" | "POST" | "PUT" | "DELETE";
-const base_url = import.meta.env.VITE_BACKEND_URL || "http://localhost:8985";
+const URL = import.meta.env.PROD
+  ? "https://api.khunmafarm.site"
+  : "http://localhost:8985";
 class HttpRequest {
-  private readonly base_url: string = base_url;
+  private readonly base_url: string = URL;
   private content_type = "application/json";
 
   public async Get<DataType>(resource: string) {
