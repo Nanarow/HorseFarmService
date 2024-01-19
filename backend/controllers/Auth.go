@@ -77,14 +77,14 @@ func Login(c *gin.Context) {
 		payload.Email = jwt_payload["email"].(string)
 	}
 
-	query := entity.DB().Table(data.Table).Where("email = ?", payload.Email)
+	base_query := entity.DB().Table(data.Table).Where("email = ?", payload.Email)
 	if role == "user" || role == "admin" {
-		query = query.Where("role_id = ?", data.ID)
+		base_query.Where("role_id = ?", data.ID)
 	}
 
 	if !skip {
 		// เลือกเฉพาะ email และ password จากตารางมาตรวจสอบ
-		if err := query.Select("password").First(&temp).Error; err != nil {
+		if err := entity.DB().Table(data.Table).Where("email = ?", payload.Email).Select("password").First(&temp).Error; err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -95,7 +95,7 @@ func Login(c *gin.Context) {
 		}
 	}
 
-	if err := query.First(data.Value).Error; err != nil {
+	if err := base_query.Omit("password").First(data.Value).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -112,5 +112,5 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": data.Value})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(data.Value)})
 }
