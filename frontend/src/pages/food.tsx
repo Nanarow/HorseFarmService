@@ -25,11 +25,14 @@ const Food = () => {
     if (res.ok) {
       toast({
         title: res.data,
+        variant: "success",
         duration: 1500,
       });
+      refresh
     } else {
       toast({
         title: res.error,
+        variant: "destructive",
         duration: 1500,
       });
     }

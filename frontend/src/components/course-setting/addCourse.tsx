@@ -16,8 +16,10 @@ import { Label } from "@shadcn/ui";
 import { useAuth } from "@src/providers/authProvider";
 import { CourseFormData, courseFormSchema } from "@src/validator";
 import { ToItemList } from "@src/utils";
+import { useRefresh } from "@src/hooks";
 
 const AddCourse = () => {
+  const { refresh } = useRefresh();
   const { getEmployee } = useAuth();
   const [locations, setLocations] = useState<Location[]>([]);
   async function fetchLocation() {
@@ -43,11 +45,14 @@ const AddCourse = () => {
     if (res.ok) {
       toast({
         title: res.data,
+        variant: "success",
         duration: 1500,
       });
+      refresh()
     } else {
       toast({
         title: res.error,
+        variant: "destructive",
         duration: 1500,
       });
     }
