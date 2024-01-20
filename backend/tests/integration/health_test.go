@@ -21,7 +21,7 @@ func TestCreateHealth(t *testing.T) {
 	t.Run(`Create Health Successfully`, func(t *testing.T) {
 
 		health := entity.Health{ //ครบ
-			Date:       time.Now().AddDate(0, 0, 1),
+			Date:       time.Now(),
 			HorseID:    1,
 			EmployeeID: 1,
 			Vital:      "Pass",
