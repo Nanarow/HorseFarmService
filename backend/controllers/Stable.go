@@ -15,7 +15,7 @@ func GetAllStable(c *gin.Context) {
 	var stables []entity.Stable
 
 	// get data form database and check error
-	if err := entity.DB().Joins("Employee").Omit("EmployeeID").Find(&stables).Error; err != nil {
+	if err := entity.DB().Joins("Employee").Find(&stables).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

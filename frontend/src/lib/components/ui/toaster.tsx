@@ -1,3 +1,4 @@
+import { CheckCircle2Icon, XCircleIcon } from "lucide-react";
 import {
   Toast,
   ToastClose,
@@ -17,7 +18,17 @@ export function Toaster() {
         return (
           <Toast key={id} {...props}>
             <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
+              {title && (
+                <div className="flex items-center gap-4">
+                  {props.variant === "destructive" && (
+                    <XCircleIcon className="text-[#ec4f2c] " />
+                  )}
+                  {props.variant === "success" && (
+                    <CheckCircle2Icon className="text-[#3ebe61] " />
+                  )}
+                  <ToastTitle>{title}</ToastTitle>
+                </div>
+              )}
               {description && (
                 <ToastDescription>{description}</ToastDescription>
               )}

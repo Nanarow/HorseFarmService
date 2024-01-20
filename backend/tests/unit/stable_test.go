@@ -15,8 +15,8 @@ func TestStableValidation(t *testing.T) {
 
 	t.Run(`stable success`, func(t *testing.T) {
 		stable := entity.Stable{
-			Maintenance:       	time.Now().AddDate(-1, 0, 0),
-			Cleaning:           time.Now().AddDate(-1, 0, 0),
+			Maintenance:       	time.Now(),
+			Cleaning:           time.Now(),
 			Temperature:        26,
 			Humidity:           36,
 			Description:      	"", 
@@ -32,8 +32,8 @@ func TestStableValidation(t *testing.T) {
 
 	t.Run(`test fail`, func(t *testing.T) {
 		stable := entity.Stable{
-			Maintenance:       	time.Now().AddDate(0, 0, -1),
-			Cleaning:           time.Now().AddDate(0, 0, 1), //ผิด
+			Maintenance:       	time.Now(),
+			Cleaning:           time.Now().AddDate(0, 0, -1), //ผิด
 			Temperature:        26,
 			Humidity:       	36,
 			Description:      	"", 
@@ -45,7 +45,7 @@ func TestStableValidation(t *testing.T) {
 		g.Expect(ok).NotTo(gomega.BeTrue())
 		g.Expect(err).NotTo(gomega.BeNil())
 
-		g.Expect(err.Error()).To(gomega.Equal("Cleaning must be in the past"))
+		g.Expect(err.Error()).To(gomega.Equal("Cleaning must be in the current"))
 	})
 
 	

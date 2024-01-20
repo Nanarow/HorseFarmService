@@ -33,9 +33,6 @@ function App() {
       <Route path="/login/employee" element={<Login role="employee" />} />
       <Route path="/login" element={<Login role="user" />} />
 
-      {/* <Route path="/example/form" element={<ValidateForm />} />
-      <Route path="/example/table" element={<DragDropTable />} /> */}
-
       <Route element={<PrivateRoute role={101} path="/login" />}>
         <Route path="/course" element={<Course />} />
         <Route path="/tour" element={<Tour />} />
@@ -50,13 +47,21 @@ function App() {
       </Route>
 
       <Route element={<PrivateRoute position={201} path="/login/employee" />}>
-        <Route path="/course/setting" element={<CourseSetting />} />
-        <Route path="/food" element={<Food />} />
         <Route path="/health" element={<Health />} />
+      </Route>
+
+      <Route element={<PrivateRoute position={202} path="/login/employee" />}>
+        <Route path="/course/setting" element={<CourseSetting />} />
+      </Route>
+      <Route element={<PrivateRoute position={203} path="/login/employee" />}>
+        <Route path="/horse" element={<Horse />} />
+      </Route>
+      <Route element={<PrivateRoute position={204} path="/login/employee" />}>
+        <Route path="/food" element={<Food />} />
+      </Route>
+      <Route element={<PrivateRoute position={205} path="/login/employee" />}>
         <Route path="/stable" element={<Stable />} />
         <Route path="/stable/list" element={<StableList />} />
-        <Route path="/stable" element={<Stable />} />
-        <Route path="/horse" element={<Horse />} />
       </Route>
     </Routes>
   );

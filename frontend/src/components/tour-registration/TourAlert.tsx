@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@shadcn/ui/dialog";
+import { useToast } from "@shadcn/ui/use-toast";
 import { http } from "@src/services/httpRequest";
 import { AlertTriangleIcon } from "lucide-react";
 interface Props {
@@ -14,9 +15,15 @@ interface Props {
   onCancel(): void;
 }
 const TourAlert = ({ tourID, onCancel }: Props) => {
+  const { toast } = useToast();
   async function handleCancel() {
     const res = await http.Delete("/tours", tourID);
     if (res.ok) {
+      toast({
+        title: "Cancelled",
+        description: "Your registration has been cancelled",
+        variant: "success",
+      });
       onCancel();
     }
   }
