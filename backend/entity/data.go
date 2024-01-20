@@ -80,12 +80,18 @@ func SetupData(db *gorm.DB) {
 			Email:      "emp1@emp.com",
 			Password:   "emp",
 			PositionID: 201,
+			PrecedeID: 2,
+			GenderID: 2,
+			Phone: "0988888888",
 		},
 		{
 			BaseModel:  BaseModel{ID: 2},
 			Email:      "emp2@emp.com",
 			Password:   "emp",
 			PositionID: 202,
+			PrecedeID: 1,
+			GenderID: 1,
+			Phone: "0999999999",
 		},
 	}
 	db.Create(&employees)
@@ -190,20 +196,17 @@ func SetupData(db *gorm.DB) {
 	precedes := []Precede{
 		{
 			BaseModel: BaseModel{ID: 1},
-			Name:      "นาย",
+			Name:      "Mr.",
 		},
 		{
 			BaseModel: BaseModel{ID: 2},
-			Name:      "นางสาว",
+			Name:      "Mrs.",
 		},
 		{
 			BaseModel: BaseModel{ID: 3},
-			Name:      "เด็กหญิง",
+			Name:      "Ms.",
 		},
-		{
-			BaseModel: BaseModel{ID: 4},
-			Name:      "เด็กชาย",
-		},
+		
 	}
 	db.Create(&precedes)
 

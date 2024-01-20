@@ -245,7 +245,7 @@ type Health struct {
 	Vaccine  string    `valid:"required~Vaccine is required,minstringlength(4)~Vaccine must be at least 4"`
 	Parasite string    `valid:"required~Parasite is required,minstringlength(4)~Parasite must be at least 4"`
 	Blood    string    `valid:"required~Blood is required,minstringlength(4)~Blood must be at least 4"`
-	Date     time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Date     time.Time `valid:"required~Date is required,today~Date must be in the current"`
 
 	HorseID uint
 	Horse   *Horse
