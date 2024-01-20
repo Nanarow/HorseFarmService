@@ -23,7 +23,7 @@ func TestFoodValidation(t *testing.T) {
 			Vitamin:      "20",
 			Mineral:      "20",
 			Forage:       "20",
-			Date:         time.Now().Add(time.Duration(1) * time.Hour),
+			Date:         time.Now(),
 			EmployeeID:   1,
 		}
 
@@ -41,7 +41,7 @@ func TestFoodValidation(t *testing.T) {
 			Vitamin:      "20",
 			Mineral:      "20",
 			Forage:       "",
-			Date:         time.Now().Add(time.Duration(1) * time.Hour),
+			Date:         time.Now(),
 			EmployeeID:   1,
 		}
 
