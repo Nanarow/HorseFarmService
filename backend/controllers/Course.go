@@ -2,13 +2,22 @@ package controllers
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut66/team16/backend/entity"
 	"gorm.io/gorm/clause"
 )
+
+type CourseForUpdate struct {
+	Name         string  
+	Duration     int     `valid:"required~Duration is required"`
+	Participants int     `valid:"required~Participants is required,lte=12~Participants not more than 12"`
+	Experience   float64 `valid:"required~Experience is required"`
+	Description  string
+	EmployeeID uint `valid:"required~Employee is required,refer=employees~Employee does not exist"`
+	LocationID uint `valid:"required~Location is required,refer=locations~Location does not exist"`
+}
 
 func GetAllCourses(c *gin.Context) {
 	var courses []entity.Course
@@ -55,7 +64,7 @@ func CreateCourse(c *gin.Context) {
 }
 
 func UpdateCourse(c *gin.Context) {
-	var course entity.Course
+	var course CourseForUpdate
 	id := c.Param("id")
 
 	if err := c.ShouldBindJSON(&course); err != nil {
@@ -68,14 +77,7 @@ func UpdateCourse(c *gin.Context) {
 		return
 	}
 
-	idUint, err := strconv.Atoi(id)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	course.ID = uint(idUint)
-
-	if err := entity.DB().Save(&course).Error; err != nil {
+	if err := entity.DB().Table("courses").Where("id = ?", id).Updates(&course).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

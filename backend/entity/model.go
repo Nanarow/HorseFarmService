@@ -172,7 +172,7 @@ type TourRegistration struct {
 	PlanID uint `valid:"required~Plan is required,refer=plans~Plan does not exist"`
 	Plan   *Plan
 
-	Email        string    `valid:"required~Email is required,email~Invalid email" gorm:"unique"`
+	Email        string    `valid:"required~Email is required,email~Invalid email"`
 	Participants int       `valid:"required~Participants is required,gte=8~Participants must be at least 8 "`
 	Date         time.Time `valid:"required~Date is required,future~Date must be in the future"`
 	Name         string    `gorm:"default:Tour" `
@@ -245,7 +245,7 @@ type Health struct {
 	Vaccine  string    `valid:"required~Vaccine is required,minstringlength(4)~Vaccine must be at least 4"`
 	Parasite string    `valid:"required~Parasite is required,minstringlength(4)~Parasite must be at least 4"`
 	Blood    string    `valid:"required~Blood is required,minstringlength(4)~Blood must be at least 4"`
-	Date     time.Time `valid:"required~Date is required,future~Date must be in the future"`
+	Date     time.Time `valid:"required~Date is required,today~Date must be in the current"`
 
 	HorseID uint
 	Horse   *Horse
@@ -262,7 +262,7 @@ type Food struct {
 	Vitamin      string    `valid:"required~Vitamin is required"`
 	Mineral      string    `valid:"required~Mineral is required"`
 	Forage       string    `valid:"required~Forage is required"`
-	Date         time.Time `valid:"required~Date is required,before_tomorrow~Date must be until today"`
+	Date     	 time.Time `valid:"required~Date is required,today~Date must be in the current"`
 
 	EmployeeID uint ` valid:"required~Employee is required,refer=employees~Employee does not exist"`
 	Employee   *Employee

@@ -29,6 +29,7 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
     if (res.ok) {
       toast({
         title: res.data,
+        variant: "success",
         duration: 1500,
       });
       onClick();
