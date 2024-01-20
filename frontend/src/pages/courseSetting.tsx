@@ -19,7 +19,7 @@ import CourseEdit from "@src/components/course-setting/CourseEdit";
 import { addDays, addHours } from "date-fns";
 import { Label } from "@shadcn/ui";
 import ScheduleImage from "../assets/schedulebg.jpg";
-import { LogOut, PlusIcon } from "lucide-react";
+import { LogOut, PlusIcon, XSquare } from "lucide-react";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { useAuth } from "@src/providers/authProvider";
 
@@ -105,11 +105,11 @@ const courseSetting = () => {
 
   return (
     <main className="w-full h-screen relative">
-      <Tooltip content={"Log out"}>
+      <Tooltip content={"Log out"} className="bg-white text-primary">
         <Button
           size={"icon"}
           variant={"secondary"}
-          className="absolute bottom-8 right-8 z-10"
+          className="absolute bottom-8 right-8 z-10 bg-white/50"
           onClick={logout}
         >
           <LogOut />
@@ -163,7 +163,7 @@ const courseSetting = () => {
             <TableCaption>Drag and Drop to change schedule</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[20%] border text-center text-black">
+                <TableHead className="w-[20%] border text-center text-black text-base">
                   Day
                 </TableHead>
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => {
@@ -174,7 +174,7 @@ const courseSetting = () => {
                   return (
                     <TableHead
                       key={index}
-                      className="border text-center w-[10%] text-black"
+                      className="border text-center w-[10%] text-black text-base"
                     >
                       {start_time.toTimeString().slice(0, 8)}
                     </TableHead>
@@ -191,7 +191,7 @@ const courseSetting = () => {
                   );
                   return (
                     <TableRow key={index} className="border text-center">
-                      <TableCell className=" w-[20%]">
+                      <TableCell className=" w-[20%] text-base">
                         {day.toDateString()}
                       </TableCell>
                       {[1, 2, 3, 4, 5, 6, 7, 8].map((_, time_index) => {
@@ -206,10 +206,13 @@ const courseSetting = () => {
                               onValueChange={(value) =>
                                 handleChange(start_time, value)
                               }
+                              
                               render={({ value, clear }) => (
                                 <>
+                                <div className="bg-white blur-none supports-[backdrop-filter]:bg-background/60 h-12 flex flex-col items-center text-base font-semibold">
                                   <p key={value}>{getCourseName(+value)}</p>
-                                  <button onClick={clear}>-</button>
+                                    <XSquare onClick={clear} className="text-black h-5 w-5"/>
+                                </div>
                                 </>
                               )}
                             ></DropZone>
