@@ -32,6 +32,7 @@ const StableEdit = ({ stable, onSave }: Props) => {
   ) {
     const newStable = {
       ...formData,
+      EmployeeID:stable.EmployeeID
     };
     const res = await http.Put<string>("/stables", ID, newStable);
     if (res.ok) {
