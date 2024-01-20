@@ -18,12 +18,14 @@ import { Button } from "@shadcn/ui";
 import { PencilIcon } from "lucide-react";
 import { CourseFormData, courseFormSchema } from "@src/validator";
 import { ToItemList } from "@src/utils";
+import { useAuth } from "@src/providers/authProvider";
 interface Props {
   course: Course;
   onSave(): void;
 }
 
-const CourseEdit = ({ course }: Props) => {
+const CourseEdit = ({ course, onSave }: Props) => {
+  const { getEmployee } = useAuth();
   const [locations, setLocation] = useState<Location[]>([]);
   const [open, setOpen] = useState(false);
   async function fetchLocation() {
@@ -40,9 +42,14 @@ const CourseEdit = ({ course }: Props) => {
 
   async function onValid(formData: CourseFormData) {
     console.log(formData);
+    const newCourse = {
+      ...formData,
+      EmployeeID: getEmployee().ID,
+    };
 
-    const res = await http.Post<string>("/courses", formData);
+    const res = await http.Put<string>("/courses", course.ID!, newCourse);
     if (res.ok) {
+      onSave();
       setOpen(false);
       toast({
         title: res.data,
