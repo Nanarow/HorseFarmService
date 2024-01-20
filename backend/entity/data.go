@@ -37,22 +37,27 @@ func SetupData(db *gorm.DB) {
 		{
 			BaseModel: BaseModel{ID: 201},
 			Name:      "Horse Veterinary",
+			Salary: 45000,
 		},
 		{
 			BaseModel: BaseModel{ID: 202},
 			Name:      "Horse Groomer",
+			Salary: 20000,
 		},
 		{
 			BaseModel: BaseModel{ID: 203},
 			Name:      "Horse Info Manager",
+			Salary: 32000,
 		},
 		{
 			BaseModel: BaseModel{ID: 204},
 			Name:      "Food Quality Inspector",
+			Salary: 30000,
 		},
 		{
 			BaseModel: BaseModel{ID: 205},
 			Name:      "Stable Quality Inspector",
+			Salary: 25000,
 		},
 	}
 	db.Create(&positions)
@@ -61,8 +66,10 @@ func SetupData(db *gorm.DB) {
 	employees := []Employee{
 		{
 			BaseModel:  BaseModel{ID: 1},
-			Email:      "emp1@emp.com",
-			Password:   "emp",
+			FirstName:  "Veterinary",
+			LastName:   "Veterinary",
+			Email:      "veter@veter.com",
+			Password:   "veter",
 			PositionID: 201,
 			PrecedeID: 2,
 			GenderID: 2,
@@ -70,12 +77,47 @@ func SetupData(db *gorm.DB) {
 		},
 		{
 			BaseModel:  BaseModel{ID: 2},
-			Email:      "emp2@emp.com",
-			Password:   "emp",
+			FirstName:  "Groomer",
+			LastName:   "Groomer",
+			Email:      "groom@groom.com",
+			Password:   "groom",
 			PositionID: 202,
 			PrecedeID: 1,
 			GenderID: 1,
 			Phone: "0999999999",
+		},
+		{
+			BaseModel:  BaseModel{ID: 3},
+			FirstName:  "Info",
+			LastName:   "Info",
+			Email:      "info@info.com",
+			Password:   "info",
+			PositionID: 203,
+			PrecedeID: 3,
+			GenderID: 2,
+			Phone: "0955555555",
+		},
+		{
+			BaseModel:  BaseModel{ID: 4},
+			FirstName:  "FoodQ",
+			LastName:   "FoodQ",
+			Email:      "food@food.com",
+			Password:   "food",
+			PositionID: 204,
+			PrecedeID: 2,
+			GenderID: 2,
+			Phone: "0900000000",
+		},
+		{
+			BaseModel:  BaseModel{ID: 5},
+			FirstName:  "StableQ",
+			LastName:   "StableQ",
+			Email:      "stable@stable.com",
+			Password:   "stable",
+			PositionID: 205,
+			PrecedeID: 1,
+			GenderID: 1,
+			Phone: "0922222222",
 		},
 	}
 	db.Create(&employees)
