@@ -249,4 +249,40 @@ func SetupData(db *gorm.DB) {
 
 	db.Create(&ridingLevels)
 
+	stable := []Stable{
+		{
+			BaseModel:   BaseModel{ID: 1},
+			EmployeeID:  1, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 2},
+			EmployeeID:  2, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 3},
+			EmployeeID:  3, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 4},
+			EmployeeID:  4, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 5},
+			EmployeeID:  5, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 6},
+			EmployeeID:  6, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 7},
+			EmployeeID:  7, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 8},
+			EmployeeID:  8, 
+		},
+	}
+	db.Create(&stable)
+
 }

@@ -1,3 +1,4 @@
+
 import { addDays } from "date-fns";
 import { z } from "zod";
 
@@ -159,11 +160,10 @@ export const foodFormSchema = z.object({
 export type FoodFormData = z.infer<typeof foodFormSchema>;
 
 export const stableFormSchema = z.object({
-  Maintenance: z.date().max(new Date(), "Maintenance must be in the past"),
-  Cleaning: z.date().max(new Date(), "Cleaning must be in the past"),
+  Maintenance: z.date().min(addDays(new Date(),-1),"Date must be in the current").max(new Date(), "Maintenance must be in the current"),
+  Cleaning: z.date().min(addDays(new Date(),-1),"Date must be in the current").max(new Date(), "Cleaning must be in the current"),
   Temperature: z.number({ required_error: "Temperature is required" }),
   Humidity: z.number({ required_error: "Humidity is required" }),
-  EmployeeID: z.number({ required_error: "Please select a employee" }),
   Description: z.string().optional(),
 });
 

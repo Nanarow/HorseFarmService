@@ -21,8 +21,8 @@ func TestCreateStable(t *testing.T) {
 	t.Run(`Create stable Success`, func(t *testing.T) {
 
 		stable := entity.Stable{
-			Maintenance: time.Now().AddDate(0, 0, -1),
-			Cleaning:    time.Now().AddDate(0, 0, -1),
+			Maintenance: time.Now(),
+			Cleaning:    time.Now(),
 			Temperature: 26,
 			Humidity:    36,
 			Description: "",
@@ -61,6 +61,6 @@ func TestCreateStable(t *testing.T) {
 		var respJson Response
 		json.Unmarshal(data, &respJson)
 		assert.Equal(t, http.StatusBadRequest, response.Code)
-		assert.Equal(t, "Humidity is required;Maintenance is required", respJson.Error)
+		assert.Equal(t, "Cleaning must be in the current;Humidity is required;Maintenance is required", respJson.Error)
 	})
 }

@@ -127,8 +127,8 @@ type Horse struct {
 
 type Stable struct {
 	BaseModel
-	Maintenance time.Time `valid:"required~Maintenance is required,past~Maintenance must be in the past"`
-	Cleaning    time.Time `valid:"required~Cleaning is required,past~Cleaning must be in the past"`
+	Maintenance time.Time `valid:"required~Maintenance is required,today~Maintenance must be in the current"`
+	Cleaning    time.Time `valid:"required~Cleaning is required,today~Cleaning must be in the current"`
 	Temperature float64   `valid:"required~Temperature is required"`
 	Humidity    float64   `valid:"required~Humidity is required"`
 	Description string
