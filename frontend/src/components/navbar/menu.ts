@@ -1,4 +1,5 @@
-type Role = "user" | "employee" | "admin";
+import { Role } from "@src/providers/authProvider";
+
 interface Menu {
   label: string;
   to: string;

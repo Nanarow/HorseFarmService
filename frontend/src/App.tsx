@@ -29,7 +29,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/loading/:page" element={<Loading />} />
 
-      <Route path="/login/admin" element={<Login role="admin" />} />
+      <Route path={"/login/admin"} element={<Login role="admin" />} />
       <Route path="/login/employee" element={<Login role="employee" />} />
       <Route path="/login" element={<Login role="user" />} />
 

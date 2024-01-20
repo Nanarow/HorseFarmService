@@ -6,31 +6,30 @@ type Props = {
   position?: 201 | 202 | 203 | 204 | 205;
   path: string;
 };
-
 const PrivateRoute = ({ role, position, path }: Props) => {
   const { getUser, getEmployee, isLoggedIn } = useAuth();
   const { pathname } = useLocation();
-  if (role && isLoggedIn()) {
-    if (getUser().RoleID == role) {
-      return <Outlet />;
-    } else {
-      return <Navigate to={"/home"} replace state={{ from: pathname }} />;
-    }
-  }
+  const state = { from: pathname, status: 403 };
 
-  if (position && isLoggedIn()) {
-    if (getEmployee().PositionID == position) {
-      return <Outlet />;
-    } else {
-      return <Navigate to={"/home"} replace state={{ from: pathname }} />;
-    }
-  }
-
-  return <Navigate to={path} replace state={{ from: pathname }} />;
+  return !isLoggedIn() ? (
+    <Navigate to={path} state={state} replace />
+  ) : role ? (
+    getUser().RoleID !== role ? (
+      <Navigate to={"/"} state={state} replace />
+    ) : (
+      <Outlet />
+    )
+  ) : getEmployee().PositionID !== position ? (
+    <Navigate to={"/"} state={state} replace />
+  ) : (
+    <Outlet />
+  );
 };
 
-// const PrivateRoute = ({}: Props) => {
+export default PrivateRoute;
+
+// import { Outlet } from "react-router-dom";
+// const PrivateRoute = (_: any) => {
 //   return <Outlet />;
 // };
-
-export default PrivateRoute;
+// export default PrivateRoute;

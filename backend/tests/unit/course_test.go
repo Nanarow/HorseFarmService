@@ -10,7 +10,10 @@ import (
 
 func TestCourseSettingValidation(t *testing.T) {
 	g := gomega.NewGomegaWithT(t)
-
+	emp := entity.Employee{
+		BaseModel: entity.BaseModel{ID: 1},
+	}
+	entity.DB().FirstOrCreate(&emp)
 	t.Run(`test participants`, func(t *testing.T) {
 		course := entity.Course{
 			Name:         "Level 1",
@@ -70,13 +73,13 @@ func TestCourseSettingValidation(t *testing.T) {
 
 	t.Run(`course success`, func(t *testing.T) {
 		course := entity.Course{ //ครบ
-			Name:			"Level 1",
-			Duration:		1,
-			Participants:	10, 
-			Description:	"",
-			Experience:		1,
-			EmployeeID:		1,
-			LocationID:		1, 
+			Name:         "Level 1",
+			Duration:     1,
+			Participants: 10,
+			Description:  "",
+			Experience:   1,
+			EmployeeID:   1,
+			LocationID:   1,
 		}
 
 		ok, err := govalidator.ValidateStruct(course)
@@ -87,12 +90,12 @@ func TestCourseSettingValidation(t *testing.T) {
 
 	t.Run(`course unsuccess`, func(t *testing.T) {
 		course := entity.Course{ //ไม่ครบ
-			Name:			"Level 1", 
-			Participants:	10, 
-			Description:	"",
-			Experience:		1,
-			EmployeeID:		1,
-			LocationID:		1, 
+			Name:         "Level 1",
+			Participants: 10,
+			Description:  "",
+			Experience:   1,
+			EmployeeID:   1,
+			LocationID:   1,
 		}
 
 		ok, err := govalidator.ValidateStruct(course)

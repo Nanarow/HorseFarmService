@@ -16,21 +16,25 @@ import (
 func TestCreateCourseSetting(t *testing.T) {
 	router := GetTestRouter()
 	router.POST("/courses", controllers.CreateCourse)
+	emp := entity.Employee{
+		BaseModel: entity.BaseModel{ID: 1},
+	}
+	entity.DB().Create(&emp)
 
 	t.Run(`create course success`, func(t *testing.T) {
-		course := entity.Course{ 
-			Name:			"Level 1",
-			Duration:		1,
-			Participants:	10, 
-			Description:	"",
-			Experience:		1,
-			EmployeeID:		1,
-			LocationID:		1, 
+		course := entity.Course{
+			Name:         "Level 1",
+			Duration:     1,
+			Participants: 10,
+			Description:  "",
+			Experience:   1,
+			EmployeeID:   1,
+			LocationID:   1,
 		}
 		courseJSON, _ := json.Marshal(course)
 		request, _ := http.NewRequest("POST", "/courses", bytes.NewBuffer(courseJSON))
 		request.Header.Set("Content-Type", "application/json")
-		
+
 		//Act
 		response := httptest.NewRecorder()
 		router.ServeHTTP(response, request)
@@ -46,9 +50,9 @@ func TestCreateCourseSetting(t *testing.T) {
 	})
 
 	t.Run(`create course fail`, func(t *testing.T) {
-		course := entity.Course{ 
-			Name:			"Level 1",
-			Duration:		1,
+		course := entity.Course{
+			Name:     "Level 1",
+			Duration: 1,
 		}
 		courseJSON, _ := json.Marshal(course)
 		request, _ := http.NewRequest("POST", "/courses", bytes.NewBuffer(courseJSON))

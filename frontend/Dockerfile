@@ -1,4 +1,4 @@
-FROM node:16 as builder
+FROM node:18 as builder
 WORKDIR /app
 COPY frontend ./
 RUN npm install
@@ -7,4 +7,4 @@ RUN npm run build
 FROM nginx:alpine
 COPY frontend/nginx.conf /etc/nginx/nginx.conf
 WORKDIR /usr/share/nginx/html
-COPY --from=builder /app/build .
+COPY --from=builder /app/dist .

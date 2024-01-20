@@ -10,7 +10,6 @@ import {
   TableRow,
 } from "@shadcn/ui/table";
 import { Schedule } from "@src/interfaces";
-import { addTimeToDate } from "@src/utils";
 import { useState } from "react";
 interface Course {
   id: number;
@@ -24,20 +23,20 @@ const DragDropTable = () => {
     for (let j = 0; j < 10; j++) {
       const scheduleList: Schedule[] = [];
       // hour
-      for (let i = 0; i < 8; i++) {
-        const day = addTimeToDate(new Date(new Date().setHours(0, 0, 0, 0)), {
-          days: j,
-        });
-        scheduleList.push({
-          CourseID: 0,
-          Description: "",
-          LocationID: 0,
-          Date: day,
-          StartTime: addTimeToDate(day, {
-            hours: i + 9,
-          }),
-        });
-      }
+      // for (let i = 0; i < 8; i++) {
+      //   const day = addTimeToDate(new Date(new Date().setHours(0, 0, 0, 0)), {
+      //     days: j,
+      //   });
+      //   scheduleList.push({
+      //     CourseID: 0,
+      //     Description: "",
+      //     LocationID: 0,
+      //     Date: day,
+      //     StartTime: addTimeToDate(day, {
+      //       hours: i + 9,
+      //     }),
+      //   });
+      // }
       dayList.push(scheduleList);
     }
     return dayList;

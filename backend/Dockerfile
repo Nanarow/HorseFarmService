@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine
+FROM golang:1.21.4-alpine
 
 WORKDIR /go/src/github.com/sut66/team16
 COPY backend .

@@ -3,22 +3,21 @@ import Form from "@shadcn/simplify/form";
 import { z } from "zod";
 import { Badge } from "@shadcn/ui/badge";
 import { useEffect } from "react";
-import { useAuth } from "@src/providers/authProvider";
+import { Role, useAuth } from "@src/providers/authProvider";
 import { Label } from "@shadcn/ui";
 import { cn } from "@cn/utils";
 
-interface LoginProps {
-  role: "user" | "employee" | "admin";
-}
 const validLogin = z.object({
-  Email: z.string().email("Please enter a valid email"),
+  Email: z
+    .string({ required_error: "Email is required" })
+    .email("Please enter a valid email"),
   Password: z
     .string()
     .min(2, "Password must be at least 8 characters long")
     .max(20, "Password must be at most 20 characters long"),
 });
 type TLogin = z.infer<typeof validLogin>;
-const Login = ({ role }: LoginProps) => {
+const Login = ({ role }: { role: Role }) => {
   const { handleLogin } = useAuth();
 
   async function onLogin(data?: TLogin) {

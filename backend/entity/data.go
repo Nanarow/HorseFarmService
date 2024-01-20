@@ -1,6 +1,9 @@
 package entity
 
-import "gorm.io/gorm"
+import (
+	"github.com/sut66/team16/backend/utils"
+	"gorm.io/gorm"
+)
 
 func SetupData(db *gorm.DB) {
 	var role []Role
@@ -21,32 +24,13 @@ func SetupData(db *gorm.DB) {
 	}
 	db.Create(roles)
 	// users
-	users := []User{
-		{
-			BaseModel: BaseModel{ID: 1},
-			Email:     "adm@adm.com",
-			Password:  "admin",
-			RoleID:    100,
-		}, {
-			BaseModel: BaseModel{ID: 2},
-			Email:     "u1@u.com",
-			Password:  "user",
-			RoleID:    101,
-		},
-		{
-			BaseModel: BaseModel{ID: 3},
-			Email:     "u2@u.com",
-			Password:  "user",
-			RoleID:    101,
-		},
-		{
-			BaseModel: BaseModel{ID: 4},
-			Email:     "u3@u.com",
-			Password:  "user",
-			RoleID:    101,
-		},
+	admin := User{
+		BaseModel: BaseModel{ID: 1},
+		Email:     utils.GetConfig().ADMIN_EMAIL,
+		Password:  utils.GetConfig().ADMIN_PASS,
+		RoleID:    100,
 	}
-	db.Create(&users)
+	db.Create(&admin)
 
 	// position
 	positions := []Position{

@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/sut66/team16/backend/entity"
 	"github.com/sut66/team16/backend/routers"
-	"github.com/sut66/team16/backend/utils"
 )
 
 func main() {
@@ -15,5 +14,5 @@ func main() {
 	routers.InitRouter(route)
 
 	// Run the server
-	route.Run(":" + utils.GetConfig().PORT)
+	route.Run()
 }
