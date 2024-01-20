@@ -10,7 +10,7 @@ func OmitEmpty(obj interface{}) interface{} {
 	data, _ := json.Marshal(obj)
 
 	switch v.Kind() {
-	case reflect.Struct:
+	case reflect.Struct, reflect.Map:
 		var jsonMap map[string]interface{}
 		json.Unmarshal(data, &jsonMap)
 		return parseMap(jsonMap)
@@ -18,6 +18,8 @@ func OmitEmpty(obj interface{}) interface{} {
 		var jsonArray []interface{}
 		json.Unmarshal(data, &jsonArray)
 		return parseSlice(jsonArray)
+	case reflect.Pointer:
+		return OmitEmpty(reflect.ValueOf(obj).Elem().Interface())
 	default:
 		return obj
 	}
