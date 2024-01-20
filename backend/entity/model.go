@@ -262,7 +262,7 @@ type Food struct {
 	Vitamin      string    `valid:"required~Vitamin is required"`
 	Mineral      string    `valid:"required~Mineral is required"`
 	Forage       string    `valid:"required~Forage is required"`
-	Date         time.Time `valid:"required~Date is required,today~Date must be until today"`
+	Date     	 time.Time `valid:"required~Date is required,today~Date must be in the current"`
 
 	EmployeeID uint ` valid:"required~Employee is required,refer=employees~Employee does not exist"`
 	Employee   *Employee
