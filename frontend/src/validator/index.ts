@@ -1,9 +1,7 @@
 import { z } from "zod";
 
 export const tourFormSchema = z.object({
-  Date: z
-    .date({ required_error: "Date is required" })
-    .min(new Date(), "Date must be in the future"),
+  Date: z.date({ required_error: "Date is required" }),
   Participants: z
     .number({ required_error: "Participants is required" })
     .min(8, "There must be at least 8 participants."),

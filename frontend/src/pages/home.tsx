@@ -17,7 +17,7 @@ const Home = () => {
         title: "Access Denied",
         description: "You do not have permission to access this page",
         variant: "destructive",
-        duration: 3000,
+        duration: 5000,
       });
     }
   }, []);

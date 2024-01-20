@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@shadcn/ui/dialog";
+import { useToast } from "@shadcn/ui/use-toast";
 import { useAuth } from "@src/providers/authProvider";
 import { http } from "@src/services/httpRequest";
 import { AlertCircleIcon } from "lucide-react";
@@ -22,6 +23,7 @@ const EnrollmentAlert = ({
 }) => {
   const { getUser } = useAuth();
   const [description, setDescription] = useState<string>();
+  const { toast } = useToast();
   async function handleClick() {
     const des = description
       ? {
@@ -34,9 +36,13 @@ const EnrollmentAlert = ({
       ...des,
     };
     console.log(data);
-    const res = await http.Post("/enrollments", data);
+    const res = await http.Post<string>("/enrollments", data);
     if (res.ok) {
-      // TODO: show success message
+      toast({
+        title: res.data,
+        duration: 1500,
+        variant: "success",
+      });
       onEnrolled();
     }
   }
