@@ -45,6 +45,7 @@ export interface Stable {
   Humidity: number;
   Description: string;
   Employee: Employee;
+  EmployeeID:number;
 }
 
 export interface Bleed {

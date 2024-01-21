@@ -25,11 +25,14 @@ const Food = () => {
     if (res.ok) {
       toast({
         title: res.data,
+        variant: "success",
         duration: 1500,
       });
+      refresh
     } else {
       toast({
         title: res.error,
+        variant: "destructive",
         duration: 1500,
       });
     }
@@ -44,8 +47,7 @@ const Food = () => {
           alt="Food"
         />
       </section>
-      {/* <div className="w-full h-full bg-white border backdrop-blur-none supports-[backdrop-filter]:bg-background/60"> */}
-      <Card className=" backdrop-blur-sm bg-white supports-[backdrop-filter]:bg-background/60 max-w-lg abs-center w-full">
+      <Card className=" backdrop-blur-sm bg-white supports-[backdrop-filter]:bg-background/60 max-w-lg abs-center w-full border-0">
         <div className="w-full justify-center items-center flex flex-col">
           <Label className="text-3xl font-bold text-center mt-4">
             Food Quality
@@ -118,7 +120,7 @@ const Food = () => {
                 >
                   reset
                 </p>
-                <Form.SubmitButton useForm={form} variant={"success"}>
+                <Form.SubmitButton useForm={form} className="text-white bg-black hover:text-black hover:bg-secondary">
                   Save
                 </Form.SubmitButton>
               </>
@@ -138,7 +140,6 @@ const Food = () => {
           </Button>
         </Tooltip>
       </div>
-      {/* </div> */}
     </div>
   );
 };

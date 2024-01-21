@@ -1,3 +1,4 @@
+import { useToast } from "@shadcn/ui/use-toast";
 import { Employee, User } from "@src/interfaces";
 import { http } from "@src/services/httpRequest";
 import { createContext, PropsWithChildren, useContext, useState } from "react";
@@ -32,6 +33,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const from = state?.from || "/";
+  const { toast } = useToast();
 
   const logout = async () => {
     const res = await http.Post("/logout/" + getRole(), {});
@@ -77,16 +79,44 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       const res = await http.Post<User>("/login/" + role, data || {});
       if (res.ok) {
         setUser(res.data);
+        notifySuccess("Login Successful");
         navigate(from, { replace: true });
+      } else {
+        notifyError(res.error);
       }
     } else {
       const res = await http.Post<Employee>("/login/employee", data || {});
       if (res.ok) {
         setEmployee(res.data);
+        notifySuccess("Login Successful");
         navigate(from, { replace: true });
+      } else {
+        notifyError(res.error);
       }
     }
   };
+
+  function notifyError(msg: string) {
+    if (msg == "Unauthorized") {
+      return;
+    }
+    toast({
+      title: msg === "record not found" ? "Account not found" : msg,
+      duration: 3000,
+      variant: "destructive",
+    });
+  }
+
+  function notifySuccess(msg: string) {
+    if (from !== "/") {
+      return;
+    }
+    toast({
+      title: msg,
+      duration: 3000,
+      variant: "success",
+    });
+  }
 
   return (
     <AuthContext.Provider

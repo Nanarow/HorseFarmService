@@ -53,10 +53,10 @@ func TestHorseValidation(t *testing.T) {
 		g.Expect(err.Error()).To(gomega.Equal("Bleed does not exist"))
 	})
 
-	t.Run(`test Age must be at least 0`, func(t *testing.T) {
+	t.Run(`Name is required`, func(t *testing.T) {
 		horse := entity.Horse{
-			Name:       "gigi",
-			Age:        -5, //ผิด
+			Name:       "",//ผิด
+			Age:        5,
 			Date:       time.Now().AddDate(0, 0, 1), 
 			Image:      "", 
 			EmployeeID: 1,
@@ -70,6 +70,6 @@ func TestHorseValidation(t *testing.T) {
 		g.Expect(ok).NotTo(gomega.BeTrue())
 		g.Expect(err).NotTo(gomega.BeNil())
 
-		g.Expect(err.Error()).To(gomega.Equal("Age must be at least 0"))
+		g.Expect(err.Error()).To(gomega.Equal("Name is required"))
 	})
 }

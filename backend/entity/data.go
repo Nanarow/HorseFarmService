@@ -37,25 +37,90 @@ func SetupData(db *gorm.DB) {
 		{
 			BaseModel: BaseModel{ID: 201},
 			Name:      "Horse Veterinary",
+			Salary: 45000,
 		},
 		{
 			BaseModel: BaseModel{ID: 202},
 			Name:      "Horse Groomer",
+			Salary: 20000,
 		},
 		{
 			BaseModel: BaseModel{ID: 203},
 			Name:      "Horse Info Manager",
+			Salary: 32000,
 		},
 		{
 			BaseModel: BaseModel{ID: 204},
 			Name:      "Food Quality Inspector",
+			Salary: 30000,
 		},
 		{
 			BaseModel: BaseModel{ID: 205},
 			Name:      "Stable Quality Inspector",
+			Salary: 25000,
 		},
 	}
 	db.Create(&positions)
+
+	// employee
+	employees := []Employee{
+		{
+			BaseModel:  BaseModel{ID: 1},
+			FirstName:  "Veterinary",
+			LastName:   "Veterinary",
+			Email:      "veter@veter.com",
+			Password:   "veter",
+			PositionID: 201,
+			PrecedeID: 2,
+			GenderID: 2,
+			Phone: "0988888888",
+		},
+		{
+			BaseModel:  BaseModel{ID: 2},
+			FirstName:  "Groomer",
+			LastName:   "Groomer",
+			Email:      "groom@groom.com",
+			Password:   "groom",
+			PositionID: 202,
+			PrecedeID: 1,
+			GenderID: 1,
+			Phone: "0999999999",
+		},
+		{
+			BaseModel:  BaseModel{ID: 3},
+			FirstName:  "Info",
+			LastName:   "Info",
+			Email:      "info@info.com",
+			Password:   "info",
+			PositionID: 203,
+			PrecedeID: 3,
+			GenderID: 2,
+			Phone: "0955555555",
+		},
+		{
+			BaseModel:  BaseModel{ID: 4},
+			FirstName:  "FoodQ",
+			LastName:   "FoodQ",
+			Email:      "food@food.com",
+			Password:   "food",
+			PositionID: 204,
+			PrecedeID: 2,
+			GenderID: 2,
+			Phone: "0900000000",
+		},
+		{
+			BaseModel:  BaseModel{ID: 5},
+			FirstName:  "StableQ",
+			LastName:   "StableQ",
+			Email:      "stable@stable.com",
+			Password:   "stable",
+			PositionID: 205,
+			PrecedeID: 1,
+			GenderID: 1,
+			Phone: "0922222222",
+		},
+	}
+	db.Create(&employees)
 
 	// tour type data
 	tourTypes := []TourType{
@@ -157,20 +222,17 @@ func SetupData(db *gorm.DB) {
 	precedes := []Precede{
 		{
 			BaseModel: BaseModel{ID: 1},
-			Name:      "นาย",
+			Name:      "Mr.",
 		},
 		{
 			BaseModel: BaseModel{ID: 2},
-			Name:      "นางสาว",
+			Name:      "Mrs.",
 		},
 		{
 			BaseModel: BaseModel{ID: 3},
-			Name:      "เด็กหญิง",
+			Name:      "Ms.",
 		},
-		{
-			BaseModel: BaseModel{ID: 4},
-			Name:      "เด็กชาย",
-		},
+		
 	}
 	db.Create(&precedes)
 
@@ -228,5 +290,41 @@ func SetupData(db *gorm.DB) {
 	}
 
 	db.Create(&ridingLevels)
+
+	stable := []Stable{
+		{
+			BaseModel:   BaseModel{ID: 1},
+			EmployeeID:  1, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 2},
+			EmployeeID:  2, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 3},
+			EmployeeID:  3, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 4},
+			EmployeeID:  4, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 5},
+			EmployeeID:  5, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 6},
+			EmployeeID:  6, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 7},
+			EmployeeID:  7, 
+		},
+		{
+			BaseModel:   BaseModel{ID: 8},
+			EmployeeID:  8, 
+		},
+	}
+	db.Create(&stable)
 
 }

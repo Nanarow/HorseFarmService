@@ -1,9 +1,11 @@
+
+import { addDays } from "date-fns";
 import { z } from "zod";
 
 export const tourFormSchema = z.object({
   Date: z
     .date({ required_error: "Date is required" })
-    .min(new Date(), "Date must be in the future"),
+    .min(new Date(), "Date must be future"),
   Participants: z
     .number({ required_error: "Participants is required" })
     .min(8, "There must be at least 8 participants."),
@@ -64,7 +66,10 @@ export const healthFormSchema = z.object({
   Vaccine: z.string().min(4, "Vaccine must be at least 4 characters"),
   Parasite: z.string().min(4, "Parasite must be at least 4 characters"),
   Blood: z.string().min(4, "Blood must be at least 4 characters"),
-  Date: z.date().min(new Date(), "Date must be in the future"),
+  Date: z
+    .date()
+    .min(addDays(new Date(), -1), "Date must be in the current")
+    .max(new Date(), "Date must be in the current"),
   HorseID: z.number({ required_error: "Please select a horse" }),
   EmployeeID: z.number({ required_error: "Please select a employee" }),
 });
@@ -146,17 +151,19 @@ export const foodFormSchema = z.object({
   Vitamin: z.string({ required_error: "Vitamin is required" }),
   Mineral: z.string({ required_error: "Mineral is required" }),
   Forage: z.string({ required_error: "Forage is required" }),
-  Date: z.date().max(new Date(), "Date must be until today"),
+  Date: z
+    .date()
+    .min(addDays(new Date(), -1), "Date must be in the current")
+    .max(new Date(), "Date must be in the current"),
 });
 
 export type FoodFormData = z.infer<typeof foodFormSchema>;
 
 export const stableFormSchema = z.object({
-  Maintenance: z.date().max(new Date(), "Maintenance must be in the past"),
-  Cleaning: z.date().max(new Date(), "Cleaning must be in the past"),
+  Maintenance: z.date().min(addDays(new Date(),-1),"Date must be in the current").max(new Date(), "Maintenance must be in the current"),
+  Cleaning: z.date().min(addDays(new Date(),-1),"Date must be in the current").max(new Date(), "Cleaning must be in the current"),
   Temperature: z.number({ required_error: "Temperature is required" }),
   Humidity: z.number({ required_error: "Humidity is required" }),
-  EmployeeID: z.number({ required_error: "Please select a employee" }),
   Description: z.string().optional(),
 });
 
