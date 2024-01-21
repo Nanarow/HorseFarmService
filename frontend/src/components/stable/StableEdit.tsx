@@ -48,7 +48,7 @@ const StableEdit = ({ stable, onSave }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
-        className="place-self-auto object-center rounded-none p-14 mt-14"
+        className="place-self-auto object-center rounded-none mt-14 "
       >
         <Card className="text-center">stable{stable.ID}</Card>
       </DialogTrigger>
