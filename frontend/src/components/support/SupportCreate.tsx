@@ -31,7 +31,7 @@ const SupportCreate = () => {
   }
 
   return (
-    <div className="flex lg justify-center items-center w-full h-with-nav">
+    <div className="flex flex-col lg:flex-row justify-center items-center w-full h-with-nav">
       <img
         src={bg17}
         className="w-full h-full abs-center object-cover rounded"
@@ -39,16 +39,16 @@ const SupportCreate = () => {
       />
       <img
         src={qrCode}
-        className="w-[260px] flex relative object-cover rounded mr-10"
+        className="w-[260px] flex relative object-cover rounded lg:mr-10"
         alt="QRcode"
       />
-      <Card className=" w-[350px] lg relative">
+      <Card className=" w-[350px] relative mt-5 ">
         <CardHeader>
           <CardTitle>Support Details</CardTitle>
         </CardHeader>
         <CardContent>
           <Form
-            className="w-full lg flex flex-col gap-4"
+            className="w-full flex flex-col gap-4 lg:"
             validator={supportFormSchema}
             onValid={onValid}
             onInvalid={(errorFields) => console.log(errorFields)}
