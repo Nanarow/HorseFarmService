@@ -5,6 +5,7 @@ import { useToast } from "@shadcn/ui/use-toast";
 import { useAuth } from "@src/providers/authProvider";
 import { SupportFormData, supportFormSchema } from "@src/validator";
 import qrCode from "../../assets/QRCode.jpg";
+import bg17 from "../../assets/bg17.jpg";
 
 const SupportCreate = () => {
   const { toast } = useToast();
@@ -30,19 +31,24 @@ const SupportCreate = () => {
   }
 
   return (
-    <div className="flex justify-center items-center w-full h-with-nav">
+    <div className="flex lg justify-center items-center w-full h-with-nav">
+      <img
+        src={bg17}
+        className="w-full h-full abs-center object-cover rounded"
+        alt="background"
+      />
       <img
         src={qrCode}
-        className="w-[250px] object-cover rounded mr-20"
+        className="w-[260px] flex relative object-cover rounded mr-10"
         alt="QRcode"
       />
-      <Card className=" w-[350px]">
+      <Card className=" w-[350px] lg relative">
         <CardHeader>
           <CardTitle>Support Details</CardTitle>
         </CardHeader>
         <CardContent>
           <Form
-            className="flex flex-col gap-4"
+            className="w-full lg flex flex-col gap-4"
             validator={supportFormSchema}
             onValid={onValid}
             onInvalid={(errorFields) => console.log(errorFields)}
@@ -52,7 +58,7 @@ const SupportCreate = () => {
                   useForm={form}
                   name="Corporate"
                   type="text"
-                  placeholder="Corporate"
+                  placeholder="Name"
                 />
                 <Form.Input
                   useForm={form}
@@ -68,7 +74,10 @@ const SupportCreate = () => {
                   placeholder="Name"
                 />
                 <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
-                <Form.SubmitButton useForm={form}>
+                <Form.SubmitButton 
+                useForm={form}
+                className="justify-self-center w-full max-w-lg lg:col-start-2"
+                >
                   Give support
                 </Form.SubmitButton>
               </>

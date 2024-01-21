@@ -56,10 +56,10 @@ type RidingLevel struct {
 
 type Support struct {
 	BaseModel
-	Corporate   string    `valid:"required~Corporate is required"`
+	Name  string    
 	Description string    `valid:"required~Description is required"`
 	Date        time.Time `valid:"required~Date is required,before_tomorrow~Date must before tomorrow"`
-	Image       string    `gorm:"type:longtext"`
+	Bill       string    `gorm:"type:longtext"`
 
 	UserID uint
 	User   *User

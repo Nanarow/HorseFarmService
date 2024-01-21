@@ -7,7 +7,7 @@ import { ToItemList } from "@src/utils";
 import { UserFormData, userFormSchema } from "@src/validator";
 import { Separator } from "@shadcn/ui/separator";
 
-const UserPage = () => {
+const UserCreate = () => {
   const { toast } = useToast();
   const [genders, setGender] = useState<Gender[]>([]);
   const [ridingLevels, setRidingLevel] = useState<RidingLevel[]>([]);
@@ -142,4 +142,4 @@ const UserPage = () => {
     />
   );
 };
-export default UserPage;
+export default UserCreate;

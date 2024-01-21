@@ -14,7 +14,7 @@ func TestSupportValidation(t *testing.T) {
 
 	t.Run(`test date must before tomorrow`, func(t *testing.T) {
 		support := entity.Support{
-			Corporate: "ooo",
+			Name: "ooo",
 			Description: "ppp",
 			Date:     time.Now().Add(time.Duration(48) * time.Hour), //ผิดตรงนี้
 		}

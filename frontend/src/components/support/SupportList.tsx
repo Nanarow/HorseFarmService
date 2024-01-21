@@ -54,7 +54,7 @@ const SupportList = () => {
               render={(support) => (
                 <TableRow>
                   <TableCell className=" w-[6%] text-center">
-                    {support.Corporate}
+                    {support.Name}
                   </TableCell>
                   <TableCell className=" w-[10%] text-center">
                     {support.Description}

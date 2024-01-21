@@ -21,7 +21,7 @@ func TestCreateSupport(t *testing.T) {
 	t.Run(`created support success`, func(t *testing.T) {
 		support := entity.Support{
 			Date:        time.Now(),
-			Corporate:   "popo",
+			Name:   "popo",
 			Description: "my sup",
 		}
 		userJSON, _ := json.Marshal(support)
@@ -59,7 +59,7 @@ func TestCreateSupport(t *testing.T) {
 
 		var respJson Response
 		json.Unmarshal(data, &respJson)
-		assert.Equal(t, "Corporate is required;Description is required", respJson.Error)
+		assert.Equal(t, "Description is required", respJson.Error)
 
 	})
 }

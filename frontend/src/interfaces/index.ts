@@ -78,7 +78,7 @@ export interface Support {
   ID: number;
   UserID: number;
   User: User;
-  Corporate: string;
+  Name: string;
   Description: string;
   Date: Date;
   Bill: string;
