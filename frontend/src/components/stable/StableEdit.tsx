@@ -32,7 +32,7 @@ const StableEdit = ({ stable, onSave }: Props) => {
   ) {
     const newStable = {
       ...formData,
-      EmployeeID:stable.EmployeeID
+      EmployeeID: stable.EmployeeID,
     };
     const res = await http.Put<string>("/stables", ID, newStable);
     if (res.ok) {
@@ -41,15 +41,14 @@ const StableEdit = ({ stable, onSave }: Props) => {
       toast({
         title: res.data,
         duration: 1500,
+        variant: "success",
       });
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        className="place-self-auto object-center rounded-none mt-14 "
-      >
+      <DialogTrigger className="place-self-auto object-center rounded-none mt-14 ">
         <Card className="text-center">stable{stable.ID}</Card>
       </DialogTrigger>
       <DialogContent className="w-full">
@@ -134,11 +133,7 @@ const StableEdit = ({ stable, onSave }: Props) => {
                   type="text"
                 />
               </div>
-              <Button
-                variant="success"
-                type="submit"
-                
-              >
+              <Button variant="success" type="submit">
                 Save
               </Button>
             </>

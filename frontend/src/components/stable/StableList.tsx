@@ -40,7 +40,7 @@ const StableList = () => {
             <TableHead className="w-[13%] text-center">Maintenance</TableHead>
             <TableHead className="w-[13%] text-center">Cleaning</TableHead>
             <TableHead className="w-[13%] text-center">Temperature</TableHead>
-            <TableHead className="w-[13%] text-center">Huminity</TableHead>
+            <TableHead className="w-[13%] text-center">Humidity</TableHead>
             <TableHead className="w-[22%] text-center">Description</TableHead>
             <TableHead className="w-[11%] text-center">Edit</TableHead>
           </TableRow>

@@ -8,6 +8,7 @@ import (
 	"github.com/sut66/team16/backend/entity"
 )
 
+// comment for commit
 func TestEnrollValidation(t *testing.T) {
 	g := gomega.NewGomegaWithT(t)
 

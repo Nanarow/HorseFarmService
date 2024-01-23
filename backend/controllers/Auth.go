@@ -10,28 +10,28 @@ import (
 
 var role_data = map[string]struct {
 	ID        uint
-	Value     any
+	Value     func() interface{}
 	Table     string
 	TokenName string
 	Hour      int
 }{
 	"user": {
 		ID:        101,
-		Value:     &entity.User{},
+		Value:     func() interface{} { return &entity.User{} },
 		Table:     "users",
 		TokenName: "utk",
 		Hour:      24 * 7,
 	},
 	"admin": {
 		ID:        100,
-		Value:     &entity.User{},
+		Value:     func() interface{} { return &entity.User{} },
 		Table:     "users",
 		TokenName: "atk",
 		Hour:      24,
 	},
 	"employee": {
 		ID:        200,
-		Value:     &entity.Employee{},
+		Value:     func() interface{} { return &entity.Employee{} },
 		Table:     "employees",
 		TokenName: "etk",
 		Hour:      24,
@@ -79,7 +79,7 @@ func Login(c *gin.Context) {
 
 	base_query := entity.DB().Table(data.Table).Where("email = ?", payload.Email)
 	if role == "user" || role == "admin" {
-		base_query.Where("role_id = ?", data.ID)
+		base_query = base_query.Where("role_id = ?", data.ID)
 	}
 
 	if !skip {
@@ -94,8 +94,9 @@ func Login(c *gin.Context) {
 			return
 		}
 	}
+	value := data.Value()
 
-	if err := base_query.Omit("password").First(data.Value).Error; err != nil {
+	if err := base_query.Omit("password").First(value).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -112,5 +113,5 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(data.Value)})
+	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(value)})
 }

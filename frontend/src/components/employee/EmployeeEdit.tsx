@@ -66,6 +66,7 @@ const EmployeeEdit = ({ employees, onSave }: Props) => {
       toast({
         title: res.data,
         duration: 1500,
+        variant: "success",
       });
     }
   }

@@ -52,7 +52,7 @@ func GenerateJWT(token_name string, c *gin.Context, email string, hour int) erro
 		return err
 	}
 
-	c.SetCookie(token_name, token_string, 3600*hour, "", "", true, true)
+	c.SetCookie(token_name, token_string, 3600*hour, "", GetConfig().ORIGIN, true, true)
 	return nil
 }
 
@@ -67,6 +67,6 @@ func SetActiveJWT(c *gin.Context, token_name string, hour int) error {
 	if err != nil {
 		return err
 	}
-	c.SetCookie("token", token_string, 3600*hour, "", "", true, true)
+	c.SetCookie("token", token_string, 3600*hour, "", GetConfig().ORIGIN, true, true)
 	return nil
 }

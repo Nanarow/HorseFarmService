@@ -32,14 +32,20 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const [employee, setEmployee] = useState<Employee>();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const from = state?.from || "/";
+  const from: string = state?.from || "/";
   const { toast } = useToast();
 
   const logout = async () => {
-    const res = await http.Post("/logout/" + getRole(), {});
+    const r = getRole();
+    const res = await http.Post("/logout/" + r, {});
     if (res.ok) {
       setEmployee(undefined);
       setUser(undefined);
+      if (r !== "user") {
+        navigate(`/login/${r}`, { replace: true });
+        return;
+      }
+      navigate("/login", { replace: true });
     }
   };
 
@@ -89,6 +95,17 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       if (res.ok) {
         setEmployee(res.data);
         notifySuccess("Login Successful");
+        if (from !== "/") {
+          const position: Record<number, string> = {
+            201: "/health",
+            202: "/course/setting",
+            203: "/horse",
+            204: "/food",
+            205: "/stable",
+          };
+          navigate(position[res.data.PositionID], { replace: true });
+          return;
+        }
         navigate(from, { replace: true });
       } else {
         notifyError(res.error);

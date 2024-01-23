@@ -43,6 +43,7 @@ const HealthPage = () => {
       toast({
         title: res.data,
         duration: 1500,
+        variant: "success",
       });
     }
   }
@@ -213,4 +214,4 @@ const HealthPage = () => {
     </div>
   );
 };
-export default  HealthPage;
+export default HealthPage;

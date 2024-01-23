@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { Role, useAuth } from "@src/providers/authProvider";
 import { Label } from "@shadcn/ui";
 import { cn } from "@cn/utils";
+import BG from "../assets/bg11.jpg";
 
 const validLogin = z.object({
   Email: z
@@ -29,11 +30,12 @@ const Login = ({ role }: { role: Role }) => {
   }, []);
 
   return (
-    <div className="w-full h-screen bg-secondary flex flex-col justify-center items-center gap-2">
-      <h1 className="text-3xl font-black text-primary mb-4 animate-tracking-in-expand">
+    <div className="w-full h-screen bg-secondary flex flex-col justify-center items-center gap-2 relative">
+      <img className=" object-cover absolute w-full h-full" src={BG} />
+      <p className="text-4xl font-black text-primary mb-4 animate-tracking-in-expand z-10 -mt-12">
         KhunMa Farm
-      </h1>
-      <Card className="flex flex-col w-3/4 max-w-sm relative">
+      </p>
+      <Card className="flex flex-col w-3/4 max-w-sm relative ">
         <CardHeader>
           <CardTitle className="text-lg font-bold text-primary text-center ">
             Log in

@@ -56,6 +56,7 @@ const EmployeeCreateDialog = ({ onCreated }: { onCreated: () => void }) => {
       toast({
         title: res.data,
         duration: 1500,
+        variant: "success",
       });
       onCreated();
       setOpen(false);

@@ -54,11 +54,13 @@ const CourseEdit = ({ course, onSave }: Props) => {
       toast({
         title: res.data,
         duration: 1500,
+        variant: "success",
       });
     } else {
       toast({
         title: res.error,
         duration: 1500,
+        variant: "destructive",
       });
     }
   }
