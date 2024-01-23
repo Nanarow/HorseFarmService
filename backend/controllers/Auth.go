@@ -50,7 +50,7 @@ func Logout(c *gin.Context) {
 		return
 	}
 	data := role_data[role]
-	c.SetCookie(data.TokenName, "", -1, "/", "localhost", false, true)
+	c.SetCookie(data.TokenName, "", -1, "/", utils.GetConfig().ORIGIN, false, true)
 	c.JSON(http.StatusOK, gin.H{"data": "you have been logged out"})
 }
 
