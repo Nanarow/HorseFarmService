@@ -30,9 +30,7 @@ const AddCourse = () => {
     }
   }
   useEffect(() => {
-    return () => {
-      fetchLocation();
-    };
+    fetchLocation();
   }, []);
 
   async function onValid(formData: CourseFormData) {
@@ -48,7 +46,7 @@ const AddCourse = () => {
         variant: "success",
         duration: 1500,
       });
-      refresh()
+      refresh();
     } else {
       toast({
         title: res.error,
@@ -80,7 +78,7 @@ const AddCourse = () => {
               placeholder="Type Course Name"
               className="w-full"
             />
-            <Form.Error field={errors.Name}/>
+            <Form.Error field={errors.Name} />
             <Label>
               Duration<span className="text-red-500">*</span>
             </Label>
@@ -91,7 +89,7 @@ const AddCourse = () => {
               placeholder="Type Duration"
               className="w-full"
             />
-            <Form.Error field={errors.Duration}/>
+            <Form.Error field={errors.Duration} />
             <Label>
               Participants<span className="text-red-500">*</span>
             </Label>
@@ -102,7 +100,7 @@ const AddCourse = () => {
               placeholder="Type Participants"
               className="w-full"
             />
-            <Form.Error field={errors.Participants}/>
+            <Form.Error field={errors.Participants} />
             <Label>Description</Label>
             <Form.Input
               useForm={form}
@@ -121,7 +119,7 @@ const AddCourse = () => {
               placeholder="Type Experience"
               className="w-full"
             />
-            <Form.Error field={errors.Experience}/>
+            <Form.Error field={errors.Experience} />
             {locations.length > 0 && (
               <>
                 <Label>
@@ -134,7 +132,7 @@ const AddCourse = () => {
                   name="LocationID"
                   placeholder="Select Location"
                 ></Form.Select>
-                <Form.Error field={errors.LocationID}/>
+                <Form.Error field={errors.LocationID} />
               </>
             )}
           </>

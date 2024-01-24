@@ -35,9 +35,7 @@ const CourseEdit = ({ course, onSave }: Props) => {
     }
   }
   useEffect(() => {
-    return () => {
-      fetchLocation();
-    };
+    fetchLocation();
   }, []);
 
   async function onValid(formData: CourseFormData) {

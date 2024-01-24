@@ -1,57 +1,54 @@
-#dino {
-  width: 50px;
-  height: 50px;
-  background-image: url(../../assets/bg11.jpg);
-  background-size: 50px 50px;
-  position: relative;
-  top: 150px;
+#horse {
+  background-image: url("../../assets/horse.png");
 }
 
 .jump {
-  animation: jump 0.3s linear;
+  animation-name: jump;
+  animation-duration: 0.6s;
+  animation-timing-function: ease-in-out;
 }
 
 @keyframes jump {
   0% {
-    top: 150px;
+    bottom: 0px;
+    transform: rotate(0deg);
   }
 
-  30% {
-    top: 130px;
+  25% {
+    transform: rotate(-10deg);
   }
-
   50% {
-    top: 80px;
+    bottom: 128px;
+    transform: rotate(-20deg);
   }
 
-  80% {
-    top: 130px;
+  75% {
+    transform: rotate(10deg);
   }
 
   100% {
-    top: 150px;
+    bottom: 0px;
+    transform: rotate(0deg);
   }
 }
 
-#cactus {
-  width: 20px;
-  height: 40px;
-  position: relative;
-  top: 110px;
-  left: 580px;
+#hay {
+  background-image: url("../../assets/hay.png");
+}
 
-  background-image: url("../../assets/bg13.jpg");
-  background-size: 20px 40px;
-
-  animation: block 2s infinite linear;
+#hay {
+  animation-name: block;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 @keyframes block {
   0% {
-    left: 580px;
+    left: 90%;
   }
 
   100% {
-    left: -5px;
+    left: 0%;
   }
 }
