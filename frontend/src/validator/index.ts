@@ -1,4 +1,3 @@
-
 import { addDays } from "date-fns";
 import { z } from "zod";
 
@@ -110,10 +109,10 @@ export const userUpdateFormSchema = z.object({
 export type UserUpdateFormData = z.infer<typeof userUpdateFormSchema>;
 
 export const supportFormSchema = z.object({
-  Corporate: z.string().min(1, "Corporate is required"),
+  Name: z.string().optional(),
   Description: z.string().min(1, "Description is required"),
   Date: z.date().max(new Date(), "Date must be in the past"),
-  Image: z.string(),
+  Bill: z.string().min(1, "Bill is required"),
 });
 
 export type SupportFormData = z.infer<typeof supportFormSchema>;
@@ -152,7 +151,7 @@ export const foodFormSchema = z.object({
   Mineral: z.string({ required_error: "Mineral is required" }),
   Forage: z.string({ required_error: "Forage is required" }),
   Date: z
-    .date()
+    .date({ required_error: "Date is required" })
     .min(addDays(new Date(), -1), "Date must be in the current")
     .max(new Date(), "Date must be in the current"),
 });
@@ -160,8 +159,14 @@ export const foodFormSchema = z.object({
 export type FoodFormData = z.infer<typeof foodFormSchema>;
 
 export const stableFormSchema = z.object({
-  Maintenance: z.date().min(addDays(new Date(),-1),"Date must be in the current").max(new Date(), "Maintenance must be in the current"),
-  Cleaning: z.date().min(addDays(new Date(),-1),"Date must be in the current").max(new Date(), "Cleaning must be in the current"),
+  Maintenance: z
+    .date()
+    .min(addDays(new Date(), -1), "Date must be in the current")
+    .max(new Date(), "Maintenance must be in the current"),
+  Cleaning: z
+    .date()
+    .min(addDays(new Date(), -1), "Date must be in the current")
+    .max(new Date(), "Cleaning must be in the current"),
   Temperature: z.number({ required_error: "Temperature is required" }),
   Humidity: z.number({ required_error: "Humidity is required" }),
   Description: z.string().optional(),

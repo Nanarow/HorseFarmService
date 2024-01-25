@@ -17,7 +17,6 @@ import {
 } from "./pages";
 import PrivateRoute from "./components/privateRoute";
 import UserList from "./components/user/UserList";
-import StableList from "./components/stable/StableList";
 import SupportList from "./components/support/SupportList";
 import useWindowError from "./hooks/useWindowError";
 
@@ -61,7 +60,6 @@ function App() {
       </Route>
       <Route element={<PrivateRoute position={205} path="/login/employee" />}>
         <Route path="/stable" element={<Stable />} />
-        <Route path="/stable/list" element={<StableList />} />
       </Route>
     </Routes>
   );

@@ -14,9 +14,10 @@ func TestSupportValidation(t *testing.T) {
 
 	t.Run(`test date must before tomorrow`, func(t *testing.T) {
 		support := entity.Support{
-			Name: "ooo",
+			Name:        "ooo",
 			Description: "ppp",
-			Date:     time.Now().Add(time.Duration(48) * time.Hour), //ผิดตรงนี้
+			Date:        time.Now().Add(time.Duration(48) * time.Hour), //ผิดตรงนี้
+			Bill:        "data",
 		}
 
 		ok, err := govalidator.ValidateStruct(support)

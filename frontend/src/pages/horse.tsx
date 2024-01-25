@@ -282,13 +282,9 @@ const HorsePage = () => {
                 <DialogFooter>
                   <div className="space-x-4">
                     <DialogClose asChild>
-                      <Button variant="destructive" type="reset">
-                        Cancel
-                      </Button>
+                      <Form.SubmitButton useForm={form} variant="destructive" type="reset">Cancel</Form.SubmitButton>
                     </DialogClose>
-                    <Button variant={"success"} type="submit">
-                      Save
-                    </Button>
+                    <Form.SubmitButton useForm={form} variant={"success"} type="submit">Save</Form.SubmitButton>
                   </div>
                 </DialogFooter>
               </>

@@ -40,8 +40,8 @@ const SupportList = () => {
           <TableHeader>
             <TableRow>
               {/* <TableHead className="w-[10%] text-center">CreateDate</TableHead> */}
-              <TableHead className="w-[12%] text-center">Corporate</TableHead>
-              <TableHead className="w-[12%] text-center">Description</TableHead>
+              <TableHead className="w-[6%] text-center">Name</TableHead>
+              <TableHead className="w-[10%] text-center">Description</TableHead>
               <TableHead className="w-[8%] text-center">Date</TableHead>
               <TableHead className="w-[8%] text-center hidden md:table-cell">
                 Bill

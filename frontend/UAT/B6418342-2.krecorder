@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<title>B6418342-sprint2</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3" data-tags="">success</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:5173/food<datalist><option>http://localhost:5173/food</option></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//button[@type='button']<datalist><option>xpath=//button[@type='button']</option><option>xpath=//div[@id='root']/div/div/div/form/button</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='*'])[1]/following::button[1]</option><option>xpath=//button</option></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//div[@id='radix-:r9:']/div/div/div/table/tbody/tr[4]/td[5]/button<datalist><option>xpath=//div[@id='radix-:r9:']/div/div/div/table/tbody/tr[4]/td[5]/button</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Sa'])[1]/following::button[26]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Fr'])[1]/following::button[26]</option><option>xpath=//*/text()[normalize-space(.)='25']/parent::*</option><option>xpath=//tr[4]/td[5]/button</option></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//input[@value='']<datalist><option>xpath=//input[@value='']</option><option>xpath=//div[@id='root']/div/div/div/form/input</option><option>xpath=//input</option></datalist></td><td></td></tr>
+<tr><td>type</td><td>xpath=//input[@value='']<datalist><option>xpath=//input[@value='']</option><option>xpath=//div[@id='root']/div/div/div/form/input</option><option>xpath=//input</option></datalist></td><td>20</td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/div/div/div/form/input[2]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[2]</option><option>xpath=//input[2]</option></datalist></td><td></td></tr>
+<tr><td>type</td><td>xpath=//div[@id='root']/div/div/div/form/input[2]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[2]</option><option>xpath=//input[2]</option></datalist></td><td>45</td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/div/div/div/form/input[3]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[3]</option><option>xpath=//input[3]</option></datalist></td><td></td></tr>
+<tr><td>type</td><td>xpath=//div[@id='root']/div/div/div/form/input[3]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[3]</option><option>xpath=//input[3]</option></datalist></td><td>50</td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/div/div/div/form/input[4]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[4]</option><option>xpath=//input[4]</option></datalist></td><td></td></tr>
+<tr><td>type</td><td>xpath=//div[@id='root']/div/div/div/form/input[4]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[4]</option><option>xpath=//input[4]</option></datalist></td><td>45</td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/div/div/div/form/input[5]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[5]</option><option>xpath=//input[5]</option></datalist></td><td></td></tr>
+<tr><td>type</td><td>xpath=//div[@id='root']/div/div/div/form/input[5]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[5]</option><option>xpath=//input[5]</option></datalist></td><td>30</td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/div/div/div/form/input[6]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[6]</option><option>xpath=//input[6]</option></datalist></td><td></td></tr>
+<tr><td>type</td><td>xpath=//div[@id='root']/div/div/div/form/input[6]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[6]</option><option>xpath=//input[6]</option></datalist></td><td>50</td></tr>
+<tr><td>click</td><td>xpath=//button[@type='submit']<datalist><option>xpath=//button[@type='submit']</option><option>xpath=//div[@id='root']/div/div/div/form/button[2]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='*'])[7]/following::button[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Katalon Recorder is recording ...'])[1]/preceding::button[2]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Stop'])[1]/preceding::button[2]</option><option>xpath=//*/text()[normalize-space(.)='Save']/parent::*</option><option>xpath=//button[2]</option></datalist></td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//div[@id='root']/div[2]/ol/li<datalist><option>xpath=//div[@id='root']/div[2]/ol/li</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Save'])[1]/following::li[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='*'])[7]/following::li[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Katalon Recorder is recording ...'])[1]/preceding::li[1]</option><option>xpath=//li</option></datalist></td><td>food successfully</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3" data-tags="">unsuccess</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:5173/food<datalist><option>http://localhost:5173/food</option></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//button[@type='button']<datalist><option>xpath=//button[@type='button']</option><option>xpath=//div[@id='root']/div/div/div/form/button</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='*'])[1]/following::button[1]</option><option>xpath=//button</option></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//div[@id='radix-:r5:']/div/div/div/table/tbody/tr[4]/td[5]/button<datalist><option>xpath=//div[@id='radix-:r5:']/div/div/div/table/tbody/tr[4]/td[5]/button</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Sa'])[1]/following::button[26]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Fr'])[1]/following::button[26]</option><option>xpath=//*/text()[normalize-space(.)='25']/parent::*</option><option>xpath=//tr[4]/td[5]/button</option></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//input[@value='']<datalist><option>xpath=//input[@value='']</option><option>xpath=//div[@id='root']/div/div/div/form/input</option><option>xpath=//input</option></datalist></td><td></td></tr>
+<tr><td>type</td><td>xpath=//input[@value='']<datalist><option>xpath=//input[@value='']</option><option>xpath=//div[@id='root']/div/div/div/form/input</option><option>xpath=//input</option></datalist></td><td>25</td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/div/div/div/form/input[2]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[2]</option><option>xpath=//input[2]</option></datalist></td><td></td></tr>
+<tr><td>type</td><td>xpath=//div[@id='root']/div/div/div/form/input[2]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[2]</option><option>xpath=//input[2]</option></datalist></td><td>30</td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/div/div/div/form/input[3]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[3]</option><option>xpath=//input[3]</option></datalist></td><td></td></tr>
+<tr><td>type</td><td>xpath=//div[@id='root']/div/div/div/form/input[3]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[3]</option><option>xpath=//input[3]</option></datalist></td><td>43</td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/div/div/div/form/input[4]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[4]</option><option>xpath=//input[4]</option></datalist></td><td></td></tr>
+<tr><td>type</td><td>xpath=//div[@id='root']/div/div/div/form/input[4]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[4]</option><option>xpath=//input[4]</option></datalist></td><td>40</td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/div/div/div/form/input[5]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[5]</option><option>xpath=//input[5]</option></datalist></td><td></td></tr>
+<tr><td>type</td><td>xpath=//div[@id='root']/div/div/div/form/input[5]<datalist><option>xpath=//div[@id='root']/div/div/div/form/input[5]</option><option>xpath=//input[5]</option></datalist></td><td>44</td></tr>
+<tr><td>click</td><td>xpath=//button[@type='submit']<datalist><option>xpath=//button[@type='submit']</option><option>xpath=//div[@id='root']/div/div/div/form/button[2]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='*'])[7]/following::button[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Katalon Recorder is recording ...'])[1]/preceding::button[2]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Stop'])[1]/preceding::button[2]</option><option>xpath=//*/text()[normalize-space(.)='Save']/parent::*</option><option>xpath=//button[2]</option></datalist></td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//div[@id='root']/div/div/div/form/div/p<datalist><option>xpath=//div[@id='root']/div/div/div/form/div/p</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='*'])[7]/following::p[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Save'])[1]/preceding::p[2]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Katalon Recorder is recording ...'])[1]/preceding::p[2]</option><option>xpath=//*/text()[normalize-space(.)='Forage is required']/parent::*</option><option>xpath=//p</option><option>css=p.text-sm.text-end</option></datalist></td><td>Forage is required</td></tr>
+</tbody></table>
+</body>
+</html>

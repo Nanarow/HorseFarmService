@@ -160,13 +160,13 @@ func GetAllPrecede(c *gin.Context) {
 	// create variable for store data as type of Precede array
 	var precedes []entity.Precede
 
-	// get data form database and check error
+	// get data form database and check error 400
 	if err := entity.DB().Find(&precedes).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// response data
+	// response data 200 OmitEmpty ไม่เอาช่องว่างจากตาราง precedes
 	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(precedes)})
 }
 

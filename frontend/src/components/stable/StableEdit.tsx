@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { Button } from "@shadcn/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +15,7 @@ import { useToast } from "@shadcn/ui/use-toast";
 import { Stable } from "@src/interfaces";
 import { stableFormSchema } from "@src/validator";
 import { Card } from "@shadcn/ui/card";
+import st1 from "../../assets/st1.jpg";
 
 interface Props {
   stable: Stable;
@@ -32,7 +32,7 @@ const StableEdit = ({ stable, onSave }: Props) => {
   ) {
     const newStable = {
       ...formData,
-      EmployeeID: stable.EmployeeID,
+      EmployeeID: stable.EmployeeID
     };
     const res = await http.Put<string>("/stables", ID, newStable);
     if (res.ok) {
@@ -48,18 +48,23 @@ const StableEdit = ({ stable, onSave }: Props) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="place-self-auto object-center rounded-none mt-14 ">
-        <Card className="text-center">stable{stable.ID}</Card>
+      <DialogTrigger className="place-self-auto object-center mt-10">
+        <Card className="rounded-none border-4 border-orange-100 text-center text-l p-28 relative m-5">
+          <div
+            className="absolute right-0 left-0 top-0 bottom-0 bg-cover bg-center text-white"
+            style={{ backgroundImage: `url(${st1})`, width: '100%', height: '100%' }}
+          ><div className="mt-44 mr-36 text-lg bg-black ">STABLE {stable.ID}</div></div>
+        </Card>
       </DialogTrigger>
       <DialogContent className="w-full">
         <DialogHeader>
-          <DialogTitle>Edit Stable Information</DialogTitle>
+          <DialogTitle>Edit Stable</DialogTitle>
           <DialogDescription>
             Make changes to your stable here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <Form
-          className="grid gap-5 mt-2"
+          className="grid gap-5 mt-3"
           validator={stableFormSchema}
           onValid={(data) => onEditValid(data, stable.ID)}
           onInvalid={(data) => console.log(data)}
@@ -133,9 +138,9 @@ const StableEdit = ({ stable, onSave }: Props) => {
                   type="text"
                 />
               </div>
-              <Button variant="success" type="submit">
-                Save
-              </Button>
+              <div className="text-right mr-12">
+                <Form.SubmitButton useForm={form}>Save</Form.SubmitButton>
+              </div>
             </>
           )}
         ></Form>
