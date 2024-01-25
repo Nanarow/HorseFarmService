@@ -67,6 +67,7 @@ const SupportCreate = () => {
                   type="text"
                   placeholder="Description"
                 />
+                <Form.Error field={errors.Bill}></Form.Error>
                 <Form.Input
                   useForm={form}
                   name="Bill"
