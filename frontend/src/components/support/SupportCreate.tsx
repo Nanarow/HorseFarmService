@@ -53,7 +53,7 @@ const SupportCreate = () => {
             validator={supportFormSchema}
             onValid={onValid}
             onInvalid={(errorFields) => console.log(errorFields)}
-            fields={({ form }) => (
+            fields={({ form, errors }) => (
               <>
                 <Form.Input
                   useForm={form}
@@ -74,6 +74,7 @@ const SupportCreate = () => {
                   accept="image/*"
                   placeholder="Name"
                 />
+                <Form.Error field={errors.Bill}></Form.Error>
                 <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
                 <Form.SubmitButton
                   useForm={form}
