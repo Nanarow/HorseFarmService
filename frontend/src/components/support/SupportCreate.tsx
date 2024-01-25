@@ -57,7 +57,7 @@ const SupportCreate = () => {
               <>
                 <Form.Input
                   useForm={form}
-                  name="Corporate"
+                  name="Name"
                   type="text"
                   placeholder="Name"
                 />
@@ -69,7 +69,7 @@ const SupportCreate = () => {
                 />
                 <Form.Input
                   useForm={form}
-                  name="Image"
+                  name="Bill"
                   type="file"
                   accept="image/*"
                   placeholder="Name"
