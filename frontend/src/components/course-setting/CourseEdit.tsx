@@ -35,9 +35,7 @@ const CourseEdit = ({ course, onSave }: Props) => {
     }
   }
   useEffect(() => {
-    return () => {
-      fetchLocation();
-    };
+    fetchLocation();
   }, []);
 
   async function onValid(formData: CourseFormData) {
@@ -54,11 +52,13 @@ const CourseEdit = ({ course, onSave }: Props) => {
       toast({
         title: res.data,
         duration: 1500,
+        variant: "success",
       });
     } else {
       toast({
         title: res.error,
         duration: 1500,
+        variant: "destructive",
       });
     }
   }

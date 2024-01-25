@@ -56,10 +56,10 @@ type RidingLevel struct {
 
 type Support struct {
 	BaseModel
-	Name  string    
+	Name        string
 	Description string    `valid:"required~Description is required"`
 	Date        time.Time `valid:"required~Date is required,before_tomorrow~Date must before tomorrow"`
-	Bill       string    `gorm:"type:longtext"`
+	Bill        string    `gorm:"type:longtext"`
 
 	UserID uint
 	User   *User
@@ -262,7 +262,7 @@ type Food struct {
 	Vitamin      string    `valid:"required~Vitamin is required"`
 	Mineral      string    `valid:"required~Mineral is required"`
 	Forage       string    `valid:"required~Forage is required"`
-	Date     	 time.Time `valid:"required~Date is required,today~Date must be in the current"`
+	Date         time.Time `valid:"required~Date is required,today~Date must be in the current"`
 
 	EmployeeID uint ` valid:"required~Employee is required,refer=employees~Employee does not exist"`
 	Employee   *Employee

@@ -1,0 +1,54 @@
+#horse {
+  background-image: url("../../assets/horse.png");
+}
+
+.jump {
+  animation-name: jump;
+  animation-duration: 0.6s;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes jump {
+  0% {
+    bottom: 0px;
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    bottom: 128px;
+    transform: rotate(-20deg);
+  }
+
+  75% {
+    transform: rotate(10deg);
+  }
+
+  100% {
+    bottom: 0px;
+    transform: rotate(0deg);
+  }
+}
+
+#hay {
+  background-image: url("../../assets/hay.png");
+}
+
+#hay {
+  animation-name: block;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes block {
+  0% {
+    left: 90%;
+  }
+
+  100% {
+    left: 0%;
+  }
+}

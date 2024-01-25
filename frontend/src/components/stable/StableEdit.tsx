@@ -41,6 +41,7 @@ const StableEdit = ({ stable, onSave }: Props) => {
       toast({
         title: res.data,
         duration: 1500,
+        variant: "success",
       });
     }
   }

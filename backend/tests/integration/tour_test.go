@@ -14,6 +14,7 @@ import (
 	"github.com/sut66/team16/backend/entity"
 )
 
+// comment for commit
 func TestCreateTour(t *testing.T) {
 	router := GetTestRouter()
 	router.POST("/tours", controllers.CreateTour)

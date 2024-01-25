@@ -20,6 +20,7 @@ const SupportCreate = () => {
       toast({
         title: res.data,
         duration: 1500,
+        variant: "success",
       });
     } else {
       toast({
@@ -74,9 +75,9 @@ const SupportCreate = () => {
                   placeholder="Name"
                 />
                 <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
-                <Form.SubmitButton 
-                useForm={form}
-                className="justify-self-center w-full max-w-lg lg:col-start-2"
+                <Form.SubmitButton
+                  useForm={form}
+                  className="justify-self-center w-full max-w-lg lg:col-start-2"
                 >
                   Give support
                 </Form.SubmitButton>

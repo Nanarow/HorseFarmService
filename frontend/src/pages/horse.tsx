@@ -88,6 +88,7 @@ const HorsePage = () => {
       toast({
         title: res.data,
         duration: 1500,
+        variant: "success",
       });
     } else {
       toast({
