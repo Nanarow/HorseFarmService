@@ -264,13 +264,14 @@ const HorseEdit = ({ horse, onSave }: Props) => {
                         Cancel
                       </Button>
                     </DialogClose>
-                    <Button
+                    <Form.SubmitButton
+                      useForm={form}
                       variant="outline"
                       type="submit"
                       className=" bg-green-500"
                     >
                       Save
-                    </Button>
+                    </Form.SubmitButton>
                   </div>
                 </DialogFooter>
               </>
