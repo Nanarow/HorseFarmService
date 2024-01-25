@@ -110,10 +110,10 @@ export const userUpdateFormSchema = z.object({
 export type UserUpdateFormData = z.infer<typeof userUpdateFormSchema>;
 
 export const supportFormSchema = z.object({
-  Corporate: z.string().min(1, "Corporate is required"),
+  Name: z.string().min(1, "Corporate is required"),
   Description: z.string().min(1, "Description is required"),
   Date: z.date().max(new Date(), "Date must be in the past"),
-  Image: z.string(),
+  Bill: z.string(),
 });
 
 export type SupportFormData = z.infer<typeof supportFormSchema>;
@@ -152,7 +152,7 @@ export const foodFormSchema = z.object({
   Mineral: z.string({ required_error: "Mineral is required" }),
   Forage: z.string({ required_error: "Forage is required" }),
   Date: z
-    .date()
+    .date({ required_error: "Date is required" })
     .min(addDays(new Date(), -1), "Date must be in the current")
     .max(new Date(), "Date must be in the current"),
 });

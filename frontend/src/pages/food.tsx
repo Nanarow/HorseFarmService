@@ -28,7 +28,7 @@ const Food = () => {
         variant: "success",
         duration: 1500,
       });
-      refresh
+      refresh();
     } else {
       toast({
         title: res.error,
