@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<title>B6408985-Sprint-2</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3" data-tags="">enroll_success</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:5173/course<datalist><option>http://localhost:5173/course</option></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/main/section/div/table/tbody/tr/td[5]/div/button<datalist><option>xpath=//div[@id='root']/main/section/div/table/tbody/tr/td[5]/div/button</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Enroll'])[1]/following::button[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Sat Jan 27 2024'])[1]/preceding::button[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Sun Jan 28 2024'])[1]/preceding::button[1]</option><option>xpath=//td[5]/div/button</option></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//button[@type='submit']<datalist><option>xpath=//button[@type='submit']</option><option>xpath=//div[@id='radix-:rp:']/div[2]/button[2]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='No, Cancel'])[1]/following::button[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Description'])[1]/following::button[2]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Close'])[1]/preceding::button[1]</option><option>xpath=//*/text()[normalize-space(.)='Yes, Enroll']/parent::*</option><option>xpath=//div[4]/div[2]/button[2]</option></datalist></td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//div[@id='root']/div/ol/li/div/div/div<datalist><option>xpath=//div[@id='root']/div/ol/li/div/div/div</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Thu Feb 01 2024'])[1]/following::div[4]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Wed Jan 31 2024'])[1]/following::div[4]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Katalon Recorder is recording ...'])[1]/preceding::div[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Stop'])[1]/preceding::div[2]</option><option>xpath=//*/text()[normalize-space(.)='enrollment successfully']/parent::*</option><option>xpath=//div/div/div</option></datalist></td><td>enrollment successfully</td></tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3" data-tags="">enroll_cancel</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>http://localhost:5173/course<datalist><option>http://localhost:5173/course</option></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/main/section/div/table/tbody/tr[4]/td[7]/div/button<datalist><option>xpath=//div[@id='root']/main/section/div/table/tbody/tr[4]/td[7]/div/button</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Mon Jan 29 2024'])[1]/following::button[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Tue Jan 30 2024'])[1]/preceding::button[1]</option><option>xpath=//td[7]/div/button</option></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//div[@id='radix-:rt:']/div[2]/button<datalist><option>xpath=//div[@id='radix-:rt:']/div[2]/button</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Description'])[1]/following::button[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Are you sure absolutely sure?'])[1]/following::button[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Yes, Enroll'])[1]/preceding::button[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Close'])[1]/preceding::button[2]</option><option>xpath=//*/text()[normalize-space(.)='No, Cancel']/parent::*</option><option>xpath=//div[4]/div[2]/button</option></datalist></td><td></td></tr>
+<tr><td>click</td><td>xpath=//div[@id='root']/main/section/div/table/tbody/tr[4]/td[7]/div/button<datalist><option>xpath=//div[@id='root']/main/section/div/table/tbody/tr[4]/td[7]/div/button</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Mon Jan 29 2024'])[1]/following::button[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Tue Jan 30 2024'])[1]/preceding::button[1]</option><option>xpath=//td[7]/div/button</option></datalist></td><td></td></tr>
+<tr><td>assertText</td><td>id=radix-:ru:<datalist><option>id=radix-:ru:</option><option>xpath=//h2[@id='radix-:ru:']</option><option>xpath=//div[@id='radix-:rt:']/div/h2</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Stop'])[1]/following::h2[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Katalon Recorder is recording ...'])[1]/following::h2[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='Description'])[1]/preceding::h2[1]</option><option>xpath=(.//*[normalize-space(text()) and normalize-space(.)='No, Cancel'])[1]/preceding::h2[1]</option><option>xpath=//*/text()[normalize-space(.)='Are you sure absolutely sure?']/parent::*</option><option>xpath=//h2</option></datalist></td><td>Are you sure absolutely sure?</td></tr>
+</tbody></table>
+</body>
+</html>

@@ -1,8 +1,10 @@
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 const Loading = () => {
-  const { page } = useParams();
-  return <Navigate to={`/${page}`}></Navigate>;
+  const {
+    state: { from },
+  } = useLocation();
+  return <Navigate to={`${from}`}></Navigate>;
 };
 
 export default Loading;

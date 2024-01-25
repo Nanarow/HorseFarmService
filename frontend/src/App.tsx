@@ -27,7 +27,7 @@ function App() {
     <Routes>
       <Route path="/*" element={<NoPage />} />
       <Route path="/" element={<Home />} />
-      <Route path="/loading/:page" element={<Loading />} />
+      <Route path="/loading" element={<Loading />} />
 
       <Route path={"/login/admin"} element={<Login role="admin" />} />
       <Route path="/login/employee" element={<Login role="employee" />} />

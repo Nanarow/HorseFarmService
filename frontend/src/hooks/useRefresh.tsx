@@ -4,8 +4,9 @@ const useRefresh = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const refresh = () => {
-    navigate("/loading" + location.pathname, {
+    navigate("/loading", {
       replace: true,
+      state: { from: location.pathname },
     });
   };
   return { refresh };

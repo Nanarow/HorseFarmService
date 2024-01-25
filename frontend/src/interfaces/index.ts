@@ -23,7 +23,7 @@ export interface TourType {
 export interface Enrollment {
   ID: number;
   UserID: number;
-  Schedule: Schedule;
+  Schedule?: Schedule;
 }
 export interface Horse {
   ID: number;
@@ -45,7 +45,7 @@ export interface Stable {
   Humidity: number;
   Description: string;
   Employee: Employee;
-  EmployeeID:number;
+  EmployeeID: number;
 }
 
 export interface Bleed {
@@ -151,6 +151,7 @@ export interface Course {
   Experience: number;
   EmployeeID: number;
   LocationID: number;
+  Location: Location;
 }
 
 export interface Schedule {

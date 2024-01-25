@@ -33,9 +33,9 @@ const Course = () => {
           alt="Tour"
         />
         <Table className=" border rounded-md overflow-hidden">
-          <TableHeader className=" rounded border bg-white">
+          <TableHeader className=" rounded border bg-secondary">
             <TableRow>
-              <TableHead className=" text-center text-primary">
+              <TableHead className=" text-center text-secondary-foreground">
                 Day/Time
               </TableHead>
               {Array.from({ length: 8 }).map((_, index) => {
@@ -45,7 +45,7 @@ const Course = () => {
                 return (
                   <TableHead
                     key={index}
-                    className=" text-center w-[10%] border text-primary"
+                    className=" text-center w-[10%] border text-secondary-foreground"
                   >
                     {start_time.toTimeString().slice(0, 5)} -{" "}
                     {end_time.toTimeString().slice(0, 5)}
@@ -60,15 +60,20 @@ const Course = () => {
                 const day = addDays(new Date().setHours(0, 0, 0, 0), index + 1);
                 return (
                   <TableRow key={index} className="border text-center rounded">
-                    <TableCell>{day.toDateString()}</TableCell>
+                    <TableCell className="bg-muted/50">
+                      {day.toDateString()}
+                    </TableCell>
                     {Array.from({ length: 8 }).map((_, time_index) => {
                       const start_time = addHours(day, time_index + 9);
+                      const sc = getSchedule(start_time);
                       return (
                         <TableCell
                           key={time_index}
-                          className="border w-[10%] h-20 rounded"
+                          className={`border w-[10%] h-20 rounded ${
+                            sc ? "bg-muted/50" : ""
+                          }`}
                         >
-                          <ScheduleItem schedule={getSchedule(start_time)} />
+                          <ScheduleItem schedule={sc} />
                         </TableCell>
                       );
                     })}
