@@ -308,22 +308,7 @@ func SetupData(db *gorm.DB) {
 			BaseModel:   BaseModel{ID: 4},
 			EmployeeID:  4, 
 		},
-		{
-			BaseModel:   BaseModel{ID: 5},
-			EmployeeID:  5, 
-		},
-		{
-			BaseModel:   BaseModel{ID: 6},
-			EmployeeID:  6, 
-		},
-		{
-			BaseModel:   BaseModel{ID: 7},
-			EmployeeID:  7, 
-		},
-		{
-			BaseModel:   BaseModel{ID: 8},
-			EmployeeID:  8, 
-		},
+	
 	}
 	db.Create(&stable)
 
