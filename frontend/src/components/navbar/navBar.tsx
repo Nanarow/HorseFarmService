@@ -13,6 +13,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menus } from "./menu";
 import { cn } from "@cn/utils";
 import Each from "../each";
+import { ModeToggle } from "../modeToggle";
 
 const NavBar = () => {
   const { getRole } = useAuth();
@@ -46,6 +47,7 @@ const NavBar = () => {
         </div>
 
         <div className="flex justify-end w-[10%] items-center">
+          <ModeToggle />
           <AccountDropdownWithMenu />
         </div>
       </div>

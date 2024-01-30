@@ -11,12 +11,34 @@ import (
 func GetAllSchedules(c *gin.Context) {
 	var schedules []entity.Schedule
 
-	if err := entity.DB().Joins("Course").Find(&schedules).Error; err != nil {
+	if err := entity.DB().Joins("Course").Joins("Course.Location").Find(&schedules).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(schedules)})
+}
+
+func GetAllSchedulesWithEnrollments(c *gin.Context) {
+	var schedules []entity.Schedule
+
+	if err := entity.DB().Select("id").Preload("Enrollments").Find(&schedules).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	type ScheduleWithEnrollments struct {
+		ScheduleID      uint
+		EnrollmentCount int
+	}
+	var schList []ScheduleWithEnrollments
+	for _, v := range schedules {
+		schList = append(schList, ScheduleWithEnrollments{
+			ScheduleID:      v.ID,
+			EnrollmentCount: len(v.Enrollments),
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": schList})
 }
 
 func GetSchedule(c *gin.Context) {

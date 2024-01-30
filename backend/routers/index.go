@@ -40,6 +40,7 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 	// enrollment system
 	route.GET("/enrollments/user/:id", user, controllers.GetAllEnrollmentsOfUser)
 	route.POST("/enrollments", user, controllers.CreateEnrollment)
+	route.GET("/schedules/enrollments", user, controllers.GetAllSchedulesWithEnrollments)
 
 	// User account management
 	route.GET("/users", controllers.GetAllUser)

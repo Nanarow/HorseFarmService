@@ -37,7 +37,7 @@ const Home = () => {
               KhunMa Farm
             </p>
             <video
-              className=" w-full h-full object-cover rounded-md z-10"
+              className=" w-full h-full object-cover rounded-md z-10 "
               autoPlay
               loop
               muted
@@ -47,7 +47,7 @@ const Home = () => {
               className=" absolute bottom-4 right-4"
               onClick={() => setShowGame(true)}
             >
-              {"🤚Don't Click ❗"}
+              {"🤚Don't Click❗"}
             </Button>
           </>
         )}

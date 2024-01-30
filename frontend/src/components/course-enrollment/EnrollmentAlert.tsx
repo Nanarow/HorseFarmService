@@ -65,9 +65,6 @@ const EnrollmentAlert = ({
           <DialogTitle>Are you sure absolutely sure?</DialogTitle>
           <Label className=" mt-4">Description</Label>
           <Textarea value={description} onChange={handle}></Textarea>
-          {/* <DialogDescription>
-            This action cannot be undone. This will cancel your registration
-          </DialogDescription> */}
         </DialogHeader>
         <DialogFooter className="sm:justify-between">
           <DialogClose asChild>

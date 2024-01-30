@@ -8,11 +8,12 @@ const ScheduleItem = ({ schedule }: { schedule: Schedule | undefined }) => {
     return;
   }
 
-  const { enrollments, fetchUserEnrollments } = useEnrollment();
+  const { enrollments, fetchUserEnrollments, getEnrollmentCountByScheduleID } =
+    useEnrollment();
 
   const isEnrolled = () => {
     for (let i = 0; i < enrollments.length; i++) {
-      if (enrollments[i].Schedule.ID === schedule.ID) {
+      if (enrollments[i].Schedule?.ID === schedule.ID) {
         return true;
       }
     }
@@ -20,8 +21,15 @@ const ScheduleItem = ({ schedule }: { schedule: Schedule | undefined }) => {
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      {schedule.Course.Name}
+    <div className="flex flex-col gap-2 ">
+      <div className="flex justify-between items-center">
+        <p>{schedule.Course.Name}</p>
+        <p>
+          {getEnrollmentCountByScheduleID(schedule.ID)}
+          {" / "}
+          {schedule.Course.Participants}
+        </p>
+      </div>
       {isEnrolled() && enrollments ? (
         <ScheduleDetails schedule={schedule} />
       ) : (

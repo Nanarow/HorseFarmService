@@ -10,10 +10,16 @@ const ScheduleDetails = ({ schedule }: { schedule: Schedule }) => {
           Enrolled
         </Button>
       </PopoverTrigger>
-      <PopoverContent>
-        {schedule.Course.Name}
-        <br />
-        {new Date(schedule.StartTime).toLocaleString()}
+      <PopoverContent className="grid grid-cols-3">
+        <p className=" font-bold">{schedule.Course.Name}</p>
+        <p className=" col-start-3 text-end">
+          {"exp:  "}
+          {schedule.Course.Experience}
+        </p>
+        <p className=" col-span-2 text-sm">
+          {new Date(schedule.StartTime).toLocaleString()}
+        </p>
+        <p className=" text-sm text-end">{schedule.Course.Location.Name}</p>
       </PopoverContent>
     </Popover>
   );

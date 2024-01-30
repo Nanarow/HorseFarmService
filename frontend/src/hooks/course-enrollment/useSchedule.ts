@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 const useSchedule = () => {
   const [schedules, setSchedules] = useState<Schedule[]>();
+
   useEffect(() => {
     async function fetchSchedules() {
       const res = await http.Get<Schedule[]>("/schedules");

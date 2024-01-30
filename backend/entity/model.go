@@ -59,7 +59,7 @@ type Support struct {
 	Name        string
 	Description string    `valid:"required~Description is required"`
 	Date        time.Time `valid:"required~Date is required,before_tomorrow~Date must before tomorrow"`
-	Bill        string    `gorm:"type:longtext"`
+	Bill        string    `valid:"required~Bill is required" gorm:"type:longtext"`
 
 	UserID uint
 	User   *User
