@@ -14,6 +14,7 @@ import { Menus } from "./menu";
 import { cn } from "@cn/utils";
 import Each from "../each";
 import { ModeToggle } from "../modeToggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@shadcn/ui/avatar";
 
 const NavBar = () => {
   const { getRole } = useAuth();
@@ -46,7 +47,7 @@ const NavBar = () => {
           }
         </div>
 
-        <div className="flex justify-end w-[10%] items-center">
+        <div className="flex justify-end w-max items-center gap-2">
           <ModeToggle />
           <AccountDropdownWithMenu />
         </div>
@@ -59,18 +60,37 @@ export default NavBar;
 
 const AccountDropdownWithMenu = () => {
   const { logout, getRole, isLoggedIn, getEmployee, getUser } = useAuth();
+  const login = isLoggedIn();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={"icon"} variant={"ghost"}>
+        <Button
+          size={"icon"}
+          variant={"ghost"}
+          className={login ? " sm:rounded-full z-100" : ""}
+        >
           <MenuIcon className="sm:hidden" />
-          <User className="hidden sm:block" />
+          {!login && <User className="hidden sm:block" />}
+          {login && (
+            <Avatar className="hidden sm:flex border-2 border-primary">
+              <AvatarImage
+                src={getRole() === "employee" ? "" : getUser().Profile}
+              />
+              <AvatarFallback>
+                {getRole() === "employee"
+                  ? getEmployee().FirstName.charAt(0).toUpperCase() +
+                    getEmployee().LastName.charAt(0).toUpperCase()
+                  : getUser().FirstName.charAt(0).toUpperCase() +
+                    getUser().LastName.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          )}
         </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-56 mt-[14px] mr-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ">
         <DropdownMenuLabel>
-          {isLoggedIn()
+          {login
             ? (getRole() === "employee"
                 ? getEmployee().FirstName
                 : getUser().FirstName) || "Name"
@@ -98,7 +118,7 @@ const AccountDropdownWithMenu = () => {
 
         <DropdownMenuSeparator className="sm:hidden" />
 
-        {isLoggedIn() ? (
+        {login ? (
           <DropdownMenuItem
             onClick={logout}
             className={cn(
