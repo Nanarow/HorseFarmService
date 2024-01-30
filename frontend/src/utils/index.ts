@@ -1,4 +1,5 @@
 import { ItemList } from "@shadcn/simplify/form";
+import { ReactNode } from "react";
 
 export function FileToBase64(file: Blob | File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -97,12 +98,12 @@ export function urlToEmbed(url: string) {
 
 export function ToItemList<T extends { ID: number; Name?: string }>(
   items: T[],
-  callbackName?: (item: T) => string
+  callbackName?: (item: T) => ReactNode
 ) {
   return items.map((item) => {
     const newItem: ItemList = {
       value: item.ID,
-      label: item.Name || `label ${item.ID}`,
+      label: item.Name,
     };
     if (callbackName) {
       newItem.label = callbackName(item);
