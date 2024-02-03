@@ -41,14 +41,15 @@ const StablePage = () => {
         </div>
       </div>
       <div className="absolute right-10 bottom-10 w-8 h-8 cursor-pointer">
-        <Tooltip content={"Log Out"} className="bg-white text-primary">
+        <Tooltip 
+          content={"Log Out"} 
+          className="bg-white text-primary">
           <Button
             variant={"secondary"}
             onClick={logout}
             size={"icon"}
             className=" bg-white-500"
-          >
-            <LogOut />
+          ><LogOut />
           </Button>
         </Tooltip>
       </div>
