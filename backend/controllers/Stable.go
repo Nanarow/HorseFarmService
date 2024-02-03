@@ -24,10 +24,38 @@ func GetAllStable(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(stables)})
 }
 
+// POST/stables
+func CreateStable(c *gin.Context) {
+	// create variable for store data as type of horse
+	var stable entity.Stable
+
+	// get data from body and check error
+	if err := c.ShouldBindJSON(&stable); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// validate struct
+	if _, err := govalidator.ValidateStruct(stable); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// create data in database and check error
+	if err := entity.DB().Create(&stable).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// response created data
+	c.JSON(http.StatusCreated, gin.H{"data": "stable successfully"})
+}
+
 // PUT/stables/:id
 func UpdateStable(c *gin.Context) {
 	// create variable for store data as type of TourRegistration
 	var stable entity.Stable
+	
 	// get id from url
 	id := c.Param("id")
 
