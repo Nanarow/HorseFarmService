@@ -94,6 +94,5 @@ func initRequiredAuthRouter(route *gin.RouterGroup) {
 
 	// stable management system
 	route.GET("/stables", controllers.GetAllStable)
-	route.POST("/stables", controllers.CreateStable)
 	route.PUT("/stables/:id", controllers.UpdateStable)
 }
