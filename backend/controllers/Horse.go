@@ -13,14 +13,14 @@ import (
 )
 
 type HorseUpdate struct {
-	Name       string
+	Name       string `gorm:"default:Horse" valid:"required~Name is required"`
 	Date       time.Time
 	Image      string `gorm:"type:longtext"`
 	Age        int    `valid:"required~Age is required,gte=0~Age must be at least 0"`
 	EmployeeID uint   `valid:"required~Employee is required,refer=employees~Employee does not exist"`
 	BleedID    uint   `valid:"required~Bleed is required,refer=bleeds~Bleed does not exist"`
-	SexID      uint
-	StableID   uint `valid:"required~Stable is required,refer=stables~Stable does not exist"`
+	SexID      uint   `valid:"required~Sex is required,refer=sexes~Sex does not exist"`
+	StableID   uint   `valid:"required~Stable is required,refer=stables~Stable does not exist"`
 }
 
 // GET /horses
@@ -37,25 +37,6 @@ func GetAllHorse(c *gin.Context) {
 	//response data
 	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(horses)})
 }
-
-// unused
-// GET /horses/:id
-// func GetHorse(c *gin.Context) {
-// 	// create variable for store data as type of Horse
-// 	var horse entity.Horse
-
-// 	//get id from url
-// 	id := c.Param("eid")
-
-// 	// get data form database and check error
-// 	if err := entity.DB().preload(clause.Associations).First(&horse, id).Error; err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	//response data
-// 	c.JSON(http.StatusOK, gin.H{"data": horse})
-// }
 
 // POST /horses
 func CreateHorse(c *gin.Context) {
