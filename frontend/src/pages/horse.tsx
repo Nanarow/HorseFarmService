@@ -114,9 +114,7 @@ const HorsePage = () => {
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button variant={"success"} className="w-36 ml-4 -mt-4">
-              ADD+
-            </Button>
+            <Button variant={"success"} className="w-36 ml-4 -mt-4">ADD+</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -330,17 +328,16 @@ const HorsePage = () => {
                 </div>
               </Card>
             ))}
-
         </div>
         <div className="absolute right-10 bottom-10 w-8 h-8 cursor-pointer">
-          <Tooltip content={"Log Out"} className="bg-white text-primary">
+          <Tooltip 
+            content={"Log Out"} 
+            className="bg-white text-primary">
             <Button
               variant={"secondary"}
               onClick={logout}
               size={"icon"}
-              className=" bg-white-500"
-            >
-              <LogOut />
+              className=" bg-white-500"><LogOut />
             </Button>
           </Tooltip>
         </div>
