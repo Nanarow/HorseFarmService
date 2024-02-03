@@ -32,61 +32,64 @@ const SupportCreate = () => {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row justify-center items-center w-full h-with-nav">
+    <div className="flex justify-center items-center w-full h-with-nav">
+      {/* className="flex flex-col lg:flex-row justify-center items-center w-full h-with-nav" */}
       <img
         src={bg17}
         className="w-full h-full abs-center object-cover rounded"
         alt="background"
       />
-      <img
-        src={qrCode}
-        className="w-[260px] flex relative object-cover rounded lg:mr-10"
-        alt="QRcode"
-      />
-      <Card className=" w-[350px] relative mt-5 ">
-        <CardHeader>
-          <CardTitle>Support Details</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Form
-            className="w-full flex flex-col gap-4 lg:"
-            validator={supportFormSchema}
-            onValid={onValid}
-            onInvalid={(errorFields) => console.log(errorFields)}
-            fields={({ form, errors }) => (
-              <>
-                <Form.Input
-                  useForm={form}
-                  name="Name"
-                  type="text"
-                  placeholder="Name"
-                />
-                <Form.Input
-                  useForm={form}
-                  name="Description"
-                  type="text"
-                  placeholder="Description"
-                />
-                <Form.Error field={errors.Bill}></Form.Error>
-                <Form.Input
-                  useForm={form}
-                  name="Bill"
-                  type="file"
-                  accept="image/*"
-                  placeholder="Name"
-                />
-                <Form.Error field={errors.Bill}></Form.Error>
-                <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
-                <Form.SubmitButton
-                  useForm={form}
-                  className="justify-self-center w-full max-w-lg lg:col-start-2"
-                >
-                  Give support
-                </Form.SubmitButton>
-              </>
-            )}
-          />
-        </CardContent>
+      <Card className=" flex flex-col w-[380px] lg:flex-row lg:w-[600px] relative mt-5 justify-center items-center">
+        <img
+          src={qrCode}
+          className="w-[180px] mt-5 flex relative object-cover rounded lg:w-[260px] lg:mt-0 lg:ml-7"
+          alt="QRcode"
+        />
+        <div>
+          <CardHeader>
+            <CardTitle>Support Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Form
+              className="w-full flex flex-col gap-4 lg:"
+              validator={supportFormSchema}
+              onValid={onValid}
+              onInvalid={(errorFields) => console.log(errorFields)}
+              fields={({ form, errors }) => (
+                <>
+                  <Form.Input
+                    useForm={form}
+                    name="Name"
+                    type="text"
+                    placeholder="Name"
+                  />
+                  <Form.Input
+                    useForm={form}
+                    name="Description"
+                    type="text"
+                    placeholder="Description"
+                  />
+                  <Form.Error field={errors.Bill}></Form.Error>
+                  <Form.Input
+                    useForm={form}
+                    name="Bill"
+                    type="file"
+                    accept="image/*"
+                    placeholder="Name"
+                  />
+                  <Form.Error field={errors.Bill}></Form.Error>
+                  <Form.DatePicker useForm={form} name="Date"></Form.DatePicker>
+                  <Form.SubmitButton
+                    useForm={form}
+                    className="justify-self-center w-full max-w-lg lg:col-start-2"
+                  >
+                    Give support
+                  </Form.SubmitButton>
+                </>
+              )}
+            />
+          </CardContent>
+        </div>
       </Card>
     </div>
   );

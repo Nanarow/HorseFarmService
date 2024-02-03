@@ -76,8 +76,8 @@ export const healthFormSchema = z.object({
 export type HealthFormData = z.infer<typeof healthFormSchema>;
 
 export const userFormSchema = z.object({
-  FirstName: z.string().min(1, "FirstName is required"),
-  LastName: z.string().min(1, "LastName is required"),
+  FirstName: z.string().min(2, "FirstName must be at least 2 characters"),
+  LastName: z.string().min(2, "LastName must be at least 2 characters"),
   DateOfBirth: z.date().max(new Date(), "Date must be in the past"),
   ExperiencePoint: z
     .number({ required_error: "Experience point is required" })
