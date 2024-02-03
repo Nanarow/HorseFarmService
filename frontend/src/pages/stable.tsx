@@ -48,8 +48,7 @@ const StablePage = () => {
             variant={"secondary"}
             onClick={logout}
             size={"icon"}
-            className=" bg-white-500"
-          ><LogOut />
+            className=" bg-white-500"><LogOut />
           </Button>
         </Tooltip>
       </div>
