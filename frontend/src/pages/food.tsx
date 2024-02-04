@@ -43,11 +43,11 @@ const Food = () => {
       <section className="w-full h-full absolute z-[-1]">
         <img
           src={FoodImage}
-          className="w-full h-full abs-center object-cover rounded "
+          className="w-full h-full abs-center object-cover rounded"
           alt="Food"
         />
       </section>
-      <Card className=" backdrop-blur-sm bg-white supports-[backdrop-filter]:bg-background/60 max-w-lg abs-center w-full border-0">
+      <Card className=" backdrop-blur-sm bg-white supports-[backdrop-filter]:bg-background/70 max-w-lg abs-center w-full border-0">
         <div className="w-full justify-center items-center flex flex-col">
           <Label className="text-3xl font-bold text-center mt-4">
             Food Quality
