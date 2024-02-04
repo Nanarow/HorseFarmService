@@ -83,7 +83,14 @@ const TourRegister = ({ onClick }: { onClick: () => void }) => {
                   <Form.Select
                     valueAsNumber
                     useForm={form}
-                    items={ToItemList(plans)}
+                    items={ToItemList(plans, (p) => (
+                      <>
+                        {p.Name}
+                        <span className="ml-4 text-sm text-muted-foreground">
+                          {p.Description}
+                        </span>
+                      </>
+                    ))}
                     name="PlanID"
                     placeholder="Pick your plan"
                   />

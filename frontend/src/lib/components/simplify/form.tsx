@@ -3,6 +3,7 @@ import {
   PropsWithChildren,
   HTMLInputTypeAttribute,
   useEffect,
+  ReactNode,
 } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -234,7 +235,7 @@ interface FormSelectProps<T extends FieldValues> {
 
 export interface ItemList {
   value: string | "label-separator" | number;
-  label: string;
+  label: ReactNode;
 }
 
 const FormSelect = <T extends FieldValues>({
@@ -292,7 +293,7 @@ const FormSelect = <T extends FieldValues>({
         <SelectGroup>
           {items.map((item) => {
             if (item.value === "label-separator") {
-              return <SelectLabel key={item.label}>{item.label}</SelectLabel>;
+              return <SelectLabel key={item.value}>{item.label}</SelectLabel>;
             }
             return (
               <SelectItem key={item.value} value={String(item.value)}>

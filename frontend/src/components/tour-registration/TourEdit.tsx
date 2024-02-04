@@ -109,7 +109,14 @@ const TourEdit = ({ tour, onSave }: Props) => {
                     defaultValue={String(tour.Plan.ID)}
                     valueAsNumber
                     useForm={form}
-                    items={ToItemList(plans)}
+                    items={ToItemList(plans, (p) => (
+                      <>
+                        {p.Name}
+                        <span className="ml-4 text-sm text-muted-foreground">
+                          {p.Description}
+                        </span>
+                      </>
+                    ))}
                     name="PlanID"
                     placeholder="Pick your plan"
                     className="col-span-3"

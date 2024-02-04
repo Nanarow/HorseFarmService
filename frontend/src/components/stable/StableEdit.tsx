@@ -59,9 +59,7 @@ const StableEdit = ({ stable, onSave }: Props) => {
       <DialogContent className="w-full">
         <DialogHeader>
           <DialogTitle>Edit Stable</DialogTitle>
-          <DialogDescription>
-            Make changes to your stable here. Click save when you're done.
-          </DialogDescription>
+          <DialogDescription>Make changes to your stable here. Click save when you're done.</DialogDescription>
         </DialogHeader>
         <Form
           className="grid gap-5 mt-3"

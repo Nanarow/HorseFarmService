@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"time"
+
 	"github.com/sut66/team16/backend/utils"
 	"gorm.io/gorm"
 )
@@ -25,7 +27,7 @@ func SetupData(db *gorm.DB) {
 	db.Create(roles)
 	// users
 	admin := User{
-		BaseModel: BaseModel{ID: 1},
+		BaseModel: BaseModel{ID: 100},
 		Email:     utils.GetConfig().ADMIN_EMAIL,
 		Password:  utils.GetConfig().ADMIN_PASS,
 		RoleID:    100,
@@ -37,27 +39,27 @@ func SetupData(db *gorm.DB) {
 		{
 			BaseModel: BaseModel{ID: 201},
 			Name:      "Horse Veterinary",
-			Salary: 45000,
+			Salary:    45000,
 		},
 		{
 			BaseModel: BaseModel{ID: 202},
 			Name:      "Horse Groomer",
-			Salary: 20000,
+			Salary:    20000,
 		},
 		{
 			BaseModel: BaseModel{ID: 203},
 			Name:      "Horse Info Manager",
-			Salary: 32000,
+			Salary:    32000,
 		},
 		{
 			BaseModel: BaseModel{ID: 204},
 			Name:      "Food Quality Inspector",
-			Salary: 30000,
+			Salary:    30000,
 		},
 		{
 			BaseModel: BaseModel{ID: 205},
 			Name:      "Stable Quality Inspector",
-			Salary: 25000,
+			Salary:    25000,
 		},
 	}
 	db.Create(&positions)
@@ -71,9 +73,9 @@ func SetupData(db *gorm.DB) {
 			Email:      "veter@veter.com",
 			Password:   "veter",
 			PositionID: 201,
-			PrecedeID: 2,
-			GenderID: 2,
-			Phone: "0988888888",
+			PrecedeID:  2,
+			GenderID:   2,
+			Phone:      "0988888888",
 		},
 		{
 			BaseModel:  BaseModel{ID: 2},
@@ -82,9 +84,9 @@ func SetupData(db *gorm.DB) {
 			Email:      "groom@groom.com",
 			Password:   "groom",
 			PositionID: 202,
-			PrecedeID: 1,
-			GenderID: 1,
-			Phone: "0999999999",
+			PrecedeID:  1,
+			GenderID:   1,
+			Phone:      "0999999999",
 		},
 		{
 			BaseModel:  BaseModel{ID: 3},
@@ -93,9 +95,9 @@ func SetupData(db *gorm.DB) {
 			Email:      "info@info.com",
 			Password:   "info",
 			PositionID: 203,
-			PrecedeID: 3,
-			GenderID: 2,
-			Phone: "0955555555",
+			PrecedeID:  3,
+			GenderID:   2,
+			Phone:      "0955555555",
 		},
 		{
 			BaseModel:  BaseModel{ID: 4},
@@ -104,9 +106,9 @@ func SetupData(db *gorm.DB) {
 			Email:      "food@food.com",
 			Password:   "food",
 			PositionID: 204,
-			PrecedeID: 2,
-			GenderID: 2,
-			Phone: "0900000000",
+			PrecedeID:  2,
+			GenderID:   2,
+			Phone:      "0900000000",
 		},
 		{
 			BaseModel:  BaseModel{ID: 5},
@@ -115,9 +117,9 @@ func SetupData(db *gorm.DB) {
 			Email:      "stable@stable.com",
 			Password:   "stable",
 			PositionID: 205,
-			PrecedeID: 1,
-			GenderID: 1,
-			Phone: "0922222222",
+			PrecedeID:  1,
+			GenderID:   1,
+			Phone:      "0922222222",
 		},
 	}
 	db.Create(&employees)
@@ -154,20 +156,24 @@ func SetupData(db *gorm.DB) {
 	// plan data
 	plans := []Plan{
 		{
-			BaseModel: BaseModel{ID: 1},
-			Name:      "Plan A",
+			BaseModel:   BaseModel{ID: 1},
+			Name:        "Plan A",
+			Description: "feeding and riding",
 		},
 		{
-			BaseModel: BaseModel{ID: 2},
-			Name:      "Plan B",
+			BaseModel:   BaseModel{ID: 2},
+			Name:        "Plan B",
+			Description: "play with horses",
 		},
 		{
-			BaseModel: BaseModel{ID: 3},
-			Name:      "Plan C",
+			BaseModel:   BaseModel{ID: 3},
+			Name:        "Plan C",
+			Description: "farm tour by horse",
 		},
 		{
-			BaseModel: BaseModel{ID: 4},
-			Name:      "Plan D",
+			BaseModel:   BaseModel{ID: 4},
+			Name:        "Plan D",
+			Description: "daily routine of horse",
 		},
 	}
 	db.Create(&plans)
@@ -232,7 +238,6 @@ func SetupData(db *gorm.DB) {
 			BaseModel: BaseModel{ID: 3},
 			Name:      "Ms.",
 		},
-		
 	}
 	db.Create(&precedes)
 
@@ -293,23 +298,60 @@ func SetupData(db *gorm.DB) {
 
 	stable := []Stable{
 		{
-			BaseModel:   BaseModel{ID: 1},
-			EmployeeID:  1, 
+			BaseModel:  BaseModel{ID: 1},
+			EmployeeID: 1,
 		},
 		{
-			BaseModel:   BaseModel{ID: 2},
-			EmployeeID:  2, 
+			BaseModel:  BaseModel{ID: 2},
+			EmployeeID: 2,
 		},
 		{
-			BaseModel:   BaseModel{ID: 3},
-			EmployeeID:  3, 
+			BaseModel:  BaseModel{ID: 3},
+			EmployeeID: 3,
 		},
 		{
-			BaseModel:   BaseModel{ID: 4},
-			EmployeeID:  4, 
+			BaseModel:  BaseModel{ID: 4},
+			EmployeeID: 4,
 		},
-	
 	}
 	db.Create(&stable)
 
+	users := []User{
+		{
+			BaseModel:       BaseModel{ID: 1},
+			FirstName:       "First1",
+			LastName:        "Last1",
+			Email:           "u1@u.com",
+			Password:        "12345678",
+			Phone:           "0123456789",
+			DateOfBirth:     time.Now().AddDate(-20, 0, 0),
+			ExperiencePoint: 1,
+			GenderID:        1,
+			RidingLevelID:   1,
+		}, {
+			BaseModel:       BaseModel{ID: 2},
+			FirstName:       "First2",
+			LastName:        "Last2",
+			Email:           "u2@u.com",
+			Password:        "12345678",
+			Phone:           "0123456789",
+			DateOfBirth:     time.Now().AddDate(-20, 0, 0),
+			ExperiencePoint: 1,
+			GenderID:        1,
+			RidingLevelID:   1,
+		}, {
+			BaseModel:       BaseModel{ID: 3},
+			FirstName:       "First3",
+			LastName:        "Last3",
+			Email:           "u3@u.com",
+			Password:        "12345678",
+			Phone:           "0123456789",
+			DateOfBirth:     time.Now().AddDate(-20, 0, 0),
+			ExperiencePoint: 1,
+			GenderID:        1,
+			RidingLevelID:   1,
+		},
+	}
+
+	db.Create(&users)
 }

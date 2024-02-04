@@ -1,4 +1,4 @@
-import { ArrowLeftSquareIcon, TrashIcon, XSquare } from "lucide-react";
+import { ArrowLeftSquareIcon } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -13,7 +13,6 @@ import { format } from "date-fns";
 import TourAlert from "./TourAlert";
 import { Tooltip } from "@shadcn/simplify/tooltip";
 import { Badge } from "@shadcn/ui/badge";
-import { Dialog, DialogTrigger } from "@shadcn/ui/dialog";
 import { useTours } from "@src/hooks";
 import Each from "../each";
 
@@ -24,7 +23,7 @@ const TourList = ({ onClick }: { onClick: () => void }) => {
       <Tooltip content={"Back to registration"} side="right">
         <ArrowLeftSquareIcon
           onClick={onClick}
-          className="absolute top-2  left-4  text-blue-500"
+          className="absolute top-2  left-4 text-blue-500 hover:scale-105"
         />
       </Tooltip>
 
@@ -77,19 +76,15 @@ const TourList = ({ onClick }: { onClick: () => void }) => {
                   )}
                 </TableCell>
                 <TableCell className=" relative">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      {new Date(tour.Date).getTime() > new Date().getTime() ? (
-                        <XSquare className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
-                      ) : (
-                        <TrashIcon className="text-red-500 abs-center hover:scale-110 cursor-pointer" />
-                      )}
-                    </DialogTrigger>
-                    <TourAlert
-                      tourID={tour.ID!}
-                      onCancel={fetchTours}
-                    ></TourAlert>
-                  </Dialog>
+                  <TourAlert
+                    tourID={tour.ID!}
+                    onCancel={fetchTours}
+                    variant={
+                      new Date(tour.Date).getTime() > new Date().getTime()
+                        ? "Cancel"
+                        : "Delete"
+                    }
+                  />
                 </TableCell>
               </TableRow>
             )}

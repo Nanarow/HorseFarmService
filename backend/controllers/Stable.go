@@ -24,7 +24,7 @@ func GetAllStable(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": OmitEmpty(stables)})
 }
 
-// POST/horses
+// POST/stables
 func CreateStable(c *gin.Context) {
 	// create variable for store data as type of horse
 	var stable entity.Stable
@@ -55,6 +55,7 @@ func CreateStable(c *gin.Context) {
 func UpdateStable(c *gin.Context) {
 	// create variable for store data as type of TourRegistration
 	var stable entity.Stable
+	
 	// get id from url
 	id := c.Param("id")
 
