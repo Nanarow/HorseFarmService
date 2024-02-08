@@ -37,7 +37,7 @@ const SupportCreate = () => {
       <img
         src={bg17}
         className="w-full h-full abs-center object-cover rounded"
-        alt="background"
+        alt="HorseBackground"
       />
       <Card className=" flex flex-col w-[380px] lg:flex-row lg:w-[600px] relative mt-5 justify-center items-center">
         <img
