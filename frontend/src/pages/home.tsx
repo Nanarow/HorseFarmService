@@ -33,7 +33,7 @@ const Home = () => {
       <section className="w-full h-with-nav p-2 relative">
         {!showGame && (
           <>
-            <p className=" text-6xl text-center sm:text-8xl abs-center font-black mix-blend-difference text-white z-30 tracking-widest">
+            <p className=" text-8xl text-center sm:text-9xl abs-center font-bold mix-blend-difference text-white z-30 title-font">
               KhunMa Farm
             </p>
             <video
@@ -47,8 +47,16 @@ const Home = () => {
               className=" absolute bottom-4 right-4"
               onClick={() => setShowGame(true)}
             >
-              {"🤚Don't Click❗"}
+              {"❗Don't Click❗"}
             </Button>
+            <a
+              href="https://www.youtube.com/@dieghe1984"
+              target="_blank"
+              className=" absolute bottom-4 left-4 hover:underline"
+            >
+              video by <br />
+              Diego Gastaldi
+            </a>
           </>
         )}
         {showGame && (

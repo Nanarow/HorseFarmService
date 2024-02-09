@@ -4,9 +4,11 @@ import { z } from "zod";
 import { Badge } from "@shadcn/ui/badge";
 import { useEffect } from "react";
 import { Role, useAuth } from "@src/providers/authProvider";
-import { Label } from "@shadcn/ui";
+import { Button, Label } from "@shadcn/ui";
 import { cn } from "@cn/utils";
 import BG from "../assets/bg11.jpg";
+import { Link } from "react-router-dom";
+import { CornerUpLeftIcon } from "lucide-react";
 
 const validLogin = z.object({
   Email: z
@@ -31,6 +33,15 @@ const Login = ({ role }: { role: Role }) => {
 
   return (
     <div className="w-full h-screen bg-secondary flex flex-col justify-center items-center gap-2 relative">
+      <Button
+        className=" absolute top-2 left-2 z-50"
+        variant={"secondary"}
+        size={"icon"}
+      >
+        <Link to="/">
+          <CornerUpLeftIcon />
+        </Link>
+      </Button>
       <img className=" object-cover absolute w-full h-full" src={BG} />
       <p className="text-4xl font-black text-primary mb-4 animate-tracking-in-expand z-10 -mt-12">
         KhunMa Farm
