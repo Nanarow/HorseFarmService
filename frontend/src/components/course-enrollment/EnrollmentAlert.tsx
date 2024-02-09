@@ -1,12 +1,10 @@
 import { Button, Label, Textarea } from "@shadcn/ui";
 import {
-  Dialog,
   DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@shadcn/ui/dialog";
 import { useToast } from "@shadcn/ui/use-toast";
 import { useAuth } from "@src/providers/authProvider";
@@ -55,33 +53,28 @@ const EnrollmentAlert = ({
     }
   }
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Enroll</Button>
-      </DialogTrigger>
-      <DialogContent className=" sm:max-w-[320px]">
-        <DialogHeader className=" items-center sm:text-center">
-          <AlertCircleIcon className="text-green-500 h-16 w-16" />
-          <DialogTitle>Are you sure absolutely sure?</DialogTitle>
-          <Label className=" mt-4">Description</Label>
-          <Textarea value={description} onChange={handle}></Textarea>
-        </DialogHeader>
-        <DialogFooter className="sm:justify-between">
-          <DialogClose asChild>
-            <Button variant="secondary">No, Cancel</Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button
-              type="submit"
-              className=" bg-green-500 hover:bg-green-500/80"
-              onClick={handleClick}
-            >
-              Yes, Enroll
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <DialogContent className=" sm:max-w-[320px]">
+      <DialogHeader className=" items-center sm:text-center">
+        <AlertCircleIcon className="text-green-500 h-16 w-16" />
+        <DialogTitle>Are you sure absolutely sure?</DialogTitle>
+        <Label className=" mt-4">Description</Label>
+        <Textarea value={description} onChange={handle}></Textarea>
+      </DialogHeader>
+      <DialogFooter className="sm:justify-between">
+        <DialogClose asChild>
+          <Button variant="secondary">No, Cancel</Button>
+        </DialogClose>
+        <DialogClose asChild>
+          <Button
+            type="submit"
+            className=" bg-green-500 hover:bg-green-500/80"
+            onClick={handleClick}
+          >
+            Yes, Enroll
+          </Button>
+        </DialogClose>
+      </DialogFooter>
+    </DialogContent>
   );
 };
 

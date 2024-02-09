@@ -33,7 +33,7 @@ const Home = () => {
       <section className="w-full h-with-nav p-2 relative">
         {!showGame && (
           <>
-            <p className=" text-8xl abs-center font-black mix-blend-difference text-white z-30 tracking-widest">
+            <p className=" text-6xl text-center sm:text-8xl abs-center font-black mix-blend-difference text-white z-30 tracking-widest">
               KhunMa Farm
             </p>
             <video
@@ -57,7 +57,7 @@ const Home = () => {
             <section className="w-full h-full px-4 lg:px-12 abs-center flex justify-center items-center">
               <Game
                 key={id}
-                className="w-full h-1/2 bg-white/40 z-40 border backdrop-blur rounded"
+                className="w-full h-4/5  lg:h-1/2 bg-white/40 z-40 border backdrop-blur rounded"
                 onClick={() => {
                   setId((prev) => prev + 1);
                 }}

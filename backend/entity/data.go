@@ -354,4 +354,36 @@ func SetupData(db *gorm.DB) {
 	}
 
 	db.Create(&users)
+
+	courses := []Course{
+		{
+			BaseModel:    BaseModel{ID: 1},
+			Name:         "Basic 1",
+			Participants: 10,
+			Experience:   2,
+			Duration:     1,
+			LocationID:   1,
+			EmployeeID:   2,
+		},
+		{
+			BaseModel:    BaseModel{ID: 2},
+			Name:         "Basic 2",
+			Participants: 12,
+			Experience:   2,
+			Duration:     1,
+			LocationID:   1,
+			EmployeeID:   2,
+		},
+		{
+			BaseModel:    BaseModel{ID: 3},
+			Name:         "Intermediate",
+			Participants: 10,
+			Experience:   4,
+			Duration:     1,
+			LocationID:   2,
+			EmployeeID:   2,
+		},
+	}
+
+	db.Create(&courses)
 }

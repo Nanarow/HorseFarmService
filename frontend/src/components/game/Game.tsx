@@ -19,16 +19,7 @@ function Game({
   const [collided, setCollided] = useState(false);
   const [gameOver, setGameOver] = useState(false);
 
-  const jump = (e: KeyboardEvent) => {
-    if (e.code !== "Space") {
-      return;
-    }
-    // if (e.code === "ArrowDown") {
-    //   if (horseRef.current) {
-    //     horseRef.current.style.height = "32px";
-    //     return;
-    //   }
-    // }
+  const jump = () => {
     if (horseRef.current?.style.animationPlayState === "paused") {
       onClick();
     }
@@ -41,6 +32,23 @@ function Game({
         horseRef.current?.classList.remove("jump");
       }, 600);
     }
+  };
+
+  const keyJump = (e: KeyboardEvent) => {
+    if (e.code !== "Space") {
+      return;
+    }
+    // if (e.code === "ArrowDown") {
+    //   if (horseRef.current) {
+    //     horseRef.current.style.height = "32px";
+    //     return;
+    //   }
+    // }
+    jump();
+  };
+
+  const clickJump = () => {
+    jump();
   };
 
   useEffect(() => {
@@ -86,6 +94,18 @@ function Game({
 
   useEffect(() => {
     if (hayRef.current && horseRef.current) {
+      if (window.innerWidth < 480) {
+        if (score > 40) {
+          hayRef.current.style.animationDuration = "0.5s";
+        } else if (score > 10) {
+          hayRef.current.style.animationDuration = "0.75s";
+        } else if (score > 5) {
+          hayRef.current.style.animationDuration = "1.0s";
+        } else {
+          hayRef.current.style.animationDuration = "1.25s";
+        }
+        return;
+      }
       if (score > 40) {
         hayRef.current.style.animationDuration = "1s";
       } else if (score > 10) {
@@ -107,8 +127,12 @@ function Game({
   }
 
   useEffect(() => {
-    document.addEventListener("keydown", jump);
-    return () => document.removeEventListener("keydown", jump);
+    document.addEventListener("keydown", keyJump);
+    document.addEventListener("click", clickJump);
+    return () => {
+      document.removeEventListener("keydown", keyJump);
+      document.removeEventListener("click", clickJump);
+    };
   }, []);
 
   return (

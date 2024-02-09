@@ -1,4 +1,4 @@
-name: test_backend
+name: Pull request workflow
 
 on:
   pull_request:

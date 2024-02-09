@@ -23,7 +23,11 @@ const NavBar = () => {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center w-full px-4">
         <div className="flex w-full">
-          <Link className="mr-6  items-center space-x-2 flex" to="/">
+          <Link
+            className="mr-6  items-center space-x-2 flex"
+            to="/loading"
+            state={{ from: "/" }}
+          >
             <HomeIcon />
             <span className="font-bold ">KhunMa Farm</span>
           </Link>
@@ -34,10 +38,11 @@ const NavBar = () => {
                 of={Menus[getRole()]}
                 render={(menu) => (
                   <Link
-                    to={menu.to}
+                    to={"/loading"}
                     className={` transition-colors hover:text-foreground/80 ${
                       location.pathname === menu.to ? "" : "text-foreground/60"
                     }`}
+                    state={{ from: menu.to }}
                   >
                     {menu.label}
                   </Link>
@@ -104,11 +109,12 @@ const AccountDropdownWithMenu = () => {
           render={(menu) => (
             <DropdownMenuItem className="sm:hidden">
               <Link
-                to={menu.to}
+                to={"/loading"}
                 className={cn(
                   "transition-colors hover:text-foreground/80",
                   location.pathname === menu.to ? "" : "text-foreground/60"
                 )}
+                state={{ from: menu.to }}
               >
                 {menu.label}
               </Link>
