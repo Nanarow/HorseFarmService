@@ -25,9 +25,9 @@ const TourAlert = ({ tourID, onCancel, variant = "Cancel" }: Props) => {
       toast({
         title: variant === "Cancel" ? "Cancelled" : "Deleted",
         description:
-          "Your registration has been " + variant === "cancel"
-            ? "cancelled"
-            : "deleted",
+          variant === "Cancel"
+            ? "Your registration has been cancelled"
+            : "Your registration has been deleted",
         variant: "success",
       });
       onCancel();
